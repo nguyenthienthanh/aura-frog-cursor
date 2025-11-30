@@ -1,0 +1,125 @@
+---
+description: Keep implementations simple, avoid over-engineering and unnecessary complexity
+globs: []
+alwaysApply: true
+---
+
+# KISS Principle & Avoid Over-Engineering
+
+**KISS (Keep It Simple, Stupid)** - Always choose the simplest solution that solves the problem. Avoid over-engineering by adding unnecessary complexity, premature optimization, or excessive abstraction.
+
+## Core Principles
+
+### 1. Simple > Complex
+
+```typescript
+// ❌ Over-Engineered: Abstract factory pattern for 2 buttons
+class ButtonFactory {
+  private static instance: ButtonFactory
+  // ... complex singleton pattern
+}
+
+// ✅ KISS: Just use props
+function Button({ variant = 'primary', children, ...props }: ButtonProps) {
+  return (
+    <button className={`btn btn--${variant}`} {...props}>
+      {children}
+    </button>
+  )
+}
+```
+
+### 2. Solve Today's Problem, Not Tomorrow's Maybe-Problem
+
+```typescript
+// ❌ Over-Engineered: Planning for features that don't exist yet
+interface DataStore {
+  get(key: string): Promise<any>
+  set(key: string, value: any): Promise<void>
+  transaction(callback: (store: DataStore) => Promise<void>): Promise<void>
+  // Many "what-if" features
+}
+
+// ✅ KISS: Solve the actual requirement
+const preferences = {
+  get: (key: string) => localStorage.getItem(key),
+  set: (key: string, value: string) => localStorage.setItem(key, value)
+}
+```
+
+### 3. Composition > Inheritance
+
+```typescript
+// ❌ Over-Engineered: Deep inheritance hierarchy
+abstract class BaseComponent {
+  abstract render(): JSX.Element
+}
+abstract class DataComponent extends BaseComponent {
+  abstract fetchData(): Promise<void>
+}
+
+// ✅ KISS: Use composition with hooks
+function UserList() {
+  const { data, loading, error } = useFetch('/api/users')
+  if (loading) return <Loading />
+  if (error) return <Error message={error.message} />
+  return <ul>{data.map(user => <UserCard key={user.id} user={user} />)}</ul>
+}
+```
+
+## When to Add Complexity
+
+### ✅ Valid Reasons
+
+**1. Repeated Patterns (Rule of 3)**
+- 1st time: Write inline
+- 2nd time: Write inline (notice similarity)
+- 3rd time: Extract to function/component
+
+**2. Actual Performance Problem**
+- Profile first, then optimize
+- Don't optimize without measurements
+
+**3. Clear Business Requirement**
+- "We need to support 5 payment gateways" → Use Strategy pattern
+- "We have complex form validation rules" → Use validation library
+
+## Review Checklist
+
+Before Adding Complexity, Ask:
+
+- [ ] Is this solving a CURRENT problem? (not future hypothetical)
+- [ ] Have I tried the simplest solution first?
+- [ ] Will this reduce total complexity or just move it?
+- [ ] Can I explain this to a junior developer in 2 minutes?
+- [ ] Is there a simpler alternative?
+- [ ] Am I adding this for a good reason or "just in case"?
+- [ ] Have I seen this pattern repeated 3+ times?
+- [ ] Will this make the code easier to maintain?
+
+If 3+ answers are "No" → It's probably over-engineering
+
+## Best Practices
+
+### Do's ✅
+- ✅ Start with the simplest solution
+- ✅ Add complexity only when needed
+- ✅ Refactor when patterns emerge
+- ✅ Write code for readability first
+- ✅ Follow YAGNI (You Aren't Gonna Need It)
+- ✅ Use standard library/framework features
+- ✅ Measure before optimizing
+- ✅ Delete code that isn't used
+
+### Don'ts ❌
+- ❌ Abstract before you have 3+ examples
+- ❌ Add "just in case" code
+- ❌ Optimize without profiling
+- ❌ Create custom solutions for solved problems
+- ❌ Add layers without clear benefit
+- ❌ Use complex patterns for simple problems
+- ❌ Build for imaginary future requirements
+
+## References
+- Project conventions: `project-contexts/[project]/conventions.md`
+- Project architecture decisions: `project-contexts/[project]/rules.md`

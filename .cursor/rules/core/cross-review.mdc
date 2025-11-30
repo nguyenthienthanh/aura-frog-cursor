@@ -1,0 +1,98 @@
+---
+description: Cross-review workflow for quality assurance across different phases
+globs: []
+alwaysApply: true
+---
+
+# Cross-Review Workflow Rules
+
+**Purpose:** Cross-review ensures quality by having multiple agents/perspectives review deliverables before proceeding
+
+## Phase 1: Requirements Analysis Review
+
+### Reviewers
+1. **Dev Agent(s)** - Technical feasibility
+2. **QA Agent** - Testability and acceptance criteria
+3. **UI Designer** - Design requirements (if UI involved)
+
+### Dev Technical Review Checklist
+- [ ] Requirements are technically achievable
+- [ ] Technology stack is appropriate
+- [ ] Integration points are clearly defined
+- [ ] No conflicting requirements
+
+### QA Testability Review Checklist
+- [ ] Acceptance criteria are measurable
+- [ ] Success criteria are clearly defined
+- [ ] Edge cases are documented
+- [ ] Requirements are testable
+
+## Phase 2: Technical Planning Review
+
+### Reviewers
+1. **Secondary Dev Agent(s)** - Architecture review
+2. **QA Agent** - Test planning feasibility
+
+### Architecture Quality Checklist
+- [ ] Architecture is sound
+- [ ] Design patterns are appropriate
+- [ ] Component structure is logical
+- [ ] State management approach is correct
+
+### Testability Assessment
+- [ ] Components are testable
+- [ ] Test isolation is possible
+- [ ] Mocking strategy is clear
+- [ ] Coverage target is achievable
+
+## Phase 4: Test Plan Review
+
+### Reviewers
+1. **Dev Agent(s)** - Implementation feasibility
+
+### Test Plan Feasibility Checklist
+- [ ] Test cases match technical implementation
+- [ ] Test scenarios are comprehensive
+- [ ] Edge cases are covered
+- [ ] Tests can be written as planned (TDD)
+
+## Cross-Review Best Practices
+
+### Do's ✅
+- ✅ Be constructive and specific
+- ✅ Focus on quality, not perfection
+- ✅ Provide alternatives, not just criticism
+- ✅ Ask questions for clarification
+- ✅ Acknowledge good decisions
+
+### Don'ts ❌
+- ❌ Nitpick minor style issues
+- ❌ Reject without explanation
+- ❌ Take too long to review
+- ❌ Skip the review process
+- ❌ Be overly critical
+
+## Escalation Process
+
+### When Reviews Conflict
+
+If reviewers disagree:
+1. Facilitate discussion
+2. Explain perspectives
+3. Discuss trade-offs
+4. Make informed decision
+
+## Timeline Impact
+
+| Phase | Without Review | With Review | Time Added |
+|-------|---------------|-------------|------------|
+| Phase 1 | 45 min | 70 min | +25 min |
+| Phase 2 | 90 min | 115 min | +25 min |
+| Phase 4 | 60 min | 75 min | +15 min |
+
+**Total added time:** ~65 minutes
+**Quality improvement:** Significant
+
+## References
+- Project team structure: `project-contexts/[project]/team.md`
+- TDD workflow: `tdd-workflow.mdc`

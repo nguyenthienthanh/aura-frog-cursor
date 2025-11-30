@@ -1,0 +1,131 @@
+---
+description: Performance optimization patterns for web and mobile applications
+globs: []
+alwaysApply: true
+---
+
+# Performance Rules
+
+**Purpose:** Ensure applications meet performance targets
+
+## Performance Targets
+
+### Web Applications
+- **First Contentful Paint:** < 1.5s
+- **Largest Contentful Paint:** < 2.5s
+- **Time to Interactive:** < 5s
+- **Cumulative Layout Shift:** < 0.1
+- **First Input Delay:** < 100ms
+
+### Mobile Applications
+- **App Launch:** < 2s
+- **Screen Navigation:** < 300ms
+- **List Scrolling:** 60fps (16.67ms per frame)
+- **Animation:** 60fps
+- **Memory:** < 200MB baseline
+
+## React/React Native Optimization
+
+### Memoization
+```typescript
+// Memoize expensive components
+const ExpensiveComponent = React.memo(({ data }) => {
+  return <div>{/* render */}</div>
+}, (prev, next) => prev.data.id === next.data.id)
+
+// Memoize expensive calculations
+const sortedData = useMemo(() => {
+  return data.sort((a, b) => a.value - b.value)
+}, [data])
+
+// Memoize callbacks
+const handleClick = useCallback(() => {
+  doSomething(id)
+}, [id])
+```
+
+### List Virtualization
+```typescript
+// For long lists (>100 items)
+<FlatList
+  data={items}
+  renderItem={renderItem}
+  initialNumToRender={10}
+  maxToRenderPerBatch={10}
+  windowSize={5}
+  removeClippedSubviews={true}
+/>
+```
+
+## API & Network Optimization
+
+### Request Batching
+```typescript
+// ❌ Multiple requests
+await fetchUser(id1)
+await fetchUser(id2)
+await fetchUser(id3)
+
+// ✅ Batched request
+await fetchUsers([id1, id2, id3])
+```
+
+### Caching
+```typescript
+// React Query caching
+const { data } = useQuery('users', fetchUsers, {
+  staleTime: 5 * 60 * 1000, // 5 minutes
+  cacheTime: 10 * 60 * 1000 // 10 minutes
+})
+```
+
+## Memory Management
+
+### Cleanup Side Effects
+```typescript
+useEffect(() => {
+  const subscription = api.subscribe()
+
+  // ✅ Cleanup
+  return () => {
+    subscription.unsubscribe()
+  }
+}, [])
+```
+
+## Performance Testing
+
+### Tools
+- Lighthouse (web)
+- React DevTools Profiler
+- Chrome DevTools Performance
+- k6 (load testing)
+
+### Checklist
+- [ ] Lighthouse score > 90
+- [ ] No render > 16ms (60fps)
+- [ ] Bundle size within budget
+- [ ] No memory leaks
+- [ ] API response < 200ms
+
+## Best Practices
+
+### Do's ✅
+- ✅ Measure before optimizing
+- ✅ Use production builds for testing
+- ✅ Optimize critical rendering path
+- ✅ Implement proper caching
+- ✅ Use CDN for static assets
+- ✅ Lazy load non-critical resources
+
+### Don'ts ❌
+- ❌ Premature optimization
+- ❌ Ignore performance budgets
+- ❌ Load everything upfront
+- ❌ Forget to cleanup resources
+- ❌ Use synchronous operations
+- ❌ Ignore bundle size
+
+## References
+- State management: `state-management.mdc`
+- Project performance budgets: `project-contexts/[project]/rules.md`

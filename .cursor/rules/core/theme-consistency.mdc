@@ -1,0 +1,176 @@
+---
+description: No hardcoded colors spacing or sizes - use theme values for consistency and dark mode support
+globs: []
+alwaysApply: true
+---
+
+# Theme Consistency - No Hardcoded Values
+
+**Core Principle:** Use theme/design system values. Never hardcode colors, spacing, or sizes.
+
+## What NOT to Do
+
+### 1. Hardcoded Colors
+```typescript
+// ❌ BAD
+<View style={{ backgroundColor: '#FFFFFF' }}>
+<Text style={{ color: '#000000' }}>Hello</Text>
+<View style={{ borderColor: '#E0E0E0' }} />
+
+// Named colors (non-theme)
+color: 'red'
+backgroundColor: 'white'
+```
+
+### 2. Hardcoded Spacing
+```typescript
+// ❌ BAD
+<View style={{ 
+  padding: 16,
+  margin: 8,
+  gap: 12,
+}}>
+```
+
+### 3. Hardcoded Sizes
+```typescript
+// ❌ BAD
+<View style={{ 
+  width: 320,
+  height: 48,
+  borderRadius: 8,
+  fontSize: 16
+}}>
+```
+
+## What TO Do
+
+### 1. Use Theme Colors
+```typescript
+// ✅ GOOD
+import { useTheme } from '@/hooks/useTheme';
+
+const Component = () => {
+  const { colors } = useTheme();
+
+  return (
+    <View style={{ 
+      backgroundColor: colors.background.primary,
+      borderColor: colors.border.default
+    }}>
+      <Text style={{ color: colors.text.primary }}>
+        Hello
+      </Text>
+    </View>
+  );
+};
+```
+
+### 2. Use Theme Spacing
+```typescript
+// ✅ GOOD
+const { space } = useTheme();
+
+<View style={{ 
+  padding: space[4],        // 16px
+  margin: space[2],          // 8px
+  gap: space[3],             // 12px
+}}>
+```
+
+### 3. Use Theme Sizes
+```typescript
+// ✅ GOOD
+const { sizes, borderRadius } = useTheme();
+
+<View style={{ 
+  width: sizes.container.sm,     // 320px
+  height: sizes.button.md,       // 48px
+  borderRadius: borderRadius.md  // 8px
+}}>
+```
+
+## Theme Structure
+
+```typescript
+interface Theme {
+  colors: {
+    primary: { 50: string; 100: string; ... 900: string };
+    success: string;
+    error: string;
+    background: { primary: string; secondary: string; };
+    text: { primary: string; secondary: string; };
+    border: { default: string; light: string; dark: string; };
+  };
+
+  space: {
+    0: number;    // 0px
+    1: number;    // 4px
+    2: number;    // 8px
+    3: number;    // 12px
+    4: number;    // 16px
+    6: number;    // 24px
+    8: number;    // 32px
+  };
+
+  sizes: {
+    text: { xs: number; sm: number; md: number; lg: number; };
+    button: { sm: number; md: number; lg: number; };
+    icon: { xs: number; sm: number; md: number; };
+    container: { xs: number; sm: number; md: number; };
+  };
+
+  borderRadius: {
+    sm: number;    // 4px
+    md: number;    // 8px
+    lg: number;    // 12px
+    full: number;  // 9999px
+  };
+}
+```
+
+## Allowed Exceptions
+
+### Exception 1: Transparent Colors
+```typescript
+// ✅ ALLOWED
+backgroundColor: 'transparent'
+borderColor: 'transparent'
+```
+
+### Exception 2: Percentage Values
+```typescript
+// ✅ ALLOWED
+width: '100%'
+height: '100%'
+```
+
+### Exception 3: Zero Values
+```typescript
+// ✅ ALLOWED
+padding: 0
+margin: 0
+```
+
+## Benefits
+
+1. **Consistency** - Same colors everywhere
+2. **Dark Mode** - Automatic support
+3. **Rebrandability** - Change theme once, updates everywhere
+4. **Accessibility** - Consistent contrast ratios
+5. **Maintainability** - Single source of truth
+
+## Code Review Checklist
+
+- [ ] No hex colors (#FFFFFF)
+- [ ] No RGB/RGBA (rgb(0,0,0))
+- [ ] No named colors ('red', 'blue')
+- [ ] All colors from theme
+- [ ] No hardcoded spacing numbers
+- [ ] All spacing from theme (space[n])
+- [ ] All sizes from theme
+- [ ] Border radius from theme
+
+## References
+- Project theme: `project-contexts/[project]/theme.ts`
+- Project conventions: `project-contexts/[project]/conventions.md`

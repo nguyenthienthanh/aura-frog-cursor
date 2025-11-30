@@ -1,0 +1,429 @@
+---
+description: Template for Low-Level Design document - Used in Phase 2 (Technical Planning) for detailed component design
+globs: []
+alwaysApply: false
+---
+
+# Low-Level Design (LLD) Template
+
+## Use Case
+Create detailed component-level design during **Phase 2: Technical Planning**. While the tech spec provides high-level architecture, the LLD drills down into specific components, functions, data structures, and implementation details.
+
+## Associated Phase
+**Phase 2: Technical Planning**
+
+## Template Structure
+
+```markdown
+# Low-Level Design (LLD) Template
+
+**Feature:** [Feature Name]
+**Date:** [Date]
+
+---
+
+## Component Architecture
+
+### Component Hierarchy
+```
+ParentComponent
+├── ChildComponent1
+│   ├── GrandchildComponent1A
+│   └── GrandchildComponent1B
+├── ChildComponent2
+│   └── GrandchildComponent2A
+└── ChildComponent3
+```
+
+### Component Responsibilities
+- **ParentComponent:** Orchestrates data flow, manages global state
+- **ChildComponent1:** Handles user input and validation
+- **ChildComponent2:** Displays data and triggers actions
+- **ChildComponent3:** Manages navigation and routing
+
+---
+
+## Data Structures
+
+### TypeScript Interfaces
+```typescript
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: 'admin' | 'user' | 'guest';
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface Post {
+  id: string;
+  userId: string;
+  title: string;
+  content: string;
+  status: 'draft' | 'published' | 'archived';
+  tags: string[];
+  metadata: PostMetadata;
+}
+
+interface PostMetadata {
+  views: number;
+  likes: number;
+  shares: number;
+}
+```
+
+### Type Definitions
+```typescript
+type PostStatus = 'draft' | 'published' | 'archived';
+type UserRole = 'admin' | 'user' | 'guest';
+type ApiResponse<T> = {
+  data: T;
+  message: string;
+  status: number;
+};
+```
+
+---
+
+## API Endpoints
+
+### POST /api/posts
+**Request:**
+```json
+{
+  "title": "string",
+  "content": "string",
+  "tags": ["string"],
+  "status": "draft" | "published"
+}
+```
+
+**Response:**
+```json
+{
+  "data": {
+    "id": "string",
+    "title": "string",
+    "status": "published",
+    "createdAt": "2025-11-30T10:00:00Z"
+  },
+  "message": "Post created successfully",
+  "status": 201
+}
+```
+
+### GET /api/posts/:id
+**Response:**
+```json
+{
+  "data": {
+    "id": "string",
+    "title": "string",
+    "content": "string",
+    "status": "published",
+    "metadata": {
+      "views": 100,
+      "likes": 25,
+      "shares": 5
+    }
+  },
+  "message": "Success",
+  "status": 200
+}
+```
+
+---
+
+## State Management
+
+### Local State
+**Component-level state managed with useState:**
+- Modal open/close state
+- Form input values
+- Loading indicators
+- Error messages
+
+### Global State (Zustand)
+**Application-wide state:**
+```typescript
+interface AppState {
+  user: User | null;
+  posts: Post[];
+  isAuthenticated: boolean;
+  setUser: (user: User | null) => void;
+  setPosts: (posts: Post[]) => void;
+  addPost: (post: Post) => void;
+  updatePost: (id: string, updates: Partial<Post>) => void;
+  deletePost: (id: string) => void;
+}
+```
+
+### Server State (React Query)
+**API data caching:**
+```typescript
+// Queries
+const usePosts = () => useQuery(['posts'], fetchPosts);
+const usePost = (id: string) => useQuery(['post', id], () => fetchPost(id));
+
+// Mutations
+const useCreatePost = () => useMutation(createPost, {
+  onSuccess: () => queryClient.invalidateQueries(['posts']),
+});
+```
+
+---
+
+## File Structure
+
+```
+src/
+├── components/
+│   ├── ShareModal/
+│   │   ├── ShareModal.tsx
+│   │   ├── ShareModal.test.tsx
+│   │   ├── ShareModal.styles.ts
+│   │   └── index.ts
+│   ├── PlatformSelector/
+│   │   ├── PlatformSelector.tsx
+│   │   ├── PlatformSelector.test.tsx
+│   │   └── index.ts
+│   └── Button/
+│       ├── Button.tsx
+│       ├── Button.test.tsx
+│       ├── Button.styles.ts
+│       └── index.ts
+├── hooks/
+│   ├── useSharePost.ts
+│   ├── useSharePost.test.ts
+│   └── index.ts
+├── api/
+│   ├── shareApi.ts
+│   ├── shareApi.test.ts
+│   └── index.ts
+├── types/
+│   ├── share.types.ts
+│   └── index.ts
+└── utils/
+    ├── validators.ts
+    ├── formatters.ts
+    └── index.ts
+```
+
+---
+
+## Functions & Methods
+
+### handleSubmit()
+**Purpose:** Submit post to selected platform
+**Parameters:**
+- `platform: 'facebook' | 'instagram' | 'linkedin'`
+- `content: string`
+- `mediaUrl?: string`
+
+**Returns:** `Promise<ShareResult>`
+
+**Logic:**
+1. Validate input (platform, content, mediaUrl)
+2. Show loading state
+3. Call API: `POST /api/social/share`
+4. Handle success:
+   - Hide loading state
+   - Show success message
+   - Close modal
+   - Invalidate cache
+5. Handle error:
+   - Hide loading state
+   - Show error message
+   - Allow retry
+
+**Implementation:**
+```typescript
+const handleSubmit = async (data: ShareData): Promise<ShareResult> => {
+  // Validate
+  const validation = validateShareData(data);
+  if (!validation.isValid) {
+    throw new ValidationError(validation.errors);
+  }
+
+  // Set loading
+  setLoading(true);
+
+  try {
+    // API call
+    const result = await shareApi.sharePost(data);
+
+    // Success handling
+    setLoading(false);
+    showSuccess('Post shared successfully!');
+    closeModal();
+    invalidateCache();
+
+    return result;
+  } catch (error) {
+    // Error handling
+    setLoading(false);
+    showError(getErrorMessage(error));
+    throw error;
+  }
+};
+```
+
+### validateShareData()
+**Purpose:** Validate share data before submission
+**Parameters:**
+- `data: ShareData`
+
+**Returns:** `ValidationResult`
+
+**Logic:**
+1. Check platform is valid
+2. Check content is not empty
+3. Check content length (max 5000 chars)
+4. Check mediaUrl format (if provided)
+5. Return validation result
+
+---
+
+## Error Handling
+
+### Frontend Errors
+```typescript
+try {
+  await handleSubmit(data);
+} catch (error) {
+  if (error instanceof ValidationError) {
+    showValidationErrors(error.errors);
+  } else if (error instanceof ApiError) {
+    if (error.status === 401) {
+      redirectToLogin();
+    } else if (error.status === 429) {
+      showRateLimitMessage();
+    } else {
+      showGenericError();
+    }
+  } else {
+    logError(error);
+    showGenericError();
+  }
+}
+```
+
+### Backend Errors
+```typescript
+// API error responses
+{
+  "error": "Validation failed",
+  "details": {
+    "content": "Content is required",
+    "platform": "Invalid platform"
+  },
+  "status": 400
+}
+```
+
+---
+
+## Performance Considerations
+
+### Memoization
+```typescript
+const MemoizedComponent = React.memo(ExpensiveComponent);
+
+const memoizedValue = useMemo(() => {
+  return expensiveCalculation(data);
+}, [data]);
+
+const memoizedCallback = useCallback(() => {
+  handleAction(param);
+}, [param]);
+```
+
+### Lazy Loading
+```typescript
+const LazyComponent = React.lazy(() => import('./HeavyComponent'));
+
+<Suspense fallback={<Loading />}>
+  <LazyComponent />
+</Suspense>
+```
+
+### Virtualization
+For long lists, use virtualization:
+```typescript
+import { FlatList } from 'react-native';
+
+<FlatList
+  data={items}
+  renderItem={renderItem}
+  keyExtractor={item => item.id}
+  initialNumToRender={10}
+  maxToRenderPerBatch={10}
+  windowSize={5}
+/>
+```
+
+---
+
+## Testing Strategy
+
+### Unit Tests
+- Individual function tests
+- Component prop variations
+- State management logic
+- Utility function tests
+
+### Integration Tests
+- Component interaction tests
+- API integration tests
+- State update tests
+- Navigation flow tests
+
+---
+```
+
+## Sections Explained
+
+### Component Architecture
+Visual hierarchy and responsibilities of each component.
+
+### Data Structures
+All TypeScript interfaces and types used in the implementation.
+
+### API Endpoints
+Detailed API contracts with request/response examples.
+
+### State Management
+How state is organized - local, global, and server state.
+
+### File Structure
+Exact folder and file organization.
+
+### Functions & Methods
+Detailed specifications for key functions including parameters, returns, logic, and implementation.
+
+### Error Handling
+How errors are caught and handled at each layer.
+
+### Performance Considerations
+Optimization strategies like memoization, lazy loading, virtualization.
+
+### Testing Strategy
+What types of tests will be written for each component.
+
+## Project Customization
+
+Reference project conventions:
+- **File naming:** `.claude/project-contexts/[project]/conventions.md`
+- **Component patterns:** `.claude/project-contexts/[project]/examples.md`
+
+## Related Templates
+- `tech-spec.mdc` - High-level technical planning
+- `test-cases.mdc` - Testing the implementation
+
+---
+
+**Version:** 1.0.0
+**Phase:** 2 - Technical Planning
+**Agent:** Typically tech stack-specific (mobile-react-native, web-reactjs, etc.)
+**Adapted for Cursor:** 2025-11-30

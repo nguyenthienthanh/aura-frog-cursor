@@ -1,0 +1,131 @@
+---
+description: Git workflow conventions for branching, commits, and pull requests
+globs: []
+alwaysApply: true
+---
+
+# Git Workflow Rules
+
+**Purpose:** Consistent version control practices
+
+## Branch Naming
+
+### Pattern
+```
+<type>/<ticket>-<short-description>
+```
+
+### Types
+- `feature/` - New features
+- `bugfix/` - Bug fixes
+- `hotfix/` - Urgent production fixes
+- `refactor/` - Code refactoring
+- `chore/` - Maintenance tasks
+
+### Examples
+```bash
+feature/PROJ-1234-add-social-sharing
+bugfix/PROJ-5678-fix-login-crash
+refactor/PROJ-9012-split-large-component
+```
+
+## Commit Messages
+
+### Format
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+### Types
+- `feat` - New feature
+- `fix` - Bug fix
+- `refactor` - Code refactoring
+- `test` - Adding tests
+- `docs` - Documentation
+- `style` - Formatting
+- `chore` - Maintenance
+
+### Examples
+```bash
+feat(social): add Instagram sharing
+
+- Implemented Instagram API integration
+- Added image upload functionality
+- Created share modal UI
+
+PROJ-1234
+```
+
+## Pull Request Guidelines
+
+### Title Format
+```
+[TICKET] Type: Brief description
+```
+
+### PR Description Template
+```markdown
+## Summary
+Brief description of changes
+
+## Type of Change
+- [ ] Feature
+- [ ] Bug Fix
+- [ ] Refactor
+
+## Testing
+- [ ] Unit tests added/updated
+- [ ] Manual testing completed
+
+## Checklist
+- [ ] Code follows style guidelines
+- [ ] Tests passing
+- [ ] Documentation updated
+```
+
+## Protected Branches
+
+### `main` / `master`
+- ❌ No direct pushes
+- ✅ Requires PR + approval
+- ✅ All tests must pass
+- ❌ No force push
+
+## Merge Strategy
+
+### Squash and Merge (Preferred)
+- Keeps history clean
+- One commit per PR
+- Preserves PR context
+
+## Forbidden Actions
+
+### ❌ Never Do:
+- Force push to `main`/`develop`
+- Commit directly to protected branches
+- Merge without approval
+- Commit secrets/credentials
+- Use `--no-verify`
+
+## Best Practices
+
+### Do's ✅
+- ✅ Commit often with meaningful messages
+- ✅ Keep commits atomic
+- ✅ Write descriptive PR descriptions
+- ✅ Request reviews from right people
+- ✅ Address review comments
+
+### Don'ts ❌
+- ❌ Commit WIP code to shared branches
+- ❌ Mix multiple concerns in one commit
+- ❌ Write vague commit messages
+- ❌ Ignore CI failures
+
+## References
+- Project team: `project-contexts/[project]/team.md`
+- Safety rules: `safety.mdc`

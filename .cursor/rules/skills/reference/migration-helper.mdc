@@ -1,0 +1,406 @@
+---
+description: "Safe database and code migrations with zero-downtime strategies. Schema changes, data backfilling, rollback plans. Three-phase approach for adding columns, concurrent indexes."
+globs: []
+alwaysApply: false
+---
+
+# Migration Helper
+
+**Type:** Reference Skill
+**Use:** On-demand for database and code migrations
+
+## When to Use
+
+Use this skill when:
+- Database schema changes needed
+- Data migrations required
+- Code refactoring across codebase
+- API version upgrades
+- Framework/library migrations
+
+## Migration Safety Rules
+
+```
+1. Always backup before migration
+2. Test migration on staging first
+3. Make migrations reversible
+4. Deploy in small batches
+5. Monitor during migration
+6. Have rollback plan ready
+```
+
+## Database Migration Patterns
+
+### Safe Schema Changes
+
+| Change | Risk | Safe Approach |
+|--------|------|---------------|
+| Add column | Low | Add nullable → backfill → make NOT NULL |
+| Remove column | Medium | Stop using → deploy → drop later |
+| Rename column | High | Add new → copy data → switch → drop old |
+| Change type | High | Add new column → migrate → drop old |
+| Add index | Medium | CREATE INDEX CONCURRENTLY |
+| Add constraint | Medium | Validate first, then add |
+
+### Zero-Downtime Pattern (6 Phases)
+
+```
+Phase 1: Add new column (nullable)
+  ↓
+Phase 2: Dual-write (write to both old and new columns)
+  ↓
+Phase 3: Backfill old data (batch processing)
+  ↓
+Phase 4: Switch reads to new column
+  ↓
+Phase 5: Remove old column writes
+  ↓
+Phase 6: Drop old column
+```
+
+**Why this works:** At every phase, the application remains functional.
+
+## Migration Script Templates
+
+### Adding Required Column (3-Phase)
+
+**Phase 1: Add nullable column**
+```sql
+-- Migration: 001_add_user_status.sql
+ALTER TABLE users ADD COLUMN status VARCHAR(20);
+
+-- Default can be set at this stage
+UPDATE users SET status = 'active' WHERE status IS NULL;
+```
+
+**Phase 2: Backfill in batches**
+```typescript
+// Migration: 002_backfill_user_status.ts
+export async function up(db: Database) {
+  let lastId = 0;
+  let processed = 0;
+
+  while (true) {
+    const result = await db.query(`
+      UPDATE users
+      SET status = 'active'
+      WHERE id > $1 AND status IS NULL
+      LIMIT 1000
+      RETURNING id
+    `, [lastId]);
+
+    if (result.length === 0) break;
+
+    lastId = result[result.length - 1].id;
+    processed += result.length;
+
+    console.log(`Processed ${processed} users...`);
+
+    // Pause between batches to avoid overwhelming DB
+    await sleep(100);
+  }
+
+  console.log(`Backfill complete: ${processed} users updated`);
+}
+```
+
+**Phase 3: Add NOT NULL constraint**
+```sql
+-- Migration: 003_make_status_required.sql
+ALTER TABLE users ALTER COLUMN status SET NOT NULL;
+```
+
+### Renaming Column (Zero-Downtime)
+
+**Phase 1: Add new column**
+```sql
+ALTER TABLE products ADD COLUMN price_cents INTEGER;
+```
+
+**Phase 2: Dual write**
+```typescript
+// Update application code to write to both
+async function updatePrice(productId, price) {
+  await db.query(`
+    UPDATE products
+    SET price = $1, price_cents = $2
+    WHERE id = $3
+  `, [price, Math.round(price * 100), productId]);
+}
+```
+
+**Phase 3: Backfill**
+```sql
+UPDATE products SET price_cents = (price * 100)::INTEGER WHERE price_cents IS NULL;
+```
+
+**Phase 4: Switch reads**
+```typescript
+// Update application to read from price_cents
+async function getPrice(productId) {
+  const result = await db.query(`
+    SELECT price_cents FROM products WHERE id = $1
+  `, [productId]);
+  return result.price_cents / 100;
+}
+```
+
+**Phase 5: Remove old writes**
+```typescript
+// Stop writing to old column
+async function updatePrice(productId, priceCents) {
+  await db.query(`
+    UPDATE products SET price_cents = $1 WHERE id = $2
+  `, [priceCents, productId]);
+}
+```
+
+**Phase 6: Drop old column**
+```sql
+ALTER TABLE products DROP COLUMN price;
+```
+
+### Adding Index (Non-blocking)
+
+**Wrong (blocks writes):**
+```sql
+CREATE INDEX idx_orders_user ON orders(user_id);
+-- Table locked during index creation!
+```
+
+**Right (non-blocking):**
+```sql
+CREATE INDEX CONCURRENTLY idx_orders_user ON orders(user_id);
+-- No table lock, safe for production
+```
+
+## Code Migration Strategies
+
+### Feature Flag Migration
+
+**Phase 1: Behind flag**
+```typescript
+if (featureFlags.newPaymentSystem) {
+  return newPaymentService.process(order);
+}
+return oldPaymentService.process(order);
+```
+
+**Phase 2: Gradually roll out**
+```typescript
+// Start: 0% users see new system
+// Week 1: 10% users
+// Week 2: 50% users
+// Week 3: 100% users
+```
+
+**Phase 3: Remove flag**
+```typescript
+// Old code deleted
+return newPaymentService.process(order);
+```
+
+### Strangler Fig Pattern
+
+For large refactorings:
+
+```
+1. Identify bounded context to migrate
+2. Create new implementation alongside old
+3. Add routing layer to direct traffic
+4. Gradually increase traffic to new system
+5. Monitor both systems
+6. When new is stable, remove old
+```
+
+**Example:**
+```typescript
+// Router layer
+function processPayment(order) {
+  if (shouldUseNewSystem(order)) {
+    return newPaymentSystem.process(order);
+  }
+  return legacyPaymentSystem.process(order);
+}
+
+function shouldUseNewSystem(order) {
+  // Gradually increase percentage
+  const percentage = getFeaturePercentage('new-payment-system');
+  return Math.random() * 100 < percentage;
+}
+```
+
+## Data Migration Checklist
+
+### Before Migration
+
+- [ ] Full database backup created
+- [ ] Migration tested on staging with production-like data
+- [ ] Rollback plan documented and tested
+- [ ] Monitoring alerts configured
+- [ ] Team notified of migration window
+- [ ] Low-traffic time slot chosen
+
+### During Migration
+
+- [ ] Run in batches (not all at once)
+- [ ] Monitor database performance
+- [ ] Monitor error rates
+- [ ] Verify data integrity after each batch
+- [ ] Ready to rollback if issues detected
+
+### After Migration
+
+- [ ] Data validation queries executed
+- [ ] Application smoke tests passed
+- [ ] Monitor for 24-48 hours
+- [ ] Document changes and lessons learned
+- [ ] Update team on completion
+
+## Common Migration Scenarios
+
+### Adding Required Column to Large Table
+
+```sql
+-- ❌ WRONG: Locks table, fails on existing rows
+ALTER TABLE users ADD COLUMN email VARCHAR NOT NULL;
+
+-- ✅ RIGHT: Three-phase approach
+-- Phase 1
+ALTER TABLE users ADD COLUMN email VARCHAR;
+
+-- Phase 2 (batch)
+UPDATE users SET email = CONCAT('user-', id, '@temp.com') WHERE email IS NULL;
+
+-- Phase 3
+ALTER TABLE users ALTER COLUMN email SET NOT NULL;
+```
+
+### Type Conversion
+
+```sql
+-- From: price DECIMAL(10,2)
+-- To: price_cents INTEGER
+
+-- Step 1: Add new column
+ALTER TABLE products ADD COLUMN price_cents INTEGER;
+
+-- Step 2: Migrate data
+UPDATE products SET price_cents = (price * 100)::INTEGER;
+
+-- Step 3: Verify
+SELECT * FROM products WHERE price_cents != (price * 100)::INTEGER;
+
+-- Step 4: Update application to use price_cents
+-- Step 5: Drop old column
+ALTER TABLE products DROP COLUMN price;
+```
+
+### Splitting Table
+
+```sql
+-- Original: users (id, name, email, address, city, country, zip)
+-- Split into: users + addresses
+
+-- Step 1: Create new table
+CREATE TABLE addresses (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id),
+  address TEXT,
+  city VARCHAR(100),
+  country VARCHAR(100),
+  zip VARCHAR(20)
+);
+
+-- Step 2: Migrate data
+INSERT INTO addresses (user_id, address, city, country, zip)
+SELECT id, address, city, country, zip FROM users;
+
+-- Step 3: Update application to use join
+-- Step 4: Drop columns from users
+ALTER TABLE users DROP COLUMN address, DROP COLUMN city, DROP COLUMN country, DROP COLUMN zip;
+```
+
+## Rollback Strategies
+
+| Strategy | When to Use | How |
+|----------|-------------|-----|
+| Script rollback | Data changes, reversible | down() migration |
+| Backup restore | Major failure, data corruption | Restore from backup |
+| Feature flag off | Code changes, not data | Disable flag |
+| Traffic reroute | Service migration | Route back to old service |
+
+**Rollback example:**
+```typescript
+// Migration file
+export async function up(db) {
+  await db.query('ALTER TABLE users ADD COLUMN status VARCHAR(20)');
+}
+
+export async function down(db) {
+  await db.query('ALTER TABLE users DROP COLUMN status');
+}
+```
+
+## Migration Testing
+
+**On staging before production:**
+
+```bash
+# 1. Clone production database to staging
+pg_dump production_db | psql staging_db
+
+# 2. Run migration on staging
+npm run migrate
+
+# 3. Run application tests
+npm test
+
+# 4. Manual smoke testing
+# 5. Check performance impact
+# 6. Verify rollback works
+npm run migrate:rollback
+```
+
+## Monitoring During Migration
+
+**Key metrics to watch:**
+
+- Query performance (slow query log)
+- Error rates (application logs)
+- Database connections (pool exhaustion?)
+- Memory usage (data loading issues?)
+- Replication lag (for replicated databases)
+
+**Alert if:**
+- Error rate > 1%
+- Response time > 2x baseline
+- Database CPU > 80%
+- Replication lag > 10s
+
+## Best Practices
+
+### Do's
+- ✅ Test migrations on production-size data
+- ✅ Make migrations idempotent (can run multiple times)
+- ✅ Batch large data updates (1000 rows at a time)
+- ✅ Monitor during execution
+- ✅ Keep rollback scripts ready
+- ✅ Document every step
+- ✅ Run during low-traffic periods
+
+### Don'ts
+- ❌ Run untested migrations on production
+- ❌ Make irreversible changes without backup
+- ❌ Migrate during peak traffic
+- ❌ Skip staging environment
+- ❌ Assume migrations are fast
+- ❌ Forget to communicate with team
+- ❌ Lock tables during business hours
+
+## References
+
+- Database migration tools: Flyway, Liquibase, Alembic
+- PostgreSQL documentation on ALTER TABLE
+- Zero-downtime deployments: Blue-green, canary
+- Feature flags: LaunchDarkly, Unleash

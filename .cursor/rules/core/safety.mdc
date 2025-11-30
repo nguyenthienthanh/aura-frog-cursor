@@ -1,0 +1,120 @@
+---
+description: Safety rules for external system interactions requiring user confirmation
+globs: []
+alwaysApply: true
+---
+
+# Safety Rules - External System Interactions
+
+**Purpose:** Prevent accidental writes to external systems
+
+## Core Safety Principles
+
+### 1. Always Confirm Before Writing
+
+**Rule:** NEVER write to external systems without explicit user confirmation
+
+**Applies to:**
+- JIRA (status updates, comments, subtasks)
+- Confluence (page creation, updates)
+- Slack (notifications)
+- Git (commits, pushes)
+
+## Confirmation Required
+
+### Git Operations
+```markdown
+⚠️ **CONFIRMATION REQUIRED: Git Commit**
+
+**Files to commit:** 5 files
+- src/features/sharing/ShareModal.tsx
+- src/features/sharing/ShareModal.test.tsx
+
+**Commit message:**
+feat(sharing): implement social media sharing
+
+**Type "confirm" to proceed**
+```
+
+## No Confirmation Needed (Read-Only)
+
+Safe operations that don't modify data:
+- ✅ Fetch JIRA tickets
+- ✅ Read Confluence pages
+- ✅ Git status, log, diff
+- ✅ Send informational notifications
+
+## Forbidden Operations
+
+### Never Auto-Execute:
+- ❌ Delete JIRA tickets
+- ❌ Force push to Git
+- ❌ Delete Git branches
+- ❌ Modify production data
+- ❌ Run database migrations in production
+
+## Security Rules
+
+### API Keys & Tokens
+```yaml
+Storage:
+  ✅ Environment variables
+  ✅ .envrc (with direnv)
+  ❌ Never in code
+  ❌ Never in git
+
+Access:
+  ✅ Read from process.env
+  ✅ Masked in logs
+  ❌ Never log full tokens
+```
+
+### Sensitive Data
+```yaml
+Never log or expose:
+  - API tokens
+  - Passwords
+  - Private keys
+  - User PII
+  - Database credentials
+```
+
+## Error Handling
+
+### Failed Operations
+```typescript
+try {
+  await externalApi.update(data);
+} catch (error) {
+  logger.error('External API update failed', {
+    // Don't log token or sensitive data
+  });
+
+  showError('Operation failed. Please try again or update manually.');
+}
+```
+
+## Checklist Before External Write
+
+- [ ] User explicitly requested this action
+- [ ] Confirmation prompt shown
+- [ ] User confirmed (typed "confirm")
+- [ ] Operation is safe (no destructive action)
+- [ ] Sensitive data redacted from logs
+- [ ] Audit log entry created
+- [ ] Error handling in place
+- [ ] User notified of result
+
+## Emergency Stop
+
+User Can Always Stop:
+```
+User types: "stop", "cancel", "abort"
+→ Immediately halt all operations
+→ Rollback pending changes
+→ Return to safe state
+```
+
+## References
+- Error handling: `error-handling.mdc`
+- Logging standards: `logging.mdc`

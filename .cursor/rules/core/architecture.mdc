@@ -1,0 +1,112 @@
+---
+description: Dual-file architecture pattern separating plugin and project-specific files
+globs: []
+alwaysApply: true
+---
+
+# Dual-File Architecture
+
+**Purpose:** Separates global plugin files from project-specific configurations
+
+## Core Concept
+
+Dual-file architecture separates:
+- **Plugin files** (global, shared) - System instructions
+- **Project files** (local, per-project) - Customization
+
+## Why Dual-File?
+
+### Problem
+Claude Code auto-loads `.claude/CLAUDE.md` from project, but NOT plugin files.
+
+### Solution
+1. Project `.claude/CLAUDE.md` is lightweight loader
+2. It instructs Claude to read plugin CLAUDE.md
+3. Single source of truth for system instructions
+
+### Benefits
+- No duplication of system instructions
+- Easy updates (change plugin, all projects benefit)
+- Project-specific overrides when needed
+- Clean separation of concerns
+
+## File Responsibilities
+
+### Project Files (`.claude/`)
+
+| File | Purpose | Git Tracked |
+|------|---------|-------------|
+| `CLAUDE.md` | Loader + project overrides | Yes |
+| `settings.json` | Project settings | Yes |
+| `settings.local.json` | Local secrets/overrides | No |
+| `project-contexts/` | Project conventions | Yes |
+
+### Global Files (`~/.claude/`)
+
+| File | Purpose |
+|------|---------|
+| `CLAUDE.md` | Global defaults |
+| `settings.json` | Global settings |
+| `plugins/` | Plugin storage |
+
+## Minimal Project CLAUDE.md
+
+```markdown
+# Project: my-app
+
+## Load Core Rules
+Read: .cursor/rules/core/*.mdc
+
+## Project Context
+Load from: .claude/project-contexts/my-app/
+
+## Overrides (if any)
+- Primary language: TypeScript
+- Test coverage: 90%
+```
+
+## When to Modify Each File
+
+### Modify Project CLAUDE.md When:
+- Adding project-specific overrides
+- Changing primary agent/language
+- Adjusting phase behavior
+- Custom approval requirements
+
+### Modify Plugin/Rules When:
+- Updating core quality standards
+- Adding new rules for all projects
+- Fixing rule bugs
+- Version updates
+
+## Anti-Patterns
+
+### DON'T: Duplicate Plugin Content
+```markdown
+❌ Project CLAUDE.md:
+# Copy-paste of entire plugin rules
+...all the rules...
+```
+
+### DO: Reference Rules
+```markdown
+✅ Project CLAUDE.md:
+# Project: my-app
+Read: .cursor/rules/core/*.mdc
+```
+
+### DON'T: Put Project Rules in Core
+```markdown
+❌ .cursor/rules/core/:
+# Rules for my-specific-project
+```
+
+### DO: Put Project Rules in Project Context
+```markdown
+✅ .claude/project-contexts/my-app/rules.md:
+# Project-specific rules
+```
+
+## References
+- Project conventions: `project-contexts/[project]/conventions.md`
+- Project rules: `project-contexts/[project]/rules.md`

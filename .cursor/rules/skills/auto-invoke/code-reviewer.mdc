@@ -1,0 +1,376 @@
+---
+description: "Comprehensive multi-agent code review. Auto-detects 'review code', runs after Phase 5c, before merge. Security, performance, maintainability, test coverage analysis by specialized agents."
+globs: []
+alwaysApply: false
+---
+
+# Code Reviewer
+
+**Type:** Auto-Invoke
+**Trigger:** Code review requests and before merge
+
+## Purpose
+
+Performs comprehensive multi-agent code review checking security vulnerabilities, performance issues, code quality, test coverage, and adherence to project conventions.
+
+## Activation Logic
+
+Cursor AI should activate this skill when:
+- User mentions: `review code`, `code review`, `check code`
+- After Phase 5c (Refactor) in workflow
+- Before merge/PR creation
+- When explicitly requested
+
+## Review Process
+
+### 1. Get Files to Review
+
+```bash
+# Get changed files
+git diff --name-only main...HEAD
+
+# Or review specific files
+[user-specified files]
+```
+
+### 2. Multi-Agent Review
+
+| Agent | Checks |
+|-------|--------|
+| **Security** | OWASP Top 10, secrets, SQL injection, XSS, auth issues |
+| **Dev** | KISS principle, structure, error handling, conventions |
+| **QA** | Coverage, test quality, edge cases, assertions |
+| **Performance** | Algorithms, memory, queries, bundle size, lazy loading |
+
+### 3. Generate Report
+
+```markdown
+## Code Review Report
+
+### ✅ Passed Checks
+- No hardcoded secrets detected
+- All files follow naming conventions
+- Error handling present
+- TypeScript strict mode enabled
+
+### ⚠️ Warnings (Non-blocking)
+- **Performance:** Large bundle size in UserProfile.tsx (+15KB)
+  - Recommendation: Consider code splitting or lazy loading
+- **Style:** Inconsistent spacing in auth/Login.tsx (lines 45-50)
+  - Fix: Run prettier
+
+### ❌ Issues Found (Blocking)
+- **[CRITICAL - SECURITY]** API key exposed in config.ts:12
+  - Fix: Move to environment variable
+  - Impact: HIGH - Credentials publicly accessible
+
+- **[HIGH - QUALITY]** Missing error handling in payment/process.ts:78
+  - Fix: Add try-catch block
+  - Impact: MEDIUM - App crash on payment failure
+
+- **[HIGH - TESTING]** Coverage below target: 72% (target: 80%)
+  - Fix: Add tests for auth/validation.ts
+  - Impact: MEDIUM - Quality standard not met
+
+### 📊 Metrics
+- **Coverage:** 72% (target: 80%) ❌
+- **Files Changed:** 8
+- **Lines Added:** +245
+- **Lines Removed:** -123
+- **Security Issues:** 1 critical, 0 high
+- **Performance Issues:** 0 critical, 1 warning
+- **Quality Issues:** 1 high, 2 medium
+```
+
+### 4. Decision
+
+- **✅ APPROVED** - No critical issues
+- **⚠️ APPROVED WITH COMMENTS** - Minor issues, can merge
+- **❌ CHANGES REQUESTED** - Critical issues, must fix before merge
+
+## Review Checklist
+
+### Security
+- [ ] No hardcoded secrets (API keys, passwords, tokens)
+- [ ] Input validation on all user inputs
+- [ ] Auth/authorization checks in place
+- [ ] SQL injection prevented (parameterized queries)
+- [ ] XSS prevented (sanitized output)
+- [ ] CSRF protection for state-changing operations
+- [ ] Sensitive data encrypted in transit and at rest
+- [ ] Dependencies have no known vulnerabilities
+
+### Code Quality
+- [ ] Follows KISS principle (simple over complex)
+- [ ] No code duplication
+- [ ] Error handling comprehensive
+- [ ] Follows project conventions (naming, structure)
+- [ ] TypeScript types properly defined (no `any`)
+- [ ] Functions are single-purpose
+- [ ] Code is readable and self-documenting
+- [ ] Comments explain "why", not "what"
+
+### Testing
+- [ ] Coverage ≥ target (default 80%)
+- [ ] Critical paths have 100% coverage
+- [ ] Edge cases covered
+- [ ] Tests follow AAA pattern
+- [ ] No skipped/disabled tests without reason
+- [ ] Mocks used appropriately
+- [ ] Integration tests for API endpoints
+- [ ] E2E tests for critical user flows
+
+### Performance
+- [ ] No N+1 query problems
+- [ ] Efficient algorithms (avoid O(n²) where possible)
+- [ ] No memory leaks
+- [ ] Images optimized
+- [ ] Lazy loading for large components
+- [ ] Database indexes on frequently queried fields
+- [ ] API responses paginated
+- [ ] Bundle size reasonable
+
+### Maintainability
+- [ ] Consistent code style
+- [ ] Proper error messages
+- [ ] Logging in appropriate places
+- [ ] No console.log in production
+- [ ] Configuration externalized
+- [ ] Magic numbers/strings extracted to constants
+- [ ] Reusable code in utilities/helpers
+
+## Critical Issues (Block Merge)
+
+These MUST be fixed before merging:
+
+1. **Hardcoded secrets** - API keys, passwords, tokens in code
+2. **SQL injection vulnerabilities** - Unsanitized SQL queries
+3. **XSS vulnerabilities** - Unescaped user input in HTML
+4. **Coverage below target** - Default 80% or project-specific
+5. **Breaking changes without migration** - Breaking API/DB changes
+6. **Missing error handling** - Unhandled promise rejections, exceptions
+7. **Auth bypass** - Missing authorization checks
+
+## Security Review Patterns
+
+### Check for Secrets
+```bash
+# Search for common secret patterns
+grep -r "api_key\s*=\s*['\"]" .
+grep -r "password\s*=\s*['\"]" .
+grep -r "secret\s*=\s*['\"]" .
+```
+
+### Check for SQL Injection
+```typescript
+// ❌ BAD - SQL Injection risk
+const query = `SELECT * FROM users WHERE id = ${userId}`;
+
+// ✅ GOOD - Parameterized query
+const query = `SELECT * FROM users WHERE id = ?`;
+db.query(query, [userId]);
+```
+
+### Check for XSS
+```typescript
+// ❌ BAD - XSS risk
+element.innerHTML = userInput;
+
+// ✅ GOOD - Sanitized
+element.textContent = userInput;
+// OR use library like DOMPurify
+element.innerHTML = DOMPurify.sanitize(userInput);
+```
+
+## Performance Review Patterns
+
+### Check for N+1 Queries
+```typescript
+// ❌ BAD - N+1 query problem
+const users = await User.findAll();
+for (const user of users) {
+  user.posts = await Post.findAll({ userId: user.id }); // N queries!
+}
+
+// ✅ GOOD - Eager loading
+const users = await User.findAll({
+  include: [Post] // 1 query with JOIN
+});
+```
+
+### Check for Inefficient Loops
+```typescript
+// ❌ BAD - O(n²)
+for (const item of items) {
+  for (const other of items) {
+    if (item.matches(other)) { /* ... */ }
+  }
+}
+
+// ✅ GOOD - O(n) with Map
+const map = new Map();
+for (const item of items) {
+  map.set(item.key, item);
+}
+```
+
+## Quality Review Patterns
+
+### Check KISS Principle
+```typescript
+// ❌ BAD - Over-engineered
+class UserFactory {
+  createUser(builder: UserBuilder): User {
+    return builder.withValidator(new UserValidator())
+                  .withRepository(new UserRepository())
+                  .build();
+  }
+}
+
+// ✅ GOOD - Simple
+function createUser(data: UserData): User {
+  validateUser(data);
+  return new User(data);
+}
+```
+
+### Check Error Handling
+```typescript
+// ❌ BAD - No error handling
+async function fetchUser(id: string) {
+  const response = await fetch(`/api/users/${id}`);
+  return response.json();
+}
+
+// ✅ GOOD - Comprehensive error handling
+async function fetchUser(id: string) {
+  try {
+    const response = await fetch(`/api/users/${id}`);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch user: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    logger.error('User fetch failed', { id, error });
+    throw new UserFetchError('Could not load user', { cause: error });
+  }
+}
+```
+
+## Automated Checks
+
+Run automated tools during review:
+
+```bash
+# Linting
+npm run lint
+
+# Type checking
+npm run type-check
+
+# Security audit
+npm audit
+# OR
+yarn audit
+
+# Dependency vulnerabilities
+snyk test
+
+# Code complexity
+npx plato src/ --dir complexity-report
+
+# Bundle size
+npm run build -- --analyze
+```
+
+## Review Comments Format
+
+```markdown
+### [SEVERITY] Category - Issue Title
+
+**File:** `src/path/to/file.ts:42`
+
+**Issue:** [Description of what's wrong]
+
+**Impact:** [What could go wrong]
+
+**Fix:** [How to fix it]
+
+\`\`\`typescript
+// Suggested fix
+[code]
+\`\`\`
+```
+
+**Example:**
+```markdown
+### [CRITICAL] Security - Hardcoded API Key
+
+**File:** `src/config/api.ts:12`
+
+**Issue:** API key is hardcoded in source code
+
+**Impact:** API credentials exposed publicly, potential unauthorized access
+
+**Fix:** Move to environment variable
+
+\`\`\`typescript
+// Before
+const API_KEY = 'sk_live_abc123...';
+
+// After
+const API_KEY = process.env.API_KEY;
+if (!API_KEY) throw new Error('API_KEY not configured');
+\`\`\`
+```
+
+## Integration
+
+Works seamlessly with:
+- `workflow-orchestrator` - Used in Phase 6 (Review)
+- `security-expert` - Security analysis
+- `test-writer` - Coverage verification
+- `project-context-loader` - Uses project quality rules
+
+## Review Summary Template
+
+```markdown
+## Code Review Summary
+
+**Reviewer:** [Agent/Human]
+**Date:** [Date]
+**Branch:** [branch-name]
+
+### Overview
+[Brief summary of changes]
+
+### Review Metrics
+- Files Changed: X
+- Lines Added: +Y
+- Lines Removed: -Z
+- Coverage: A% (target: B%)
+
+### Issues Summary
+- Critical: X
+- High: Y
+- Medium: Z
+- Low: W
+
+### Decision
+[✅ APPROVED / ⚠️ APPROVED WITH COMMENTS / ❌ CHANGES REQUESTED]
+
+### Detailed Findings
+[See sections above]
+
+### Recommendations
+[Optional improvement suggestions]
+```
+
+## References
+
+- Security: OWASP Top 10, Security best practices
+- Quality: KISS principle, Clean Code principles
+- Testing: Coverage requirements from project-context-loader
+- Performance: Performance optimization patterns

@@ -1,0 +1,128 @@
+---
+description: YAGNI principle - implement only what is needed right now, avoid speculative features
+globs: []
+alwaysApply: true
+---
+
+# YAGNI Principle (You Aren't Gonna Need It)
+
+**YAGNI** = Only implement what is needed **right now**. Don't add functionality based on speculation about future requirements.
+
+## Core Principle
+
+```
+"Always implement things when you actually need them,
+never when you just foresee that you need them."
+— Ron Jeffries (XP co-founder)
+```
+
+## Anti-Patterns to Avoid
+
+### 1. Speculative Features
+
+```typescript
+// ❌ YAGNI Violation: Adding unused options
+interface UserService {
+  getUser(id: string): User
+  getUsers(): User[]
+  getUsersByRole(role: string): User[]  // "We might need this"
+  getUsersByDepartment(dept: string): User[]  // "Just in case"
+  getUsersWithFilters(filters: ComplexFilterObject): User[]  // "Future-proof"
+}
+
+// ✅ YAGNI: Only what's needed now
+interface UserService {
+  getUser(id: string): User
+  getUsers(): User[]
+}
+```
+
+### 2. Unused Configuration
+
+```typescript
+// ❌ YAGNI Violation: Configurable everything
+const config = {
+  api: {
+    baseUrl: process.env.API_URL,
+    timeout: process.env.API_TIMEOUT || 5000,
+    retries: process.env.API_RETRIES || 3,
+    retryDelay: process.env.API_RETRY_DELAY || 1000,
+    maxConcurrent: process.env.API_MAX_CONCURRENT || 10,
+    // ... many unused options
+  }
+}
+
+// ✅ YAGNI: Only what you're using
+const config = {
+  api: {
+    baseUrl: process.env.API_URL,
+    timeout: 5000
+  }
+}
+```
+
+## When to Add Features
+
+### Add When
+- ✅ There's a concrete user story/ticket
+- ✅ Tests are written for the feature
+- ✅ Feature is part of current sprint
+- ✅ Customer has requested it
+
+### Don't Add When
+- ❌ "We might need this later"
+- ❌ "It's easy to add now"
+- ❌ "Other systems have this"
+- ❌ "It makes the API more complete"
+
+## YAGNI Decision Flowchart
+
+```
+Is this feature in the current requirements?
+├── YES → Implement it
+└── NO → Is there a concrete future ticket?
+    ├── YES → Wait for that ticket
+    └── NO → Don't implement it
+```
+
+## YAGNI vs Planning Ahead
+
+| YAGNI (Good) | Over-Engineering (Bad) |
+|--------------|------------------------|
+| Design for extensibility | Implement all extensions |
+| Use dependency injection | Create abstract factories |
+| Keep interfaces minimal | Add "might need" methods |
+| Document future ideas | Code future ideas |
+
+**Key Insight:** You can **design** for extensibility without **implementing** extensions.
+
+## Checklist Before Adding Code
+
+- [ ] Is this in the current requirements?
+- [ ] Does a test exist for this feature?
+- [ ] Will this be used in the current sprint?
+- [ ] Can I explain why this is needed NOW?
+- [ ] Would removing this break current functionality?
+
+**If any answer is NO → Don't add it**
+
+## Best Practices
+
+### Do's ✅
+- Implement only current requirements
+- Delete unused code immediately
+- Question every "just in case" addition
+- Keep interfaces minimal
+- Add features when tests require them
+
+### Don'ts ❌
+- Add parameters "for future use"
+- Create abstractions for single implementations
+- Configure things that won't change
+- Add API endpoints without consumers
+- Build features without user stories
+
+## References
+- KISS Principle: `kiss-principle.mdc`
+- DRY with Caution: `dry-caution.mdc`
+- Project requirements: `project-contexts/[project]/rules.md`

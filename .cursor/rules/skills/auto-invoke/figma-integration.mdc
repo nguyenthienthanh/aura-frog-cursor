@@ -1,0 +1,620 @@
+---
+description: "Auto-fetch Figma designs when URL detected. Extracts components, design tokens, colors, typography, spacing. Generates component structure. Requires FIGMA_ACCESS_TOKEN."
+globs: []
+alwaysApply: false
+---
+
+# Figma Integration
+
+**Type:** Auto-Invoke
+**Trigger:** Figma URL detected
+
+## Purpose
+
+Automatically fetches Figma design details when a Figma URL is shared, extracting design tokens (colors, typography, spacing) and component structures to inform UI implementation.
+
+## Activation Logic
+
+Cursor AI should activate this skill when:
+- Figma URL shared: `https://figma.com/file/ABC123/...`
+- User mentions: "implement Figma design", "use Figma file"
+- Starting workflow with design reference
+- Design extraction requested
+
+## Integration Process
+
+### 1. Detect & Extract File ID
+
+**Pattern:** `figma.com/file/([a-zA-Z0-9]+)`
+
+**Example URLs:**
+```
+https://figma.com/file/ABC123xyz/Project-Name
+https://www.figma.com/file/ABC123xyz/Project-Name?node-id=1:2
+https://figma.com/proto/ABC123xyz/Prototype
+```
+
+```javascript
+// Detection regex
+const match = message.match(/figma\.com\/(?:file|proto)\/([a-zA-Z0-9]+)/);
+const fileId = match[1]; // "ABC123xyz"
+```
+
+### 2. Check for Existing Log Data (PRIORITY)
+
+**⚠️ IMPORTANT: Always check for cached data first before fetching!**
+
+**Log file locations (check in order):**
+```
+.cursor/logs/figma/{FILE_ID}-readable.txt  ← Human-readable format
+.cursor/logs/figma/{FILE_ID}.json          ← Raw JSON data
+.cursor/logs/figma/{FILE_ID}-images.json   ← Image URLs
+logs/figma/{FILE_ID}-readable.txt          ← Alternative location
+logs/figma/{FILE_ID}.json                  ← Alternative location
+```
+
+**Decision logic:**
+```
+IF log file exists AND user did NOT request "fetch", "refresh", "update":
+  → READ from log file using Read tool
+  → Show cached data with note: "📋 Using cached Figma data from {date}"
+
+IF log file does NOT exist OR user requests fresh data:
+  → FETCH using bash script
+```
+
+**Read cached data:**
+```bash
+# Prefer readable format
+Read .cursor/logs/figma/ABC123-readable.txt
+
+# Or parse JSON if needed
+Read .cursor/logs/figma/ABC123.json
+
+# Get image URLs
+Read .cursor/logs/figma/ABC123-images.json
+```
+
+### 3. Fetch Fresh Data (Only When Needed)
+
+**Fetch when:**
+- No cached log exists
+- User says: "fetch", "refresh", "update", "get latest"
+- User explicitly requests fresh Figma data
+
+```bash
+# Run Figma fetch script
+bash .cursor/scripts/figma-fetch.sh ABC123xyz
+
+# Output saved to:
+#   .cursor/logs/figma/ABC123xyz-readable.txt  ← Formatted data
+#   .cursor/logs/figma/ABC123xyz.json          ← Raw JSON
+#   .cursor/logs/figma/ABC123xyz-images.json   ← Image URLs
+#   .cursor/logs/figma/figma-fetch-{timestamp}.log ← Execution log
+```
+
+**Script extracts:**
+1. Design tokens (colors, typography, spacing)
+2. Component structures
+3. Frame hierarchy
+4. Images/icons
+5. Styles
+
+**Output format:**
+```json
+{
+  "fileId": "ABC123xyz",
+  "name": "Mobile App Design",
+  "lastModified": "2025-01-20T10:30:00Z",
+  "designTokens": {
+    "colors": {
+      "primary": "#007AFF",
+      "secondary": "#5AC8FA",
+      "background": "#FFFFFF",
+      "text": "#000000",
+      "error": "#FF3B30"
+    },
+    "typography": {
+      "heading1": { "fontFamily": "SF Pro", "fontSize": 28, "fontWeight": "bold" },
+      "heading2": { "fontFamily": "SF Pro", "fontSize": 22, "fontWeight": "semibold" },
+      "body": { "fontFamily": "SF Pro", "fontSize": 16, "fontWeight": "regular" }
+    },
+    "spacing": {
+      "xs": 4,
+      "sm": 8,
+      "md": 16,
+      "lg": 24,
+      "xl": 32
+    }
+  },
+  "components": [
+    {
+      "name": "Button",
+      "type": "COMPONENT",
+      "properties": {
+        "width": "auto",
+        "height": 44,
+        "borderRadius": 8,
+        "backgroundColor": "primary"
+      }
+    }
+  ],
+  "frames": [
+    {
+      "name": "Login Screen",
+      "children": ["Header", "EmailInput", "PasswordInput", "LoginButton"]
+    }
+  ]
+}
+```
+
+### 4. Extract Design Tokens
+
+**Generate token files from Figma data:**
+
+#### Colors
+```typescript
+// src/theme/colors.ts
+export const colors = {
+  primary: '#007AFF',
+  secondary: '#5AC8FA',
+  background: '#FFFFFF',
+  text: '#000000',
+  error: '#FF3B30',
+  success: '#34C759',
+  warning: '#FF9500',
+} as const;
+```
+
+#### Typography
+```typescript
+// src/theme/typography.ts
+export const typography = {
+  heading1: {
+    fontFamily: 'SF Pro',
+    fontSize: 28,
+    fontWeight: '700',
+    lineHeight: 34,
+  },
+  heading2: {
+    fontFamily: 'SF Pro',
+    fontSize: 22,
+    fontWeight: '600',
+    lineHeight: 28,
+  },
+  body: {
+    fontFamily: 'SF Pro',
+    fontSize: 16,
+    fontWeight: '400',
+    lineHeight: 22,
+  },
+} as const;
+```
+
+#### Spacing
+```typescript
+// src/theme/spacing.ts
+export const spacing = {
+  xs: 4,
+  sm: 8,
+  md: 16,
+  lg: 24,
+  xl: 32,
+  xxl: 48,
+} as const;
+```
+
+#### Using with NativeWind
+```typescript
+// tailwind.config.js
+module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#007AFF',
+        secondary: '#5AC8FA',
+        // ... from Figma
+      },
+      spacing: {
+        xs: '4px',
+        sm: '8px',
+        md: '16px',
+        // ... from Figma
+      },
+    },
+  },
+};
+```
+
+### 5. Generate Component Structure
+
+**Map Figma frames to code components:**
+
+```
+Figma File: "Login Screen"
+├── Header (Frame)
+│   ├── Logo (Component)
+│   └── Title (Text)
+├── Form (Frame)
+│   ├── EmailInput (Component)
+│   ├── PasswordInput (Component)
+│   └── LoginButton (Component)
+└── Footer (Frame)
+    └── SignUpLink (Component)
+```
+
+**Generated component structure:**
+```typescript
+// src/screens/LoginScreen.tsx
+import { Header } from '@/components/Header';
+import { EmailInput } from '@/components/EmailInput';
+import { PasswordInput } from '@/components/PasswordInput';
+import { LoginButton } from '@/components/LoginButton';
+
+export const LoginScreen = () => {
+  return (
+    <View>
+      <Header />
+      <View>
+        <EmailInput />
+        <PasswordInput />
+        <LoginButton />
+      </View>
+    </View>
+  );
+};
+```
+
+**Component files to create:**
+```
+src/
+  components/
+    Header/
+      Header.tsx
+      Header.test.tsx
+    EmailInput/
+      EmailInput.tsx
+      EmailInput.test.tsx
+    PasswordInput/
+      PasswordInput.tsx
+      PasswordInput.test.tsx
+    LoginButton/
+      LoginButton.tsx
+      LoginButton.test.tsx
+```
+
+### 6. Export Images & Icons
+
+```bash
+# Export images from Figma
+bash scripts/figma-export-images.sh ABC123xyz
+
+# Saved to:
+# assets/images/logo.png
+# assets/icons/user.svg
+```
+
+## Setup
+
+### Required Environment Variable
+
+**In `.envrc` (at project root):**
+```bash
+export FIGMA_ACCESS_TOKEN="figd_your-token-here"
+```
+
+### Generate Figma Access Token
+
+1. Go to: https://www.figma.com/settings
+2. Navigate to "Personal Access Tokens"
+3. Click "Create new token"
+4. Copy token
+5. Add to `.envrc`
+6. Run: `direnv allow` (if using direnv)
+
+### Verify Setup
+
+```bash
+# Test Figma connection
+bash ~/.claude/plugins/marketplaces/aurafrog/aura-frog/scripts/figma-test.sh
+
+# Expected output:
+# ✅ Figma connection successful
+# ✅ Token valid
+# ✅ Can access files
+```
+
+## If Not Configured
+
+When Figma URL detected but token not configured:
+
+```markdown
+⚠️ **Figma Integration Not Configured**
+
+Detected Figma file: https://figma.com/file/ABC123xyz/Project
+
+**Options:**
+1. **Configure Figma** (recommended)
+   - Generate token at: https://www.figma.com/settings
+   - Add to .envrc: `export FIGMA_ACCESS_TOKEN="figd_..."`
+   - Run: `bash scripts/figma-setup.sh`
+
+2. **Provide screenshots instead**
+   - Share design screenshots
+   - I'll extract design tokens manually
+
+3. **Skip for now**
+   - Continue without design context
+
+Which option? [1/2/3]
+```
+
+## Design Token Extraction
+
+### Color Extraction
+
+Figma provides colors in various formats:
+
+```json
+// Figma API response
+{
+  "fills": [{
+    "type": "SOLID",
+    "color": {
+      "r": 0.0,
+      "g": 0.478,
+      "b": 1.0,
+      "a": 1.0
+    }
+  }]
+}
+```
+
+**Convert to hex:**
+```typescript
+// RGB to Hex conversion
+const rgbToHex = (r, g, b) => {
+  const toHex = (n) => Math.round(n * 255).toString(16).padStart(2, '0');
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+};
+
+// Result: #007AFF
+```
+
+### Typography Extraction
+
+```json
+// Figma text style
+{
+  "fontFamily": "SF Pro",
+  "fontSize": 28,
+  "fontWeight": 700,
+  "lineHeight": { "value": 34, "unit": "PIXELS" },
+  "letterSpacing": { "value": 0, "unit": "PIXELS" }
+}
+```
+
+**Convert to CSS/React Native:**
+```typescript
+{
+  fontFamily: 'SF Pro',
+  fontSize: 28,
+  fontWeight: '700',
+  lineHeight: 34,
+  letterSpacing: 0,
+}
+```
+
+### Spacing Extraction
+
+Figma uses auto-layout with spacing values:
+
+```json
+{
+  "paddingTop": 16,
+  "paddingRight": 16,
+  "paddingBottom": 16,
+  "paddingLeft": 16,
+  "itemSpacing": 8
+}
+```
+
+**Extract spacing scale:**
+```
+Most common values: 4, 8, 16, 24, 32
+→ Map to: xs, sm, md, lg, xl
+```
+
+## Component Mapping
+
+### Figma → React Native
+
+| Figma Type | React Native Component |
+|------------|----------------------|
+| Frame | View |
+| Text | Text |
+| Rectangle (with content) | View / Pressable |
+| Instance (Button) | Pressable + Text |
+| Instance (Input) | TextInput |
+| Image | Image |
+| Icon | Image / SVG |
+
+### Auto-Generate Components
+
+```typescript
+// From Figma Button component
+// Generated: src/components/Button.tsx
+
+import { Pressable, Text } from 'react-native';
+import { colors } from '@/theme/colors';
+
+export const Button = ({ onPress, children }) => {
+  return (
+    <Pressable
+      className="bg-primary rounded-lg py-3 px-6"
+      onPress={onPress}
+    >
+      <Text className="text-white font-semibold text-base">
+        {children}
+      </Text>
+    </Pressable>
+  );
+};
+```
+
+## Image Export
+
+### Export Settings
+
+```json
+{
+  "format": "PNG",
+  "scale": 2, // @2x for retina
+  "constraint": { "type": "SCALE", "value": 2 }
+}
+```
+
+### Generated Assets
+
+```
+assets/
+  images/
+    logo@2x.png
+    logo@3x.png
+    background@2x.png
+  icons/
+    user.svg
+    settings.svg
+    home.svg
+```
+
+## Phase 3 Integration
+
+**In workflow Phase 3 (UI Breakdown):**
+
+```markdown
+## Phase 3: UI Breakdown (from Figma)
+
+### Design Tokens Extracted ✅
+- **Colors:** 8 colors defined
+- **Typography:** 5 text styles defined
+- **Spacing:** 6 spacing values defined
+
+### Components Identified
+1. **Header**
+   - Logo component
+   - Title text (heading1 style)
+
+2. **LoginForm**
+   - EmailInput (custom component)
+   - PasswordInput (custom component)
+   - LoginButton (primary button style)
+
+3. **Footer**
+   - SignUpLink (text link)
+
+### Files to Create
+- src/theme/colors.ts
+- src/theme/typography.ts
+- src/theme/spacing.ts
+- src/components/Header/Header.tsx
+- src/components/EmailInput/EmailInput.tsx
+- src/components/PasswordInput/PasswordInput.tsx
+- src/components/LoginButton/LoginButton.tsx
+
+**Approve to proceed to Phase 4?**
+```
+
+## Error Handling
+
+### File Not Found
+```markdown
+❌ Figma file not found: ABC123xyz
+
+**Possible reasons:**
+- File doesn't exist
+- No permission to access file
+- File is in a different team/organization
+
+Check file URL and permissions.
+```
+
+### Authentication Failed
+```markdown
+❌ Figma authentication failed
+
+**Check:**
+- FIGMA_ACCESS_TOKEN is set in .envrc
+- Token is valid (not expired)
+- Token has correct permissions
+
+Generate new token at: https://www.figma.com/settings
+```
+
+### Network Error
+```markdown
+⚠️ Could not connect to Figma API
+
+**Continuing without Figma integration**
+
+Options:
+- Retry later
+- Provide screenshots
+- Continue without design context
+```
+
+## Integration
+
+Works seamlessly with:
+- `workflow-orchestrator` - Auto-loads design in Phase 3
+- `ui-designer` agent - Uses design tokens for implementation
+- `project-context-loader` - Integrates with project styling (NativeWind, etc.)
+
+## Benefits
+
+1. **Consistency** - Exact colors, fonts, spacing from design
+2. **Speed** - No manual token extraction
+3. **Accuracy** - Pixel-perfect implementation
+4. **Sync** - Always use latest design
+5. **Documentation** - Design tokens become code
+
+## Fallback: Screenshots
+
+If Figma API unavailable, use screenshots:
+
+```markdown
+**Alternative: Share Screenshots**
+
+Please provide:
+1. Full screen design
+2. Component close-ups
+3. Style guide / design tokens
+
+I'll extract:
+- Colors (using color picker)
+- Typography (font, size, weight)
+- Spacing (measurements)
+- Component structure
+```
+
+## Privacy & Security
+
+**Important:**
+- Figma tokens have full access to your Figma files
+- Never commit `.envrc` to version control
+- Add to `.gitignore`:
+  ```
+  .envrc
+  .claude/logs/figma/*.json
+  ```
+- Tokens can be deleted at: https://www.figma.com/settings
+
+## References
+
+- Figma API: https://www.figma.com/developers/api
+- Design tokens: https://www.figma.com/community/plugin/888356646278934516/Design-Tokens
+- Setup guide: Project documentation
+
+## Note
+
+**Figma integration is optional.** Screenshots work perfectly fine as a fallback. The integration is a convenience feature for teams with Figma API access.

@@ -1,0 +1,321 @@
+---
+description: Template for Technical Specification document - Used in Phase 2 (Technical Planning)
+globs: []
+alwaysApply: false
+---
+
+# Technical Specification Template
+
+## Use Case
+Generate comprehensive technical specifications during **Phase 2: Technical Planning** of the Aura Frog workflow. This template provides a structured approach to documenting architecture, data models, API specifications, security, performance, testing strategy, and deployment plans.
+
+## Associated Phase
+**Phase 2: Technical Planning**
+
+## When to Use
+- After requirements analysis (Phase 1) is complete
+- Before implementation begins (Phase 5)
+- When defining system architecture and technical approach
+- For documenting complex features that require detailed planning
+
+## Template Structure
+
+```markdown
+# Technical Specification Template
+
+**Feature:** [Feature Name]
+**JIRA:** [JIRA-XXXX]
+**Author:** [Agent Name]
+**Date:** [YYYY-MM-DD]
+**Version:** 1.0.0
+
+---
+
+## 1. Overview
+
+### 1.1 Purpose
+Brief description of what this feature does and why it's needed.
+
+### 1.2 Scope
+What is included and what is out of scope.
+
+### 1.3 Stakeholders
+- Product: [PM Name]
+- Development: [Dev Team]
+- QA: [QA Team]
+- Design: [Designer Name]
+
+---
+
+## 2. Requirements Summary
+
+### 2.1 Functional Requirements
+| ID | Requirement | Priority | Status |
+|----|-------------|----------|--------|
+| FR-001 | [Requirement description] | High | ✅ |
+| FR-002 | [Requirement description] | Medium | ✅ |
+
+### 2.2 Non-Functional Requirements
+| ID | Requirement | Target | Status |
+|----|-------------|--------|--------|
+| NFR-001 | Performance: Page load < 2s | < 2s | ✅ |
+| NFR-002 | Test coverage >= 80% | >= 80% | ✅ |
+
+---
+
+## 3. Architecture
+
+### 3.1 High-Level Architecture
+[Insert architecture diagram or ASCII diagram]
+
+### 3.2 Component Structure
+[Define component hierarchy]
+
+### 3.3 Data Flow
+[Describe data flow through the system]
+
+---
+
+## 4. Data Models
+
+### 4.1 Frontend Models (TypeScript)
+[Define TypeScript interfaces and types]
+
+### 4.2 Backend Models
+[Define backend data models - Laravel, Node.js, etc.]
+
+### 4.3 Database Schema
+[Define database tables, indexes, relationships]
+
+---
+
+## 5. API Specification
+
+### 5.1 Endpoints
+For each endpoint, document:
+- HTTP method and path
+- Description
+- Request parameters
+- Request body schema
+- Response schema
+- Error responses
+
+---
+
+## 6. State Management
+
+### 6.1 Global State
+[Define global state structure - Zustand, Redux, etc.]
+
+### 6.2 Server State
+[Define React Query queries and mutations]
+
+---
+
+## 7. Security Considerations
+
+### 7.1 Authentication & Authorization
+### 7.2 Input Validation
+### 7.3 Data Protection
+### 7.4 Rate Limiting
+
+---
+
+## 8. Performance Considerations
+
+### 8.1 Frontend Performance
+- Initial Load: < 2 seconds
+- Component Render: < 100ms
+- Memory Usage: < 150MB
+
+### 8.2 Backend Performance
+- API Response Time: < 500ms (p95)
+- Database Query Time: < 100ms (p95)
+
+### 8.3 Network Performance
+
+---
+
+## 9. Error Handling
+
+### 9.1 Frontend Error Handling
+### 9.2 Backend Error Handling
+### 9.3 User-Facing Error Messages
+
+---
+
+## 10. Testing Strategy
+
+### 10.1 Unit Tests
+**Target Coverage:** 85%
+
+### 10.2 Component Tests
+**Target Coverage:** 75%
+
+### 10.3 Integration Tests
+### 10.4 E2E Tests (Critical Flows)
+
+---
+
+## 11. Deployment Strategy
+
+### 11.1 Environment Setup
+### 11.2 Feature Flags
+### 11.3 Gradual Rollout
+### 11.4 Monitoring
+
+---
+
+## 12. Rollback Plan
+
+### 12.1 Rollback Triggers
+### 12.2 Rollback Steps
+
+---
+
+## 13. Documentation
+
+### 13.1 Code Documentation
+### 13.2 User Documentation
+### 13.3 Developer Documentation
+
+---
+
+## 14. Success Metrics
+
+### 14.1 Technical Metrics
+- [ ] Test coverage >= 85%
+- [ ] API response time < 500ms (p95)
+- [ ] Frontend render < 100ms
+- [ ] Zero critical bugs in production
+
+### 14.2 Business Metrics
+
+---
+
+## 15. Risks & Mitigations
+
+| Risk | Impact | Probability | Mitigation |
+|------|--------|-------------|------------|
+| [Risk] | [High/Medium/Low] | [High/Medium/Low] | [Mitigation plan] |
+
+---
+
+## 16. Dependencies
+
+### 16.1 Technical Dependencies
+### 16.2 External Services
+### 16.3 Internal Dependencies
+
+---
+
+## 17. Timeline & Milestones
+
+| Phase | Duration | Deliverables |
+|-------|----------|--------------|
+| Planning | 1 day | Tech spec, LLD |
+| Implementation | 3 days | Code, tests |
+| Testing | 2 days | QA, bug fixes |
+
+**Total:** [X] days
+
+---
+
+## 18. Approval & Sign-off
+
+| Role | Name | Signature | Date |
+|------|------|-----------|------|
+| Product Manager | | | |
+| Tech Lead | | | |
+| QA Lead | | | |
+
+---
+
+**Document Status:** ✅ Ready for Review
+**Last Updated:** [Date]
+**Version:** 1.0.0
+```
+
+## Sections Explained
+
+### 1. Overview
+Provides context about the feature - what it does, why it's needed, who's involved, and what's in/out of scope.
+
+### 2. Requirements Summary
+Maps back to Phase 1 requirements, showing functional and non-functional requirements in table format for easy tracking.
+
+### 3. Architecture
+Describes the high-level system design, component structure, and data flow. Include diagrams where helpful.
+
+### 4. Data Models
+Defines all data structures used in the system - frontend types, backend models, and database schemas.
+
+### 5. API Specification
+Documents all API endpoints with full request/response examples. Critical for frontend-backend contract.
+
+### 6. State Management
+Describes how application state is managed - global state, server state, local state patterns.
+
+### 7. Security Considerations
+Addresses authentication, authorization, input validation, data protection, and rate limiting.
+
+### 8. Performance Considerations
+Sets performance targets and describes optimization strategies for frontend, backend, and network.
+
+### 9. Error Handling
+Defines how errors are handled at each layer and what messages users see.
+
+### 10. Testing Strategy
+Maps to Phase 4 test planning - defines test types, coverage targets, and critical test scenarios.
+
+### 11. Deployment Strategy
+Describes environments, feature flags, rollout strategy, and monitoring approach.
+
+### 12. Rollback Plan
+Defines when and how to rollback if issues occur in production.
+
+### 13. Documentation
+Lists all documentation that will be created - code docs, user guides, developer guides.
+
+### 14. Success Metrics
+Defines technical and business metrics to measure success.
+
+### 15. Risks & Mitigations
+Identifies potential risks and mitigation strategies.
+
+### 16. Dependencies
+Lists all dependencies - libraries, external services, internal systems.
+
+### 17. Timeline & Milestones
+Estimates time for each phase of work.
+
+### 18. Approval & Sign-off
+Tracks stakeholder approval.
+
+## Project Customization
+
+Reference project-specific conventions:
+- **File naming:** `.claude/project-contexts/[project]/conventions.md`
+- **Code patterns:** `.claude/project-contexts/[project]/examples.md`
+- **Tech stack:** `.claude/project-contexts/[project]/project-config.yaml`
+
+## Related Templates
+- `requirements.mdc` - Phase 1 output, input to this template
+- `lld.mdc` - More detailed component-level design
+- `test-plan.mdc` - Phase 4 testing approach
+
+## Tips for Usage
+
+1. **Start from Requirements:** Use Phase 1 requirements document as foundation
+2. **Include Diagrams:** Architecture and data flow diagrams improve clarity
+3. **Be Specific:** Provide concrete examples for APIs, data models, error scenarios
+4. **Consider Scale:** Think about performance under load
+5. **Plan for Failure:** Include error handling and rollback strategies
+6. **Reference Standards:** Link to coding standards, design systems, API guidelines
+
+---
+
+**Version:** 1.0.0
+**Phase:** 2 - Technical Planning
+**Agent:** Typically mobile-react-native, web-reactjs, backend-nodejs, etc.
+**Adapted for Cursor:** 2025-11-30

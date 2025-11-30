@@ -1,0 +1,461 @@
+---
+description: "Performance optimization through profiling and measurement. Frontend (Core Web Vitals), backend (N+1 queries), database (indexes), memory leak detection. Measure first, optimize bottlenecks."
+globs: []
+alwaysApply: false
+---
+
+# Performance Optimizer
+
+**Type:** Reference Skill
+**Use:** On-demand for performance optimization
+
+## When to Use
+
+Use this skill when:
+- Performance issues identified
+- Slow response times, page loads
+- Phase 6 (Review) detects performance issues
+- Optimization explicitly requested
+- Before production release (performance audit)
+
+## Performance Optimization Rules
+
+```
+1. Measure first, optimize second (no guessing)
+2. Optimize the bottleneck, not everything
+3. 80/20 rule: 80% of slowness is in 20% of code
+4. Premature optimization is the root of all evil
+```
+
+## Profiling Strategy
+
+| Layer | Tools | Key Metrics |
+|-------|-------|-------------|
+| Frontend | Lighthouse, Chrome DevTools | FCP, LCP, TTI, CLS |
+| Backend | APM tools, profilers | Response time, throughput, CPU |
+| Database | EXPLAIN, slow query log | Query time, index usage |
+| Memory | Heap snapshots | Allocation, leaks, GC pauses |
+
+### When to Profile
+
+- **Before optimization** - Establish baseline
+- **After each change** - Verify improvement
+- **In production** - Real user data (RUM)
+
+## Frontend Optimization
+
+### Core Web Vitals Targets
+
+| Metric | Good | Needs Improvement | Poor | Description |
+|--------|------|-------------------|------|-------------|
+| LCP | < 2.5s | 2.5s - 4s | > 4s | Largest Contentful Paint |
+| FID | < 100ms | 100ms - 300ms | > 300ms | First Input Delay |
+| CLS | < 0.1 | 0.1 - 0.25 | > 0.25 | Cumulative Layout Shift |
+| FCP | < 1.8s | 1.8s - 3s | > 3s | First Contentful Paint |
+| TTI | < 3.8s | 3.8s - 7.3s | > 7.3s | Time to Interactive |
+
+### Quick Wins
+
+**Images:**
+```tsx
+// Lazy load images
+<img loading="lazy" src="image.jpg" alt="Description" />
+
+// Use modern formats
+<picture>
+  <source srcSet="image.webp" type="image/webp" />
+  <img src="image.jpg" alt="Description" />
+</picture>
+
+// Responsive images
+<img
+  srcSet="small.jpg 480w, medium.jpg 800w, large.jpg 1200w"
+  sizes="(max-width: 600px) 480px, (max-width: 1000px) 800px, 1200px"
+  src="medium.jpg"
+/>
+```
+
+**Code Splitting:**
+```typescript
+// Lazy load components
+const HeavyComponent = lazy(() => import('./HeavyComponent'));
+
+// Route-based splitting
+const routes = [
+  { path: '/dashboard', component: lazy(() => import('./Dashboard')) },
+  { path: '/settings', component: lazy(() => import('./Settings')) },
+];
+```
+
+**Debouncing & Throttling:**
+```typescript
+// Debounce search input
+const handleSearch = debounce((query) => {
+  search(query);
+}, 300);
+
+// Throttle scroll handler
+const handleScroll = throttle(() => {
+  updateScrollPosition();
+}, 100);
+```
+
+**Memoization:**
+```typescript
+// Memoize expensive computations
+const expensiveResult = useMemo(() => {
+  return expensiveCalculation(data);
+}, [data]);
+
+// Memoize components
+const MemoizedComponent = memo(({ data }) => {
+  return <div>{data}</div>;
+});
+
+// Memoize callbacks
+const handleClick = useCallback(() => {
+  onClick(id);
+}, [id, onClick]);
+```
+
+### Frontend Checklist
+
+- [ ] Images optimized (WebP, compressed, lazy loading)
+- [ ] Code split by route
+- [ ] CSS/JS minified and gzipped
+- [ ] Caching headers set (Cache-Control)
+- [ ] Fonts preloaded or self-hosted
+- [ ] Third-party scripts deferred
+- [ ] Render-blocking resources eliminated
+- [ ] Critical CSS inlined
+
+## Backend Optimization
+
+### Common Bottlenecks & Solutions
+
+| Issue | Problem | Solution |
+|-------|---------|----------|
+| N+1 Queries | Multiple DB calls in loop | Eager loading, batching |
+| Missing Indexes | Full table scans | Add appropriate indexes |
+| Unbounded Queries | Loading entire tables | Pagination, limits |
+| Synchronous Blocking | Sequential operations | Async/parallel processing |
+| No Caching | Repeated expensive operations | Cache hot data |
+| Large Payloads | Sending unnecessary data | Field selection, compression |
+
+### Quick Wins
+
+**Batch Database Calls:**
+```typescript
+// ❌ BAD - N+1 query problem
+const orders = await Order.findAll();
+for (const order of orders) {
+  order.user = await User.findById(order.userId); // N queries!
+}
+
+// ✅ GOOD - Eager loading (1 query)
+const orders = await Order.findAll({
+  include: [User]
+});
+
+// ✅ GOOD - Manual batching
+const userIds = orders.map(o => o.userId);
+const users = await User.findByIds(userIds); // 1 query
+const userMap = new Map(users.map(u => [u.id, u]));
+orders.forEach(o => o.user = userMap.get(o.userId));
+```
+
+**Add Database Indexes:**
+```sql
+-- Before: Full table scan
+SELECT * FROM orders WHERE user_id = 123;  -- Slow!
+
+-- After: Index scan
+CREATE INDEX idx_orders_user_id ON orders(user_id);
+SELECT * FROM orders WHERE user_id = 123;  -- Fast!
+```
+
+**Cache Expensive Queries:**
+```typescript
+// With caching
+const data = await cache.getOrSet(
+  'expensive-query-key',
+  async () => {
+    return await db.query('EXPENSIVE QUERY');
+  },
+  3600 // TTL in seconds
+);
+```
+
+**Parallel Async Operations:**
+```typescript
+// ❌ BAD - Sequential (slow)
+const users = await getUsers();
+const orders = await getOrders();
+const products = await getProducts();
+// Total: T1 + T2 + T3
+
+// ✅ GOOD - Parallel (fast)
+const [users, orders, products] = await Promise.all([
+  getUsers(),
+  getOrders(),
+  getProducts()
+]);
+// Total: max(T1, T2, T3)
+```
+
+## Database Optimization
+
+### Query Analysis
+
+```sql
+-- Always EXPLAIN slow queries
+EXPLAIN ANALYZE SELECT * FROM orders WHERE user_id = 123;
+
+-- Look for:
+-- ✅ Index Scan (good)
+-- ❌ Seq Scan / Full Table Scan (bad)
+```
+
+### Index Strategy
+
+| Query Pattern | Index Type | Example |
+|---------------|------------|---------|
+| Exact match (=) | B-tree | `WHERE user_id = 123` |
+| Range (<, >, BETWEEN) | B-tree | `WHERE created_at > '2025-01-01'` |
+| Full-text search | GIN/GiST | `WHERE description @@ 'search terms'` |
+| JSON fields | GIN | `WHERE data @> '{"key": "value"}'` |
+| Partial match (LIKE) | GIN with pg_trgm | `WHERE name LIKE '%john%'` |
+
+### Index Examples
+
+```sql
+-- Single column index
+CREATE INDEX idx_users_email ON users(email);
+
+-- Composite index (order matters!)
+CREATE INDEX idx_orders_user_date ON orders(user_id, created_at);
+
+-- Partial index (for common queries)
+CREATE INDEX idx_active_users ON users(email) WHERE status = 'active';
+
+-- Concurrent index (no table lock)
+CREATE INDEX CONCURRENTLY idx_users_email ON users(email);
+```
+
+### Database Checklist
+
+- [ ] Indexes on all WHERE clause columns
+- [ ] Indexes on JOIN columns
+- [ ] No SELECT * (specify needed columns only)
+- [ ] Pagination on large result sets
+- [ ] Connection pooling enabled
+- [ ] Query result caching
+- [ ] Analyze slow query log regularly
+
+## Caching Strategy
+
+| Cache Level | TTL | Use Case | Example |
+|-------------|-----|----------|---------|
+| Browser | Hours-Days | Static assets | CSS, JS, images |
+| CDN | Minutes-Hours | API responses, pages | Edge caching |
+| Application | Seconds-Minutes | Computed data, queries | Redis, Memcached |
+| Database | Varies | Query results | Postgres query cache |
+
+### Cache Invalidation Patterns
+
+**Time-based (TTL):**
+```typescript
+cache.set('user:123', user, { ttl: 3600 }); // 1 hour
+```
+
+**Event-based:**
+```typescript
+// Invalidate on update
+async function updateUser(id, data) {
+  await User.update(id, data);
+  await cache.delete(`user:${id}`); // Invalidate cache
+}
+```
+
+**Version-based:**
+```typescript
+const version = await getDataVersion();
+const data = await cache.get(`data:v${version}`);
+```
+
+## Memory Optimization
+
+### Common Memory Leaks
+
+| Cause | Problem | Fix |
+|-------|---------|-----|
+| Event listeners not removed | Accumulate over time | Cleanup in useEffect/componentWillUnmount |
+| Closures holding references | Prevent GC | Null out references when done |
+| Growing arrays/maps | Unbounded growth | Use WeakMap, clear periodically |
+| Timers not cleared | Keep running | clearInterval/clearTimeout |
+| Large cached data | Out of memory | Implement LRU cache, size limits |
+
+### Leak Detection
+
+**Node.js:**
+```typescript
+// Generate heap snapshot
+const v8 = require('v8');
+v8.writeHeapSnapshot(`heap-${Date.now()}.heapsnapshot`);
+
+// Analyze with Chrome DevTools Memory profiler
+```
+
+**Browser:**
+```
+1. Open Chrome DevTools
+2. Memory tab → Take heap snapshot
+3. Perform actions
+4. Take another snapshot
+5. Compare snapshots
+6. Look for objects that shouldn't be retained
+```
+
+### Memory Leak Example & Fix
+
+**Leak:**
+```typescript
+// ❌ Event listener never removed
+useEffect(() => {
+  window.addEventListener('scroll', handleScroll);
+  // Missing cleanup!
+});
+```
+
+**Fixed:**
+```typescript
+// ✅ Cleanup on unmount
+useEffect(() => {
+  window.addEventListener('scroll', handleScroll);
+  return () => {
+    window.removeEventListener('scroll', handleScroll);
+  };
+}, []);
+```
+
+## React Native Performance
+
+### FlatList Optimization
+
+```typescript
+<FlatList
+  data={items}
+  renderItem={renderItem}
+  keyExtractor={item => item.id}
+  // Performance optimizations
+  removeClippedSubviews={true}
+  maxToRenderPerBatch={10}
+  updateCellsBatchingPeriod={50}
+  initialNumToRender={10}
+  windowSize={10}
+  getItemLayout={(data, index) => ({
+    length: ITEM_HEIGHT,
+    offset: ITEM_HEIGHT * index,
+    index,
+  })}
+/>
+```
+
+### Image Optimization
+
+```typescript
+<Image
+  source={{ uri: imageUrl }}
+  resizeMode="cover"
+  // Native image caching
+  cache="force-cache"
+  // Set specific size (avoid layout recalculation)
+  style={{ width: 100, height: 100 }}
+/>
+```
+
+## Optimization Workflow
+
+### 1. Baseline Measurement
+
+```bash
+# Frontend
+lighthouse https://example.com --view
+
+# Backend
+ab -n 1000 -c 10 http://api.example.com/users
+
+# Database
+EXPLAIN ANALYZE SELECT ...
+```
+
+### 2. Identify Bottleneck
+
+Look for:
+- Slowest requests/queries
+- Highest CPU/memory usage
+- Largest bundle sizes
+- Most frequent operations
+
+### 3. Optimize Target
+
+Make ONE optimization at a time.
+
+### 4. Measure Again
+
+Verify improvement:
+```
+Before: 2.5s
+After: 1.2s
+Improvement: 52% faster
+```
+
+### 5. Verify No Regressions
+
+- Run tests
+- Check other metrics
+- Monitor for errors
+
+## Optimization Checklist
+
+**Before:**
+- [ ] Baseline metrics captured
+- [ ] Bottleneck identified via profiling
+- [ ] Target improvement defined (e.g., "reduce LCP by 50%")
+- [ ] Current performance logged
+
+**During:**
+- [ ] One optimization at a time
+- [ ] Measure after each change
+- [ ] Document what was changed and why
+
+**After:**
+- [ ] Metrics improved as expected
+- [ ] No regressions introduced
+- [ ] Tests still pass
+- [ ] Performance logged for comparison
+
+## Best Practices
+
+### Do's
+- ✅ Measure before and after
+- ✅ Optimize biggest bottleneck first
+- ✅ Use appropriate data structures (Map vs Object)
+- ✅ Cache strategically (with invalidation)
+- ✅ Profile in production-like environment
+- ✅ Monitor in production
+
+### Don'ts
+- ❌ Optimize without measuring (guessing)
+- ❌ Micro-optimize everything
+- ❌ Cache without invalidation strategy
+- ❌ Ignore memory leaks
+- ❌ Sacrifice readability for marginal gains
+- ❌ Assume local dev performance = production
+
+## References
+
+- Web Vitals: https://web.dev/vitals/
+- Chrome DevTools: https://developer.chrome.com/docs/devtools/
+- React DevTools Profiler: https://react.dev/learn/react-devtools
+- Database indexes: PostgreSQL documentation

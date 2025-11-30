@@ -1,0 +1,190 @@
+---
+description: Access values directly from hook objects, avoid intermediate destructuring
+globs: []
+alwaysApply: true
+---
+
+# Direct Hook Access - No Intermediate Destructuring
+
+**Core Principle:** Access values directly from hook objects. Don't destructure and pass around.
+
+## What NOT to Do
+
+### 1. Destructuring and Returning
+```typescript
+// ❌ BAD
+const useLogic = () => {
+  const { t } = useTranslation();
+  const { colors, space } = useTheme();
+
+  // Returning destructured values
+  return {
+    t,
+    colors,
+    space,
+  };
+};
+
+// Usage
+const { t, colors } = useLogic();
+```
+
+**Problems:**
+- ❌ Hard to track where `t` comes from
+- ❌ Hard to track where `colors` comes from
+- ❌ Breaks IDE "Go to Definition"
+- ❌ Difficult to refactor
+
+### 2. Passing Destructured Values as Props
+```typescript
+// ❌ BAD
+const Parent = () => {
+  const { t } = useTranslation();
+  const { colors } = useTheme();
+
+  return <Child t={t} colors={colors} />;
+};
+```
+
+## What TO Do
+
+### 1. Keep Hook Objects Intact
+```typescript
+// ✅ GOOD
+const useLogic = () => {
+  // Keep hook objects intact
+  const translation = useTranslation();
+  const theme = useTheme();
+
+  const handleSave = () => {
+    console.log(translation.t('saving'));
+  };
+
+  // Return hook objects as-is
+  return {
+    translation,  // Entire hook object
+    theme,        // Entire hook object
+    handleSave,
+  };
+};
+```
+
+### 2. Access via Namespace
+```typescript
+// ✅ GOOD
+const Component = () => {
+  const logic = useLogic();
+
+  return (
+    <View style={{ backgroundColor: logic.theme.colors.primary }}>
+      <Text>{logic.translation.t('hello')}</Text>
+      <Button onPress={logic.handleSave} />
+    </View>
+  );
+};
+```
+
+### 3. Get Hooks Where Needed
+```typescript
+// ✅ GOOD
+const Child = () => {
+  // Get hooks directly where needed
+  const translation = useTranslation();
+  const theme = useTheme();
+
+  return (
+    <Text style={{ color: theme.colors.text }}>
+      {translation.t('title')}
+    </Text>
+  );
+};
+```
+
+## Benefits
+
+### 1. Traceability
+```typescript
+// ✅ Easy to track
+logic.t('key')
+// ↑ Clear: From logic hook
+
+logic.colors.primary
+// ↑ Clear: From logic hook
+```
+
+### 2. Refactoring
+```typescript
+// ✅ Easy to refactor
+// Find all usages: Search "logic.handleSave"
+logic.handleSave()
+
+// Rename: Change in one place (useLogic hook)
+// All usages update automatically
+```
+
+### 3. Type Safety
+```typescript
+// ✅ Better IntelliSense
+// Type "logic." and IDE shows all available properties
+logic.
+// ↓ IntelliSense:
+// - translation
+// - theme
+// - handleSave
+// ... etc
+```
+
+## Code Review Checklist
+
+### Custom Hooks
+- [ ] Does hook return entire objects (not destructured)?
+- [ ] Are `useTranslation()` and `useTheme()` kept intact?
+- [ ] No intermediate destructuring?
+- [ ] Clear naming (translation, theme, logic)?
+
+### Component Usage
+- [ ] All values accessed via namespace (logic.x)?
+- [ ] Consistent pattern throughout?
+- [ ] No prop drilling of hook values?
+- [ ] Easy to track data source?
+
+### Bad Patterns to Avoid
+- [ ] No: `const { t } = useTranslation(); return { t };`
+- [ ] No: `const { colors } = useTheme(); return { colors };`
+- [ ] No: Passing `t` or `colors` as props
+- [ ] No: Multiple destructuring sources mixed
+
+## Summary
+
+### ❌ DON'T
+```typescript
+// Don't destructure and return
+const { t } = useTranslation();
+const { colors } = useTheme();
+return { t, colors };
+
+// Don't pass as props
+<Child t={t} colors={colors} />
+```
+
+### ✅ DO
+```typescript
+// Keep hook objects intact
+const translation = useTranslation();
+const theme = useTheme();
+return { translation, theme };
+
+// Access via namespace
+logic.translation.t('key')
+logic.theme.colors.primary
+
+// Get hooks where needed
+const Child = () => {
+  const translation = useTranslation();
+  return <Text>{translation.t('key')}</Text>;
+};
+```
+
+## References
+- Project hook patterns: `project-contexts/[project]/conventions.md`
+- Code quality: `code-quality.mdc`

@@ -1,0 +1,354 @@
+---
+description: Template for detailed Test Cases - Used in Phase 4 (Test Planning) and Phase 5a (Write Tests)
+globs: []
+alwaysApply: false
+---
+
+# Test Cases Template
+
+## Use Case
+Document individual test case specifications during **Phase 4: Test Planning** and write actual test code during **Phase 5a: Write Tests (TDD RED)**. Each test case includes pre-conditions, steps, expected results, and test code.
+
+## Associated Phase
+**Phase 4: Test Planning** (specification)
+**Phase 5a: Write Tests** (implementation)
+
+## Template Structure
+
+```markdown
+# Test Cases Template
+
+**Feature:** [Feature Name]
+**Test Plan:** [Link to test plan]
+
+---
+
+## TC-001: Component Renders with Default Props
+
+**Priority:** HIGH
+**Type:** Unit Test
+**Description:** Verify component renders correctly with default props
+
+**Pre-conditions:**
+- Component imported
+- Testing library configured
+
+**Steps:**
+1. Mount component without any props
+2. Verify component is in the document
+3. Check default content displays
+4. Verify default styles applied
+
+**Expected Result:**
+- Component renders without errors
+- Default content is visible
+- No console errors or warnings
+
+**Test Code:**
+```typescript
+describe('MyComponent', () => {
+  it('renders with default props', () => {
+    const { getByTestId } = render(<MyComponent />);
+
+    expect(getByTestId('my-component')).toBeInTheDocument();
+    expect(getByTestId('my-component')).toHaveTextContent('Default Title');
+    expect(getByTestId('my-component')).toHaveStyle({ backgroundColor: '#fff' });
+  });
+});
+```
+
+---
+
+## TC-002: User Can Click Button
+
+**Priority:** HIGH
+**Type:** Integration Test
+**Description:** User can click button and callback is triggered
+
+**Pre-conditions:**
+- Component rendered
+- Button is visible and enabled
+
+**Steps:**
+1. Render component with onPress callback
+2. Find button element
+3. Simulate press event
+4. Verify callback was called with correct arguments
+
+**Expected Result:**
+- onPress callback invoked exactly once
+- Callback receives expected arguments
+- UI updates accordingly
+
+**Test Code:**
+```typescript
+it('calls onPress when button is clicked', () => {
+  const onPressMock = jest.fn();
+  const { getByRole } = render(<MyButton onPress={onPressMock} />);
+
+  const button = getByRole('button');
+  fireEvent.press(button);
+
+  expect(onPressMock).toHaveBeenCalledTimes(1);
+  expect(onPressMock).toHaveBeenCalledWith(/* expected args */);
+});
+```
+
+---
+
+## TC-003: Form Validation Works
+
+**Priority:** HIGH
+**Type:** Integration Test
+**Description:** Form validates input and shows error messages
+
+**Pre-conditions:**
+- Form rendered
+- Validation rules configured
+
+**Steps:**
+1. Render form component
+2. Enter invalid data (empty, wrong format, etc.)
+3. Submit form
+4. Verify error messages display
+5. Enter valid data
+6. Submit form
+7. Verify no errors and submission succeeds
+
+**Expected Result:**
+- Invalid data shows error messages
+- Valid data submits successfully
+- Error messages are user-friendly
+
+**Test Code:**
+```typescript
+it('validates form input correctly', async () => {
+  const onSubmitMock = jest.fn();
+  const { getByLabelText, getByText, queryByText } = render(
+    <MyForm onSubmit={onSubmitMock} />
+  );
+
+  // Test invalid input
+  const emailInput = getByLabelText('Email');
+  fireEvent.changeText(emailInput, 'invalid-email');
+  fireEvent.press(getByText('Submit'));
+
+  await waitFor(() => {
+    expect(queryByText('Invalid email format')).toBeInTheDocument();
+    expect(onSubmitMock).not.toHaveBeenCalled();
+  });
+
+  // Test valid input
+  fireEvent.changeText(emailInput, 'valid@email.com');
+  fireEvent.press(getByText('Submit'));
+
+  await waitFor(() => {
+    expect(queryByText('Invalid email format')).not.toBeInTheDocument();
+    expect(onSubmitMock).toHaveBeenCalledWith({ email: 'valid@email.com' });
+  });
+});
+```
+
+---
+
+## TC-004: API Call Success Scenario
+
+**Priority:** HIGH
+**Type:** Integration Test
+**Description:** API call succeeds and data displays correctly
+
+**Pre-conditions:**
+- API client configured
+- Mock server set up
+
+**Steps:**
+1. Render component that makes API call
+2. Mock successful API response
+3. Trigger API call
+4. Wait for loading state
+5. Verify data displays correctly
+
+**Expected Result:**
+- Loading indicator shows during API call
+- Data displays after successful response
+- No error state shown
+
+**Test Code:**
+```typescript
+it('fetches and displays data successfully', async () => {
+  const mockData = [{ id: 1, name: 'Test' }];
+  jest.spyOn(api, 'fetchData').mockResolvedValue(mockData);
+
+  const { getByText, queryByTestId } = render(<DataList />);
+
+  // Verify loading state
+  expect(getByText('Loading...')).toBeInTheDocument();
+
+  // Wait for data to load
+  await waitFor(() => {
+    expect(queryByText('Loading...')).not.toBeInTheDocument();
+    expect(getByText('Test')).toBeInTheDocument();
+  });
+});
+```
+
+---
+
+## TC-005: API Call Error Scenario
+
+**Priority:** MEDIUM
+**Type:** Integration Test
+**Description:** API call fails and error message displays
+
+**Pre-conditions:**
+- API client configured
+- Mock server set up
+
+**Steps:**
+1. Render component that makes API call
+2. Mock API error response
+3. Trigger API call
+4. Wait for error state
+5. Verify error message displays
+
+**Expected Result:**
+- Error message is user-friendly
+- Retry option available (if applicable)
+- App doesn't crash
+
+**Test Code:**
+```typescript
+it('handles API errors gracefully', async () => {
+  jest.spyOn(api, 'fetchData').mockRejectedValue(new Error('Network error'));
+
+  const { getByText } = render(<DataList />);
+
+  await waitFor(() => {
+    expect(getByText(/something went wrong/i)).toBeInTheDocument();
+    expect(getByText('Retry')).toBeInTheDocument();
+  });
+});
+```
+
+---
+
+## TC-006: Navigation Works Correctly
+
+**Priority:** HIGH
+**Type:** E2E Test
+**Description:** User can navigate between screens
+
+**Pre-conditions:**
+- Navigation configured
+- All screens registered
+
+**Steps:**
+1. Start on home screen
+2. Tap navigation button
+3. Verify navigated to correct screen
+4. Tap back button
+5. Verify returned to home screen
+
+**Expected Result:**
+- Navigation is smooth
+- Correct screen displays
+- Back navigation works
+
+**Test Code:**
+```typescript
+it('navigates between screens', async () => {
+  const { getByText } = render(<AppNavigator />);
+
+  // Navigate to details screen
+  fireEvent.press(getByText('View Details'));
+
+  await waitFor(() => {
+    expect(getByText('Details Screen')).toBeInTheDocument();
+  });
+
+  // Navigate back
+  fireEvent.press(getByText('Back'));
+
+  await waitFor(() => {
+    expect(getByText('Home Screen')).toBeInTheDocument();
+  });
+});
+```
+
+---
+
+[Continue with additional test cases as needed]
+
+---
+```
+
+## Tips for Writing Test Cases
+
+1. **One Thing Per Test:** Each test should verify one specific behavior
+2. **Descriptive Names:** Test names should describe what they're testing
+3. **AAA Pattern:** Arrange, Act, Assert - organize tests clearly
+4. **Independent Tests:** Tests shouldn't depend on each other
+5. **Mock External Dependencies:** Don't rely on real APIs, databases, etc.
+6. **Use Test Data Factories:** Create reusable test data generators
+7. **Clean Up:** Reset mocks and state between tests
+
+## Common Test Patterns
+
+### Testing Hooks
+```typescript
+import { renderHook, act } from '@testing-library/react-hooks';
+
+it('custom hook works correctly', () => {
+  const { result } = renderHook(() => useMyHook());
+
+  expect(result.current.value).toBe(initialValue);
+
+  act(() => {
+    result.current.updateValue(newValue);
+  });
+
+  expect(result.current.value).toBe(newValue);
+});
+```
+
+### Testing Async Operations
+```typescript
+it('handles async operations', async () => {
+  const { getByText } = render(<AsyncComponent />);
+
+  await waitFor(() => {
+    expect(getByText('Loaded')).toBeInTheDocument();
+  }, { timeout: 3000 });
+});
+```
+
+### Testing User Events
+```typescript
+import { userEvent } from '@testing-library/user-event';
+
+it('handles user interactions', async () => {
+  const user = userEvent.setup();
+  const { getByRole } = render(<MyComponent />);
+
+  await user.click(getByRole('button'));
+  await user.type(getByRole('textbox'), 'Hello');
+});
+```
+
+## Project Customization
+
+Reference project-specific testing patterns:
+- **Test utilities:** `.claude/project-contexts/[project]/examples.md`
+- **Mock data:** `.claude/project-contexts/[project]/test-data/`
+- **Testing conventions:** `.claude/project-contexts/[project]/conventions.md`
+
+## Related Templates
+- `test-plan.mdc` - Overall testing strategy
+- `tech-spec.mdc` - What functionality needs testing
+
+---
+
+**Version:** 1.0.0
+**Phase:** 4 (planning) and 5a (implementation)
+**Agent:** Typically qa-automation
+**Adapted for Cursor:** 2025-11-30

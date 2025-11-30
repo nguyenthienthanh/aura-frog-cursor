@@ -1,0 +1,277 @@
+---
+description: Priority hierarchy - determines how instructions are loaded and merged
+globs: []
+alwaysApply: true
+---
+
+# Priority Hierarchy
+
+**Version:** 1.0.0
+**Priority:** HIGH - Determines how instructions are loaded and merged
+**Type:** Rule (Structural Standard)
+
+---
+
+## Core Rule
+
+Cursor IDE loads instructions in a specific order. Instructions from higher-priority sources override lower-priority ones.
+
+---
+
+## Loading Order
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ 1. .cursorrules (project root)      (HIGHEST PRIORITY) │
+│    └─ Project-specific overrides                        │
+├─────────────────────────────────────────────────────────┤
+│ 2. .cursor/rules/*.mdc              (MEDIUM PRIORITY)   │
+│    └─ Aura Frog core rules (auto-loaded)               │
+├─────────────────────────────────────────────────────────┤
+│ 3. .cursor/AGENTS.md                (REFERENCE)         │
+│    └─ System documentation & guides                     │
+├─────────────────────────────────────────────────────────┤
+│ 4. Cursor's default behavior        (LOWEST PRIORITY)   │
+│    └─ Built-in AI behavior                              │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Priority Levels Explained
+
+### Level 1: .cursorrules (Highest)
+
+**Location:** `<project>/.cursorrules` (project root)
+
+**Purpose:**
+- Project-specific overrides
+- Points to .cursor/AGENTS.md for system instructions
+- Custom project rules
+
+**Example:**
+```markdown
+# Project Instructions for Cursor
+
+## Load Aura Frog System
+Read: .cursor/AGENTS.md
+
+## Load Project Context
+Read: .cursor/project-contexts/[project-name]/
+
+## Project Overrides (Examples)
+- Primary agent: [agent-name]
+- Skip Phase 3 (if no UI changes)
+- Test coverage: [percentage]% (if different from default)
+```
+
+### Level 2: .cursor/rules/*.mdc (Medium)
+
+**Location:** `.cursor/rules/` directory
+
+**Purpose:**
+- Aura Frog core rules (automatically loaded by Cursor)
+- System constraints and guidelines
+- Quality standards
+
+**Core Rules:**
+- `.cursor/rules/core/agent-identification.mdc`
+- `.cursor/rules/core/priority-hierarchy.mdc` (this file)
+- `.cursor/rules/core/execution.mdc`
+- `.cursor/rules/core/approval-gates.mdc`
+- `.cursor/rules/core/token-awareness.mdc`
+
+**How MDC Files Work:**
+- Cursor automatically loads all `.mdc` files from `.cursor/rules/`
+- Files with `alwaysApply: true` apply to all file types
+- Files with `globs` array apply only to matching files
+- Cursor uses `description` field to understand when to apply each rule
+
+### Level 3: .cursor/AGENTS.md (Reference)
+
+**Location:** `.cursor/AGENTS.md`
+
+**Purpose:**
+- Complete system documentation
+- Agent definitions and capabilities
+- Workflow guides and examples
+- Not automatically loaded (read on demand)
+
+**Contains:**
+- Agent identification banner rule
+- 9-phase workflow structure
+- TDD enforcement guidelines
+- Approval gates explanation
+- All core Aura Frog behavior documentation
+
+### Level 4: Cursor Default Behavior (Lowest)
+
+**Source:** Built-in Cursor AI behavior
+
+**Purpose:**
+- Fallback when no rules apply
+- Generic code generation
+- Standard AI assistance
+
+---
+
+## Context Priority
+
+Beyond instruction files, project context also has priority:
+
+```
+Project Context > Aura Frog Rules > Generic Defaults
+```
+
+### Loading Order for Context
+
+```
+1. .cursor/project-contexts/[project]/
+   ├── project-config.yaml    # Tech stack, team
+   ├── conventions.md         # Naming, structure
+   ├── rules.md               # Project rules
+   └── examples.md            # Code examples
+
+2. .cursor/rules/             # Aura Frog core rules
+
+3. Cursor's training          # Generic defaults
+```
+
+---
+
+## Override Behavior
+
+### How Overrides Work
+
+| Source | Example Rule | Priority |
+|--------|--------------|----------|
+| .cursorrules | "Test coverage: 90%" | Wins |
+| .cursor/rules/*.mdc | "Test coverage: 80%" | Overridden |
+| Cursor default | "Test coverage: 70%" | Overridden |
+
+### Merge Strategy
+
+**Additive:** Lists are merged (agents, skills)
+```yaml
+# .cursor/rules/
+agents: [mobile-react-native, qa-automation]
+
+# .cursorrules (adds to list)
+agents: [ui-designer]
+
+# Result
+agents: [mobile-react-native, qa-automation, ui-designer]
+```
+
+**Override:** Values are replaced
+```yaml
+# .cursor/rules/
+test_coverage: 80
+
+# .cursorrules (replaces value)
+test_coverage: 90
+
+# Result
+test_coverage: 90
+```
+
+---
+
+## When to Use Each Level
+
+### Use .cursorrules When:
+- Project has specific tech stack
+- Need to override default behavior
+- Want project-specific agents
+- Custom workflow phases needed
+
+### Use .cursor/rules/*.mdc When:
+- Defining core system rules
+- Creating reusable quality standards
+- Setting up Aura Frog core behavior
+- Shared across similar projects
+
+### Use .cursor/AGENTS.md When:
+- Need comprehensive documentation
+- Want to understand full system
+- Learning Aura Frog capabilities
+- Reference for command usage
+
+---
+
+## File Locations Summary
+
+| Level | Location | Git Tracked | Auto-Loaded |
+|-------|----------|-------------|-------------|
+| .cursorrules | `/.cursorrules` | Yes | Yes (Cursor) |
+| Core Rules | `.cursor/rules/core/*.mdc` | Yes | Yes (Cursor) |
+| Project Rules | `.cursor/rules/*.mdc` | Yes | Yes (Cursor) |
+| Documentation | `.cursor/AGENTS.md` | Yes | No (reference) |
+| Project Context | `.cursor/project-contexts/` | Yes | Manual |
+| Logs | `.cursor/logs/` | No | N/A |
+| Workflow State | `.cursor/workflow-contexts/` | No | N/A |
+
+---
+
+## Best Practices
+
+### DO:
+- Keep .cursorrules lightweight (point to AGENTS.md)
+- Put overrides only in .cursorrules
+- Use .cursor/rules/*.mdc for system rules
+- Track core files in git
+- Ignore logs and workflow state
+
+### DON'T:
+- Duplicate AGENTS.md content in .cursorrules
+- Put project-specific rules in core/*.mdc
+- Modify core rules for project needs (use .cursorrules)
+- Track temporary files in git
+
+---
+
+## Troubleshooting
+
+### Rules Not Loading?
+
+1. Check .cursor/rules/*.mdc files have proper frontmatter
+2. Verify `alwaysApply: true` for core rules
+3. Check `description` field is clear
+4. Restart Cursor IDE
+
+### Overrides Not Working?
+
+1. Check priority order (.cursorrules > .mdc > default)
+2. Ensure correct file location
+3. Verify YAML syntax in frontmatter
+4. Check Cursor's rule application in output
+
+### Context Not Applied?
+
+1. Run `project:init` to create context files
+2. Check `.cursor/project-contexts/[project]/` exists
+3. Verify YAML syntax in project-config.yaml
+4. Ensure .cursorrules or AGENTS.md loads context
+
+---
+
+## MDC Format Requirements
+
+All rule files in `.cursor/rules/` must follow this format:
+
+```markdown
+---
+description: Brief description for Cursor to understand when to apply
+globs: []  # Empty for core rules (always apply), or ["**/*.ts", "**/*.tsx"] for specific files
+alwaysApply: true  # Core rules always apply, project-specific rules set to false
+---
+
+# Rule Title
+
+[Rule content - keep generic, reference .cursor/project-contexts/ when needed]
+```
+
+---
+
+**Version:** 1.0.0
+**Last Updated:** 2025-11-30

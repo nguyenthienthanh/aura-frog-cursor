@@ -1,0 +1,395 @@
+# Cursor Rules for React Native Mint UI
+
+# Based on CCPM Team Agents: https://github.com/nguyenthienthanh/ccpm-team-agents
+
+# Version: 4.5.0
+
+# ============================================================================
+
+# PROJECT CONTEXT (MANDATORY - Load First)
+
+# ============================================================================
+
+# This project is a React Native component library (not an app)
+
+# React Native 0.74.5 with TypeScript
+
+# See .cursor/contexts/react-native-mint-ui/ for full project context
+
+# ============================================================================
+
+# CORE RULES (Always Applied)
+
+# ============================================================================
+
+# All rules in .cursor/rules/ are automatically applied
+
+# Project-specific rules override core rules where they conflict
+
+# See .cursor/rules/ for detailed rule files
+
+# ============================================================================
+
+# AGENTS SYSTEM
+
+# ============================================================================
+
+# Specialized agents are available in .cursor/agents/
+
+# Primary agent for this project: mobile-react-native
+
+# Agents auto-activate based on task context
+
+# Available Agents (14 total):
+
+# Development:
+
+# - mobile-react-native (Priority: 100) - Primary for this React Native library
+
+# - backend-laravel (Priority: 90)
+
+# - web-vuejs (Priority: 90)
+
+# - web-reactjs (Priority: 90)
+
+# - web-nextjs (Priority: 90)
+
+# Quality & Design:
+
+# - qa-automation (Priority: 85) - Testing enforcement
+
+# - ui-designer (Priority: 85) - Component design patterns
+
+# Operations:
+
+# - jira-operations (Priority: 80)
+
+# - confluence-operations (Priority: 80)
+
+# - slack-operations (Priority: 70)
+
+# Infrastructure:
+
+# - pm-operations-orchestrator (Priority: 95)
+
+# - project-detector (Priority: 100)
+
+# - project-config-loader (Priority: 100)
+
+# - project-context-manager (Priority: 95) - Context tracking
+
+# Always Active Agents:
+
+# - mobile-react-native (Primary for this React Native library)
+
+# - ui-designer (Component design patterns)
+
+# - project-context-manager (Context tracking)
+
+# See .cursor/agents/ for detailed agent definitions
+
+# ============================================================================
+
+# SKILLS SYSTEM
+
+# ============================================================================
+
+# Reusable skills are available in .cursor/skills/
+
+# Skills enhance agent capabilities with shared knowledge modules
+
+# Available Skills (24 total):
+
+# Root Level (3):
+
+# - code-review - Cross-agent code review with quality checklists
+
+# - requirement-analysis - Gather, parse, and structure requirements
+
+# - tdd-implementation - Test-driven development patterns
+
+# Development Expert (8):
+
+# - react-native-patterns - React Native best practices and patterns
+
+# - react-patterns - React.js patterns and best practices
+
+# - component-design - Component design patterns (CRITICAL for library)
+
+# - design-system - Design system implementation (CRITICAL for library)
+
+# - api-integration - API integration patterns
+
+# - form-handling - Form handling patterns
+
+# - state-management - State management patterns
+
+# QA Expert (5):
+
+# - unit-testing - Unit testing strategies and patterns
+
+# - e2e-testing - End-to-end testing strategies
+
+# - performance-testing - Performance testing approaches
+
+# - accessibility-testing - Accessibility testing patterns
+
+# - test-strategies - Comprehensive test strategies
+
+# PM Expert (4):
+
+# - project-planning - Project planning methodologies
+
+# - risk-management - Risk identification and mitigation
+
+# - stakeholder-management - Stakeholder communication
+
+# - agile-methodology - Agile practices and ceremonies
+
+# Design Expert (4):
+
+# - figma-analysis - Figma design analysis and extraction
+
+# - design-system - Design system implementation
+
+# - component-design - Component design patterns
+
+# - responsive-design - Responsive design patterns
+
+# Skills are automatically referenced by agents based on their capabilities
+
+# See .cursor/skills/README.md for full skills documentation
+
+# Use skill:create command to add new skills
+
+# ============================================================================
+
+# WORKFLOW SYSTEM
+
+# ============================================================================
+
+# Two workflow modes available:
+
+# 1. Full 9-Phase Workflow (for complex features)
+
+# - Phase 1: Requirements Analysis
+
+# - Phase 2: Technical Planning
+
+# - Phase 3: Design Review
+
+# - Phase 4: Test Planning
+
+# - Phase 5a: TDD Red (Write failing tests)
+
+# - Phase 5b: TDD Green (Make tests pass)
+
+# - Phase 5c: TDD Refactor (Improve code)
+
+# - Phase 6: Code Review
+
+# - Phase 7: QA Validation
+
+# - Phase 8: Documentation
+
+# - Phase 9: Notification
+
+# 2. Lightweight Commands (for quick fixes)
+
+# - bugfix:quick - Quick bug fixes
+
+# - refactor - Code refactoring
+
+# - document - Documentation only
+
+# - planning - Planning only
+
+# See .cursor/workflows/ for workflow phase definitions
+
+# See .cursor/commands/ for all 45 available commands
+
+# Commands: When user mentions a command or requests operations, read the corresponding
+
+# file from .cursor/commands/ and execute according to its instructions.
+
+# ============================================================================
+
+# CRITICAL RULES
+
+# ============================================================================
+
+# 1. LIBRARY-SPECIFIC RULES (CRITICAL)
+
+# - This is a COMPONENT LIBRARY, not an app
+
+# - Components must be reusable and well-documented
+
+# - Export all public APIs from src/index.ts
+
+# - Use BaseProps pattern for common props
+
+# - Support theme switching (light/dark) via MintContext
+
+# - Test components via Storybook in demo/ app
+
+# - Build library before testing: yarn build
+
+# See .cursor/contexts/react-native-mint-ui/conventions.md
+
+# 2. CODE QUALITY (ENFORCED)
+
+# - TypeScript strict mode (zero errors)
+
+# - ESLint must pass with zero errors
+
+# - Prettier auto-formatting
+
+# - Library allows `any` types for flexibility (noImplicitAny: false)
+
+# - No non-null assertions (handle nullish values properly)
+
+# See .cursor/rules/code-quality.md
+
+# 3. PROJECT CONVENTIONS (MANDATORY)
+
+# - Load project context from .cursor/contexts/react-native-mint-ui/ FIRST
+
+# - Follow React Native and TypeScript conventions
+
+# - Use component-based architecture (not feature-based)
+
+# - PascalCase for React components, camelCase for utilities
+
+# - Use relative imports within library
+
+# - Export props interfaces alongside components
+
+# See .cursor/contexts/react-native-mint-ui/conventions.md
+
+# 4. COMPONENT DESIGN RULES (LIBRARY-SPECIFIC)
+
+# - Extend BaseProps for common props (Theme, Color, SideComponents, Text)
+
+# - Use MintContext for theme and global state
+
+# - Always use StyleSheet.create for styles (performance)
+
+# - Use React.memo for component optimization
+
+# - Support both legacy and revamp themes
+
+# - Document props with JSDoc comments
+
+# - Mark deprecated props with @deprecated
+
+# See .cursor/contexts/react-native-mint-ui/rules.md
+
+# 5. TESTING APPROACH (LIBRARY-SPECIFIC)
+
+# - No unit tests in library (tested via Storybook and demo app)
+
+# - Create Storybook stories for each component
+
+# - Test all component variants in stories
+
+# - Test theme switching (light/dark)
+
+# - Test responsive behavior
+
+# - Build library before testing: yarn build-demo
+
+# 6. APPROVAL GATES
+
+# - Human approval required at each phase
+
+# - No auto-progression
+
+# See .cursor/rules/approval-gates.md
+
+# ============================================================================
+
+# QUICK REFERENCE
+
+# ============================================================================
+
+# Project Type: Library (React Native Component Library)
+
+# Framework: React Native 0.74.5
+
+# Language: TypeScript ^4.9.5
+
+# Build Tool: react-native-builder-bob ^0.40.6
+
+# Testing: Storybook (in demo/ app)
+
+# Code Quality: ESLint + Prettier
+
+# Package Manager: Yarn
+
+# Main Branch: main
+
+# ============================================================================
+
+# FILE STRUCTURE
+
+# ============================================================================
+
+# .cursor/
+
+# ├── agents/ # Specialized agent definitions
+
+# ├── rules/ # Core rules (TDD, quality, etc.)
+
+# ├── contexts/ # Project-specific contexts
+
+# │   └── react-native-mint-ui/ # This project's context
+
+# ├── workflows/ # Workflow definitions
+
+# ├── commands/ # Command definitions
+
+# ├── skills/ # Reusable skills for agents (24 skills)
+
+# │   ├── dev-expert/ # Development skills (8 skills)
+
+# │   ├── qa-expert/ # QA skills (5 skills)
+
+# │   ├── pm-expert/ # PM skills (4 skills)
+
+# │   └── design-expert/ # Design skills (4 skills)
+
+# ├── config/ # Configuration files
+
+# ├── docs/ # Documentation
+
+# └── hooks/ # Workflow hooks
+
+# ============================================================================
+
+# IMPORTANT NOTES
+
+# ============================================================================
+
+# - Always load project context FIRST before starting any task
+
+# - This is a LIBRARY project, not an app
+
+# - Components must be reusable and well-documented
+
+# - Test via Storybook in demo/ app, not unit tests
+
+# - Build library before testing: yarn build or yarn build-demo
+
+# - ESLint must pass with zero errors
+
+# - Follow React Native, TypeScript, and project conventions
+
+# - Get approval at each phase gate
+
+# - Agents automatically use relevant skills from .cursor/skills/
+
+# - Skills provide reusable knowledge modules for common patterns
+
+# - Component design and design system skills are CRITICAL for this library
+
+# For detailed information, see files in .cursor/ directory

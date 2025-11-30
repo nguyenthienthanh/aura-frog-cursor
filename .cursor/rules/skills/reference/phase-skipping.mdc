@@ -1,0 +1,320 @@
+---
+description: "Smart workflow phase skipping rules. Auto-detects when to skip phases based on task context (backend-only, prototype, bug fix, docs-only, config). Maintains minimum quality while optimizing speed."
+globs: []
+alwaysApply: false
+---
+
+# Smart Phase Skipping
+
+**Type:** Reference Skill
+**Use:** During workflow orchestration to optimize phase execution
+
+## When to Use
+
+Use this skill when:
+- Starting workflow (to determine which phases apply)
+- Task context suggests certain phases aren't needed
+- User requests faster workflow
+- During pm-operations-orchestrator workflow planning
+
+## Phase Skip Rules
+
+| Condition | Skip Phases | Keep Phases | Reason |
+|-----------|-------------|-------------|--------|
+| Backend-only task | Phase 3 (UI) | All others | No UI to design |
+| Prototype/POC | Phase 4, 5a, 7, 8 | 1, 2, 5b, 6 | Quick validation |
+| "No tests" stated | Phase 4, 5a, 7 | All others | User preference (not recommended) |
+| Bug fix (small) | Phase 2, 3, 4 | 1, 5b, 6, 7 | Direct to bugfix-quick |
+| Documentation only | Phase 2-7 | 1, 8, 9 | No code changes |
+| Config change only | Phase 2, 3, 4, 5a, 6, 8 | 1, 5b, 7 | Simple update |
+| Frontend-only | - | All | Full workflow (UI important) |
+
+## Detection Logic
+
+### Backend-Only Indicators
+
+**Keywords:** API, endpoint, service, database, migration, cron, queue, worker, background job
+
+**File patterns:** `/services/`, `/api/`, `/models/`, `/migrations/`, `/controllers/`
+
+**No mention of:** UI, screen, component, page, form, button, layout
+
+**Example:**
+```
+User: "Create API endpoint for user authentication"
+→ Backend-only detected
+→ Skip Phase 3 (UI Breakdown)
+```
+
+### Prototype/POC Indicators
+
+**Keywords:** POC, prototype, spike, experiment, quick test, proof of concept
+
+**Phrases:** "just want to try", "see if it works", "validate idea", "quick demo"
+
+**Example:**
+```
+User: "POC for integrating Stripe payments"
+→ Prototype detected
+→ Skip Phase 4, 5a (tests), Phase 7 (verification), Phase 8 (docs)
+→ Focus on Phase 5b (implementation) to prove concept
+```
+
+### Bug Fix Indicators
+
+**Keywords:** bug, fix, broken, not working, error, crash, issue
+
+**Scope:** Single file, specific function, known cause
+
+**Example:**
+```
+User: "Fix login button not working"
+→ Bug fix detected
+→ Use bugfix-quick skill instead
+→ Skip workflow entirely (use 4-step bug process)
+```
+
+### Documentation-Only Indicators
+
+**Keywords:** document, readme, docs, documentation, write guide
+
+**No mention of:** code, implement, build, create feature
+
+**Example:**
+```
+User: "Document the authentication API"
+→ Documentation-only detected
+→ Skip Phase 2-7
+→ Jump to Phase 8 (Document)
+```
+
+### Config/Environment Indicators
+
+**Keywords:** config, environment, env variable, setting, configuration
+
+**File patterns:** `.env`, `config.yml`, `settings.json`
+
+**Example:**
+```
+User: "Add STRIPE_API_KEY to environment variables"
+→ Config change detected
+→ Skip Phase 2, 3, 4, 5a, 6, 8
+→ Keep Phase 1 (understand), 5b (implement), 7 (verify)
+```
+
+## Skip Confirmation Format
+
+Always confirm with user before skipping phases:
+
+```markdown
+## 🎯 Workflow Plan
+
+**Task:** [description]
+**Detected Context:** [Backend-only | Prototype | Bug fix | etc.]
+
+**Proposed Workflow:**
+
+✅ Phase 1: Understand (1h)
+✅ Phase 2: Design (2h)
+⏭️ Phase 3: UI Breakdown - **SKIPPED** (no UI components)
+✅ Phase 4: Plan Tests (1h)
+✅ Phase 5a-c: Implementation (8h)
+✅ Phase 6: Review (1h)
+✅ Phase 7: Verify (1h)
+✅ Phase 8: Document (1h)
+✅ Phase 9: Share (0.5h)
+
+**Estimated Time:** 15.5h (vs 29.5h full workflow)
+
+**Options:**
+- `approve` → Use this workflow
+- `full` → Run all 9 phases
+- `modify: <changes>` → Adjust workflow
+
+Approve this plan?
+```
+
+## Workflow Combinations
+
+### Full Workflow (Default)
+All 9 phases - Complex features with UI
+
+```
+Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 6 → Phase 7 → Phase 8 → Phase 9
+```
+
+### Backend Feature
+```
+Phase 1 → Phase 2 → Phase 4 → Phase 5 → Phase 6 → Phase 7 → Phase 8 → Phase 9
+Skip: Phase 3 (UI)
+```
+
+### Quick Prototype
+```
+Phase 1 → Phase 2 → Phase 5b → Phase 6
+Skip: Phase 3, 4, 5a, 5c, 7, 8, 9
+Focus: Prove concept works
+```
+
+### Bug Fix
+```
+bugfix-quick skill (4 steps)
+Skip: Entire workflow (use dedicated bug process)
+```
+
+### Documentation Only
+```
+Phase 1 → Phase 8 → Phase 9
+Skip: Phase 2-7
+```
+
+### Config/Environment Change
+```
+Phase 1 → Phase 5b → Phase 7
+Skip: Phase 2, 3, 4, 5a, 5c, 6, 8, 9
+```
+
+### Frontend-Only (No Backend)
+```
+Phase 1 → Phase 2 → Phase 3 → Phase 4 → Phase 5 → Phase 6 → Phase 7 → Phase 8 → Phase 9
+Skip: None (UI requires full workflow)
+```
+
+## Override Rules
+
+User can always override automatic skip detection:
+
+**Include skipped phases:**
+```
+User: "Include tests even though it's a prototype"
+→ Re-enable Phase 4, 5a, 7
+```
+
+**Force full workflow:**
+```
+User: "Use full workflow"
+→ No skipping, run all 9 phases
+```
+
+**Skip additional phases (not recommended):**
+```
+User: "Skip review"
+→ Skip Phase 6 (show warning about quality risk)
+```
+
+**Warning for risky skips:**
+```markdown
+⚠️ **Warning: Skipping Quality Phase**
+
+You requested to skip Phase 6 (Review).
+
+**Risks:**
+- Security vulnerabilities may go undetected
+- Code quality issues may slip through
+- Performance problems may not be caught
+
+**Recommendation:** Keep Phase 6, it only adds ~1-2 hours
+
+Continue with skip? [yes/no]
+```
+
+## Decision Tree
+
+```
+Is there UI involved?
+├── No → Skip Phase 3 (UI Breakdown)
+└── Yes → Include Phase 3
+
+Is this a prototype/POC?
+├── Yes → Skip Phase 4, 5a, 7, 8 (focus on proving concept)
+└── No → Include all testing/verification
+
+Is this a simple bug fix?
+├── Yes → Use bugfix-quick skill (skip workflow)
+└── No → Continue workflow planning
+
+Is this documentation only?
+├── Yes → Jump to Phase 8 (Document)
+└── No → Continue full workflow
+
+Is this a config change only?
+├── Yes → Skip Phase 2, 3, 4, 5a, 6, 8
+└── No → Continue full workflow
+
+Default: Full workflow (all 9 phases)
+```
+
+## Logging Skipped Phases
+
+Always document why phases were skipped:
+
+```markdown
+## Workflow Log
+
+**Task:** Add user authentication API
+**Date:** 2025-01-20
+
+**Skipped Phases:**
+- Phase 3 (UI Breakdown): No UI components in scope
+- Phase 5c (Refactor): Deferred to tech debt sprint (time constraint)
+
+**Rationale:**
+- Backend-only feature (API endpoints only)
+- Implementation already clean, refactor not critical
+
+**Approved By:** [User]
+```
+
+## Minimum Quality Threshold
+
+**Never skip without good reason:**
+- Phase 1 (Understand) - ALWAYS run (need requirements)
+- Phase 6 (Review) - Skip only for prototypes/POCs
+- Phase 7 (Verify) - Skip only for docs/config
+
+**For production code:**
+- Phase 4 (Plan Tests) - Recommended
+- Phase 5a (Write Tests) - Recommended
+- Phase 7 (Verify) - Required
+
+## Re-evaluation
+
+**If scope changes mid-workflow:**
+
+```markdown
+⚠️ **Scope Change Detected**
+
+**Original:** Backend API endpoint
+**Current:** API endpoint + UI component
+
+**Recommendation:** Add Phase 3 (UI Breakdown)
+
+The task now includes UI, which wasn't in the original scope.
+
+Add Phase 3 now? [yes/no/later]
+```
+
+## Best Practices
+
+### Do's
+- ✅ Confirm skip decisions with user
+- ✅ Log skipped phases with reasons
+- ✅ Allow user override
+- ✅ Maintain minimum quality (Phase 6, 7 for production)
+- ✅ Re-evaluate if scope changes
+- ✅ Document skips in workflow log
+
+### Don'ts
+- ❌ Skip Phase 1 (always understand first)
+- ❌ Skip Phase 6 for production code (quality matters)
+- ❌ Auto-skip without user awareness
+- ❌ Skip tests without explicit request
+- ❌ Skip documentation for public APIs
+- ❌ Skip verification for critical features
+
+## References
+
+- Workflow orchestrator: Main workflow skill
+- Phase guides: Detailed phase documentation
+- Bug fix workflow: bugfix-quick skill
+- Project contexts: Task type detection patterns

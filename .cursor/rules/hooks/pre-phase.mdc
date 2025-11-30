@@ -1,0 +1,262 @@
+---
+description: Prepares environment and context before each workflow phase begins
+globs: []
+alwaysApply: false
+---
+
+# Pre-Phase Hook - Phase Initialization
+
+## Trigger
+Automatically executes:
+- After Phase N-1 is approved
+- Before Phase N execution begins
+- For all 9 workflow phases
+
+## Purpose
+Prepare the environment, load context, verify prerequisites, and initialize state before phase execution begins. This ensures each phase has the necessary setup and context to execute successfully.
+
+## Execution Flow
+
+```
+Phase N-1 Approved
+      ↓
+[PRE-PHASE HOOK] ← YOU ARE HERE
+      ↓
+Load workflow state
+Verify prerequisites
+Initialize phase state
+Load phase context
+Show phase info
+Start timer & token tracking
+      ↓
+Phase N Execution begins
+```
+
+## Actions
+
+### 1. Load Workflow State
+```typescript
+const state = loadWorkflowState();
+const currentPhase = state.current_phase;
+const phaseName = PHASES[currentPhase].name;
+
+console.log(`\n${'='.repeat(60)}`);
+console.log(`🚀 STARTING PHASE ${currentPhase}: ${phaseName}`);
+console.log(`${'='.repeat(60)}\n`);
+```
+
+### 2. Verify Prerequisites
+```typescript
+// Check if previous phase was approved
+const prevPhase = state.phases[currentPhase - 1];
+if (prevPhase && prevPhase.status !== 'approved') {
+  throw new Error(`Cannot start Phase ${currentPhase}: Previous phase not approved`);
+}
+
+// Check if required agents are active
+const requiredAgents = PHASES[currentPhase].required_agents;
+const activeAgents = state.context.agents;
+const missingAgents = requiredAgents.filter(a => !activeAgents.includes(a));
+
+if (missingAgents.length > 0) {
+  console.warn(`⚠️  Missing agents: ${missingAgents.join(', ')}`);
+  await activateAgents(missingAgents);
+}
+```
+
+### 3. Initialize Phase State
+```typescript
+state.phases[currentPhase] = {
+  name: phaseName,
+  status: 'in_progress',
+  started_at: new Date().toISOString(),
+  deliverables: [],
+  logs: [],
+};
+
+saveWorkflowState(state);
+```
+
+### 4. Load Phase Context
+```typescript
+// Load previous phase deliverables
+const previousDeliverables = currentPhase > 1
+  ? state.phases[currentPhase - 1].deliverables
+  : [];
+
+// Load project context
+const projectContext = await loadProjectContext();
+
+// Prepare phase context
+const phaseContext = {
+  phase: currentPhase,
+  previousDeliverables,
+  projectContext,
+  workflowState: state,
+};
+```
+
+### 5. Show Phase Info
+```typescript
+console.log(`📋 Phase ${currentPhase}: ${phaseName}`);
+console.log(`📅 Started: ${new Date().toLocaleString()}`);
+console.log(`🤖 Active Agents: ${activeAgents.join(', ')}`);
+console.log(`📦 Previous Deliverables: ${previousDeliverables.length} file(s)`);
+console.log(`\n🎯 Objectives:`);
+
+PHASES[currentPhase].objectives.forEach((obj, i) => {
+  console.log(`   ${i + 1}. ${obj}`);
+});
+
+console.log(`\n✅ Success Criteria:`);
+PHASES[currentPhase].success_criteria.forEach((criteria, i) => {
+  console.log(`   ${i + 1}. ${criteria}`);
+});
+
+console.log(`\n${'─'.repeat(60)}\n`);
+```
+
+### 6. Start Phase Timer & Token Tracking
+```typescript
+state.phases[currentPhase].timer_start = Date.now();
+
+// Initialize token tracking
+state.phases[currentPhase].tokens = {
+  start: getCurrentTokenUsage(),
+  phase_tokens: 0,
+  cumulative_tokens: state.total_tokens_used || 0,
+};
+
+saveWorkflowState(state);
+```
+
+## Phase-Specific Setup
+
+### Phase 1: Requirements Analysis
+Load JIRA ticket and Confluence docs if provided.
+
+### Phase 2: Technical Planning
+Load codebase context and architecture patterns.
+
+### Phase 3: Design Review
+Load Figma designs and UI components library.
+
+### Phase 4: Test Planning
+Load existing tests and test patterns.
+
+### Phase 5a: Write Tests (RED)
+Verify test files are planned in Phase 4.
+
+### Phase 5b: Implementation (GREEN)
+Verify tests exist and are failing (TDD RED phase complete).
+
+### Phase 5c: Refactor (REFACTOR)
+Verify tests pass before refactoring, save baseline metrics.
+
+### Phase 6: Code Review
+Load code quality rules and run linter.
+
+### Phase 7: QA Validation
+Run all tests and coverage analysis.
+
+### Phase 8: Documentation
+Load documentation templates and collect changes summary.
+
+### Phase 9: Notification
+Prepare notification data (JIRA, Confluence, Slack).
+
+## Context Access
+- Workflow state: `.claude/logs/workflows/[workflow-id]/state.json`
+- Project context: `.claude/project-contexts/[project]/`
+- Current phase: Retrieved from workflow state
+- Previous deliverables: From prior phase state
+- Phase definitions: From CLAUDE.md or plugin configuration
+
+## Integration
+This hook is **critical** - it must complete successfully before the phase can run:
+- If prerequisites are not met, the phase cannot start
+- If required agents are missing, they are automatically activated
+- All necessary context is loaded and made available to the phase
+- Timer and token tracking begin for performance monitoring
+
+## Pre-Phase Banner
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚀 PHASE 2: TECHNICAL PLANNING
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+## Error Handling
+
+```typescript
+try {
+  await executePrePhaseHook(phaseNumber);
+} catch (error) {
+  console.error(`❌ Pre-phase hook failed: ${error.message}`);
+
+  // Save error state
+  state.phases[phaseNumber].status = 'error';
+  state.phases[phaseNumber].error = error.message;
+  saveWorkflowState(state);
+
+  // Notify user
+  console.log('\n⚠️  Cannot start phase. Please fix the error and try again.\n');
+
+  // Don't proceed to phase execution
+  throw error;
+}
+```
+
+## Checklist
+
+- [ ] Workflow state loaded
+- [ ] Previous phase verified (approved)
+- [ ] Required agents activated
+- [ ] Phase state initialized
+- [ ] Phase context prepared
+- [ ] Phase info displayed
+- [ ] Timer started
+- [ ] Token tracking initialized
+- [ ] Phase-specific setup complete
+- [ ] Logs written
+
+## Examples
+
+### Successful Pre-Phase Execution
+```
+🚀 STARTING PHASE 2: TECHNICAL PLANNING
+
+📋 Phase 2: Technical Planning
+📅 Started: 2025-11-30 10:30:00
+🤖 Active Agents: mobile-react-native, backend-nodejs
+📦 Previous Deliverables: 1 file(s)
+
+🎯 Objectives:
+   1. Create technical specification
+   2. Define architecture
+   3. Plan implementation approach
+
+✅ Success Criteria:
+   1. Tech spec document created
+   2. Architecture diagrams included
+   3. All components defined
+
+────────────────────────────────────────────────────────
+
+[Phase 2 execution begins]
+```
+
+### Failed Pre-Phase (Missing Prerequisites)
+```
+❌ Pre-phase hook failed: Previous phase not approved
+
+⚠️  Cannot start phase. Please fix the error and try again.
+```
+
+---
+
+**Version:** 1.0.0
+**Trigger:** Before each phase execution
+**Critical:** YES - Must complete successfully before phase runs
+**Adapted for Cursor:** 2025-11-30

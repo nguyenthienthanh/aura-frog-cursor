@@ -1,0 +1,319 @@
+---
+description: Validates phase completion, collects metrics, and prepares approval after each phase finishes
+globs: []
+alwaysApply: false
+---
+
+# Post-Phase Hook - Phase Completion
+
+## Trigger
+Automatically executes:
+- After Phase N execution completes
+- Before approval prompt is shown
+- For all 9 workflow phases
+
+## Purpose
+Clean up, validate phase output, check success criteria, collect metrics, and prepare approval data after phase execution completes. This ensures quality standards are met before proceeding to the next phase.
+
+## Execution Flow
+
+```
+Phase N Execution completes
+      ↓
+[POST-PHASE HOOK] ← YOU ARE HERE
+      ↓
+Stop timer & calculate tokens
+Validate phase output
+Run phase-specific validation
+Check success criteria
+Generate phase summary
+Save state
+Prepare approval data
+      ↓
+Approval Prompt displayed
+```
+
+## Actions
+
+### 1. Stop Phase Timer & Calculate Token Usage
+```typescript
+const state = loadWorkflowState();
+const currentPhase = state.current_phase;
+const phaseState = state.phases[currentPhase];
+
+const duration = Date.now() - phaseState.timer_start;
+phaseState.duration_ms = duration;
+phaseState.completed_at = new Date().toISOString();
+phaseState.status = 'completed';
+
+// Calculate token usage
+const currentTokens = getCurrentTokenUsage();
+const phaseTokens = currentTokens - phaseState.tokens.start;
+phaseState.tokens.phase_tokens = phaseTokens;
+phaseState.tokens.end = currentTokens;
+
+// Update cumulative
+state.total_tokens_used = (state.total_tokens_used || 0) + phaseTokens;
+state.total_tokens_remaining = 200000 - state.total_tokens_used;
+
+console.log(`⏱️  Phase completed in ${formatDuration(duration)}`);
+console.log(`🎯 Tokens used: ${phaseTokens.toLocaleString()} (~${Math.round(phaseTokens/1000)}K)`);
+console.log(`📊 Total tokens: ${state.total_tokens_used.toLocaleString()} / 200K (${Math.round(state.total_tokens_used/2000)}%)`);
+```
+
+### 2. Validate Phase Output
+```typescript
+// Check if deliverables were created
+if (phaseState.deliverables.length === 0) {
+  console.warn('⚠️  No deliverables generated in this phase');
+}
+
+// Verify deliverables exist
+for (const file of phaseState.deliverables) {
+  if (!fileExists(file)) {
+    throw new Error(`Deliverable not found: ${file}`);
+  }
+}
+
+console.log(`✅ ${phaseState.deliverables.length} deliverable(s) created`);
+```
+
+### 3. Run Phase-Specific Validation
+```typescript
+const validationResult = await validatePhaseOutput(currentPhase, phaseState);
+
+if (!validationResult.success) {
+  console.error(`❌ Phase validation failed:`);
+  validationResult.errors.forEach(err => console.error(`   - ${err}`));
+  throw new Error('Phase validation failed');
+}
+
+console.log(`✅ Phase validation passed`);
+```
+
+### 4. Check Success Criteria
+```typescript
+const phase = PHASES[currentPhase];
+const criteriaResults = [];
+
+for (const criteria of phase.success_criteria) {
+  const met = await checkCriteria(criteria, phaseState);
+  criteriaResults.push({ criteria, met });
+
+  const icon = met ? '✅' : '❌';
+  console.log(`${icon} ${criteria}`);
+}
+
+const allMet = criteriaResults.every(r => r.met);
+if (!allMet) {
+  console.warn('⚠️  Not all success criteria met');
+}
+
+phaseState.success_criteria_met = allMet;
+```
+
+### 5. Generate Phase Summary
+```typescript
+const summary = {
+  phase: currentPhase,
+  phase_name: phase.name,
+  duration: formatDuration(phaseState.duration_ms),
+  deliverables: phaseState.deliverables,
+  success_criteria_met: phaseState.success_criteria_met,
+  metrics: await collectPhaseMetrics(currentPhase, phaseState),
+};
+
+phaseState.summary = summary;
+```
+
+### 6. Save State
+```typescript
+saveWorkflowState(state);
+console.log(`💾 Workflow state saved`);
+```
+
+### 7. Prepare for Approval
+```typescript
+// Generate approval prompt data
+const approvalData = {
+  phase: currentPhase,
+  summary: phaseState.summary,
+  next_phase: currentPhase < 9 ? PHASES[currentPhase + 1] : null,
+};
+
+// Save for approval hook
+saveApprovalData(approvalData);
+```
+
+## Phase-Specific Validation
+
+### Phase 1: Requirements Analysis
+- Verify requirements document exists
+- Check for scope section
+
+### Phase 2: Technical Planning
+- Verify tech spec exists
+- Check for required sections (Architecture, Components, File Changes)
+
+### Phase 3: Design Review
+- Verify design analysis document exists
+
+### Phase 4: Test Planning
+- Verify test plan exists
+- Count and validate test cases (must have at least 1)
+
+### Phase 5a: Write Tests (RED)
+- Run tests - they MUST fail (TDD RED phase)
+- Log failing test count
+
+### Phase 5b: Implementation (GREEN)
+- Run tests - they MUST pass
+- Check coverage meets threshold (default: 80%)
+- Log passing test count and coverage
+
+### Phase 5c: Refactor (REFACTOR)
+- Verify tests still pass after refactoring
+- Compare code quality metrics (complexity, duplication, maintainability)
+- Log improvements
+
+### Phase 6: Code Review
+- Check linter results
+- Ensure no errors (warnings are acceptable)
+
+### Phase 7: QA Validation
+- Run all tests - must pass
+- Verify coverage meets threshold
+- Log final test results and coverage
+
+### Phase 8: Documentation
+- Verify documentation files created
+- Count documentation files
+
+### Phase 9: Notification
+- Verify notifications sent (JIRA, Slack, etc.)
+- Log completion
+
+## Context Access
+- Workflow state: `.claude/logs/workflows/[workflow-id]/state.json`
+- Phase deliverables: From phase execution
+- Test results: From test runs
+- Coverage reports: From coverage tools
+- Lint results: From linter
+- Metrics: Collected during phase
+
+## Integration
+This hook is **critical** - it must complete successfully before showing approval prompt:
+- If validation fails, phase is marked as failed
+- If deliverables are missing, phase cannot be approved
+- If tests don't meet TDD requirements, phase is flagged
+- All metrics are collected for reporting and decision-making
+
+## Post-Phase Banner
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ PHASE 2 COMPLETED IN 15m 30s
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+## Metrics Collection
+
+Collected metrics vary by phase:
+
+**All Phases:**
+- Duration (milliseconds)
+- Deliverables count
+- Token usage
+
+**Phase 4 (Test Planning):**
+- Test cases count
+
+**Phase 5a/5b/5c (Implementation):**
+- Test results (passed/failed)
+- Coverage percentage
+- Files changed count
+- Code quality improvements (5c only)
+
+**Phase 6 (Code Review):**
+- Lint errors count
+- Lint warnings count
+
+**Phase 7 (QA Validation):**
+- Final test results
+- Final coverage percentage
+
+## Error Handling
+
+```typescript
+try {
+  await executePostPhaseHook(phaseNumber);
+} catch (error) {
+  console.error(`❌ Post-phase hook failed: ${error.message}`);
+
+  // Mark phase as failed
+  state.phases[phaseNumber].status = 'failed';
+  state.phases[phaseNumber].error = error.message;
+  saveWorkflowState(state);
+
+  // Don't show approval prompt
+  console.log('\n⚠️  Phase validation failed. Cannot proceed to approval.\n');
+  console.log('Please fix the issues and re-run the phase.\n');
+
+  throw error;
+}
+```
+
+## Checklist
+
+- [ ] Timer stopped
+- [ ] Duration calculated
+- [ ] Token usage calculated
+- [ ] Deliverables validated
+- [ ] Phase-specific validation passed
+- [ ] Success criteria checked
+- [ ] Metrics collected
+- [ ] Summary generated
+- [ ] State saved
+- [ ] Approval data prepared
+- [ ] Logs written
+
+## Examples
+
+### Successful Post-Phase Execution
+```
+⏱️  Phase completed in 15m 30s
+🎯 Tokens used: 12,500 (~13K)
+📊 Total tokens: 45,000 / 200K (23%)
+✅ 3 deliverable(s) created
+✅ Phase validation passed
+
+✅ Tech spec document created
+✅ Architecture diagrams included
+✅ All components defined
+
+💾 Workflow state saved
+
+[Approval prompt displayed]
+```
+
+### Failed Post-Phase (Tests Not Passing)
+```
+⏱️  Phase completed in 8m 15s
+🎯 Tokens used: 8,200 (~8K)
+📊 Total tokens: 35,000 / 200K (18%)
+✅ 5 deliverable(s) created
+
+❌ Phase validation failed:
+   - Implementation incomplete: 3 test(s) still failing
+
+⚠️  Phase validation failed. Cannot proceed to approval.
+
+Please fix the issues and re-run the phase.
+```
+
+---
+
+**Version:** 1.0.0
+**Trigger:** After each phase execution
+**Critical:** YES - Must complete successfully before approval prompt
+**Adapted for Cursor:** 2025-11-30

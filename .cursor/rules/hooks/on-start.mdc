@@ -1,0 +1,195 @@
+---
+description: Validates project setup before workflow execution - runs on workflow:start
+globs: []
+alwaysApply: false
+---
+
+# On-Start Hook - Workflow Initialization Check
+
+## Trigger
+Automatically executes when:
+- `workflow:start` command is run
+- Any workflow phase command is executed
+- Before Phase 1 begins
+
+## Purpose
+Ensure the project is properly initialized with Aura Frog before executing workflows. This hook validates that all required configuration files and contexts exist, and offers the user an informed choice to proceed or cancel if setup is incomplete.
+
+**Distinction from Session Start:**
+- **Session Start Protocol** (in CLAUDE.md): Welcome message at conversation start (non-blocking, informational)
+- **On-Start Hook** (this file): Strict validation before workflow execution (blocking, requires user choice)
+
+## Execution Flow
+
+```
+User executes: workflow:start "Task"
+      ↓
+[ON-START HOOK] ← YOU ARE HERE
+      ↓
+Validate project setup
+      ↓
+If incomplete: Show setup reminder + wait for user choice
+      ↓
+If complete OR user chooses to continue:
+      ↓
+Phase 1: Understand begins
+```
+
+## Actions
+
+### 1. Check Project Context
+Verify `.claude/project-contexts/` directory exists and contains at least one project configuration:
+
+```bash
+if [ ! -d ".claude/project-contexts" ] || [ -z "$(ls -A .claude/project-contexts 2>/dev/null)" ]; then
+  MISSING_PROJECT_CONTEXT=true
+else
+  MISSING_PROJECT_CONTEXT=false
+fi
+```
+
+### 2. Check Aura Frog Configuration
+Verify `ccpm-config.yaml` exists (project-level or plugin-level):
+
+```bash
+if [ -f ".claude/ccpm-config.yaml" ]; then
+  MISSING_CONFIG=false
+elif [ -f "$PLUGIN_DIR/ccpm-config.yaml" ]; then
+  MISSING_CONFIG=false
+else
+  MISSING_CONFIG=true
+fi
+```
+
+### 3. Check Settings
+Verify `.claude/settings.local.json` exists:
+
+```bash
+if [ ! -f ".claude/settings.local.json" ]; then
+  MISSING_SETTINGS=true
+else
+  MISSING_SETTINGS=false
+fi
+```
+
+### 4. Check Environment Configuration
+Verify project `.envrc` exists:
+
+```bash
+if [ ! -f ".envrc" ]; then
+  MISSING_ENVRC=true
+else
+  MISSING_ENVRC=false
+fi
+```
+
+### 5. Display Setup Reminder (If Needed)
+If any checks failed, show comprehensive setup reminder with:
+- List of missing components
+- Instructions to run `project:init`
+- Explanation of what initialization does
+- Post-init configuration steps
+- User choice to continue anyway or cancel
+
+## Context Access
+- Project root directory: Current working directory
+- Plugin directory: `~/.claude/plugins/marketplaces/aurafrog/aura-frog/`
+- Required files:
+  - `.claude/project-contexts/[project]/project-config.yaml`
+  - `.claude/settings.local.json`
+  - `.envrc`
+  - `ccpm-config.yaml` (project or plugin level)
+
+## Integration
+This hook is **blocking** - it requires user decision before proceeding:
+- **User chooses to cancel**: Workflow exits, suggests running `project:init`
+- **User chooses to continue**: Workflow proceeds with default configuration
+
+## User Experience
+
+### Setup Complete
+```
+✅ Project context exists
+✅ Aura Frog config exists
+✅ Settings configured
+✅ Environment configuration exists
+
+[Workflow proceeds to Phase 1]
+```
+
+### Setup Incomplete
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️ Aura Frog Setup Incomplete
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔧 Missing components detected:
+   ❌ Project context (.claude/project-contexts/)
+   ❌ Aura Frog configuration (ccpm-config.yaml)
+   ❌ Settings file (.claude/settings.local.json)
+   ❌ Environment config (.envrc in your project root)
+
+📚 To complete setup, run:
+   project:init
+
+This will:
+   • Create .claude/ folder in your project
+   • Analyze your project structure
+   • Generate project-specific configuration
+   • Create .claude/settings.local.json from template
+   • Set up .envrc in your project root
+   • Prepare Aura Frog for your tech stack
+
+After running project:init:
+   • Edit .envrc in your project root to add integration tokens
+   • Run 'direnv allow' to enable environment variables
+   • Customize .claude/settings.local.json if needed
+   • Review .claude/CLAUDE.md for project guide
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Continue workflow anyway? (y/n)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Your choice: _
+```
+
+## Benefits
+
+1. **Proactive Guidance** - Users discover `project:init` naturally with clear instructions
+2. **Flexible** - Allows continuing without setup (uses defaults), doesn't block workflows completely
+3. **Educational** - Shows what files are expected and explains what each component does
+4. **Non-Intrusive** - Only shows once per session (or until setup complete), quick to dismiss
+
+## Examples
+
+### For Claude/Cursor AI Agent
+When executing a workflow:
+1. Run this hook before Phase 1
+2. Check all required files
+3. If missing, display reminder
+4. Wait for user input (y/n)
+5. Continue or exit based on choice
+
+### For Users
+If you see the reminder:
+1. Exit the workflow (type 'n')
+2. Run `project:init`
+3. Follow the setup instructions
+4. Try your workflow again
+
+## Files Checked
+
+### Plugin Root Files
+- `~/.claude/plugins/marketplaces/aurafrog/aura-frog/ccpm-config.yaml`
+
+### Project Root Files
+- `.claude/` - Project Aura Frog data folder
+- `.claude/project-contexts/[project]/` - Project context
+- `.claude/settings.local.json` - Claude Code settings
+- `.envrc` - Project environment variables
+
+---
+
+**Version:** 1.1.0
+**Created:** 2025-11-27
+**Adapted for Cursor:** 2025-11-30

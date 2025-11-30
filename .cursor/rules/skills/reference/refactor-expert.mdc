@@ -1,0 +1,477 @@
+---
+description: "Safe, incremental refactoring guidance. Code smell detection, refactoring patterns, step-by-step process. Ensures behavior unchanged through continuous testing."
+globs: []
+alwaysApply: false
+---
+
+# Refactor Expert
+
+**Type:** Reference Skill
+**Use:** On-demand during refactoring tasks
+
+## When to Use
+
+Use this skill when:
+- Code smell detected (duplication, long methods, complex logic)
+- Tests are passing (safe to refactor)
+- Code needs cleanup after feature implementation
+- Improving maintainability requested
+- Phase 5c (Refactor) in workflow
+
+## Golden Rule
+
+**Never refactor and add features simultaneously.**
+
+Refactoring changes structure, not behavior. Features change behavior. Mixing them creates confusion and bugs.
+
+## Refactoring Decision Matrix
+
+| Signal | Action |
+|--------|--------|
+| Code smell detected | Identify specific smell (see below) |
+| Tests passing | Safe to refactor |
+| No tests | Write tests FIRST, then refactor |
+| Large change needed | Break into small, testable steps |
+
+## Common Code Smells → Refactoring Patterns
+
+| Smell | Refactoring | Example |
+|-------|-------------|---------|
+| Long Method | Extract Method | Break 50-line method into smaller functions |
+| Large Class | Extract Class | Split 1000-line class into cohesive units |
+| Long Parameter List | Introduce Parameter Object | `fn(a,b,c,d,e)` → `fn(params)` |
+| Duplicate Code | Extract Method/Class | DRY principle |
+| Feature Envy | Move Method | Method uses more of another class |
+| Data Clumps | Extract Class | Same group of data repeated |
+| Primitive Obsession | Replace with Object | String userId → User object |
+| Switch Statements | Replace with Polymorphism | Strategy pattern |
+| Speculative Generality | Remove unused abstraction | YAGNI principle |
+| Dead Code | Delete it | Unused functions, variables |
+
+## Refactoring Patterns
+
+### 1. Extract Method
+
+**Before:**
+```typescript
+function processOrder(order: Order) {
+  // Validate
+  if (!order.items.length) throw new Error('Empty order');
+  if (!order.customer) throw new Error('No customer');
+
+  // Calculate total
+  let total = 0;
+  for (const item of order.items) {
+    total += item.price * item.quantity;
+  }
+
+  // Apply discount
+  if (order.customer.isPremium) {
+    total *= 0.9;
+  }
+
+  return total;
+}
+```
+
+**After:**
+```typescript
+function processOrder(order: Order) {
+  validateOrder(order);
+  const total = calculateTotal(order.items);
+  return applyCustomerDiscount(total, order.customer);
+}
+
+function validateOrder(order: Order) {
+  if (!order.items.length) throw new Error('Empty order');
+  if (!order.customer) throw new Error('No customer');
+}
+
+function calculateTotal(items: OrderItem[]): number {
+  return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+}
+
+function applyCustomerDiscount(amount: number, customer: Customer): number {
+  return customer.isPremium ? amount * 0.9 : amount;
+}
+```
+
+### 2. Replace Conditional with Polymorphism
+
+**Before:**
+```typescript
+function getPrice(type: string, base: number): number {
+  if (type === 'premium') return base * 0.8;
+  if (type === 'vip') return base * 0.7;
+  if (type === 'regular') return base;
+  return base;
+}
+```
+
+**After:**
+```typescript
+interface PricingStrategy {
+  calculate(base: number): number;
+}
+
+class PremiumPricing implements PricingStrategy {
+  calculate(base: number) { return base * 0.8; }
+}
+
+class VIPPricing implements PricingStrategy {
+  calculate(base: number) { return base * 0.7; }
+}
+
+class RegularPricing implements PricingStrategy {
+  calculate(base: number) { return base; }
+}
+
+// Usage
+const strategy = pricingStrategies[customerType];
+const price = strategy.calculate(basePrice);
+```
+
+### 3. Introduce Parameter Object
+
+**Before:**
+```typescript
+function createUser(
+  firstName: string,
+  lastName: string,
+  email: string,
+  age: number,
+  address: string,
+  phone: string
+) {
+  // ...
+}
+```
+
+**After:**
+```typescript
+interface UserData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  age: number;
+  address: string;
+  phone: string;
+}
+
+function createUser(data: UserData) {
+  // ...
+}
+```
+
+### 4. Simplify Conditional
+
+**Before:**
+```typescript
+if (date.before(SUMMER_START) || date.after(SUMMER_END)) {
+  charge = quantity * winterRate;
+} else {
+  charge = quantity * summerRate;
+}
+```
+
+**After:**
+```typescript
+const isSummer = !date.before(SUMMER_START) && !date.after(SUMMER_END);
+const rate = isSummer ? summerRate : winterRate;
+const charge = quantity * rate;
+```
+
+### 5. Replace Magic Numbers
+
+**Before:**
+```typescript
+if (user.age > 65) {
+  discount = price * 0.15;
+}
+
+if (order.total > 1000) {
+  shipping = 0;
+}
+```
+
+**After:**
+```typescript
+const SENIOR_AGE_THRESHOLD = 65;
+const SENIOR_DISCOUNT_RATE = 0.15;
+const FREE_SHIPPING_THRESHOLD = 1000;
+
+if (user.age > SENIOR_AGE_THRESHOLD) {
+  discount = price * SENIOR_DISCOUNT_RATE;
+}
+
+if (order.total > FREE_SHIPPING_THRESHOLD) {
+  shipping = 0;
+}
+```
+
+## Safe Refactoring Process
+
+### Step-by-Step
+
+```
+1. Ensure tests pass ✅
+2. Make ONE small change
+3. Run tests ✅
+4. Commit
+5. Repeat
+```
+
+**Critical:** Never make multiple changes between test runs.
+
+### Example Workflow
+
+```bash
+# 1. Verify tests pass
+npm test  # ✅ All pass
+
+# 2. Extract one method
+git add -p  # Stage only this change
+
+# 3. Run tests again
+npm test  # ✅ Still pass
+
+# 4. Commit
+git commit -m "refactor: extract validateOrder method"
+
+# 5. Next refactoring
+# Repeat process
+```
+
+## Refactoring Checklist
+
+### Before Refactoring
+- [ ] Tests exist and pass
+- [ ] Understand current behavior
+- [ ] Identify specific code smell
+- [ ] Plan refactoring approach
+
+### During Refactoring
+- [ ] One change at a time
+- [ ] Run tests after each change
+- [ ] Commit frequently (each successful change)
+- [ ] Keep behavior unchanged
+
+### After Refactoring
+- [ ] All tests pass
+- [ ] Code is cleaner/more maintainable
+- [ ] Behavior is identical
+- [ ] No new bugs introduced
+- [ ] Documentation updated if needed
+
+## When to Stop Refactoring
+
+Stop when:
+- ✅ Code smell eliminated
+- ✅ Code is readable and maintainable
+- ✅ Tests pass
+- ✅ No obvious improvements left
+
+**Don't:**
+- ❌ Over-refactor working code
+- ❌ Abstract prematurely
+- ❌ Refactor code you don't understand
+- ❌ Sacrifice readability for cleverness
+
+## Common Refactoring Scenarios
+
+### React Component Refactoring
+
+**Before:**
+```typescript
+function UserProfile() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch('/api/user')
+      .then(r => r.json())
+      .then(setUser)
+      .catch(setError)
+      .finally(() => setLoading(false));
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  if (!user) return <div>No user</div>;
+
+  return (
+    <div>
+      <h1>{user.name}</h1>
+      <p>{user.email}</p>
+      <p>{user.bio}</p>
+    </div>
+  );
+}
+```
+
+**After:**
+```typescript
+function UserProfile() {
+  const { user, loading, error } = useUser();
+
+  if (loading) return <LoadingSpinner />;
+  if (error) return <ErrorMessage error={error} />;
+  if (!user) return <EmptyState message="No user found" />;
+
+  return <UserProfileCard user={user} />;
+}
+
+// Extracted hook
+function useUser() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchUser()
+      .then(setUser)
+      .catch(setError)
+      .finally(() => setLoading(false));
+  }, []);
+
+  return { user, loading, error };
+}
+
+// Extracted component
+function UserProfileCard({ user }: { user: User }) {
+  return (
+    <div>
+      <h1>{user.name}</h1>
+      <p>{user.email}</p>
+      <p>{user.bio}</p>
+    </div>
+  );
+}
+```
+
+### API Handler Refactoring
+
+**Before:**
+```typescript
+app.post('/api/orders', async (req, res) => {
+  try {
+    // Validation
+    if (!req.body.items) return res.status(400).json({ error: 'Items required' });
+    if (!req.body.userId) return res.status(400).json({ error: 'User ID required' });
+
+    // Get user
+    const user = await db.query('SELECT * FROM users WHERE id = $1', [req.body.userId]);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+
+    // Calculate total
+    let total = 0;
+    for (const item of req.body.items) {
+      total += item.price * item.quantity;
+    }
+
+    // Create order
+    const order = await db.query(
+      'INSERT INTO orders (user_id, total) VALUES ($1, $2) RETURNING *',
+      [req.body.userId, total]
+    );
+
+    res.status(201).json(order);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+```
+
+**After:**
+```typescript
+app.post('/api/orders', async (req, res) => {
+  try {
+    const orderData = validateOrderRequest(req.body);
+    const user = await findUserOrFail(orderData.userId);
+    const total = calculateOrderTotal(orderData.items);
+    const order = await createOrder(user.id, total);
+
+    res.status(201).json(order);
+  } catch (error) {
+    handleError(error, res);
+  }
+});
+
+function validateOrderRequest(body: any): OrderData {
+  if (!body.items) throw new ValidationError('Items required');
+  if (!body.userId) throw new ValidationError('User ID required');
+  return { userId: body.userId, items: body.items };
+}
+
+async function findUserOrFail(userId: string): Promise<User> {
+  const user = await User.findById(userId);
+  if (!user) throw new NotFoundError('User not found');
+  return user;
+}
+
+function calculateOrderTotal(items: OrderItem[]): number {
+  return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+}
+
+async function createOrder(userId: string, total: number): Promise<Order> {
+  return Order.create({ userId, total });
+}
+
+function handleError(error: Error, res: Response) {
+  if (error instanceof ValidationError) {
+    res.status(400).json({ error: error.message });
+  } else if (error instanceof NotFoundError) {
+    res.status(404).json({ error: error.message });
+  } else {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+```
+
+## Tools for Refactoring
+
+### IDE Refactoring Features
+- Rename (F2 in VS Code)
+- Extract Method
+- Extract Variable
+- Move File/Function
+- Find All References
+
+### Automated Refactoring
+```bash
+# TypeScript: Rename across project
+# Use IDE or:
+npx ts-refactor rename oldName newName
+
+# ESLint auto-fix
+npx eslint --fix .
+
+# Prettier format
+npx prettier --write .
+```
+
+## Best Practices
+
+### Do's
+- ✅ Test first, refactor second
+- ✅ Small, incremental changes
+- ✅ Commit after each successful refactor
+- ✅ Use IDE refactoring tools
+- ✅ Document why (in commit message)
+- ✅ Keep PRs focused (refactor OR feature)
+
+### Don'ts
+- ❌ Refactor without tests
+- ❌ Mix refactoring with feature work
+- ❌ Make large changes at once
+- ❌ Refactor code you don't understand
+- ❌ Over-refactor working code
+- ❌ Ignore test failures
+
+## References
+
+- Martin Fowler's Refactoring Catalog: https://refactoring.com/catalog/
+- KISS Principle: Keep it simple
+- YAGNI: You ain't gonna need it
+- DRY: Don't repeat yourself

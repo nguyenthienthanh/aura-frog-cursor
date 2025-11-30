@@ -1,0 +1,121 @@
+---
+description: WCAG accessibility standards for inclusive UI development
+globs: []
+alwaysApply: true
+---
+
+# Accessibility (a11y) Rules
+
+**Purpose:** Ensure applications are usable by everyone, including users with disabilities
+
+## WCAG Compliance Levels
+
+| Level | Required | Target |
+|-------|----------|--------|
+| A | Minimum | All projects |
+| AA | Recommended | Production apps |
+| AAA | Enhanced | When specified |
+
+## Core Requirements
+
+### Semantic HTML
+```html
+<!-- ✅ Good -->
+<button type="submit">Submit</button>
+<nav><ul><li><a href="/">Home</a></li></ul></nav>
+<main><article><h1>Title</h1></article></main>
+
+<!-- ❌ Bad -->
+<div onclick="submit()">Submit</div>
+<div class="nav"><div class="link">Home</div></div>
+```
+
+### Keyboard Navigation
+```
+✅ All interactive elements focusable
+✅ Visible focus indicators
+✅ Logical tab order
+✅ Escape closes modals
+✅ Arrow keys in menus
+```
+
+### Color Contrast
+| Text Size | Minimum Ratio (AA) |
+|-----------|-------------------|
+| Normal (<18px) | 4.5:1 |
+| Large (≥18px bold, ≥24px) | 3:1 |
+
+## ARIA Essentials
+
+### Labels
+```html
+<!-- Icon buttons -->
+<button aria-label="Close dialog"><CloseIcon /></button>
+
+<!-- Form fields -->
+<input aria-label="Search" type="search" />
+```
+
+### States
+```html
+<!-- Expandable -->
+<button aria-expanded="false" aria-controls="panel">Toggle</button>
+
+<!-- Loading -->
+<button aria-busy="true">Loading...</button>
+
+<!-- Invalid -->
+<input aria-invalid="true" aria-describedby="error" />
+```
+
+## Mobile Accessibility
+
+| Requirement | Minimum |
+|-------------|---------|
+| Touch target size | 44×44px |
+| Touch target spacing | 8px |
+| Text scaling | Support up to 200% |
+
+```tsx
+// React Native
+<TouchableOpacity
+  accessible={true}
+  accessibilityLabel="Submit form"
+  accessibilityRole="button"
+  style={{ minWidth: 44, minHeight: 44 }}
+>
+```
+
+## Testing Checklist
+
+### Automated
+- [ ] axe DevTools: 0 violations
+- [ ] Lighthouse accessibility: ≥90
+- [ ] Jest-axe tests pass
+
+### Manual
+- [ ] Tab through entire page
+- [ ] Test with screen reader
+- [ ] Zoom to 200%
+- [ ] Check color contrast
+- [ ] Test without mouse
+
+## Best Practices
+
+### Do's
+- Use semantic HTML first
+- Test with keyboard only
+- Provide text alternatives
+- Maintain focus management
+- Use ARIA sparingly
+
+### Don'ts
+- Disable zoom
+- Remove focus outlines
+- Rely on color alone
+- Use placeholder as label
+- Create keyboard traps
+
+## References
+- Project accessibility standards: `project-contexts/[project]/rules.md`
+- WCAG Guidelines: https://www.w3.org/WAI/WCAG21/quickref/

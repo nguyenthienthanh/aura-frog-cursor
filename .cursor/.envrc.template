@@ -1,0 +1,19 @@
+# CCPM Integration Environment Variables
+# This template is copied to root .envrc during project:init
+# Uncomment and fill in your values in root .envrc to enable integrations
+
+# JIRA Integration
+# export JIRA_URL="https://your-company.atlassian.net"
+# export JIRA_EMAIL="your-email@company.com"
+# export JIRA_API_TOKEN="your-jira-token"
+
+# Confluence Integration
+# export CONFLUENCE_URL="https://your-company.atlassian.net/wiki"
+# export CONFLUENCE_EMAIL="your-email@company.com"
+# export CONFLUENCE_API_TOKEN="your-confluence-token"
+
+# Slack Integration
+# export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/..."
+
+# Figma Integration
+# export FIGMA_API_TOKEN="your-figma-token"

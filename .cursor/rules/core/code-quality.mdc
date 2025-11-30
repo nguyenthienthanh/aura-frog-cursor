@@ -1,0 +1,228 @@
+---
+description: Ensure consistent high-quality code with TypeScript strict mode, proper error handling, and testing standards
+globs: []
+alwaysApply: true
+---
+
+# Code Quality Rules
+
+**Purpose:** Ensure consistent, high-quality code across all projects
+
+## General Code Standards
+
+### TypeScript/JavaScript
+```typescript
+// ✅ GOOD: Strict typing, no any
+interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+function getUser(id: string): User | null {
+  // Implementation
+}
+
+// ❌ BAD: Using any
+function getUser(id: any): any {
+  // Implementation
+}
+```
+
+### No Non-Null Assertions
+```typescript
+// ❌ BAD
+const value = obj.field!;
+
+// ✅ GOOD
+const value = obj.field ?? defaultValue;
+if (obj.field) {
+  // Use obj.field safely
+}
+```
+
+### Proper Error Handling
+```typescript
+// ✅ GOOD
+try {
+  await riskyOperation();
+} catch (error) {
+  if (error instanceof ValidationError) {
+    handleValidationError(error);
+  } else {
+    logger.error('Unexpected error', error);
+    throw error;
+  }
+}
+
+// ❌ BAD: Silent failures
+try {
+  await riskyOperation();
+} catch (error) {
+  // Do nothing
+}
+```
+
+## Testing Rules
+
+### Test Coverage
+```yaml
+Minimum Coverage:
+  overall: 80%
+  critical_business_logic: 90%
+  ui_components: 70%
+  utility_functions: 95%
+```
+
+### Test Structure
+```typescript
+// ✅ GOOD: Descriptive, organized
+describe('useSocialMediaPost', () => {
+  describe('when posting to Facebook', () => {
+    it('should successfully post with valid content', async () => {
+      // Arrange
+      const hook = renderHook(() => useSocialMediaPost());
+
+      // Act
+      await act(() => hook.result.current.post(validPost));
+
+      // Assert
+      expect(hook.result.current.status).toBe('success');
+    });
+  });
+});
+```
+
+## Naming Conventions
+
+### Variables & Functions
+```typescript
+// ✅ GOOD: Descriptive, camelCase
+const userList = getActiveUsers();
+const isAuthenticated = checkAuth();
+
+// ❌ BAD: Unclear, inconsistent
+const list = get();
+const auth = check();
+```
+
+### Constants
+```typescript
+// ✅ GOOD: UPPER_SNAKE_CASE
+const MAX_RETRY_ATTEMPTS = 3;
+const API_BASE_URL = 'https://api.example.com';
+```
+
+### Booleans
+```typescript
+// ✅ GOOD: is/has/can prefix
+const isLoading = true;
+const hasPermission = checkPermission();
+const canEdit = user.role === 'admin';
+```
+
+## File Organization
+
+### Import Order
+```typescript
+// 1. React & React Native
+import { useState, useEffect } from 'react';
+import { View, Text } from 'react-native';
+
+// 2. Third-party libraries
+import { useQuery } from '@tanstack/react-query';
+
+// 3. Navigation
+import { useNavigation } from '@react-navigation/native';
+
+// 4. Store & State
+import { useBoundStore } from 'hooks/useBoundStore';
+
+// 5. API
+import { userApi } from 'api/userApi';
+
+// 6. Components
+import { Button } from 'components';
+
+// 7. Hooks
+import { useCustomHook } from './hooks/useCustomHook';
+
+// 8. Utils & Constants
+import { formatDate } from 'utils/dateUtils';
+
+// 9. Types
+import type { User } from 'types/user';
+
+// 10. Assets
+import Logo from './assets/logo.svg';
+```
+
+## Code Smells to Avoid
+
+### Magic Numbers
+```typescript
+// ❌ BAD
+if (user.age > 18) {
+  // What does 18 mean?
+}
+
+// ✅ GOOD
+const MINIMUM_AGE = 18;
+if (user.age > MINIMUM_AGE) {
+  // Clear intent
+}
+```
+
+### Long Functions
+```typescript
+// ❌ BAD: 200+ lines function
+function processUser() {
+  // Too much logic
+}
+
+// ✅ GOOD: Break into smaller functions
+function processUser() {
+  validateUser();
+  transformUser();
+  saveUser();
+}
+```
+
+### Nested Conditionals
+```typescript
+// ❌ BAD: Deep nesting
+if (user) {
+  if (user.isActive) {
+    if (user.hasPermission) {
+      // Do something
+    }
+  }
+}
+
+// ✅ GOOD: Early returns
+if (!user) return;
+if (!user.isActive) return;
+if (!user.hasPermission) return;
+// Do something
+```
+
+## Code Review Checklist
+
+Before submitting code:
+
+- [ ] No ESLint warnings
+- [ ] TypeScript strict compliance
+- [ ] Test coverage >= threshold
+- [ ] All tests pass
+- [ ] No console.logs in production
+- [ ] Proper error handling
+- [ ] Code is readable
+- [ ] No code smells
+- [ ] Documentation updated
+- [ ] Follows naming conventions
+
+## References
+- Project conventions: `project-contexts/[project]/conventions.md`
+- Project-specific rules: `project-contexts/[project]/rules.md`
+- Naming conventions: `naming-conventions.mdc`
+- Smart commenting: `smart-commenting.mdc`

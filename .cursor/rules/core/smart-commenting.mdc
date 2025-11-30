@@ -1,0 +1,168 @@
+---
+description: Smart commenting rules - explain WHY not WHAT, avoid redundant comments
+globs: []
+alwaysApply: true
+---
+
+# Smart Commenting - Avoid Redundant Comments
+
+**Core Principle:** Comments should explain WHY, not WHAT.
+
+## What NOT to Comment
+
+### 1. Self-Explanatory Code
+```typescript
+// ❌ BAD
+// Set user name to John
+const userName = 'John';
+
+// Loop through users
+users.forEach(user => {
+  console.log(user.name);
+});
+
+// ✅ GOOD
+const userName = 'John';
+users.forEach(user => {
+  console.log(user.name);
+});
+```
+
+### 2. Standard Patterns
+```typescript
+// ❌ BAD
+// useEffect hook to fetch data on mount
+useEffect(() => {
+  fetchUserData();
+}, []);
+
+// ✅ GOOD
+useEffect(() => {
+  fetchUserData();
+}, []);
+```
+
+### 3. Commented-Out Code
+```typescript
+// ❌ BAD
+const UserProfile = () => {
+  // const oldLogic = () => {
+  //   return user.name;
+  // };
+
+  return <NewComponent />;
+};
+
+// ✅ GOOD
+const UserProfile = () => {
+  return <NewComponent />;
+};
+// Use git history for old code
+```
+
+## When TO Comment
+
+### 1. Complex Business Logic
+```typescript
+// ✅ GOOD
+// PH region requires additional KYC verification for policies > 1M PHP
+// This is a regulatory requirement as per BSP Circular No. 950
+if (region === 'PH' && policyAmount > 1_000_000) {
+  await performEnhancedKYC(user);
+}
+```
+
+### 2. Non-Obvious Workarounds
+```typescript
+// ✅ GOOD
+// WORKAROUND: React Native Android doesn't support nested Text with onPress
+// Issue: https://github.com/facebook/react-native/issues/12345
+// TODO: Remove when fixed in RN 0.75+
+const TextButton = Platform.OS === 'android'
+  ? TouchableOpacity
+  : Text;
+```
+
+### 3. Magic Numbers/Constants
+```typescript
+// ✅ GOOD
+// API timeout set to 30s for slow 3G connections in rural areas
+const API_TIMEOUT = 30000;
+
+// Buffer of 100px to trigger infinite scroll before reaching bottom
+// Provides smoother UX on slow devices
+const SCROLL_THRESHOLD = 100;
+```
+
+### 4. Security/Privacy Considerations
+```typescript
+// ✅ GOOD
+// SECURITY: Never log sensitive data in production
+// PII (email, phone, NRIC) must be masked per PDPA requirements
+if (__DEV__) {
+  console.log('User data:', userData);
+} else {
+  console.log('User data:', maskSensitiveData(userData));
+}
+```
+
+## Comment Quality Checklist
+
+Before adding a comment, ask:
+
+1. ❓ **Would another developer understand this code without the comment?**
+   - If YES → Don't comment
+   - If NO → Consider better naming first, then comment
+
+2. ❓ **Does the comment explain WHY, not WHAT?**
+   - "Why this approach?" ✅
+   - "What does this line do?" ❌
+
+3. ❓ **Is this explaining complex business logic?**
+   - Business rules ✅
+   - Standard code ❌
+
+## Good Comment Patterns
+
+### Pattern 1: WHY + Context
+```typescript
+// Calculate insurance premium with MY region discount
+// MY market requires 15% discount for first-time buyers (as per 2024 campaign)
+// Other regions: No discount
+const premium = region === 'MY' && user.isFirstTime
+  ? basePremium * 0.85
+  : basePremium;
+```
+
+### Pattern 2: Business Rule + Source
+```typescript
+// BUSINESS RULE: Users under 18 cannot purchase life insurance
+// Source: Insurance Act 1996, Section 45
+// Exception: Parent/guardian consent (not implemented yet)
+if (user.age < 18) {
+  throw new Error('Minimum age requirement not met');
+}
+```
+
+### Pattern 3: Technical Constraint + Issue Link
+```typescript
+// WORKAROUND: iOS WKWebView doesn't support localStorage in iframe
+// Issue: https://bugs.webkit.org/show_bug.cgi?id=123456
+// Using postMessage instead
+window.parent.postMessage({ type: 'SAVE', data }, '*');
+```
+
+## Code Review Checklist
+
+During code review, check:
+
+- [ ] Does it explain WHY, not WHAT?
+- [ ] Is it necessary? (Try removing it)
+- [ ] Could better naming eliminate the need?
+- [ ] Is it up-to-date?
+- [ ] Does it add value?
+
+## References
+- Code quality: `code-quality.mdc`
+- KISS principle: `kiss-principle.mdc`
+- Naming conventions: `naming-conventions.mdc`

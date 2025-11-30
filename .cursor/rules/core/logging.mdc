@@ -1,0 +1,171 @@
+---
+description: Structured logging with proper levels, sanitization, and request correlation
+globs: []
+alwaysApply: true
+---
+
+# Logging Standards
+
+**Purpose:** Consistent, structured logging improves debugging, monitoring, and incident response
+
+## Log Levels
+
+| Level | When to Use | Example |
+|-------|-------------|---------|
+| ERROR | Failures requiring attention | Database connection failed |
+| WARN | Potential issues, recoverable | Rate limit approaching |
+| INFO | Important business events | User registered, order placed |
+| DEBUG | Development troubleshooting | Function input/output |
+| TRACE | Detailed execution flow | Loop iterations |
+
+### Level Selection
+```typescript
+// ERROR - Something broke
+logger.error('Payment failed', { orderId, error: err.message })
+
+// WARN - Concerning but handled
+logger.warn('Retry attempt', { attempt: 3, maxRetries: 5 })
+
+// INFO - Business events
+logger.info('User registered', { userId, email })
+
+// DEBUG - Development only
+logger.debug('Cache lookup', { key, hit: true })
+```
+
+## Structured Logging Format
+
+### Required Fields
+```typescript
+{
+  timestamp: '2025-01-15T10:30:00.000Z',  // ISO 8601
+  level: 'error',                          // Log level
+  message: 'Payment processing failed',    // Human-readable
+  service: 'payment-service',              // Service name
+  requestId: 'req_abc123',                 // Request correlation
+  // Context-specific fields below
+}
+```
+
+### Context-Aware Logging
+```typescript
+// Good: Structured with context
+logger.error({
+  message: 'Payment failed',
+  orderId: '12345',
+  amount: 99.99,
+  currency: 'USD',
+  errorCode: 'CARD_DECLINED',
+  userId: 'user_abc',
+  requestId: req.id
+})
+
+// Bad: Unstructured string
+logger.error('Payment failed for order 12345, amount 99.99 USD')
+```
+
+## What to Log
+
+### Always Log
+- Request start/end (method, path, duration, status)
+- Authentication (userId, success/failure)
+- Business events (eventType, entityId, outcome)
+- Errors (message, stack, context)
+- External calls (service, endpoint, duration, status)
+
+### Never Log
+- Passwords
+- API tokens/keys
+- Credit card numbers
+- Full SSN/ID numbers
+- Session tokens
+- PII in production
+
+### Sanitization
+```typescript
+function sanitize(data: Record<string, unknown>) {
+  const sensitive = ['password', 'token', 'apiKey', 'ssn', 'creditCard']
+  return Object.fromEntries(
+    Object.entries(data).map(([k, v]) =>
+      sensitive.some(s => k.toLowerCase().includes(s))
+        ? [k, '[REDACTED]']
+        : [k, v]
+    )
+  )
+}
+
+// Usage
+logger.info('User login', sanitize(req.body))
+```
+
+## Request Correlation
+
+```typescript
+// Middleware to add requestId
+app.use((req, res, next) => {
+  req.id = req.headers['x-request-id'] || uuid()
+  res.setHeader('x-request-id', req.id)
+  next()
+})
+
+// Include in all logs
+logger.info('Processing request', {
+  requestId: req.id,
+  path: req.path
+})
+```
+
+## Environment-Specific
+
+| Environment | Level | Format | Output |
+|-------------|-------|--------|--------|
+| Development | DEBUG | Pretty | Console |
+| Staging | DEBUG | JSON | Console + File |
+| Production | INFO | JSON | Aggregator (DataDog, etc.) |
+
+## Logging Checklist
+
+- [ ] Use appropriate log level
+- [ ] Include correlation ID (requestId)
+- [ ] Add relevant context fields
+- [ ] Sanitize sensitive data
+- [ ] Use structured format (JSON in prod)
+- [ ] Log start and end of operations
+- [ ] Include timing for external calls
+- [ ] Log errors with stack trace
+
+## Anti-Patterns
+
+```typescript
+// ❌ Console.log in production
+console.log('debug info')
+
+// ❌ Logging sensitive data
+logger.info('Login', { email, password })
+
+// ❌ Unstructured messages
+logger.error(`Error: ${error} for user ${userId}`)
+
+// ❌ Missing context
+logger.error('Something failed')
+```
+
+## Best Practices
+
+### Do's
+- Use structured JSON logging
+- Include correlation IDs
+- Log at appropriate levels
+- Sanitize sensitive data
+- Include timestamps
+
+### Don'ts
+- Log passwords/tokens
+- Use console.log in production
+- Log entire request bodies
+- Over-log in production
+- Forget error context
+
+## References
+- Error handling: `error-handling.mdc`
+- Project logging config: `project-contexts/[project]/rules.md`

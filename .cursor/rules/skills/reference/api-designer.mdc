@@ -1,0 +1,453 @@
+---
+description: "RESTful API design patterns, versioning, documentation. Consistent endpoint naming, status codes, pagination, error handling. OpenAPI/Swagger documentation."
+globs: []
+alwaysApply: false
+---
+
+# API Designer
+
+**Type:** Reference Skill
+**Use:** On-demand for API design and implementation
+
+## When to Use
+
+Use this skill when:
+- Designing new API endpoints
+- Creating backend services
+- Implementing RESTful APIs
+- Phase 2 (Design) for backend features
+- API documentation needed
+
+## REST
+
+ful Conventions
+
+| Method | Endpoint | Purpose | Success Response | Error Response |
+|--------|----------|---------|------------------|----------------|
+| GET | `/users` | List all | 200 + array | 400, 500 |
+| GET | `/users/:id` | Get one | 200 + object | 404, 500 |
+| POST | `/users` | Create | 201 + created | 400, 409, 500 |
+| PUT | `/users/:id` | Replace | 200 + updated | 400, 404, 500 |
+| PATCH | `/users/:id` | Partial update | 200 + updated | 400, 404, 500 |
+| DELETE | `/users/:id` | Delete | 204 (no content) | 404, 500 |
+
+### Nested Resources
+
+```
+GET    /users/:userId/orders          # User's orders
+POST   /users/:userId/orders          # Create order for user
+GET    /users/:userId/orders/:orderId # Specific order
+DELETE /users/:userId/orders/:orderId # Cancel user's order
+```
+
+**Rule:** Nest max 2 levels deep. Beyond that, use query params or separate endpoints.
+
+## Naming Conventions
+
+| Type | Convention | Example | Rationale |
+|------|------------|---------|-----------|
+| Resources | Plural nouns | `/users`, `/orders`, `/products` | Collections |
+| Actions | Verbs (rare) | `/auth/login`, `/reports/generate` | Non-CRUD operations |
+| Query params | snake_case | `?page_size=20&sort_by=created_at` | Readability |
+| Request/Response | camelCase | `{ "firstName": "John" }` | JavaScript convention |
+| URL segments | kebab-case | `/user-profiles`, `/order-items` | URL standard |
+
+## Versioning Strategies
+
+| Strategy | Example | Pros | Cons |
+|----------|---------|------|------|
+| URL Path | `/v1/users`, `/v2/users` | Clear, explicit | URL changes |
+| Header | `Accept: application/vnd.api+json;version=1` | Clean URLs | Less visible |
+| Query | `/users?version=1` | Simple | Messy URLs |
+
+**Recommended:** URL path (`/api/v1/...`) for clarity and discoverability.
+
+**Example:**
+```
+/api/v1/users
+/api/v2/users  # Breaking changes
+```
+
+## Response Format
+
+### Success Response
+
+**Single Resource:**
+```json
+{
+  "data": {
+    "id": "123",
+    "name": "John Doe",
+    "email": "john@example.com"
+  },
+  "meta": {
+    "timestamp": "2025-01-20T10:30:00Z"
+  }
+}
+```
+
+**List with Pagination:**
+```json
+{
+  "data": [
+    { "id": "1", "name": "Item 1" },
+    { "id": "2", "name": "Item 2" }
+  ],
+  "meta": {
+    "page": 1,
+    "pageSize": 20,
+    "total": 100,
+    "totalPages": 5,
+    "hasNext": true,
+    "hasPrev": false
+  },
+  "links": {
+    "self": "/api/v1/users?page=1",
+    "next": "/api/v1/users?page=2",
+    "prev": null,
+    "first": "/api/v1/users?page=1",
+    "last": "/api/v1/users?page=5"
+  }
+}
+```
+
+### Error Response
+
+```json
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Invalid input provided",
+    "fields": {
+      "email": "Invalid email format",
+      "age": "Must be at least 18"
+    },
+    "timestamp": "2025-01-20T10:30:00Z",
+    "requestId": "req-abc-123"
+  }
+}
+```
+
+## HTTP Status Codes
+
+| Code | Meaning | When to Use |
+|------|---------|-------------|
+| 200 | OK | Successful GET, PUT, PATCH |
+| 201 | Created | Successful POST (resource created) |
+| 204 | No Content | Successful DELETE (no response body) |
+| 400 | Bad Request | Invalid input, malformed request |
+| 401 | Unauthorized | No authentication provided |
+| 403 | Forbidden | Authenticated but no permission |
+| 404 | Not Found | Resource doesn't exist |
+| 409 | Conflict | Duplicate resource, state conflict |
+| 422 | Unprocessable Entity | Validation failed |
+| 429 | Too Many Requests | Rate limited |
+| 500 | Internal Server Error | Unexpected server error |
+| 503 | Service Unavailable | Temporary downtime, maintenance |
+
+## Pagination Patterns
+
+### Offset-Based (Simple)
+
+**Request:**
+```
+GET /api/v1/users?page=2&page_size=20
+```
+
+**Response:**
+```json
+{
+  "data": [...],
+  "meta": {
+    "page": 2,
+    "pageSize": 20,
+    "total": 150,
+    "totalPages": 8
+  }
+}
+```
+
+**Pros:** Simple, can jump to any page
+**Cons:** Performance degrades with large datasets, inconsistent with concurrent updates
+
+### Cursor-Based (Scalable)
+
+**Request:**
+```
+GET /api/v1/users?cursor=eyJpZCI6MTAwfQ&limit=20
+```
+
+**Response:**
+```json
+{
+  "data": [...],
+  "meta": {
+    "limit": 20,
+    "hasNext": true
+  },
+  "cursors": {
+    "next": "eyJpZCI6MTIwfQ",
+    "prev": "eyJpZCI6ODB9"
+  }
+}
+```
+
+**Pros:** Consistent, fast, handles concurrent updates
+**Cons:** Can't jump to specific page, harder to implement
+
+**Use cursor-based for:**
+- Large datasets (millions of records)
+- Real-time feeds
+- Infinite scroll UIs
+
+## Filtering, Sorting, Searching
+
+### Filter by Field
+```
+GET /api/v1/users?status=active&role=admin
+GET /api/v1/products?category=electronics&price_min=100&price_max=500
+```
+
+### Sort
+```
+GET /api/v1/users?sort=created_at:desc,name:asc
+GET /api/v1/products?sort=-price,name  # - for descending
+```
+
+### Search
+```
+GET /api/v1/users?q=john
+GET /api/v1/products?search=laptop
+```
+
+### Combined
+```
+GET /api/v1/users?status=active&role=admin&sort=created_at:desc&page=1&page_size=20
+```
+
+## API Documentation (OpenAPI 3.0)
+
+```yaml
+openapi: 3.0.0
+info:
+  title: User Management API
+  version: 1.0.0
+  description: API for managing users
+
+servers:
+  - url: https://api.example.com/v1
+    description: Production
+  - url: https://staging.api.example.com/v1
+    description: Staging
+
+paths:
+  /users:
+    get:
+      summary: List users
+      description: Retrieve a paginated list of users
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: page_size
+          in: query
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [active, inactive]
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+
+    post:
+      summary: Create user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        createdAt:
+          type: string
+          format: date-time
+
+    CreateUserRequest:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        fields:
+          type: object
+
+    PaginationMeta:
+      type: object
+      properties:
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        total:
+          type: integer
+        totalPages:
+          type: integer
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
+```
+
+## Rate Limiting
+
+**Headers:**
+```
+X-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 998
+X-RateLimit-Reset: 1642694400
+```
+
+**429 Response:**
+```json
+{
+  "error": {
+    "code": "RATE_LIMIT_EXCEEDED",
+    "message": "Too many requests. Please try again later.",
+    "retryAfter": 60
+  }
+}
+```
+
+## Authentication & Authorization
+
+### Bearer Token (JWT)
+
+**Request:**
+```
+GET /api/v1/users/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+```
+
+### API Key
+
+**Request:**
+```
+GET /api/v1/data
+X-API-Key: sk_live_abc123xyz
+```
+
+## API Design Checklist
+
+**Before Implementation:**
+- [ ] RESTful resource naming (plural nouns)
+- [ ] Consistent response format
+- [ ] Proper status codes defined
+- [ ] Pagination strategy chosen
+- [ ] Error responses designed
+- [ ] Versioning strategy set
+- [ ] OpenAPI documentation written
+- [ ] Authentication method chosen
+
+**During Implementation:**
+- [ ] Input validation
+- [ ] Error handling
+- [ ] Rate limiting
+- [ ] Logging (requests/responses)
+- [ ] CORS configuration
+- [ ] Security headers
+
+**After Implementation:**
+- [ ] API tests (integration/E2E)
+- [ ] Documentation updated
+- [ ] Postman/Insomnia collection
+- [ ] Client SDK (if needed)
+
+## Best Practices
+
+### Do's
+- ✅ Use plural nouns for resources (`/users`, not `/user`)
+- ✅ Return created/updated resource in response
+- ✅ Include pagination metadata
+- ✅ Document with OpenAPI/Swagger
+- ✅ Version from day one (`/v1/`)
+- ✅ Use appropriate status codes
+- ✅ Validate all inputs
+- ✅ Log requests for debugging
+
+### Don'ts
+- ❌ Use verbs in resource names (`/getUsers`)
+- ❌ Return different formats per endpoint
+- ❌ Expose internal IDs/structures
+- ❌ Ignore backward compatibility
+- ❌ Skip error code standards
+- ❌ Forget to document breaking changes
+- ❌ Use GET for state-changing operations
+- ❌ Return 200 for errors
+
+## References
+
+- OpenAPI Specification: https://swagger.io/specification/
+- REST API Tutorial: https://restfulapi.net/
+- HTTP Status Codes: https://httpstatuses.com/
+- API Design Patterns: https://www.apiman.io/guides/rest-api-design-guide/

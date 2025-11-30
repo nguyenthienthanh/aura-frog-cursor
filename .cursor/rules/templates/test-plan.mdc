@@ -1,0 +1,315 @@
+---
+description: Template for Test Plan document - Used in Phase 4 (Test Planning)
+globs: []
+alwaysApply: false
+---
+
+# Test Plan Template
+
+## Use Case
+Generate comprehensive test plans during **Phase 4: Test Planning** of the Aura Frog workflow. This template defines test strategy, scope, test types, coverage goals, and test environment requirements before writing tests in Phase 5a.
+
+## Associated Phase
+**Phase 4: Test Planning**
+
+## When to Use
+- After technical planning (Phase 2) and design review (Phase 3) are complete
+- Before writing tests (Phase 5a - TDD RED)
+- When defining comprehensive testing strategy
+- To establish test coverage goals and success criteria
+
+## Template Structure
+
+```markdown
+# Test Plan Template
+
+**Feature:** [Feature Name]
+**Date:** [Date]
+**Test Lead:** QA Automation Agent
+
+---
+
+## Test Strategy
+
+### Scope
+**In scope:**
+- Feature functionality
+- User interactions
+- API integration
+- Error handling
+- Edge cases
+- Performance benchmarks
+
+**Out of scope:**
+- Third-party service testing
+- Infrastructure testing
+- Load testing (unless specified)
+
+### Test Types
+- [ ] Unit tests (60%) - Individual functions and components
+- [ ] Integration tests (30%) - Component interactions and API calls
+- [ ] E2E tests (10%) - Critical user flows
+
+### Coverage Goal
+**Target:** 85%
+
+**Breakdown:**
+- Unit test coverage: 90%
+- Integration test coverage: 80%
+- E2E test coverage: Critical flows only
+
+---
+
+## Test Environment
+
+### Platform/Device Requirements
+**Mobile:**
+- iPhone 14, iPad Pro
+- Android Pixel, Samsung Galaxy
+
+**OS Versions:**
+- iOS 16+
+- Android 12+
+
+**Web Browsers:**
+- Chrome (latest)
+- Firefox (latest)
+- Safari (latest)
+- Edge (latest)
+
+### Network Conditions
+- Wi-Fi (fast connection)
+- 4G/LTE (mobile connection)
+- Slow 3G (poor connection)
+- Offline mode
+
+### Test Data
+- **Environment:** Staging
+- **Test users:** 5 test accounts with different roles
+- **Sample data:** Pre-populated test datasets
+
+---
+
+## Test Cases Summary
+
+| ID | Category | Priority | Count |
+|----|----------|----------|-------|
+| TC-001-015 | Component Rendering | HIGH | 15 |
+| TC-016-030 | User Interactions | HIGH | 15 |
+| TC-031-045 | API Integration | MEDIUM | 15 |
+| TC-046-053 | Error Handling | MEDIUM | 8 |
+
+**Total:** 53 test cases
+
+**Priority Distribution:**
+- HIGH: 30 tests (critical functionality)
+- MEDIUM: 15 tests (important but not critical)
+- LOW: 8 tests (nice-to-have coverage)
+
+---
+
+## Test Categories
+
+### 1. Component Rendering Tests
+**Goal:** Verify all components render correctly with various props
+
+**Test Cases:**
+- Component renders with default props
+- Component renders with custom props
+- Component renders in loading state
+- Component renders in error state
+- Component renders with empty data
+- Responsive rendering on different screen sizes
+
+### 2. User Interaction Tests
+**Goal:** Verify user interactions work as expected
+
+**Test Cases:**
+- Button clicks trigger correct actions
+- Form inputs accept and validate data
+- Navigation works correctly
+- Gestures (swipe, pinch, etc.) work properly
+- Keyboard shortcuts function as expected
+- Accessibility features work (screen readers, keyboard navigation)
+
+### 3. API Integration Tests
+**Goal:** Verify API calls and data handling
+
+**Test Cases:**
+- Successful API calls return correct data
+- Failed API calls are handled gracefully
+- Loading states display during API calls
+- Error states display on API failures
+- Retry logic works for failed requests
+- Caching works as expected
+
+### 4. Error Handling Tests
+**Goal:** Verify error scenarios are handled properly
+
+**Test Cases:**
+- Network errors display user-friendly messages
+- Validation errors show on forms
+- Unauthorized access redirects appropriately
+- Server errors handled gracefully
+- Timeout errors trigger retry logic
+- Edge cases don't crash the app
+
+### 5. State Management Tests
+**Goal:** Verify state updates correctly
+
+**Test Cases:**
+- Global state updates propagate
+- Local state updates trigger re-renders
+- State persistence works (if applicable)
+- State resets on logout
+- Concurrent state updates handled correctly
+
+### 6. Performance Tests
+**Goal:** Verify performance benchmarks are met
+
+**Test Cases:**
+- Initial load time < 2s
+- Component render time < 100ms
+- API response handling < 50ms
+- Smooth scrolling (60fps)
+- Memory usage stays under limits
+- Bundle size within constraints
+
+---
+
+## Risk Assessment
+
+| Risk | Impact | Likelihood | Mitigation |
+|------|--------|------------|------------|
+| API rate limits | HIGH | MEDIUM | Implement retry logic with exponential backoff |
+| Network failures | MEDIUM | HIGH | Offline mode + request queue |
+| Third-party service downtime | HIGH | LOW | Mock third-party APIs in tests |
+| Browser compatibility | MEDIUM | MEDIUM | Cross-browser testing in CI/CD |
+| Flaky tests | MEDIUM | MEDIUM | Retry logic, better assertions, stable test data |
+
+---
+
+## Test Schedule
+
+| Phase | Duration | Activities |
+|-------|----------|------------|
+| Test planning | Day 1 | Create test plan, identify test cases |
+| Test writing (RED) | Days 2-3 | Write all tests (Phase 5a) |
+| Implementation (GREEN) | Days 4-5 | Make tests pass (Phase 5b) |
+| Refactoring | Day 6 | Improve code quality (Phase 5c) |
+| Regression testing | Day 7 | Run full test suite |
+| Bug fixing | Day 8 | Fix any issues found |
+
+**Total:** 8 days
+
+---
+
+## Test Tools & Frameworks
+
+### Unit & Integration Testing
+- **Framework:** Jest
+- **React Testing:** React Testing Library / React Native Testing Library
+- **Mocking:** jest.mock(), MSW (Mock Service Worker)
+- **Coverage:** Jest coverage reports
+
+### E2E Testing
+- **Framework:** Detox (React Native) / Playwright (Web)
+- **Test Runner:** Jest or Detox test runner
+- **Reporting:** Detox artifacts, screenshots, videos
+
+### Performance Testing
+- **Tools:** React DevTools Profiler, Chrome DevTools
+- **Metrics:** Lighthouse scores (web), React Native Performance Monitor
+
+---
+
+## Success Criteria
+
+- [ ] 85%+ total test coverage achieved
+- [ ] All HIGH priority tests passing
+- [ ] All MEDIUM priority tests passing
+- [ ] No flaky tests (consistent pass/fail)
+- [ ] Test execution time < 5 minutes
+- [ ] CI/CD pipeline integration successful
+- [ ] All critical user flows covered by E2E tests
+
+---
+
+## Deliverables
+
+1. **Test Plan Document** (this document)
+2. **Test Cases Document** (detailed test scenarios)
+3. **Test Suite** (Phase 5a - actual test code)
+4. **Test Coverage Report** (Phase 5b - after implementation)
+5. **QA Sign-off** (Phase 7 - validation complete)
+
+---
+
+## Notes
+
+- Tests should be written BEFORE implementation (TDD RED phase)
+- Each test should be independent and not rely on execution order
+- Use descriptive test names: "should display error message when API fails"
+- Mock external dependencies to ensure test reliability
+- Keep tests simple and focused on one thing
+- Use test data factories for consistent test data
+
+---
+```
+
+## Sections Explained
+
+### Test Strategy
+Defines what will be tested, what won't be tested, test type distribution, and coverage goals.
+
+### Test Environment
+Specifies platforms, devices, browsers, OS versions, network conditions, and test data requirements.
+
+### Test Cases Summary
+High-level overview of test categories, priorities, and counts.
+
+### Test Categories
+Detailed breakdown of each test category with specific test scenarios.
+
+### Risk Assessment
+Identifies testing risks and mitigation strategies.
+
+### Test Schedule
+Timeline for test planning, writing, execution, and bug fixing.
+
+### Test Tools & Frameworks
+Lists all testing tools, frameworks, and reporting mechanisms.
+
+### Success Criteria
+Clear, measurable criteria for test plan success.
+
+### Deliverables
+Lists all outputs from the testing phases.
+
+## Project Customization
+
+Reference project-specific testing conventions:
+- **Testing framework:** `.claude/project-contexts/[project]/project-config.yaml`
+- **Test patterns:** `.claude/project-contexts/[project]/examples.md`
+- **Coverage requirements:** `.claude/project-contexts/[project]/rules.md`
+
+## Related Templates
+- `test-cases.mdc` - Detailed individual test case specifications
+- `tech-spec.mdc` - Phase 2, defines what needs to be tested
+- `requirements.mdc` - Phase 1, defines acceptance criteria to test
+
+## Tips for Usage
+
+1. **Test Types Balance:** Aim for testing pyramid - more unit tests, fewer E2E tests
+2. **Priority Wisely:** Focus on critical functionality first
+3. **Consider Edge Cases:** Don't just test happy paths
+4. **Plan for Performance:** Include performance benchmarks
+5. **Think About Reliability:** Plan for flaky test prevention
+6. **Automate Everything:** All tests should run in CI/CD
+
+---
+
+**Version:** 1.0.0
+**Phase:** 4 - Test Planning
+**Agent:** Typically qa-automation
+**Adapted for Cursor:** 2025-11-30

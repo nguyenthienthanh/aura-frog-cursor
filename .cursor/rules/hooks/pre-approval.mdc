@@ -1,0 +1,321 @@
+---
+description: Displays formatted approval prompt with phase summary and handles user decision
+globs: []
+alwaysApply: false
+---
+
+# Pre-Approval Hook - Approval Prompt Display
+
+## Trigger
+Automatically executes:
+- After post-phase hook completes successfully
+- Before waiting for user approval decision
+- For all 9 workflow phases
+
+## Purpose
+Display a comprehensive, formatted approval prompt showing phase summary, deliverables, success criteria, metrics, and next steps. Then wait for and validate user response (approve/reject/modify/cancel/back).
+
+## Execution Flow
+
+```
+Post-Phase Hook Complete
+      ↓
+[PRE-APPROVAL HOOK] ← YOU ARE HERE
+      ↓
+Load approval data
+Format phase summary
+Show approval prompt
+      ↓
+Wait for User Response
+      ↓
+Validate response
+      ↓
+Process Response (approve/reject/modify/cancel/back)
+```
+
+## Actions
+
+### 1. Load Approval Data
+```typescript
+const state = loadWorkflowState();
+const currentPhase = state.current_phase;
+const phaseState = state.phases[currentPhase];
+const phase = PHASES[currentPhase];
+```
+
+### 2. Format Phase Summary
+```typescript
+const summary = formatPhaseSummary(phaseState);
+```
+
+### 3. Show Approval Prompt
+Display comprehensive prompt with:
+- Phase number and name
+- Summary description
+- Duration and deliverables count
+- List of deliverables with icons
+- Success criteria with checkmarks
+- Metrics (if available)
+- Next phase preview (or workflow complete message)
+- Action options
+
+### 4. Wait for User Input
+```typescript
+async function waitForUserResponse(): Promise<string> {
+  return new Promise((resolve) => {
+    const readline = require('readline').createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+
+    readline.question('', (answer: string) => {
+      readline.close();
+      resolve(answer.trim().toLowerCase());
+    });
+  });
+}
+```
+
+### 5. Validate Response
+```typescript
+function validateResponse(response: string, currentPhase: number): ValidationResult {
+  const validResponses = ['approve', 'reject', 'modify', 'cancel'];
+
+  if (currentPhase > 1) {
+    validResponses.push('back');
+  }
+
+  const normalizedResponse = normalizeResponse(response);
+
+  if (validResponses.includes(normalizedResponse)) {
+    return { valid: true, normalized: normalizedResponse };
+  }
+
+  return {
+    valid: false,
+    error: `Invalid response: "${response}". Please type one of: ${validResponses.join(', ')}`
+  };
+}
+```
+
+## Approval Prompt Template
+
+```
+═══════════════════════════════════════════════════════════════════
+🎯 PHASE 2 COMPLETE: TECHNICAL PLANNING
+═══════════════════════════════════════════════════════════════════
+
+📊 SUMMARY:
+
+Created technical specification and architecture plan:
+- 5 components planned
+- 12 files to be created/modified
+- 3 integration points identified
+
+⏱️  Duration: 15m 30s
+📦 Deliverables: 3 file(s)
+
+📦 DELIVERABLES:
+   📄 .claude/logs/workflows/abc123/tech-spec.md
+   📊 .claude/logs/workflows/abc123/architecture-diagram.png
+   📘 .claude/logs/workflows/abc123/component-breakdown.md
+
+✅ SUCCESS CRITERIA:
+   ✅ Tech spec document created
+   ✅ Architecture diagrams included
+   ✅ All components defined
+
+📈 METRICS:
+   - Component Count: 5
+   - File Count: 12
+   - Integration Point Count: 3
+
+⏭️  NEXT PHASE: Phase 3 - Design Review
+   Review UI/UX designs and verify alignment with requirements
+
+──────────────────────────────────────────────────────────────────
+⚠️  ACTION REQUIRED
+
+Please review the above and respond with ONE of:
+
+  ✅ Type "approve"  → Proceed to next phase
+  🔄 Type "reject"   → Restart this phase with feedback
+  ✏️  Type "modify"   → Make changes before proceeding
+  ❌ Type "cancel"   → Stop workflow (save state)
+  ⏪ Type "back"     → Return to previous phase
+
+──────────────────────────────────────────────────────────────────
+
+Your response:
+```
+
+## Phase-Specific Summaries
+
+### Phase 1: Requirements Analysis
+```
+Analyzed requirements and identified scope. Key findings:
+- 8 requirements identified
+- 5 edge cases documented
+- 12 acceptance criteria defined
+```
+
+### Phase 2: Technical Planning
+```
+Created technical specification and architecture plan:
+- 5 components planned
+- 12 files to be created/modified
+- 3 integration points identified
+```
+
+### Phase 4: Test Planning
+```
+Created comprehensive test plan:
+- 53 test cases planned
+- 3 test types (unit, integration, E2E)
+- Target coverage: 85%
+```
+
+### Phase 5a: Write Tests (RED)
+```
+Tests written following TDD RED phase:
+- 8 test files created
+- 53 tests written
+- 53 tests failing (expected) 🔴
+```
+
+### Phase 5b: Implementation (GREEN)
+```
+Implementation complete, tests passing:
+- 12 files implemented
+- 53 tests passing 🟢
+- Coverage: 87%
+- Linter: PASS
+```
+
+### Phase 5c: Refactor (REFACTOR)
+```
+Code refactored and improved:
+- Complexity reduced by 15%
+- Duplication reduced by 20%
+- 53 tests still passing ♻️
+```
+
+### Phase 7: QA Validation
+```
+QA validation complete:
+- 53 tests passed ✅
+- Coverage: 87% (threshold: 85%)
+- 5 manual tests passed
+- No critical bugs found
+```
+
+### Phase 8: Documentation
+```
+Documentation complete:
+- 3 documentation files created
+- Confluence page prepared
+- Change log updated
+```
+
+### Phase 9: Notification
+```
+Notifications sent and workflow complete:
+- JIRA ticket updated: PROJ-1234
+- Confluence page created: https://...
+- Slack notifications sent: 2 channel(s)
+```
+
+## File Icons
+
+```typescript
+function getFileIcon(filename: string): string {
+  if (filename.includes('.test.')) return '🧪';
+  if (filename.endsWith('.md')) return '📄';
+  if (filename.endsWith('.tsx')) return '⚛️';
+  if (filename.endsWith('.ts')) return '📘';
+  if (filename.endsWith('.json')) return '📋';
+  if (filename.endsWith('.sh')) return '🔧';
+  if (filename.includes('diagram')) return '📊';
+  return '📁';
+}
+```
+
+## Response Normalization
+
+Accepts variations for user convenience:
+- **Approve:** approved, ok, proceed, continue, yes, y, go
+- **Reject:** rejected, no, restart, redo
+- **Modify:** edit, change, update
+- **Cancel:** stop, abort, quit
+- **Back:** previous, return
+
+## Context Access
+- Workflow state: `.claude/logs/workflows/[workflow-id]/state.json`
+- Phase state: From workflow state
+- Approval data: Prepared by post-phase hook
+- Phase definitions: From CLAUDE.md or plugin configuration
+
+## Integration
+This hook is the **core of the approval gate mechanism**:
+- Displays all relevant information for informed decision
+- Waits for user input (blocking)
+- Validates response
+- Returns normalized response for processing
+- Re-prompts if invalid response
+
+## Error Handling
+
+```typescript
+try {
+  await showApprovalPromptAndWait(currentPhase);
+} catch (error) {
+  console.error(`❌ Approval prompt failed: ${error.message}`);
+
+  // Save error state
+  state.status = 'error';
+  state.error = error.message;
+  saveWorkflowState(state);
+
+  throw error;
+}
+```
+
+## Checklist
+
+- [ ] Approval data loaded
+- [ ] Phase summary formatted
+- [ ] Deliverables listed with icons
+- [ ] Success criteria displayed with status
+- [ ] Metrics shown (if available)
+- [ ] Next phase previewed (or completion message)
+- [ ] Action options shown
+- [ ] Prompt displayed
+- [ ] Waiting for user input
+- [ ] Response validated
+- [ ] Normalized response returned
+
+## Examples
+
+### Workflow In Progress
+User sees next phase and can choose to proceed or make changes.
+
+### Workflow Complete (Phase 9)
+```
+🎉 WORKFLOW COMPLETE!
+   All phases finished. Ready to notify stakeholders.
+```
+No "back" option shown, only approve/cancel.
+
+### Invalid Response
+```
+❌ Invalid response: "maybe". Please type one of: approve, reject, modify, cancel, back
+
+Your response:
+```
+
+---
+
+**Version:** 1.0.0
+**Trigger:** After post-phase hook, before processing user response
+**Critical:** YES - Core of approval gate mechanism
+**Adapted for Cursor:** 2025-11-30

@@ -1,0 +1,34 @@
+# Environment variables
+.envrc
+.env
+.env.*
+
+# Logs
+.cursor/logs/
+logs/
+
+# Workflow contexts (project-specific)
+.cursor/workflow-contexts/
+.cursor/project-contexts/*/
+
+# Keep template structure for project-contexts
+!.cursor/project-contexts/.gitkeep
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.log
+*.tmp
+*.temp
+
+# Archives
+.cursor/archive/

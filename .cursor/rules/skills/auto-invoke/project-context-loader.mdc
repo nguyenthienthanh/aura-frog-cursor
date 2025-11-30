@@ -1,0 +1,249 @@
+---
+description: "Load project conventions, rules, and examples BEFORE any code generation. Auto-triggers before workflow:start, implementation, code generation, or refactoring. Ensures AI follows YOUR project standards."
+globs: []
+alwaysApply: false
+---
+
+# Project Context Loader
+
+**Type:** Auto-Invoke
+**Trigger:** Before any code generation or workflow execution
+
+## Purpose
+
+Loads project-specific conventions, naming patterns, coding standards, and examples before generating any code. This ensures AI follows YOUR project's established patterns and standards rather than generic defaults.
+
+## Activation Logic
+
+Cursor AI should activate this skill BEFORE:
+- `workflow:start` or any implementation
+- Any code generation or new files
+- Refactoring or writing tests
+- File creation or modification
+
+**SKIP only for:**
+- Simple questions (no code involved)
+- When already loaded this session
+
+## Loading Process
+
+### 1. Check Context Exists
+```bash
+if [ ! -d ".claude/project-contexts" ]; then
+  echo "⚠️ Run: project:init"
+fi
+```
+
+### 2. Load Project Files
+
+**Location:** `.claude/project-contexts/[project]/`
+
+| File | Contains |
+|------|----------|
+| `project-config.yaml` | Tech stack, team, integrations |
+| `conventions.md` | File naming, directory structure, import aliases |
+| `rules.md` | Quality rules, testing requirements, git workflow |
+| `examples.md` | Real code examples from project |
+
+### 3. Load Aura Frog Core Rules
+From plugin `rules/`:
+- `tdd-workflow.md` - TDD methodology
+- `approval-gates.md` - Workflow approval process
+- `kiss-principle.md` - Simplicity rules
+- `cross-review.md` - Multi-agent review process
+
+### 4. Merge (Project Overrides Core)
+```
+Project rules.md > Aura Frog core rules > Generic defaults
+```
+
+## Key Context Items
+
+**Tech Stack:**
+- Framework (React Native, Flutter, Next.js, etc.)
+- Language (TypeScript, Python, PHP, Go)
+- Styling (NativeWind, Tailwind, styled-components)
+- State management (Redux, Zustand, Context)
+- Testing framework (Jest, PyTest, PHPUnit)
+
+**Conventions:**
+- File naming (kebab-case, PascalCase, snake_case)
+- Import aliases (`@/`, `~/`, relative)
+- Component structure (directory layout)
+- Code organization patterns
+
+**Rules:**
+- Coverage target (default 80%, may be higher)
+- Linting configuration
+- PR requirements
+- Git workflow
+
+**Examples:**
+- Component patterns
+- Test patterns
+- API patterns
+- State management patterns
+
+## Application Examples
+
+| Without Context | With Context |
+|-----------------|--------------|
+| `userProfile.tsx` | `UserProfile.tsx` (PascalCase) |
+| StyleSheet.create | NativeWind className |
+| 80% coverage | 85% coverage (project rule) |
+| Relative imports | `@/components/Button` |
+| Generic component | Project-specific pattern |
+
+## Context Usage
+
+### During Code Generation
+```typescript
+// Generic (without context):
+import Button from '../../../components/Button';
+
+// Project-specific (with context loaded):
+import { Button } from '@/components/ui';
+```
+
+### During Testing
+```typescript
+// Generic (without context):
+describe('User', () => {
+  // 80% coverage default
+});
+
+// Project-specific (with context loaded):
+describe('User', () => {
+  // 85% coverage per project rules
+  // Uses project-specific test helpers
+});
+```
+
+## If Context Missing
+
+```markdown
+⚠️ **Project context not found!**
+
+Run: `project:init`
+
+This will create:
+- .claude/project-contexts/[project]/project-config.yaml
+- .claude/project-contexts/[project]/conventions.md
+- .claude/project-contexts/[project]/rules.md
+- .claude/project-contexts/[project]/examples.md
+
+Continue with Aura Frog defaults? [yes/no]
+```
+
+## Context Files Structure
+
+### project-config.yaml
+```yaml
+project:
+  name: "my-app"
+  type: "react-native"
+
+tech_stack:
+  framework: "react-native"
+  language: "typescript"
+  styling: "nativewind"
+  state: "zustand"
+  testing: "jest"
+
+agents:
+  primary: "mobile-react-native"
+  secondary: ["qa-automation", "ui-designer"]
+
+integrations:
+  jira: true
+  figma: true
+  slack: true
+```
+
+### conventions.md
+```markdown
+# File Naming
+- Components: PascalCase (Button.tsx)
+- Utilities: camelCase (formatDate.ts)
+- Tests: *.test.ts
+
+# Import Aliases
+- @/components → src/components
+- @/utils → src/utils
+
+# Directory Structure
+src/
+  components/
+    ui/         # Reusable UI components
+    features/   # Feature-specific components
+  utils/
+  hooks/
+```
+
+### rules.md
+```markdown
+# Quality Rules
+- Coverage: 85% minimum
+- No console.log in production
+- All components must have testId
+- TypeScript strict mode
+
+# Git Workflow
+- Feature branches from main
+- PR requires 1 approval
+- All tests must pass
+```
+
+### examples.md
+```markdown
+# Component Pattern
+\`\`\`typescript
+// Standard component structure
+export const Button = ({ onPress, children }: ButtonProps) => {
+  return (
+    <Pressable testID="button" onPress={onPress}>
+      <Text>{children}</Text>
+    </Pressable>
+  );
+};
+\`\`\`
+```
+
+## Loading Indicators
+
+When context is loaded:
+```
+✅ Project context loaded: my-app
+   - Tech: React Native + TypeScript + NativeWind
+   - Coverage target: 85%
+   - Import aliases: @/ configured
+```
+
+When context not found:
+```
+⚠️ No project context found
+   Using Aura Frog defaults
+```
+
+## Integration
+
+Works seamlessly with:
+- `workflow-orchestrator` - Loads context before Phase 2 (Design)
+- `agent-detector` - Uses project-config.yaml for agent priorities
+- `test-writer` - Uses coverage targets and test patterns
+- `code-reviewer` - Uses quality rules for review criteria
+- All code generation skills - Ensures correct patterns
+
+## Benefits
+
+1. **Consistency** - All generated code follows project patterns
+2. **Quality** - Enforces project-specific quality rules
+3. **Speed** - No need to explain conventions each time
+4. **Standards** - Maintains codebase standards automatically
+5. **Onboarding** - New developers get instant context
+
+## References
+
+- Project contexts: `.cursor/rules/project-contexts/`
+- Rules combination guide: Project documentation
+- Context initialization: `project:init` command

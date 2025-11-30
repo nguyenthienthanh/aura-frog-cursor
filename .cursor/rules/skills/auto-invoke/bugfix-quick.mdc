@@ -1,0 +1,315 @@
+---
+description: "Fast TDD bug fixes. Auto-detects 'fix bug', 'error', 'not working', 'broken', 'crash'. Lightweight 4-step process: understand → write failing test → implement fix → verify. Much faster than full workflow."
+globs: []
+alwaysApply: false
+---
+
+# Quick Bugfix
+
+**Type:** Auto-Invoke
+**Trigger:** Bug fix requests
+
+## Purpose
+
+Provides a streamlined 4-step TDD process for bug fixes, offering a much faster alternative to the full 9-phase workflow while maintaining quality through test-driven development.
+
+## Activation Logic
+
+Cursor AI should activate this skill when:
+- User mentions: `fix bug`, `error`, `not working`, `broken`, `crash`, `issue`
+- Bug-related keywords detected
+- Problem description provided
+- Existing code needs correction
+
+**DO NOT** activate for:
+- New features → use `workflow-orchestrator`
+- Major refactors → use `refactor-expert`
+- UI changes → use workflow with UI design phase
+
+## Quick Fix Process (4 Steps)
+
+### 1. Understand (5-10 min)
+
+**Goal:** Identify the root cause
+
+**Actions:**
+- Read error description from user
+- Locate affected code using Grep/Glob
+- Trace execution flow
+- Identify root cause (not just symptoms)
+- Document findings
+
+**Output:**
+```markdown
+## Bug Analysis
+
+**Issue:** Login fails when password field is empty
+**Location:** src/auth/LoginForm.tsx, line 45
+**Root Cause:** Missing validation before API call
+**Expected Behavior:** Show error message "Password is required"
+**Current Behavior:** App crashes with undefined error
+```
+
+### 2. Write Failing Test (10-15 min) - TDD RED
+
+**Goal:** Create a test that reproduces the bug
+
+**Actions:**
+- Write test that demonstrates the bug
+- Run test → MUST FAIL
+- If test passes, the test isn't correctly reproducing the bug
+
+**Example:**
+```typescript
+// Test that reproduces the bug
+describe('LoginForm', () => {
+  it('should show error when password is empty', () => {
+    const { getByTestId, getByText } = render(<LoginForm />);
+
+    fireEvent.press(getByTestId('login-button'));
+
+    expect(getByText('Password is required')).toBeTruthy();
+  });
+});
+```
+
+**Approval Gate:**
+```markdown
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔴 RED Phase - Test Written
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Test MUST fail to prove it catches the bug.
+
+**Options:**
+- `approve` → Confirmed test fails, proceed to fix
+- `reject: <reason>` → Test doesn't fail or doesn't catch bug
+```
+
+### 3. Implement Fix (20-45 min) - TDD GREEN
+
+**Goal:** Minimal code to make the test pass
+
+**Actions:**
+- Write minimal fix (no over-engineering)
+- Run test → MUST PASS
+- If test fails, fix the code (not the test)
+
+**Example:**
+```typescript
+const handleLogin = () => {
+  // FIX: Add password validation
+  if (!password) {
+    setError('Password is required');
+    return;
+  }
+
+  // Existing API call...
+  login(email, password);
+};
+```
+
+**Approval Gate:**
+```markdown
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🟢 GREEN Phase - Fix Implemented
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Test MUST pass to confirm fix works.
+
+**Options:**
+- `approve` → Confirmed test passes, proceed to verify
+- `reject: <reason>` → Test still fails or fix incorrect
+```
+
+### 4. Verify (5-10 min)
+
+**Goal:** Ensure no regressions
+
+**Actions:**
+- Run full test suite
+- Check related functionality
+- Verify no regressions introduced
+- Confirm bug is truly fixed
+
+**Output:**
+```markdown
+## Verification Results
+
+✅ New test passes
+✅ All existing tests pass
+✅ No regressions detected
+✅ Bug confirmed fixed
+
+**Coverage Impact:** +2% (added test for edge case)
+```
+
+**Approval Gate:**
+```markdown
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Verification Complete
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**Options:**
+- `approve` → Bugfix complete, ready to commit
+- `reject: <reason>` → Issue with verification
+```
+
+## Complete Template
+
+```markdown
+## Bug Fix: [Short Description]
+
+### 📋 Issue
+**What's broken:** [Description]
+**Impact:** [Who/what is affected]
+**Severity:** [Critical/High/Medium/Low]
+
+### 🔍 Root Cause
+[Explanation of why bug occurs]
+
+### 🔴 Test Added (TDD RED)
+\`\`\`typescript
+[Failing test code]
+\`\`\`
+**Result:** ❌ Test fails (as expected)
+
+### 🟢 Fix Applied (TDD GREEN)
+\`\`\`typescript
+[Fix code]
+\`\`\`
+**Result:** ✅ Test passes
+
+### ✅ Verification
+- ✅ New test passes
+- ✅ All tests pass (X/X)
+- ✅ No regressions
+- ✅ Coverage: X% → Y%
+
+### 📝 Notes
+[Any additional context or follow-up needed]
+```
+
+## Comparison to Full Workflow
+
+| Aspect | Bugfix Quick | Full Workflow |
+|--------|--------------|---------------|
+| Phases | 4 | 9 |
+| Approval Gates | 3 | 9 |
+| Time | 40-70 min | 4-8 hours |
+| Use For | Bugs only | New features |
+| Design Phase | No | Yes |
+| UI Phase | No | Yes (if needed) |
+| Security Review | Lightweight | Comprehensive |
+
+## When to Escalate
+
+**Switch to full workflow if:**
+- Fix requires architectural changes
+- Multiple components affected
+- Security implications
+- Performance concerns
+- UI/UX changes needed
+- Bug reveals larger design flaw
+
+**Example:**
+```markdown
+⚠️ **Escalation Recommended**
+
+This bug reveals a larger issue with authentication flow.
+Recommend switching to workflow-orchestrator for proper redesign.
+
+Switch to workflow? [yes/no]
+```
+
+## TDD Rules (Non-Negotiable)
+
+### RED Phase
+```
+✅ Write test FIRST
+✅ Test MUST fail
+❌ If test passes → Test is wrong or bug doesn't exist
+```
+
+### GREEN Phase
+```
+✅ Write MINIMAL code to pass test
+✅ Test MUST pass
+❌ Don't fix tests to match bad code
+```
+
+### Verify Phase
+```
+✅ All tests MUST pass
+✅ Check for regressions
+❌ Don't skip full test suite
+```
+
+## Common Bug Patterns
+
+### Null/Undefined Errors
+```typescript
+// Before (crashes)
+const name = user.profile.name;
+
+// After (safe)
+const name = user?.profile?.name ?? 'Unknown';
+
+// Test
+it('should handle missing profile', () => {
+  expect(getName(userWithoutProfile)).toBe('Unknown');
+});
+```
+
+### Off-by-One Errors
+```typescript
+// Before (wrong)
+for (let i = 0; i <= items.length; i++) {}
+
+// After (correct)
+for (let i = 0; i < items.length; i++) {}
+
+// Test
+it('should process all items without overflow', () => {
+  expect(() => processItems(items)).not.toThrow();
+});
+```
+
+### Race Conditions
+```typescript
+// Before (race condition)
+fetchUser();
+displayUser(); // May run before fetch completes
+
+// After (awaited)
+await fetchUser();
+displayUser();
+
+// Test
+it('should wait for user before displaying', async () => {
+  await waitFor(() => {
+    expect(getByText(userName)).toBeTruthy();
+  });
+});
+```
+
+## Integration
+
+Works seamlessly with:
+- `agent-detector` - Gets correct dev agent for bug fix
+- `test-writer` - Uses test patterns for RED phase
+- `project-context-loader` - Follows project conventions
+- `code-reviewer` - Optional lightweight review after fix
+
+## Benefits
+
+1. **Speed** - 3 gates vs 9 gates (much faster)
+2. **Quality** - Still uses TDD methodology
+3. **Focus** - No unnecessary phases for simple bugs
+4. **Efficiency** - Right-sized process for bug fixes
+
+## References
+
+- TDD methodology: Core TDD rules
+- Test patterns: `test-writer` skill
+- Project conventions: Project context files

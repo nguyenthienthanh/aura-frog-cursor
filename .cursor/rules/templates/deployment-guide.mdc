@@ -1,0 +1,382 @@
+---
+description: Template for Deployment Guide - Used in Phase 8 (Documentation) for deployment procedures
+globs: []
+alwaysApply: false
+---
+
+# Deployment Guide Template
+
+## Use Case
+Create deployment documentation during **Phase 8: Documentation**. This guide provides step-by-step instructions for deploying the feature to staging and production environments, including pre-deployment checklist, deployment steps, verification, and rollback procedures.
+
+## Associated Phase
+**Phase 8: Documentation**
+
+## Template Structure
+
+```markdown
+# Deployment Guide Template
+
+**Feature:** [Feature Name]
+**Version:** [X.Y.Z]
+**Date:** [Date]
+
+---
+
+## Pre-Deployment Checklist
+
+- [ ] All tests passing (unit, integration, E2E)
+- [ ] Code reviewed and approved
+- [ ] QA validation complete
+- [ ] Documentation updated
+- [ ] Database backup created (if schema changes)
+- [ ] Rollback plan ready
+- [ ] Stakeholders notified of deployment window
+- [ ] Feature flags configured (if applicable)
+- [ ] Environment variables set
+- [ ] Dependencies updated in package.json
+
+---
+
+## Environment Configuration
+
+### Required Environment Variables
+
+**Staging:**
+```bash
+REACT_APP_API_URL=https://api-staging.example.com
+REACT_APP_ENV=staging
+REACT_APP_FEATURE_FLAG_NEW_FEATURE=true
+REACT_APP_ANALYTICS_ID=GA-STAGING-XXXX
+```
+
+**Production:**
+```bash
+REACT_APP_API_URL=https://api.example.com
+REACT_APP_ENV=production
+REACT_APP_FEATURE_FLAG_NEW_FEATURE=false  # Start disabled
+REACT_APP_ANALYTICS_ID=GA-PROD-XXXX
+```
+
+### Database Migrations (if applicable)
+```bash
+# Run migrations in staging first
+npm run migrate:staging
+
+# Verify migrations completed successfully
+npm run migrate:status
+```
+
+---
+
+## Deployment Steps
+
+### 1. Pre-Deployment
+
+```bash
+# Checkout latest code
+git checkout main
+git pull origin main
+
+# Install dependencies
+npm install
+
+# Run tests locally
+npm test
+
+# Build for production
+npm run build
+
+# Verify build succeeded
+ls -la dist/
+```
+
+### 2. Deploy to Staging
+
+```bash
+# Deploy to staging environment
+npm run deploy:staging
+
+# Or using deployment platform
+vercel deploy --prod  # For Vercel
+netlify deploy --prod  # For Netlify
+
+# Verify deployment
+curl https://staging.example.com/health
+```
+
+**Expected Response:**
+```json
+{
+  "status": "healthy",
+  "version": "1.2.3",
+  "timestamp": "2025-11-30T10:00:00Z"
+}
+```
+
+### 3. Smoke Testing on Staging
+
+**Critical Checks:**
+- [ ] Application loads without errors
+- [ ] New feature displays correctly
+- [ ] Existing features still work
+- [ ] No console errors
+- [ ] API calls successful
+- [ ] Authentication works
+- [ ] Performance is acceptable
+- [ ] Mobile responsiveness maintained
+
+**Testing Tools:**
+- Manual testing by QA
+- Automated E2E tests: `npm run test:e2e:staging`
+- Performance check: Lighthouse score
+- Cross-browser testing: BrowserStack
+
+### 4. Deploy to Production
+
+**Only proceed if staging smoke tests pass!**
+
+```bash
+# Tag the release
+git tag -a v1.2.3 -m "Release version 1.2.3: Add new feature"
+git push origin v1.2.3
+
+# Deploy to production
+npm run deploy:production
+
+# Verify deployment
+curl https://example.com/health
+```
+
+### 5. Enable Feature (if using feature flags)
+
+```bash
+# Gradual rollout recommended:
+# 1. Internal users (10%)
+# 2. Beta users (25%)
+# 3. 50% of users
+# 4. All users (100%)
+
+# Update feature flag in admin panel or via API
+curl -X POST https://api.example.com/admin/feature-flags \
+  -H "Authorization: Bearer $ADMIN_TOKEN" \
+  -d '{"name": "new_feature", "enabled": true, "rollout": 10}'
+```
+
+---
+
+## Post-Deployment Verification
+
+### 1. Health Checks
+
+```bash
+# Check application health
+curl https://example.com/health
+
+# Check API health
+curl https://api.example.com/health
+
+# Check database connectivity
+npm run db:check
+```
+
+### 2. Monitoring
+
+**Watch these metrics for 30 minutes:**
+- Error rate (should be < 1%)
+- Response time (should be < 500ms p95)
+- CPU usage (should be < 70%)
+- Memory usage (should be < 80%)
+- Request rate (should match expected traffic)
+
+**Monitoring Tools:**
+- Application: New Relic / Datadog / Sentry
+- Infrastructure: CloudWatch / Grafana
+- User analytics: Google Analytics / Mixpanel
+
+### 3. Validation Checklist
+
+- [ ] Feature accessible to target users
+- [ ] All integrations working (payment, email, etc.)
+- [ ] No spike in error logs
+- [ ] Performance metrics within SLA
+- [ ] Analytics tracking working
+- [ ] User feedback positive (if early access)
+- [ ] Database queries performing well
+- [ ] No memory leaks detected
+
+---
+
+## Rollback Plan
+
+### Rollback Criteria (when to rollback)
+
+**Immediately rollback if:**
+- Error rate > 5%
+- Critical functionality broken
+- Security vulnerability discovered
+- Data corruption detected
+- Performance degraded > 50%
+- User complaints spike
+
+### Rollback Steps
+
+**Option 1: Feature Flag Disable (Fastest)**
+```bash
+# Disable feature flag immediately
+curl -X POST https://api.example.com/admin/feature-flags \
+  -H "Authorization: Bearer $ADMIN_TOKEN" \
+  -d '{"name": "new_feature", "enabled": false}'
+```
+
+**Option 2: Revert Deployment**
+```bash
+# Revert to previous version
+npm run deploy:rollback
+
+# Or deploy previous tagged version
+git checkout v1.2.2
+npm run build
+npm run deploy:production
+```
+
+**Option 3: Database Rollback (if schema changed)**
+```bash
+# Rollback database migration
+npm run migrate:rollback
+
+# Verify rollback
+npm run migrate:status
+```
+
+### Post-Rollback Actions
+
+1. Verify rollback success
+   ```bash
+   curl https://example.com/health
+   npm run test:e2e:production
+   ```
+
+2. Notify stakeholders
+   - Send Slack notification
+   - Update JIRA ticket
+   - Email affected users (if necessary)
+
+3. Investigate and fix issues
+   - Review error logs
+   - Identify root cause
+   - Create fix branch
+   - Test thoroughly
+
+4. Re-deploy after fixes
+   - Follow deployment process again
+   - Monitor closely
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+**Issue: Build fails**
+```bash
+# Solution: Clear cache and rebuild
+rm -rf node_modules dist
+npm install
+npm run build
+```
+
+**Issue: Deployment fails**
+```bash
+# Solution: Check deployment logs
+npm run deploy:logs
+
+# Verify credentials
+npm run deploy:check-auth
+```
+
+**Issue: Feature not visible**
+```bash
+# Solution: Check feature flag status
+curl https://api.example.com/admin/feature-flags/new_feature
+
+# Clear CDN cache
+npm run cdn:purge
+```
+
+**Issue: High error rate**
+```bash
+# Solution: Check error logs
+npm run logs:production
+
+# Check specific error types
+grep "ERROR" production.log | tail -100
+```
+
+---
+
+## Post-Deployment Tasks
+
+### Immediate (within 1 hour)
+- [ ] Monitor error rates and performance
+- [ ] Verify feature working for sample users
+- [ ] Check analytics tracking
+- [ ] Review deployment logs
+
+### Short-term (within 24 hours)
+- [ ] Full QA regression testing
+- [ ] Review user feedback
+- [ ] Check performance trends
+- [ ] Update documentation if needed
+
+### Long-term (within 1 week)
+- [ ] Analyze feature adoption metrics
+- [ ] Review performance impact
+- [ ] Gather user feedback
+- [ ] Plan Phase 2 enhancements (if applicable)
+
+---
+
+## Support Contacts
+
+**On-call Engineer:** [Name] ([Phone/Slack])
+**DevOps Team:** [Email/Slack channel]
+**Database Admin:** [Name] ([Phone/Slack])
+**Emergency Escalation:** [Phone number]
+
+---
+
+## Known Issues
+
+### Issue 1: [Brief description]
+**Impact:** [Low/Medium/High]
+**Workaround:** [Steps to work around the issue]
+**Fix planned:** [Yes/No, ETA if yes]
+
+### Issue 2: [Brief description]
+**Impact:** [Low/Medium/High]
+**Workaround:** [Steps to work around the issue]
+**Fix planned:** [Yes/No, ETA if yes]
+
+---
+
+## Deployment History
+
+| Version | Date | Deployed By | Status | Notes |
+|---------|------|-------------|--------|-------|
+| 1.2.3 | 2025-11-30 | [Name] | Success | Initial deployment |
+| 1.2.2 | 2025-11-25 | [Name] | Success | Previous version |
+
+---
+```
+
+## Related Templates
+- `implementation-summary.mdc` - What was implemented
+- `tech-spec.mdc` - Technical details
+
+---
+
+**Version:** 1.0.0
+**Phase:** 8 - Documentation
+**Agent:** Typically devops-cicd
+**Adapted for Cursor:** 2025-11-30
