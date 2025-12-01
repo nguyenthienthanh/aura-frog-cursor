@@ -1,0 +1,123 @@
+---
+description: "Manages workflow state across sessions with handoff and resume capabilities"
+globs: []
+alwaysApply: true
+---
+
+# Session Continuation Skill
+
+## Purpose
+
+Manage workflow state across sessions with handoff and resume for long-running workflows.
+
+## When This Skill Activates
+
+| Trigger | Action |
+|---------|--------|
+| Token count reaches 150K (75%) | Suggest handoff |
+| User says "handoff" / "save state" | Execute handoff |
+| User says "resume" + workflow ID | Execute resume |
+| Session about to end | Auto-save state |
+
+## Handoff Flow
+
+### Step 1: Detect Need
+```yaml
+Triggers:
+  - Token count: >= 150,000 (75% of 200K limit)
+  - User request: "handoff", "save", "pause"
+  - Long workflow: Phases 1-4 complete, starting Phase 5
+```
+
+### Step 2: Save State
+
+**Location:** `.cursor/logs/workflows/[workflow-id]/workflow-state.json`
+
+```json
+{
+  "workflow_id": "feature-auth-20251129-143022",
+  "status": "paused",
+  "current_phase": 5,
+  "current_sub_phase": "a",
+  "phases_completed": {
+    "1": { "status": "approved", "deliverables": ["requirements.md"] },
+    "2": { "status": "approved", "deliverables": ["tech-spec.md"] }
+  },
+  "context": {
+    "project_name": "my-api",
+    "tech_stack": "Node.js, Express",
+    "key_decisions": ["Using JWT with refresh tokens"]
+  },
+  "token_usage": { "at_handoff": 152340 }
+}
+```
+
+### Step 3: Generate Summary
+
+```markdown
+WORKFLOW HANDOFF COMPLETE
+
+**Workflow ID:** feature-auth-20251129-143022
+**Progress:** Phase 5a - Write Tests
+
+**TO RESUME:** `workflow:resume feature-auth-20251129-143022`
+```
+
+## Resume Flow
+
+### Step 1: Parse Command
+```
+Input: "workflow:resume feature-auth-20251129-143022"
+Extract: workflow_id
+```
+
+### Step 2: Load & Restore
+```yaml
+Actions:
+  1. Load project context
+  2. Activate saved agents
+  3. Load phase-specific rules
+  4. Restore key decisions
+```
+
+### Step 3: Continue
+```markdown
+WORKFLOW RESUMED
+
+**Task:** Implement user authentication
+**Current Phase:** 5a - Write Tests
+**Key Decisions:** Using JWT with refresh tokens
+
+Type "continue" to proceed.
+```
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `workflow:handoff` | Save state and generate resume instructions |
+| `workflow:resume <id>` | Load and continue from saved state |
+| `workflow:list` | Show all saved workflows |
+
+## Auto-Save Behavior
+
+- Phase completion (before approval gate)
+- Every 5 minutes during active work
+- Token count milestones (100K, 150K, 175K)
+- Silent saves (no user notification)
+
+## Best Practices
+
+**DO:**
+- Handoff before token limit (at 150K)
+- Resume promptly to maintain context
+- Review key decisions after resume
+
+**DON'T:**
+- Wait until 200K tokens
+- Delete state files manually
+- Resume with different project context
+
+---
+
+**Version:** 1.0.0

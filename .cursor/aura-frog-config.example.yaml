@@ -1,0 +1,156 @@
+# Aura Frog Configuration Example for Cursor IDE
+# Copy this to aura-frog-config.yaml and customize for your project
+
+project:
+  name: "Your Project Name"
+  type: "mobile-react-native"  # Options: mobile-react-native, web-vuejs, web-reactjs, web-nextjs, backend-laravel, backend-nodejs, backend-python
+  description: "Brief description of your project"
+  repository: "https://github.com/your-org/your-project"
+
+team:
+  reviewers:
+    default: "reviewer@example.com"
+    # For multi-region projects:
+    # ph: "philippines-reviewer@example.com"
+    # my: "malaysia-reviewer@example.com"
+
+integrations:
+  jira:
+    enabled: false
+    # url: "https://your-domain.atlassian.net"
+    # project_key: "PROJ"
+    # Authentication via environment variables:
+    # JIRA_EMAIL and JIRA_API_TOKEN
+
+  confluence:
+    enabled: false
+    # url: "https://your-domain.atlassian.net/wiki"
+    # space_key: "DOCS"
+    # Authentication via environment variables:
+    # CONFLUENCE_EMAIL and CONFLUENCE_API_TOKEN
+
+  slack:
+    enabled: false
+    # Authentication via environment variable:
+    # SLACK_WEBHOOK_URL
+    # channels:
+    #   dev: "dev-notifications"
+    #   qa: "qa-reports"
+
+  voice:
+    enabled: false
+    # provider: elevenlabs
+    # Authentication via environment variable:
+    # ELEVENLABS_API_KEY
+
+workflow:
+  # Default test coverage threshold (percentage)
+  default_test_coverage: 80
+
+  # Require human approval at each phase gate
+  require_approval: true
+
+  # Enforce TDD workflow (tests before code)
+  tdd_enforcement: true
+
+  # Auto-generate documentation after completion
+  auto_generate_docs: true
+
+  # Token warning thresholds
+  token_warning_threshold: 150000
+  token_critical_threshold: 175000
+
+quality:
+  # Maximum ESLint warnings allowed (0 = no warnings)
+  eslint_max_warnings: 0
+
+  # Use TypeScript strict mode
+  typescript_strict: true
+
+  # Auto-format with Prettier
+  prettier_auto_format: true
+
+# =============================================================================
+# MODEL SELECTION (Multi-Model Support)
+# =============================================================================
+# Configure different AI models for different workflow phases
+# See docs/MODEL_SELECTION.md for full documentation
+
+models:
+  # Phase-specific model selection
+  # Uncomment and modify to use different models for specific phases
+  phase_models:
+    # === EXAMPLE: Use Gemini for reasoning phases ===
+    # phase_1_understand: "gemini"    # Deep reasoning for requirements
+    # phase_2_design: "gemini"        # Architecture visioning
+
+    # === EXAMPLE: Use Claude for implementation ===
+    # phase_3_ui_breakdown: "claude"
+    # phase_4_plan_tests: "claude"
+    # phase_5a_tdd_red: "claude"      # Write tests
+    # phase_5b_build: "claude"        # Implementation
+    # phase_5c_polish: "claude"
+
+    # === EXAMPLE: Use GPT-4 for review ===
+    # phase_6_review: "openai"        # Code review
+
+    # Leave commented to use defaults (all Claude)
+
+  # Model behavior settings
+  behavior:
+    context_handoff: true     # Pass context between models
+    log_switches: true        # Log model switches for debugging
+    fallback_on_error: true   # Fall back to default if model unavailable
+    max_retries: 2            # Retry attempts before fallback
+
+  # Optimization preferences
+  preferences:
+    # optimize_for: "quality"  # Options: speed, quality, cost
+
+# =============================================================================
+# COMMON MODEL CONFIGURATIONS
+# =============================================================================
+# Copy and uncomment the configuration that matches your needs:
+#
+# --- Option 1: Gemini for Planning, Claude for Coding ---
+# models:
+#   phase_models:
+#     phase_1_understand: "gemini"
+#     phase_2_design: "gemini"
+#     phase_3_ui_breakdown: "claude"
+#     phase_5b_build: "claude"
+#
+# --- Option 2: DeepSeek for Cost-Effective Coding ---
+# models:
+#   phase_models:
+#     phase_5a_tdd_red: "deepseek"
+#     phase_5b_build: "deepseek"
+#     phase_5c_polish: "deepseek"
+#
+# --- Option 3: Multi-Model Review Pipeline ---
+# models:
+#   phase_models:
+#     phase_1_understand: "gemini"
+#     phase_2_design: "gemini"
+#     phase_5b_build: "claude"
+#     phase_6_review: "openai"
+#
+# =============================================================================
+
+conventions:
+  # File naming conventions
+  file_naming:
+    components: "PascalCase.tsx"
+    hooks: "useCamelCase.ts"
+    utils: "camelCase.ts"
+
+  # Branch naming pattern
+  branch_naming:
+    pattern: "feature/<TICKET>-<description>"
+    example: "feature/PROJ-123-add-feature"
+
+  # Code style preferences
+  code_style:
+    component_type: "functional"  # Options: functional, class
+    state_management: "zustand"   # Options: zustand, redux, context, pinia
+    api_layer: "react-query"      # Options: react-query, rtk-query, axios

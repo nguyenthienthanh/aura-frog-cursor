@@ -1,0 +1,122 @@
+---
+description: "Component design principles using Atomic Design methodology"
+globs:
+  - "**/*.tsx"
+  - "**/*.vue"
+  - "**/components/**"
+alwaysApply: false
+---
+
+# Component Design Patterns
+
+## Atomic Design Hierarchy
+
+```
+Atoms → Molecules → Organisms → Templates → Pages
+
+Atoms: Button, Input, Icon
+Molecules: SearchBar (Input + Button)
+Organisms: Header (Logo + Nav + SearchBar)
+Templates: Page layout structure
+Pages: Final implementation
+```
+
+## Component Anatomy
+
+```tsx
+<Component>
+  <ComponentHeader>
+    {/* Icon/Avatar */}
+    {/* Title */}
+    {/* Actions */}
+  </ComponentHeader>
+
+  <ComponentBody>
+    {/* Main content */}
+  </ComponentBody>
+
+  <ComponentFooter>
+    {/* Secondary actions */}
+  </ComponentFooter>
+</Component>
+```
+
+## Design Specifications Example
+
+```markdown
+## Card Component
+
+### Props:
+- variant: 'elevated' | 'outlined' | 'filled'
+- size: 'sm' | 'md' | 'lg'
+- hoverable: boolean
+- clickable: boolean
+
+### Visual:
+- Padding: 16px (md)
+- Border radius: 12px
+- Shadow: 0 2px 8px rgba(0,0,0,0.1)
+- Border: 1px solid #e0e0e0 (outlined)
+```
+
+## Responsive Patterns
+
+```typescript
+// Mobile First
+<CardContent direction="column">  // Stack on mobile
+  <Image />
+  <Text />
+</CardContent>
+
+// Tablet/Desktop
+<CardContent direction="row">     // Horizontal on larger
+  <Image />
+  <TextBlock />
+</CardContent>
+```
+
+## Accessibility Checklist
+
+- [ ] Color contrast WCAG AA (4.5:1)
+- [ ] Visible focus states
+- [ ] Min 44x44px touch targets
+- [ ] Proper ARIA labels
+- [ ] Keyboard navigation
+- [ ] Screen reader friendly
+
+## Component Breakdown Example
+
+```markdown
+# SocialMediaPost Component
+
+## Sub-components:
+1. PostHeader (Avatar, Author, Timestamp, Menu)
+2. PostContent (Text, Images, Link preview)
+3. PostActions (Like, Comment, Share, Save)
+4. PostComments (Comment list, Comment input)
+
+## Props:
+- post: Post object
+- onLike: () => void
+- onComment: (text: string) => void
+- showComments: boolean
+```
+
+## Best Practices
+
+### Do's ✅
+- Break down into reusable components
+- Design for multiple states (loading, error, empty)
+- Consider responsive layouts
+- Follow accessibility guidelines
+- Document component specs
+
+### Don'ts ❌
+- Create monolithic components
+- Hardcode values
+- Ignore edge cases
+- Forget loading/error states
+
+---
+
+**Used by:** ui-designer agent

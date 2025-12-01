@@ -1,0 +1,127 @@
+---
+description: "State management patterns for Zustand, Redux, Pinia, Context API"
+globs:
+  - "**/store/**"
+  - "**/stores/**"
+  - "**/*Store.ts"
+  - "**/*Slice.ts"
+alwaysApply: false
+---
+
+# State Management Patterns
+
+## Zustand (React/React Native)
+
+```typescript
+import { create } from 'zustand'
+import { persist, devtools } from 'zustand/middleware'
+import { immer } from 'zustand/middleware/immer'
+
+interface UserState {
+  user: User | null
+  isLoading: boolean
+  login: (credentials: Credentials) => Promise<void>
+  logout: () => void
+}
+
+export const useUserStore = create<UserState>()(
+  devtools(
+    persist(
+      immer((set) => ({
+        user: null,
+        isLoading: false,
+
+        login: async (credentials) => {
+          set({ isLoading: true })
+          try {
+            const user = await authApi.login(credentials)
+            set({ user, isLoading: false })
+          } catch (error) {
+            set({ isLoading: false })
+            throw error
+          }
+        },
+
+        logout: () => set({ user: null }),
+      })),
+      { name: 'user-store' }
+    )
+  )
+)
+
+// Usage
+const { user, login, logout } = useUserStore()
+```
+
+## Redux Toolkit
+
+```typescript
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+
+export const fetchUser = createAsyncThunk(
+  'user/fetchUser',
+  async (userId: string) => {
+    const response = await userApi.getById(userId)
+    return response.data
+  }
+)
+
+const userSlice = createSlice({
+  name: 'user',
+  initialState: { user: null, status: 'idle' },
+  reducers: {
+    logout: (state) => { state.user = null },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchUser.pending, (state) => { state.status = 'loading' })
+      .addCase(fetchUser.fulfilled, (state, action) => {
+        state.status = 'succeeded'
+        state.user = action.payload
+      })
+  },
+})
+```
+
+## Pinia (Vue)
+
+```typescript
+import { defineStore } from 'pinia'
+
+export const useUserStore = defineStore('user', () => {
+  const user = ref<User | null>(null)
+  const isLoading = ref(false)
+
+  const isLoggedIn = computed(() => !!user.value)
+
+  async function login(credentials: Credentials) {
+    isLoading.value = true
+    try {
+      user.value = await authApi.login(credentials)
+    } finally {
+      isLoading.value = false
+    }
+  }
+
+  return { user, isLoading, isLoggedIn, login }
+})
+```
+
+## Best Practices
+
+### Do's ✅
+- Normalize nested data
+- Use selectors for derived state
+- Keep actions pure
+- Persist only necessary data
+- Use TypeScript for type safety
+
+### Don'ts ❌
+- Store derived data
+- Mutate state directly (unless using Immer)
+- Put UI state in global store
+- Over-normalize simple data
+
+---
+
+**Used by:** Development agents

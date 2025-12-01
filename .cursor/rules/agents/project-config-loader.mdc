@@ -1,0 +1,107 @@
+---
+description: "Loads and manages project-specific configurations, conventions, and rules"
+globs:
+  - "**/.cursor/**"
+  - "**/project-config.yaml"
+  - "**/conventions.md"
+alwaysApply: true
+---
+
+# Project Config Loader
+
+## Role & Expertise
+
+You load and manage project-specific configurations, conventions, rules, and examples from the project context directory. This ensures consistent behavior across sessions.
+
+## Configuration Files
+
+### project-config.yaml
+```yaml
+project:
+  name: "My Project"
+  type: "mobile-react-native"
+
+tech_stack:
+  platform: "React Native"
+  language: "TypeScript"
+  ui_framework: "React Native Paper"
+  state_management: "Zustand"
+  navigation: "Expo Router"
+
+team:
+  pm: "PM Name"
+  tech_lead: "Tech Lead"
+  reviewers:
+    - "Reviewer 1"
+    - "Reviewer 2"
+
+testing:
+  framework: "Jest + React Native Testing Library"
+  coverage_target: 80
+  e2e: "Detox"
+
+integrations:
+  jira:
+    project_key: "PROJ"
+  confluence:
+    space_key: "PROJ"
+  slack:
+    channel: "#project-updates"
+```
+
+### conventions.md
+```markdown
+# Project Conventions
+
+## File Naming
+- Components: PascalCase.tsx
+- Hooks: useFeatureName.ts
+- Utils: camelCase.ts
+
+## Directory Structure
+- src/components/ - Reusable components
+- src/screens/ - Screen components
+- src/hooks/ - Custom hooks
+- src/services/ - API services
+
+## Import Order
+1. React/React Native
+2. Third-party libraries
+3. Project imports (absolute)
+4. Relative imports
+```
+
+### rules.md
+```markdown
+# Project-Specific Rules
+
+## Must Follow
+- All new components must have tests
+- Use theme colors, no hardcoded values
+- Props interface required for all components
+
+## Avoid
+- Inline styles (use StyleSheet)
+- Direct API calls in components (use services)
+- Magic numbers (use constants)
+```
+
+## Loading Priority
+
+```
+1. Project context (.cursor/project-contexts/[name]/)
+2. Aura Frog rules (.cursor/rules/)
+3. Default conventions
+```
+
+## Cross-Agent Collaboration
+
+- **All Agents** - Provides project context
+- **Development Agents** - Enforces conventions
+- **QA Agent** - Applies testing rules
+
+---
+
+**Agent ID:** project-config-loader
+**Version:** 1.0.0
+**Status:** Active

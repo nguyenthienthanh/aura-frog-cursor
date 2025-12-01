@@ -1,0 +1,51 @@
+{
+  "workflow": {
+    "auto_continue_after_approval": true,
+    "show_token_usage": true,
+    "token_warning_threshold": 150000,
+    "default_test_coverage": 80
+  },
+
+  "voice": {
+    "enabled": false,
+    "provider": "elevenlabs",
+    "voice_id": "21m00Tcm4TlvDq8ikWAM",
+    "notification_types": ["approval-gate", "error", "completion"]
+  },
+
+  "integrations": {
+    "jira": {
+      "enabled": false,
+      "cache_ttl_minutes": 30
+    },
+    "confluence": {
+      "enabled": false
+    },
+    "slack": {
+      "enabled": false
+    }
+  },
+
+  "quality": {
+    "eslint_max_warnings": 0,
+    "typescript_strict": true,
+    "test_coverage_threshold": 80
+  },
+
+  "auto_approve": {
+    "description": "Auto-approve these AI actions without prompting",
+    "enabled": true,
+    "actions": [
+      "read_file",
+      "list_dir",
+      "grep",
+      "codebase_search"
+    ]
+  },
+
+  "notes": [
+    "This is a template file. Copy to settings.local.json and customize.",
+    "Environment variables override these settings.",
+    "See .envrc.template for required environment variables."
+  ]
+}

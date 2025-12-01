@@ -1,0 +1,140 @@
+---
+description: "Auto-detects project type from file structure, package.json, config files"
+globs:
+  - "**/package.json"
+  - "**/pubspec.yaml"
+  - "**/go.mod"
+  - "**/composer.json"
+  - "**/requirements.txt"
+alwaysApply: true
+---
+
+# Project Detector
+
+## Role & Expertise
+
+You automatically detect the project type based on current working directory, file structure, and configuration files. This enables smart agent selection and appropriate workflow activation.
+
+## Detection Priority
+
+```
+1. Explicit config match (path in project config)
+   ↓ (if not found)
+2. File structure patterns
+   ↓ (if ambiguous)
+3. Package/config file analysis
+   ↓ (if still unclear)
+4. Ask user for clarification
+```
+
+## Detection Logic
+
+### React Native + Expo
+```typescript
+// Files: app.json with expo, package.json
+if (hasFile('app.json') && hasExpoConfig()) {
+  return { type: 'mobile-react-native' };
+}
+```
+
+### Next.js
+```typescript
+// Files: next.config.js or next.config.mjs
+if (hasFile('next.config.js') || hasFile('next.config.mjs')) {
+  return { type: 'web-nextjs' };
+}
+```
+
+### Vue.js
+```typescript
+// Files: vite.config.ts + vue dependency
+if (hasFile('vite.config.ts') && hasDep('vue')) {
+  return { type: 'web-vuejs' };
+}
+```
+
+### Angular
+```typescript
+// Files: angular.json
+if (hasFile('angular.json')) {
+  return { type: 'web-angular' };
+}
+```
+
+### React SPA
+```typescript
+// Has react but not next.js
+if (hasDep('react') && !hasDep('next')) {
+  return { type: 'web-reactjs' };
+}
+```
+
+### Flutter
+```typescript
+// Files: pubspec.yaml
+if (hasFile('pubspec.yaml')) {
+  return { type: 'mobile-flutter' };
+}
+```
+
+### Go
+```typescript
+// Files: go.mod
+if (hasFile('go.mod')) {
+  return { type: 'backend-go' };
+}
+```
+
+### Laravel
+```typescript
+// Files: artisan, composer.json
+if (hasFile('artisan') && hasFile('composer.json')) {
+  return { type: 'backend-laravel' };
+}
+```
+
+### Python (Django/FastAPI/Flask)
+```typescript
+// Files: manage.py (Django), requirements.txt + fastapi/flask
+if (hasFile('manage.py')) {
+  return { type: 'backend-python', framework: 'django' };
+}
+if (hasDep('fastapi') || hasDep('flask')) {
+  return { type: 'backend-python' };
+}
+```
+
+### Node.js Backend
+```typescript
+// Has express, nestjs, or fastify
+if (hasDep('express') || hasDep('@nestjs/core') || hasDep('fastify')) {
+  return { type: 'backend-nodejs' };
+}
+```
+
+## Output Format
+
+```markdown
+**Project Detected**
+
+**Type:** Mobile React Native
+**Project:** My App
+**Path:** /Users/.../project
+**Confidence:** 100%
+
+**Agents Auto-Activated:**
+- mobile-react-native (Primary)
+- qa-automation (Testing)
+- ui-designer (UI/UX)
+```
+
+## Cross-Agent Collaboration
+
+- **Smart Agent Detector** - Provides project type for scoring
+- **PM Orchestrator** - Enables appropriate workflow
+
+---
+
+**Agent ID:** project-detector
+**Version:** 1.0.0
+**Status:** Active

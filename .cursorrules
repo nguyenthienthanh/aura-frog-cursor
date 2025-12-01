@@ -40,43 +40,63 @@
 
 # Agents auto-activate based on task context
 
-# Available Agents (14 total):
+# Available Agents (24 total):
 
-# Development:
+# Development (11 agents):
 
-# - mobile-react-native (Priority: 100) - Primary for this React Native library
+# - mobile-react-native (Priority: 100) - React Native + Expo expert
 
-# - backend-laravel (Priority: 90)
+# - mobile-flutter (Priority: 95) - Flutter + Dart cross-platform
 
-# - web-vuejs (Priority: 90)
+# - web-reactjs (Priority: 90) - React 18 SPA expert
 
-# - web-reactjs (Priority: 90)
+# - web-nextjs (Priority: 90) - Next.js App Router expert
 
-# - web-nextjs (Priority: 90)
+# - web-vuejs (Priority: 90) - Vue.js 3 + Composition API
 
-# Quality & Design:
+# - web-angular (Priority: 90) - Angular 17+ Signals expert
 
-# - qa-automation (Priority: 85) - Testing enforcement
+# - backend-nodejs (Priority: 95) - Node.js/Express/NestJS
 
-# - ui-designer (Priority: 85) - Component design patterns
+# - backend-python (Priority: 90) - Django/FastAPI/Flask
 
-# Operations:
+# - backend-go (Priority: 85) - Go/Gin/Fiber
 
-# - jira-operations (Priority: 80)
+# - backend-laravel (Priority: 90) - PHP/Laravel
 
-# - confluence-operations (Priority: 80)
+# - database-specialist (Priority: 85) - Schema, queries, migrations
 
-# - slack-operations (Priority: 70)
+# Quality & Security (3 agents):
 
-# Infrastructure:
+# - qa-automation (Priority: 85) - Testing, coverage, E2E
 
-# - pm-operations-orchestrator (Priority: 95)
+# - security-expert (Priority: 95) - OWASP, vulnerability scanning
 
-# - project-detector (Priority: 100)
+# - ui-designer (Priority: 85) - Design analysis, accessibility
 
-# - project-config-loader (Priority: 100)
+# DevOps & Operations (5 agents):
 
-# - project-context-manager (Priority: 95) - Context tracking
+# - devops-cicd (Priority: 90) - Docker, K8s, CI/CD pipelines
+
+# - jira-operations (Priority: 80) - JIRA ticket management
+
+# - confluence-operations (Priority: 80) - Documentation publishing
+
+# - slack-operations (Priority: 70) - Team notifications
+
+# - voice-operations (Priority: 70) - TTS/audio notifications
+
+# Infrastructure (5 agents):
+
+# - smart-agent-detector (Priority: 100) - Auto agent selection
+
+# - project-detector (Priority: 100) - Auto project type detection
+
+# - project-config-loader (Priority: 95) - Load project configurations
+
+# - project-context-manager (Priority: 95) - Session state persistence
+
+# - pm-operations-orchestrator (Priority: 95) - 9-phase workflow coordinator
 
 # Always Active Agents:
 
