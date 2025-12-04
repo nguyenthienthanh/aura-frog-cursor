@@ -1,7 +1,7 @@
 #!/bin/bash
 # Figma File Fetch Script for Aura Frog (Cursor IDE)
 # Usage: ./figma-fetch.sh <file-id-or-url>
-# Version: 1.0.0
+# Version: 1.1.4
 
 set -e
 

@@ -1,0 +1,174 @@
+---
+description: "UI/UX design expertise - component design, design systems, responsive design, Figma analysis"
+globs: []
+alwaysApply: false
+---
+
+# Design Expert Skill
+
+**Type:** Reference Skill
+**Priority:** Medium
+**Used By:** ui-designer agent
+
+---
+
+## Sub-Skills
+
+| File | Purpose |
+|------|---------|
+| `component-design.mdc` | Atomic design, component anatomy, specs |
+
+---
+
+## When to Use
+
+- Phase 3 (UI Breakdown) - Component design decisions
+- UI/UX design tasks
+- Design system setup
+- Responsive layout planning
+
+---
+
+## Quick Reference
+
+### Atomic Design
+
+```
+Atoms → Molecules → Organisms → Templates → Pages
+
+Atoms:      Button, Input, Icon, Label
+Molecules:  SearchBar (Input + Button + Icon)
+Organisms:  Header (Logo + Nav + SearchBar)
+Templates:  Page layout structure
+Pages:      Actual page with real content
+```
+
+### Design Tokens
+
+| Category | Examples |
+|----------|----------|
+| Colors | `primary-500`, `gray-100`, `error-600` |
+| Spacing | `space-1` (4px), `space-4` (16px) |
+| Typography | `text-sm`, `text-xl`, `font-bold` |
+| Shadows | `shadow-sm`, `shadow-lg` |
+| Borders | `rounded-md`, `border-2` |
+
+### Responsive Breakpoints
+
+| Breakpoint | Width | Target |
+|------------|-------|--------|
+| `sm` | < 640px | Mobile |
+| `md` | 640px - 768px | Large mobile |
+| `lg` | 768px - 1024px | Tablet |
+| `xl` | > 1024px | Desktop |
+
+---
+
+## Component Design Principles
+
+### Single Responsibility
+
+Each component should do ONE thing well.
+
+```tsx
+// Good: Focused component
+<Button onClick={handleClick}>Submit</Button>
+
+// Bad: Too much responsibility
+<ButtonWithFormValidationAndSubmit />
+```
+
+### Composability
+
+Components should be composable.
+
+```tsx
+// Good: Composable
+<Card>
+  <Card.Header>Title</Card.Header>
+  <Card.Body>Content</Card.Body>
+  <Card.Footer>Actions</Card.Footer>
+</Card>
+
+// Bad: Rigid
+<Card title="Title" content="Content" footer="Actions" />
+```
+
+### Props Interface
+
+```typescript
+interface ButtonProps {
+  variant: 'primary' | 'secondary' | 'ghost';
+  size: 'sm' | 'md' | 'lg';
+  disabled?: boolean;
+  loading?: boolean;
+  onClick?: () => void;
+  children: React.ReactNode;
+}
+```
+
+---
+
+## Design System Structure
+
+```
+design-system/
+├── tokens/
+│   ├── colors.ts
+│   ├── spacing.ts
+│   └── typography.ts
+├── components/
+│   ├── Button/
+│   ├── Input/
+│   └── Card/
+└── patterns/
+    ├── forms/
+    └── layouts/
+```
+
+---
+
+## Figma Analysis
+
+### Extracting Design Specs
+
+1. **Colors** - Check fill colors, create tokens
+2. **Typography** - Font family, size, weight, line-height
+3. **Spacing** - Padding, margins, gaps
+4. **Effects** - Shadows, borders, opacity
+5. **States** - Default, hover, active, disabled
+
+### Design to Code Mapping
+
+| Figma Property | CSS/Tailwind |
+|----------------|--------------|
+| Fill: #3B82F6 | `bg-blue-500` |
+| Padding: 16 | `p-4` |
+| Gap: 8 | `gap-2` |
+| Border radius: 8 | `rounded-lg` |
+| Font size: 14 | `text-sm` |
+
+---
+
+## Accessibility (a11y)
+
+### Color Contrast
+
+- Normal text: 4.5:1 ratio minimum
+- Large text: 3:1 ratio minimum
+- Use tools like WebAIM Contrast Checker
+
+### Interactive Elements
+
+- Minimum touch target: 44x44px
+- Focus states visible
+- Keyboard navigable
+
+---
+
+**Load sub-skills for detailed design guidance.**
+
+---
+
+**Version:** 1.1.4
+**Last Updated:** 2025-12-04

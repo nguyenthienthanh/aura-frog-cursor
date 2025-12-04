@@ -248,5 +248,5 @@ workflow:start "Task"        # Full workflow (includes planning)
 ---
 
 **Command:** planning
-**Version:** 1.0.0
+**Version:** 1.1.4
 **Added:** Aura Frog v1.3

@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Token & Time Awareness
 
-**Version:** 1.0.0
+**Version:** 1.1.4
 **Priority:** HIGH - Monitor throughout every session
 **Type:** Rule (Always Enforced)
 
@@ -205,5 +205,5 @@ State will be saved to: .cursor/workflow-contexts/workflow-{id}/
 
 ---
 
-**Version:** 1.0.0
+**Version:** 1.1.4
 **Last Updated:** 2025-11-30

@@ -61,5 +61,5 @@ Output: Detects Laravel + Vue, activates backend-laravel and web-vuejs agents
 
 ---
 
-**Source:** Aura Frog v1.0.0
+**Source:** Aura Frog v1.1.4
 **Converted:** 2025-11-30

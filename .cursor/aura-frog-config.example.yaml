@@ -74,7 +74,7 @@ quality:
 # MODEL SELECTION (Multi-Model Support)
 # =============================================================================
 # Configure different AI models for different workflow phases
-# See docs/MODEL_SELECTION.md for full documentation
+# Note: Model selection is handled by Cursor IDE settings
 
 models:
   # Phase-specific model selection

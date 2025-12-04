@@ -211,5 +211,5 @@ blocTest<UserBloc, UserState>(
 ---
 
 **Agent ID:** mobile-flutter
-**Version:** 1.0.0
+**Version:** 1.1.4
 **Status:** Active

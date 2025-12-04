@@ -1,0 +1,216 @@
+---
+description: "Create Architecture Decision Records (ADRs) and Runbooks for operational documentation."
+globs: []
+alwaysApply: false
+---
+
+# Documentation Skill (ADR & Runbook)
+
+**Type:** Reference Skill
+**Priority:** Medium
+**Used By:** All agents, Phase 8
+
+---
+
+## Overview
+
+Create Architecture Decision Records (ADRs) and Runbooks for operational documentation.
+
+---
+
+## Part 1: Architecture Decision Records (ADR)
+
+### When to Create ADR
+
+- Choosing between technologies
+- Significant architectural changes
+- New patterns or conventions
+- Deprecating existing approaches
+
+### ADR Template
+
+```markdown
+# ADR-[NUMBER]: [TITLE]
+
+**Status:** [Proposed | Accepted | Deprecated | Superseded by ADR-XXX]
+**Date:** YYYY-MM-DD
+**Deciders:** [Names/Teams]
+
+## Context
+
+[What is the issue? Why do we need to make a decision?]
+
+## Decision
+
+[What is the change being proposed/decided?]
+
+## Options Considered
+
+### Option 1: [Name]
+- **Pros:** [Benefits]
+- **Cons:** [Drawbacks]
+
+### Option 2: [Name]
+- **Pros:** [Benefits]
+- **Cons:** [Drawbacks]
+
+## Consequences
+
+### Positive
+- [Benefit 1]
+- [Benefit 2]
+
+### Negative
+- [Tradeoff 1]
+- [Tradeoff 2]
+
+### Risks
+- [Risk 1] - Mitigation: [How to handle]
+
+## References
+
+- [Link to relevant docs/discussions]
+```
+
+### ADR Naming Convention
+
+```
+docs/adr/
+├── ADR-001-database-selection.md
+├── ADR-002-authentication-strategy.md
+├── ADR-003-api-versioning.md
+└── README.md (index)
+```
+
+---
+
+## Part 2: Runbook
+
+### When to Create Runbook
+
+- New service deployment
+- Common operational tasks
+- Incident response procedures
+- On-call handoff documentation
+
+### Runbook Template
+
+```markdown
+# Runbook: [Service/Task Name]
+
+**Service:** [Service name]
+**Owner:** [Team/Person]
+**Last Updated:** YYYY-MM-DD
+**On-Call:** [Rotation/Contact]
+
+## Overview
+
+[Brief description of what this runbook covers]
+
+## Prerequisites
+
+- [ ] Access to [system/tool]
+- [ ] Credentials for [service]
+- [ ] VPN connected (if applicable)
+
+## Common Operations
+
+### Start Service
+\```bash
+systemctl start service-name
+systemctl status service-name
+\```
+
+### Stop Service
+\```bash
+systemctl stop service-name
+\```
+
+### Check Logs
+\```bash
+journalctl -u service-name -n 100
+journalctl -u service-name -f
+\```
+
+### Health Check
+\```bash
+curl -s http://localhost:8080/health | jq
+\```
+
+## Troubleshooting
+
+### Issue: Service Won't Start
+
+**Symptoms:** Service fails to start, exits immediately
+
+**Common Causes:**
+1. Missing environment variables
+2. Port already in use
+3. Database connection failed
+
+## Alerts & Escalation
+
+| Alert | Severity | Action | Escalate After |
+|-------|----------|--------|----------------|
+| Service Down | Critical | Restart, check logs | 5 min |
+| High CPU | Warning | Monitor, scale if needed | 15 min |
+
+## Contacts
+
+| Role | Name | Contact |
+|------|------|---------|
+| Primary On-Call | [Name] | [Slack/Phone] |
+| Team Lead | [Name] | [Slack/Phone] |
+```
+
+### Runbook Naming Convention
+
+```
+docs/runbooks/
+├── api-service.md
+├── database-maintenance.md
+├── deployment-rollback.md
+├── incident-response.md
+└── README.md (index)
+```
+
+---
+
+## Documentation Checklist
+
+### ADR Checklist
+- [ ] Clear problem statement
+- [ ] Options evaluated objectively
+- [ ] Decision clearly stated
+- [ ] Consequences documented
+- [ ] Numbered and indexed
+
+### Runbook Checklist
+- [ ] Prerequisites listed
+- [ ] Commands are copy-paste ready
+- [ ] Common issues documented
+- [ ] Escalation path defined
+- [ ] Contacts current
+
+---
+
+## Best Practices
+
+### Do's
+- Keep ADRs immutable (supersede, don't edit)
+- Test runbook commands before documenting
+- Include "why" not just "what"
+- Review runbooks after incidents
+- Index all documentation
+
+### Don'ts
+- Delete old ADRs (mark superseded)
+- Write runbooks without testing
+- Assume reader knows context
+- Let docs become stale
+- Skip the troubleshooting section
+
+---
+
+**Version:** 1.1.4
+**Last Updated:** 2025-12-04

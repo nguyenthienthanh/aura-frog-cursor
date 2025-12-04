@@ -315,7 +315,7 @@ h2. Success Criteria
 
 ----
 
-_Page created by [Aura Frog|https://github.com/nguyenthienthanh/aura-frog] v1.0.0_
+_Page created by [Aura Frog|https://github.com/nguyenthienthanh/aura-frog] v1.1.4_
 _Last updated: [Date]_
 _Maintained by: [Team Name]_
 ```
@@ -366,7 +366,7 @@ Adapt sections based on your organization's needs:
 
 ---
 
-**Version:** 1.0.0
+**Version:** 1.1.4
 **Phase:** 8 (Documentation) and 9 (Notification)
 **Agent:** Typically pm-operations-orchestrator or implementation agent
 **Adapted for Cursor:** 2025-11-30

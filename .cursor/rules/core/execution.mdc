@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Execution Rules
 
-**Version:** 1.0.0
+**Version:** 1.1.4
 **Priority:** CRITICAL - Behavioral constraints for all operations
 **Type:** Rule (Behavioral Constraints)
 
@@ -271,5 +271,5 @@ All file paths referenced in this rule:
 
 ---
 
-**Version:** 1.0.0
+**Version:** 1.1.4
 **Last Updated:** 2025-11-30

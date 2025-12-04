@@ -1,50 +1,63 @@
 # Agent Identification System
 
-**Version:** 1.0.0
-**Purpose:** Guide Claude to always identify which agent is speaking
-**Last Updated:** 2025-12-01
+**Version:** 1.1.4
+**Purpose:** Guide Cursor AI to always identify which agent is speaking
+**Last Updated:** 2025-12-04
 
 ---
 
 ## Purpose
 
-Every message from Claude MUST include clear agent identification so users know which specialized agent is handling their request.
+Every message from Cursor AI MUST include clear agent identification so users know which specialized agent is handling their request.
 
 ---
 
-## Agent Signature Format
+## Agent Banner Format
 
-### Standard Signature
+### Standard Banner
 
-**At the start of every conversation turn:**
+**At the start of every response:**
 
-```markdown
-**[separator line]**
-Agent: [agent-name] | System: Aura Frog v1.0.0 | Phase: [current-phase]
-**[separator line]**
 ```
+⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ Agent: [agent-name] │ Phase: [phase] - [name]          ┃
+┃ Model: [model] │ 🔥 [aura-message]                      ┃
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### Banner Components
+
+| Component | Description | Example |
+|-----------|-------------|---------|
+| **Agent** | Active specialized agent | `mobile-react-native` |
+| **Phase** | Current workflow phase (or `-` if none) | `2 - Design` |
+| **Model** | Cursor AI model being used | `claude-3.5-sonnet` |
+| **Aura Message** | Fun, contextual phrase (2-4 words) | `Code go brrrr` |
 
 ### Examples
 
 **During Workflow Phase:**
-```markdown
-**[separator line]**
-Agent: mobile-react-native | System: Aura Frog v1.0.0 | Phase: 2 (Design)
-**[separator line]**
+```
+⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ Agent: mobile-react-native │ Phase: 2 - Design         ┃
+┃ Model: claude-3.5-sonnet │ 🔥 Architecting greatness    ┃
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 **General Conversation:**
-```markdown
-**[separator line]**
-Agent: Claude (General) | System: Cursor IDE
-**[separator line]**
+```
+⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ Agent: pm-operations-orchestrator │ Phase: -           ┃
+┃ Model: gpt-4o │ 🔥 Ready to rock                        ┃
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 **Cross-Review:**
-```markdown
-**[separator line]**
-Agent: qa-automation (Cross-Review) | System: Aura Frog v1.0.0 | Phase: 2 (Design)
-**[separator line]**
+```
+⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ Agent: qa-automation (Cross-Review) │ Phase: 2 - Design┃
+┃ Model: claude-3-opus │ 🔥 Eagle eyes on                 ┃
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 ---
@@ -117,15 +130,12 @@ When multiple agents work together:
 
 When transitioning between phases/agents:
 
-```markdown
-**[separator line]**
-Agent Handoff
-**From:** mobile-react-native (Phase 2: Design)
-**To:** ui-designer (Phase 3: UI Breakdown)
-**Reason:** Design approved, ready for UI analysis
-**[separator line]**
-
-Agent: ui-designer | System: Aura Frog v1.0.0 | Phase: 3 (UI Breakdown)
+```
+⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ Agent Handoff                                           ┃
+┃ From: mobile-react-native (Phase 2)                     ┃
+┃ To: ui-designer (Phase 3)                               ┃
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Hello! I'm the UI Designer agent. Let me analyze the design...
 ```
@@ -137,7 +147,7 @@ Hello! I'm the UI Designer agent. Let me analyze the design...
 For short progress messages:
 
 ```markdown
-**[mobile-react-native | Phase 5b: Build]**
+**[mobile-react-native | Phase 5b]**
 
 Writing implementation code for UserProfile component...
 ```
@@ -170,9 +180,9 @@ Writing implementation code for UserProfile component...
 
 - **Agent List:** `rules/agents/README.md` - All available agents
 - **Agent Selection:** `rules/agents/smart-agent-detector.mdc` - How agents are chosen
-- **Banner Rule:** `rules/agent-identification-banner.mdc` - Display format
+- **Banner Rule:** `rules/core/agent-identification.mdc` - Display format
 
 ---
 
-**Document Version:** 1.0.0
-**Last Updated:** 2025-12-01
+**Document Version:** 1.1.4
+**Last Updated:** 2025-12-04

@@ -351,7 +351,7 @@ Templates are MDC (Markdown Context) files:
 
 ---
 
-**Version:** 1.0.0
+**Version:** 1.1.4
 **Adapted from:** Aura Frog templates system
 **For:** Cursor IDE
 **Date:** 2025-11-30

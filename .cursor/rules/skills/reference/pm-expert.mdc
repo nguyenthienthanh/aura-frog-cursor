@@ -1,0 +1,161 @@
+---
+description: "Project management expertise - agile methodology, estimation, risk management, stakeholder management"
+globs: []
+alwaysApply: false
+---
+
+# PM Expert Skill
+
+**Type:** Reference Skill
+**Priority:** Medium
+**Used By:** pm-operations-orchestrator agent
+
+---
+
+## Sub-Skills
+
+| File | Purpose |
+|------|---------|
+| `estimation.mdc` | Story points, time estimation |
+
+---
+
+## When to Use
+
+- Phase 1 (Understand) - Requirements analysis
+- Phase 2 (Design) - Technical planning
+- Sprint planning sessions
+- Risk assessment
+
+---
+
+## Quick Reference
+
+### Estimation
+
+**Story Points (Fibonacci):**
+```
+1 - Trivial (< 1 hour)
+2 - Simple (1-2 hours)
+3 - Small (half day)
+5 - Medium (1 day)
+8 - Large (2-3 days)
+13 - X-Large (1 week)
+```
+
+**T-shirt Sizing:**
+```
+XS - Quick fix, config change
+S  - Small feature, bug fix
+M  - Medium feature, integration
+L  - Large feature, refactor
+XL - Epic, major feature
+```
+
+### Risk Matrix
+
+```
+Impact x Probability = Priority
+
+High Impact + High Probability = CRITICAL
+High Impact + Low Probability  = HIGH
+Low Impact + High Probability  = MEDIUM
+Low Impact + Low Probability   = LOW
+```
+
+---
+
+## Agile Methodology
+
+### Scrum Events
+
+| Event | Duration | Purpose |
+|-------|----------|---------|
+| Sprint Planning | 2-4 hours | Plan sprint work |
+| Daily Standup | 15 min | Sync, blockers |
+| Sprint Review | 1-2 hours | Demo work |
+| Retrospective | 1-2 hours | Process improvement |
+
+### Kanban Principles
+
+1. Visualize workflow
+2. Limit WIP (Work in Progress)
+3. Manage flow
+4. Make policies explicit
+5. Implement feedback loops
+6. Improve collaboratively
+
+---
+
+## Project Planning
+
+### Roadmap Structure
+
+```
+Q1 2025
+├── Epic 1: User Authentication
+│   ├── Feature: Login/Logout
+│   ├── Feature: Password Reset
+│   └── Feature: OAuth Integration
+├── Epic 2: Dashboard
+│   ├── Feature: Analytics
+│   └── Feature: Reports
+```
+
+### Milestone Definition
+
+- Clear deliverables
+- Measurable success criteria
+- Fixed deadline
+- Dependencies identified
+
+---
+
+## Risk Management
+
+### Risk Identification
+
+| Category | Examples |
+|----------|----------|
+| Technical | New technology, integration complexity |
+| Resource | Team availability, skill gaps |
+| Schedule | Dependencies, estimation errors |
+| External | Third-party APIs, regulations |
+
+### Mitigation Strategies
+
+1. **Avoid** - Eliminate the risk
+2. **Mitigate** - Reduce probability/impact
+3. **Transfer** - Shift to third party
+4. **Accept** - Acknowledge and monitor
+
+---
+
+## Stakeholder Management
+
+### Communication Plan
+
+| Stakeholder | Frequency | Format |
+|-------------|-----------|--------|
+| Team | Daily | Standup |
+| Product Owner | Weekly | Status meeting |
+| Leadership | Bi-weekly | Executive summary |
+| Customers | Monthly | Newsletter |
+
+### RACI Matrix
+
+```
+R - Responsible (does the work)
+A - Accountable (approves/signs off)
+C - Consulted (provides input)
+I - Informed (kept updated)
+```
+
+---
+
+**Load sub-skills for detailed PM guidance.**
+
+---
+
+**Version:** 1.1.4
+**Last Updated:** 2025-12-04

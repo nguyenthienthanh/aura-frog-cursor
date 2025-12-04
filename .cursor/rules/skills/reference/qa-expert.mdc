@@ -1,0 +1,159 @@
+---
+description: "QA expertise - unit testing, e2e testing, accessibility testing, performance testing, test strategies"
+globs: []
+alwaysApply: false
+---
+
+# QA Expert Skill
+
+**Type:** Reference Skill
+**Priority:** Medium
+**Used By:** qa-automation agent
+
+---
+
+## Sub-Skills
+
+| File | Purpose |
+|------|---------|
+| `unit-testing.mdc` | Jest, Vitest, PHPUnit patterns |
+| `e2e-testing.mdc` | Cypress, Playwright, Detox |
+
+---
+
+## When to Use
+
+- Phase 4 (Test Planning) - Test strategy
+- Phase 5a (TDD Red) - Writing tests first
+- Phase 7 (Verify) - QA validation
+- Accessibility audits
+
+---
+
+## Quick Reference
+
+### Testing Pyramid
+
+```
+      E2E (10%)
+     /        \
+   Integration (20%)
+  /              \
+ Unit Tests (70%)
+```
+
+### Coverage Targets
+
+| Metric | Target |
+|--------|--------|
+| Statements | 80% |
+| Branches | 75% |
+| Functions | 80% |
+
+---
+
+## Test Strategies
+
+### Unit Testing
+
+- Test individual functions/components in isolation
+- Mock external dependencies
+- Fast execution (< 100ms per test)
+- High coverage (70%+)
+
+### Integration Testing
+
+- Test component interactions
+- Test API endpoints
+- Real database (test instance)
+- Medium coverage (20%)
+
+### E2E Testing
+
+- Test full user flows
+- Test critical paths
+- Real browser environment
+- Low coverage (10%)
+
+---
+
+## Testing Best Practices
+
+### Arrange-Act-Assert (AAA)
+
+```typescript
+describe('Calculator', () => {
+  it('should add two numbers', () => {
+    // Arrange
+    const calculator = new Calculator();
+
+    // Act
+    const result = calculator.add(2, 3);
+
+    // Assert
+    expect(result).toBe(5);
+  });
+});
+```
+
+### Test Naming
+
+```typescript
+// Format: should [expected behavior] when [condition]
+it('should return error when email is invalid')
+it('should redirect to login when token expires')
+it('should show loading spinner when fetching data')
+```
+
+### Mock Guidelines
+
+- Mock external services (APIs, databases)
+- Don't mock what you're testing
+- Use factories for test data
+- Reset mocks between tests
+
+---
+
+## Accessibility Testing
+
+### WCAG 2.1 Checklist
+
+- [ ] All images have alt text
+- [ ] Color contrast meets AA standards (4.5:1)
+- [ ] Interactive elements are keyboard accessible
+- [ ] Form inputs have labels
+- [ ] Focus states are visible
+
+### Automated Tools
+
+- axe-core for automated a11y scanning
+- Lighthouse for accessibility audits
+- React Testing Library for a11y queries
+
+---
+
+## Performance Testing
+
+### Metrics to Track
+
+| Metric | Target |
+|--------|--------|
+| LCP (Largest Contentful Paint) | < 2.5s |
+| FID (First Input Delay) | < 100ms |
+| CLS (Cumulative Layout Shift) | < 0.1 |
+
+### Load Testing
+
+- Test under expected load
+- Test peak load scenarios
+- Monitor response times
+- Check error rates
+
+---
+
+**Load sub-skills for detailed testing guidance.**
+
+---
+
+**Version:** 1.1.4
+**Last Updated:** 2025-12-04

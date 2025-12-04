@@ -128,6 +128,6 @@ Request specific agent expertise:
 
 ---
 
-**Version:** 1.0.0
+**Version:** 1.1.4
 **Last Updated:** 2025-12-01
 **Status:** Complete (24/24 agents)

@@ -1,7 +1,7 @@
 #!/bin/bash
 # JIRA Ticket Fetch Script for Aura Frog (Cursor IDE)
 # Usage: ./jira-fetch.sh PROJ-1234
-# Version: 1.0.0
+# Version: 1.1.4
 
 set -e
 

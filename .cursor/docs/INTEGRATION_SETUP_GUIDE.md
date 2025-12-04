@@ -1,7 +1,7 @@
 # Integration Setup Guide
 
-**Version:** 1.0.0
-**Last Updated:** 2025-12-01
+**Version:** 1.1.4
+**Last Updated:** 2025-12-04
 
 ---
 
@@ -482,11 +482,10 @@ Ensure these are in your `.gitignore`:
 
 ## Related Documentation
 
-- **MODEL_SELECTION.md** - Multi-model configuration
 - **AGENT_IDENTIFICATION.md** - Agent display system
 - **aura-frog-config.example.yaml** - Full configuration reference
 
 ---
 
-**Version:** 1.0.0
-**Last Updated:** 2025-12-01
+**Version:** 1.1.4
+**Last Updated:** 2025-12-04
