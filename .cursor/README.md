@@ -1,9 +1,9 @@
 # Aura Frog for Cursor IDE
 
-**Version:** 1.0.0
+**Version:** 1.1.4
 **Converted from:** [nguyenthienthanh/aura-frog](https://github.com/nguyenthienthanh/aura-frog) (Aura Frog Plugin for Claude Code)
 **Adapted for:** Cursor IDE
-**Conversion Date:** 2025-11-30
+**Last Updated:** 2025-12-04
 
 ---
 
@@ -108,11 +108,17 @@ Located in subdirectories:
 Every response shows:
 
 ```
-⚡ 🐸 AURA FROG v1.0.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ Agent: mobile-react-native │ Phase: 2 - Design        ┃
-┃ 🔥 Code go brrrr                                       ┃
+⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ Agent: mobile-react-native │ Phase: 2 - Design         ┃
+┃ Model: claude-3.5-sonnet │ 🔥 Code go brrrr             ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+**Supported Cursor Models:**
+- Claude: `claude-3.5-sonnet`, `claude-3-opus`, `claude-3-haiku`
+- OpenAI: `gpt-4o`, `gpt-4-turbo`, `gpt-4`
+- Google: `gemini-pro`, `gemini-1.5-pro`
+- Cursor: `cursor-small`
 
 ---
 
@@ -200,6 +206,6 @@ See all commands: `cat .cursor/commands/QUICK_REFERENCE.md`
 
 **Code with main character energy!** 🐸✨
 
-**Version:** 1.0.0
-**Converted:** 2025-11-30
+**Version:** 1.1.4
+**Last Updated:** 2025-12-04
 **Original:** [nguyenthienthanh/aura-frog](https://github.com/nguyenthienthanh/aura-frog)

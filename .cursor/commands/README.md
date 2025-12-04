@@ -1,7 +1,7 @@
 # Aura Frog Commands - Cursor Slash Command Format
 
-**Conversion Date:** 2025-11-30  
-**Source:** Aura Frog v1.0.0  
+**Last Updated:** 2025-12-04
+**Source:** Aura Frog v1.1.4  
 **Total Commands:** 70
 
 ---

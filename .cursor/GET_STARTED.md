@@ -111,14 +111,15 @@ Aura Frog uses a structured TDD (Test-Driven Development) workflow:
 Every response shows:
 
 ```
-⚡ 🐸 AURA FROG v1.0.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ Agent: mobile-react-native │ Phase: 2 - Design        ┃
-┃ 🔥 Code go brrrr                                       ┃
+⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ Agent: mobile-react-native │ Phase: 2 - Design         ┃
+┃ Model: claude-3.5-sonnet │ 🔥 Code go brrrr             ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 - **Agent:** Currently active specialized agent
 - **Phase:** Workflow phase (or `-` if none)
+- **Model:** Cursor AI model (e.g., `claude-3.5-sonnet`, `gpt-4o`, `gemini-1.5-pro`)
 - **Aura Message:** Fun, contextual phrase (changes each time)
 
 ### 24 Specialized Agents
@@ -688,5 +689,5 @@ Code with main character energy. Let's build something amazing!
 
 ---
 
-**Version:** 1.0.0
-**Last Updated:** 2025-11-30
+**Version:** 1.1.4
+**Last Updated:** 2025-12-04
