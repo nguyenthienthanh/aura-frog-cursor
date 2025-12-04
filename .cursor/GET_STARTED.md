@@ -20,9 +20,9 @@ git clone https://github.com/nguyenthienthanh/aura-frog-cursor.git
 
 The setup script will:
 - Copy `.cursor` folder to your project
-- Create `.envrc` from template
+- Create `.cursor/.envrc` from template
 - Prompt for JIRA and Figma credentials (optional)
-- Add `.envrc` to `.gitignore`
+- Add `.cursor/.envrc` to `.gitignore`
 
 **Option B: Manual Installation**
 

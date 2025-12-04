@@ -86,7 +86,7 @@ echo ""
 echo -e "${BLUE}[2/4] Setting up environment file...${NC}"
 
 ENVRC_TEMPLATE="$SCRIPT_DIR/.envrc.template"
-ENVRC_TARGET="$TARGET_PROJECT/.envrc"
+ENVRC_TARGET="$TARGET_PROJECT/.cursor/.envrc"
 
 if [ -f "$ENVRC_TARGET" ]; then
     echo -e "${YELLOW}  .envrc already exists. Skipping template copy.${NC}"
@@ -185,19 +185,19 @@ else
     echo -e "${YELLOW}  ⊘ Figma skipped${NC}"
 fi
 
-# Add .envrc to .gitignore if not already there
+# Add .cursor/.envrc to .gitignore if not already there
 GITIGNORE="$TARGET_PROJECT/.gitignore"
 if [ -f "$GITIGNORE" ]; then
-    if ! grep -q "^\.envrc$" "$GITIGNORE"; then
+    if ! grep -q "^\.cursor/\.envrc$" "$GITIGNORE"; then
         echo "" >> "$GITIGNORE"
         echo "# Aura Frog environment (contains secrets)" >> "$GITIGNORE"
-        echo ".envrc" >> "$GITIGNORE"
-        echo -e "${GREEN}  ✓ Added .envrc to .gitignore${NC}"
+        echo ".cursor/.envrc" >> "$GITIGNORE"
+        echo -e "${GREEN}  ✓ Added .cursor/.envrc to .gitignore${NC}"
     fi
 else
     echo "# Aura Frog environment (contains secrets)" > "$GITIGNORE"
-    echo ".envrc" >> "$GITIGNORE"
-    echo -e "${GREEN}  ✓ Created .gitignore with .envrc${NC}"
+    echo ".cursor/.envrc" >> "$GITIGNORE"
+    echo -e "${GREEN}  ✓ Created .gitignore with .cursor/.envrc${NC}"
 fi
 
 # Summary
@@ -210,11 +210,11 @@ echo -e "${BOLD}Installed to:${NC} $TARGET_PROJECT/.cursor"
 echo ""
 echo -e "${BOLD}Files created:${NC}"
 echo "  - .cursor/          (Aura Frog rules, commands, agents)"
-echo "  - .envrc            (Environment configuration)"
+echo "  - .cursor/.envrc    (Environment configuration)"
 echo ""
 echo -e "${BOLD}Next steps:${NC}"
 echo "  1. Open your project in Cursor IDE"
-echo "  2. Load environment: ${CYAN}source .envrc${NC}"
+echo "  2. Load environment: ${CYAN}source .cursor/.envrc${NC}"
 echo "  3. Initialize project: ${CYAN}/project:init${NC}"
 echo "  4. Start workflow: ${CYAN}/workflow:start \"Your task\"${NC}"
 echo ""
@@ -222,7 +222,7 @@ echo -e "${BOLD}Documentation:${NC}"
 echo "  - Quick Start: ${CYAN}cat .cursor/GET_STARTED.md${NC}"
 echo "  - Commands: ${CYAN}cat .cursor/commands/QUICK_REFERENCE.md${NC}"
 echo ""
-echo -e "${YELLOW}Note: Run 'source .envrc' to load environment variables.${NC}"
+echo -e "${YELLOW}Note: Run 'source .cursor/.envrc' to load environment variables.${NC}"
 echo -e "${YELLOW}      Or use direnv for automatic loading.${NC}"
 echo ""
 echo -e "🐸 ${GREEN}Code with main character energy!${NC}"
