@@ -107,17 +107,24 @@ bash scripts/integrations/confluence-publish.sh update 123456 docs/api.md "New T
 
 ## Setup
 
-**In `.envrc`:**
+**In `.cursor/.envrc`:**
 ```bash
 export CONFLUENCE_URL="https://company.atlassian.net/wiki"
 export CONFLUENCE_EMAIL="email@company.com"
 export CONFLUENCE_API_TOKEN="your-token"
 ```
 
+**Note:** If Confluence credentials are not set, JIRA credentials will be used automatically (same Atlassian account). The setup script auto-configures Confluence when you set up JIRA.
+
+**Fallback order:**
+1. `CONFLUENCE_URL` → falls back to `${JIRA_URL}/wiki`
+2. `CONFLUENCE_EMAIL` → falls back to `JIRA_EMAIL`
+3. `CONFLUENCE_API_TOKEN` → falls back to `JIRA_API_TOKEN`
+
 **Get API Token:**
 1. Go to https://id.atlassian.com/manage-profile/security/api-tokens
-2. Create new token
-3. Add to .envrc
+2. Create new token (same token works for both JIRA and Confluence)
+3. Add to .cursor/.envrc
 
 ---
 

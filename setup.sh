@@ -159,6 +159,14 @@ if [ -n "$JIRA_URL_INPUT" ]; then
     rm -f "$ENVRC_TARGET.bak"
 
     echo -e "${GREEN}  ✓ JIRA configured${NC}"
+
+    # Auto-configure Confluence with JIRA credentials (same Atlassian account)
+    CONFLUENCE_URL_DEFAULT="${JIRA_URL_INPUT}/wiki"
+    sed -i.bak "s|# export CONFLUENCE_URL=.*|export CONFLUENCE_URL=\"$CONFLUENCE_URL_DEFAULT\"|" "$ENVRC_TARGET"
+    sed -i.bak "s|# export CONFLUENCE_EMAIL=.*|export CONFLUENCE_EMAIL=\"$JIRA_EMAIL_INPUT\"|" "$ENVRC_TARGET"
+    sed -i.bak "s|# export CONFLUENCE_API_TOKEN=.*|export CONFLUENCE_API_TOKEN=\"$JIRA_API_TOKEN_INPUT\"|" "$ENVRC_TARGET"
+    rm -f "$ENVRC_TARGET.bak"
+    echo -e "${GREEN}  ✓ Confluence auto-configured (using JIRA credentials)${NC}"
 else
     echo -e "${YELLOW}  ⊘ JIRA skipped${NC}"
 fi

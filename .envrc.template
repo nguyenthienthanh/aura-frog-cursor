@@ -57,6 +57,8 @@
 # ============================================
 # Confluence Integration
 # ============================================
+# NOTE: If not set, Confluence uses JIRA credentials (same Atlassian account)
+# Only set these if your Confluence uses different credentials than JIRA
 # export CONFLUENCE_URL="https://your-company.atlassian.net/wiki"
 # export CONFLUENCE_EMAIL="your-email@company.com"
 # export CONFLUENCE_API_TOKEN="your-confluence-api-token"
