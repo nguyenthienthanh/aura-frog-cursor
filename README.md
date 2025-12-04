@@ -22,13 +22,29 @@ This is a conversion of the **Aura Frog** plugin for Claude Code:
 - **Original Repository:** [github.com/nguyenthienthanh/aura-frog](https://github.com/nguyenthienthanh/aura-frog)
 - **Converted for:** Cursor IDE
 - **Conversion Date:** 2025-11-30
-- **Version:** 1.0.0
+- **Version:** 1.1.4
 
 ## Quick Start
 
 ### 1. Installation
 
-Copy the `.cursor` directory and `.cursorrules` file to your project root:
+**Option A: Using Setup Script (Recommended)**
+
+```bash
+# Clone this repository
+git clone https://github.com/nguyenthienthanh/aura-frog-cursor.git
+
+# Run setup script
+./aura-frog-cursor/setup.sh /path/to/your/project
+```
+
+The setup script will:
+- Copy `.cursor` folder to your project
+- Create `.envrc` from template
+- Prompt for JIRA and Figma credentials (optional)
+- Add `.envrc` to `.gitignore`
+
+**Option B: Manual Installation**
 
 ```bash
 # Clone this repository

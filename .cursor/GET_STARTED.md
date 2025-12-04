@@ -6,7 +6,33 @@
 
 ## 📖 Quick Start (5 Minutes)
 
-### Step 1: Verify Installation
+### Step 1: Install Aura Frog
+
+**Option A: Using Setup Script (Recommended)**
+
+```bash
+# Clone the repository
+git clone https://github.com/nguyenthienthanh/aura-frog-cursor.git
+
+# Run setup script
+./aura-frog-cursor/setup.sh /path/to/your/project
+```
+
+The setup script will:
+- Copy `.cursor` folder to your project
+- Create `.envrc` from template
+- Prompt for JIRA and Figma credentials (optional)
+- Add `.envrc` to `.gitignore`
+
+**Option B: Manual Installation**
+
+```bash
+# Copy .cursor folder to your project
+cp -r aura-frog-cursor/.cursor /path/to/your/project/
+cp aura-frog-cursor/.cursorrules /path/to/your/project/
+```
+
+### Step 2: Verify Installation
 
 Check that all files are in place:
 
@@ -24,7 +50,7 @@ ls .cursor/
 # - Documentation files
 ```
 
-### Step 2: Initialize Project
+### Step 3: Initialize Project
 
 Run the project initialization command:
 
@@ -39,7 +65,7 @@ This will:
 - Generate project-specific rules
 - Set up directory structure
 
-### Step 3: Review Generated Context
+### Step 4: Review Generated Context
 
 ```bash
 cat .cursor/project-contexts/[project]/conventions.md
@@ -53,7 +79,7 @@ This file contains your project's:
 
 **Important:** Review and edit if needed! This is how Aura Frog learns YOUR patterns.
 
-### Step 4: Start Your First Workflow
+### Step 5: Start Your First Workflow
 
 ```bash
 /workflow:start "Add dark mode toggle to settings"
