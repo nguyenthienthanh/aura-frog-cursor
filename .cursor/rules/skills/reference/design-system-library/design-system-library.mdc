@@ -1,0 +1,90 @@
+---
+description: "Build apps with popular design systems - Material UI, Ant Design, Tailwind, shadcn/ui, Chakra UI, NativeWind"
+globs: ["**/*.tsx", "**/*.jsx", "**/*.vue"]
+alwaysApply: false
+---
+
+# Skill: Design System Library
+
+**Category:** Implementation Skill
+**Used By:** ui-designer, web-reactjs, web-vuejs, web-nextjs, mobile-react-native
+
+---
+
+## Purpose
+
+Enable agents to build web and mobile applications using popular design systems. Provides patterns, best practices, and implementation guides.
+
+---
+
+## Supported Design Systems
+
+| File | Design System | Platform |
+|------|---------------|----------|
+| `shadcn-ui.md` | shadcn/ui | React, Next.js |
+| `tailwind-css.md` | Tailwind CSS | All frameworks |
+| `material-ui.md` | Material UI | React, Next.js |
+| `ant-design.md` | Ant Design | React, Vue |
+| `chakra-ui.md` | Chakra UI | React, Next.js |
+| `nativewind.md` | NativeWind | React Native |
+
+---
+
+## Auto-Detection
+
+Detect design system from:
+
+1. **Package.json:**
+   - `@mui/material` → Material UI
+   - `antd` → Ant Design
+   - `tailwindcss` → Tailwind CSS
+   - `@chakra-ui/react` → Chakra UI
+   - `nativewind` → NativeWind
+
+2. **Config files:**
+   - `tailwind.config.js` → Tailwind
+   - `components.json` → shadcn/ui
+
+3. **Import patterns:**
+   - `from '@mui/'` → Material UI
+   - `from 'antd'` → Ant Design
+   - `from '@/components/ui/'` → shadcn/ui
+
+---
+
+## Quick Selection Guide
+
+### Enterprise Apps
+- **Ant Design** - Rich data display, tables, forms
+- **Material UI** - Google ecosystem
+
+### Modern Web Apps
+- **Tailwind + shadcn/ui** - Maximum flexibility
+- **Chakra UI** - Great DX
+
+### Mobile Apps (React Native)
+- **NativeWind** - Tailwind for mobile
+
+### Prototyping
+- **Tailwind** - Rapid utility styling
+- **Bootstrap** - Quick, familiar
+
+---
+
+## Usage Flow
+
+```
+1. Detect design system (auto or user-specified)
+2. Load relevant sub-skill file
+3. Apply patterns and conventions
+4. Generate code following best practices
+```
+
+---
+
+**Load sub-skills as needed for detailed implementation guidance.**
+
+---
+
+**Version:** 1.1.4
+**Last Updated:** 2025-12-05

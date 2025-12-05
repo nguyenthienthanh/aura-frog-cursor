@@ -1,0 +1,138 @@
+---
+description: "Use the project's established design system consistently. Never mix design systems."
+globs: ["**/*.tsx", "**/*.jsx", "**/*.vue"]
+alwaysApply: false
+---
+
+# Rule: Design System Usage
+
+**Priority:** High
+**Enforcement:** Code Generation + Code Review Phase
+**Applies To:** All UI code (React, Vue, Angular, React Native, Next.js)
+
+---
+
+## Core Principle
+
+**Use the project's established design system consistently. Never mix design systems or create custom styles that bypass the design system.**
+
+---
+
+## Detection Requirements
+
+Before generating UI code, detect the design system:
+
+1. **Check package.json** for design system dependencies
+2. **Check config files** (tailwind.config.js, components.json, etc.)
+3. **Analyze existing imports** in the codebase
+4. **Ask user** if multiple or no systems detected
+
+---
+
+## What NOT to Do
+
+### 1. Mixing Design Systems
+
+```tsx
+// BAD: Mixing MUI and Ant Design
+import { Button } from '@mui/material';
+import { Input } from 'antd';
+```
+
+### 2. Bypassing the Design System
+
+```tsx
+// BAD: Custom CSS when Tailwind is the design system
+<div className="flex items-center" style={{ marginTop: '17px', color: '#333' }}>
+
+// BAD: Creating custom components that ignore the design system
+const MyButton = styled.button`
+  background: blue;  // Should use theme colors
+`;
+```
+
+### 3. Hardcoding Values
+
+```tsx
+// BAD: Hardcoded colors/spacing
+<div style={{ padding: '16px', backgroundColor: '#f5f5f5' }}>
+
+// GOOD: Use theme/design tokens
+<div className="p-4 bg-gray-100">  // Tailwind
+<Box p={4} bg="gray.100">           // Chakra
+```
+
+---
+
+## What TO Do
+
+### 1. Detect Before Generating
+
+```markdown
+Before writing UI code:
+1. Check package.json for: @mui/material, antd, tailwindcss, @chakra-ui/react, etc.
+2. Look for config files: tailwind.config.js, components.json
+3. Examine existing component imports
+4. Load appropriate design system sub-skill
+```
+
+### 2. Use Design System Components
+
+```tsx
+// Material UI project
+import { Button, TextField, Card } from '@mui/material';
+
+// Ant Design project
+import { Button, Input, Card } from 'antd';
+
+// shadcn/ui project
+import { Button } from "@/components/ui/button";
+
+// Chakra UI project
+import { Button, Input, Card } from '@chakra-ui/react';
+```
+
+### 3. Follow Design System Patterns
+
+```tsx
+// TAILWIND: Use utility classes
+<button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+
+// MUI: Use sx prop or styled
+<Button variant="contained" sx={{ borderRadius: 2 }}>
+
+// CHAKRA: Use style props
+<Button colorScheme="blue" size="md" borderRadius="lg">
+```
+
+---
+
+## Design System Detection
+
+| Indicator | Design System |
+|-----------|---------------|
+| @mui/material | Material UI |
+| antd | Ant Design |
+| tailwindcss | Tailwind CSS |
+| @chakra-ui/react | Chakra UI |
+| nativewind | NativeWind |
+| @mantine/core | Mantine |
+| tailwind.config.js | Tailwind |
+| components.json | shadcn/ui |
+
+---
+
+## Code Review Checklist
+
+During Phase 6 (Code Review), verify:
+
+- [ ] Design system correctly detected
+- [ ] Only one primary design system used
+- [ ] All components from design system (not native HTML)
+- [ ] Theme/design tokens used (no hardcoded values)
+- [ ] Consistent styling approach throughout
+
+---
+
+**Version:** 1.1.4
+**Last Updated:** 2025-12-05

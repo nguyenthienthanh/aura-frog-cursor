@@ -1,0 +1,139 @@
+---
+description: "Every response must end with next step guidance showing available actions."
+globs: []
+alwaysApply: true
+---
+
+# Rule: Next Step Guidance
+
+**Priority:** CRITICAL
+**Enforcement:** EVERY response must include next step guidance
+**Applies To:** All interactions, phases, and approval gates
+
+---
+
+## Core Rule
+
+**EVERY response MUST end with a "What's Next" section showing available actions and suggested commands.**
+
+The user should NEVER have to guess what they can do next.
+
+---
+
+## Guidance Block Format
+
+### Standard Format (End of Every Response)
+
+```markdown
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+WHAT'S NEXT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**Quick Actions:**
+- `approve` or `yes` - Continue to next phase
+- `reject: <reason>` - Redo with feedback
+- `skip` - Skip current phase (if allowed)
+
+**Available Commands:**
+- `workflow:status` - Show current progress
+- `workflow:skip phase-3` - Skip specific phase
+- `workflow:handoff` - Prepare session handoff
+
+**Suggestions:**
+-> Type `approve` to continue to next phase
+-> Or provide feedback to refine
+```
+
+---
+
+## Context-Aware Guidance
+
+Show relevant options based on current phase:
+
+### Planning Phases (1-4)
+- `approve` - Accept and continue
+- `reject: <feedback>` - Refine requirements
+- `skip phase-3` - Skip UI (backend-only)
+
+### Implementation Phase (5)
+- `continue` - Keep implementing
+- `tests:run` - Check test status
+- `skip refactor` - Skip Phase 5c
+
+### Review Phases (6-9)
+- `approve` - Accept deliverables
+- `fix: <issue>` - Address specific issue
+- `done` - Complete workflow
+
+---
+
+## Universal Commands Reference
+
+### Workflow Control
+
+| Command | Description |
+|---------|-------------|
+| `approve` / `yes` | Accept and continue |
+| `reject: <reason>` | Reject with feedback |
+| `modify: <changes>` | Adjust deliverables |
+| `skip` | Skip current phase |
+| `done` | Complete workflow |
+| `pause` | Save and pause |
+
+### Phase Navigation
+
+| Command | Description |
+|---------|-------------|
+| `workflow:status` | Show progress |
+| `workflow:skip <phase>` | Skip specific phase |
+| `workflow:force <phase>` | Jump to phase |
+| `workflow:handoff` | Prepare session handoff |
+
+### Speed Commands
+
+| Command | Description |
+|---------|-------------|
+| `skip brainstorming` | Skip requirement analysis |
+| `skip ui` | Skip Phase 3 |
+| `skip tests` | Skip test writing |
+| `skip docs` | Skip Phase 8 |
+| `force implementation` | Jump to coding |
+| `force complete` | End immediately |
+
+---
+
+## When to Show Guidance
+
+### Show FULL guidance when:
+- First interaction of a phase
+- After rejection (show how to proceed)
+- Complex decision point
+- Multiple valid paths exist
+
+### Show MINIMAL guidance when:
+- Mid-phase work (just "continue" option)
+- Simple confirmation needed
+
+### Minimal Format:
+
+```markdown
+---
+**Next:** `approve` to continue | `reject: <feedback>` to revise
+```
+
+---
+
+## Enforcement Checklist
+
+Every response should:
+
+- [ ] End with guidance block
+- [ ] Show 2-3 most relevant options
+- [ ] Include at least one quick command
+- [ ] Show a clear suggested action
+- [ ] Be context-aware for current phase
+
+---
+
+**Version:** 1.1.4
+**Last Updated:** 2025-12-05
