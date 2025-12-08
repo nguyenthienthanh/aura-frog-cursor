@@ -17,6 +17,34 @@ CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 BOLD='\033[1m'
 
+# Parse flags
+FORCE_OVERRIDE=false
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -f|--force)
+            FORCE_OVERRIDE=true
+            shift
+            ;;
+        -h|--help)
+            echo "Usage: $0 [OPTIONS] [TARGET_PATH]"
+            echo ""
+            echo "Options:"
+            echo "  -f, --force    Force override all existing files (including .envrc)"
+            echo "  -h, --help     Show this help message"
+            echo ""
+            echo "Examples:"
+            echo "  $0 /path/to/project           # Install with merge"
+            echo "  $0 --force /path/to/project   # Force override all files"
+            exit 0
+            ;;
+        *)
+            # Assume it's the target path
+            TARGET_ARG="$1"
+            shift
+            ;;
+    esac
+done
+
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CURSOR_SOURCE="$SCRIPT_DIR/.cursor"
@@ -36,8 +64,8 @@ if [ ! -d "$CURSOR_SOURCE" ]; then
 fi
 
 # Get target project path
-if [ -n "$1" ]; then
-    TARGET_PROJECT="$1"
+if [ -n "$TARGET_ARG" ]; then
+    TARGET_PROJECT="$TARGET_ARG"
 else
     echo -e "${YELLOW}Enter the path to your target project:${NC}"
     read -r TARGET_PROJECT
@@ -58,7 +86,11 @@ echo ""
 
 # Confirm installation
 echo -e "${YELLOW}This will copy .cursor folder to your project.${NC}"
-echo -e "${YELLOW}Existing files with the same name will be overwritten.${NC}"
+if [ "$FORCE_OVERRIDE" = true ]; then
+    echo -e "${RED}Mode: FORCE OVERRIDE - All existing files will be replaced.${NC}"
+else
+    echo -e "${GREEN}Mode: MERGE - Existing .envrc will be preserved, missing vars added.${NC}"
+fi
 echo ""
 read -p "Continue? (y/N): " -n 1 -r
 echo ""
@@ -88,9 +120,59 @@ echo -e "${BLUE}[2/4] Setting up environment file...${NC}"
 ENVRC_TEMPLATE="$SCRIPT_DIR/.envrc.template"
 ENVRC_TARGET="$TARGET_PROJECT/.cursor/.envrc"
 
-if [ -f "$ENVRC_TARGET" ]; then
-    echo -e "${YELLOW}  .envrc already exists. Skipping template copy.${NC}"
-    echo -e "${YELLOW}  You can manually update it or delete and re-run setup.${NC}"
+# Function to merge missing env vars from template to existing file
+merge_envrc() {
+    local template="$1"
+    local target="$2"
+    local added=0
+
+    # Get all export lines from template
+    while IFS= read -r line; do
+        # Extract variable name (e.g., JIRA_URL from "export JIRA_URL=...")
+        if [[ "$line" =~ ^export[[:space:]]+([A-Z_]+)= ]]; then
+            var_name="${BASH_REMATCH[1]}"
+            # Check if this variable exists in target (commented or not)
+            if ! grep -q "export $var_name=" "$target" 2>/dev/null; then
+                # Variable not found, append it
+                echo "" >> "$target"
+                echo "$line" >> "$target"
+                ((added++))
+            fi
+        fi
+    done < "$template"
+
+    echo $added
+}
+
+if [ -f "$ENVRC_TARGET" ] && [ "$FORCE_OVERRIDE" = false ]; then
+    echo -e "${YELLOW}  .envrc already exists. Checking for missing variables...${NC}"
+
+    # Determine which template to use for merging
+    if [ -f "$ENVRC_TEMPLATE" ]; then
+        MERGE_SOURCE="$ENVRC_TEMPLATE"
+    else
+        MERGE_SOURCE="$TARGET_PROJECT/.cursor/.envrc.template"
+    fi
+
+    if [ -f "$MERGE_SOURCE" ]; then
+        added=$(merge_envrc "$MERGE_SOURCE" "$ENVRC_TARGET")
+        if [ "$added" -gt 0 ]; then
+            echo -e "${GREEN}  ✓ Added $added missing environment variables${NC}"
+        else
+            echo -e "${GREEN}  ✓ All environment variables present${NC}"
+        fi
+    else
+        echo -e "${YELLOW}  No template found for merging${NC}"
+    fi
+elif [ -f "$ENVRC_TARGET" ] && [ "$FORCE_OVERRIDE" = true ]; then
+    # Backup existing .envrc before overriding
+    cp "$ENVRC_TARGET" "$ENVRC_TARGET.backup"
+    echo -e "${YELLOW}  .envrc backed up to .envrc.backup${NC}"
+
+    if [ -f "$ENVRC_TEMPLATE" ]; then
+        cp "$ENVRC_TEMPLATE" "$ENVRC_TARGET"
+        echo -e "${GREEN}  ✓ .envrc overwritten from template${NC}"
+    fi
 elif [ -f "$ENVRC_TEMPLATE" ]; then
     cp "$ENVRC_TEMPLATE" "$ENVRC_TARGET"
     echo -e "${GREEN}  ✓ .envrc created from template${NC}"
