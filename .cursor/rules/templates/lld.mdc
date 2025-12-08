@@ -414,8 +414,8 @@ What types of tests will be written for each component.
 ## Project Customization
 
 Reference project conventions:
-- **File naming:** `.claude/project-contexts/[project]/conventions.md`
-- **Component patterns:** `.claude/project-contexts/[project]/examples.md`
+- **File naming:** `.cursor/project-contexts/[project]/conventions.md`
+- **Component patterns:** `.cursor/project-contexts/[project]/examples.md`
 
 ## Related Templates
 - `tech-spec.mdc` - High-level technical planning

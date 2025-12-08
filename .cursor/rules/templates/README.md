@@ -27,7 +27,7 @@ Templates are **structured markdown documents** that define the format and conte
 - Success Criteria
 - Initial Estimation (story points, time, confidence)
 
-**Output Example:** `.claude/logs/workflows/[id]/requirements.md`
+**Output Example:** `.cursor/logs/workflows/[id]/requirements.md`
 
 ---
 
@@ -52,7 +52,7 @@ Templates are **structured markdown documents** that define the format and conte
 - Dependencies
 - Timeline & Milestones
 
-**Output Example:** `.claude/logs/workflows/[id]/tech-spec.md`
+**Output Example:** `.cursor/logs/workflows/[id]/tech-spec.md`
 
 **Related:** `lld.mdc` for detailed component design
 
@@ -72,7 +72,7 @@ Templates are **structured markdown documents** that define the format and conte
 - Performance Optimizations
 - Testing Strategy
 
-**Output Example:** `.claude/logs/workflows/[id]/lld.md`
+**Output Example:** `.cursor/logs/workflows/[id]/lld.md`
 
 ---
 
@@ -91,7 +91,7 @@ Templates are **structured markdown documents** that define the format and conte
 - Test Tools & Frameworks
 - Success Criteria
 
-**Output Example:** `.claude/logs/workflows/[id]/test-plan.md`
+**Output Example:** `.cursor/logs/workflows/[id]/test-plan.md`
 
 ---
 
@@ -106,7 +106,7 @@ Templates are **structured markdown documents** that define the format and conte
 - Expected Results
 - Test Code (actual Jest/testing-library code)
 
-**Output Example:** `.claude/logs/workflows/[id]/test-cases.md`
+**Output Example:** `.cursor/logs/workflows/[id]/test-cases.md`
 
 **Note:** Used in Phase 4 (planning) and Phase 5a (implementation)
 
@@ -132,7 +132,7 @@ Templates are **structured markdown documents** that define the format and conte
 - Lessons Learned
 - Next Steps
 
-**Output Example:** `.claude/logs/workflows/[id]/implementation-summary.md`
+**Output Example:** `.cursor/logs/workflows/[id]/implementation-summary.md`
 
 ---
 
@@ -150,7 +150,7 @@ Templates are **structured markdown documents** that define the format and conte
 - Known Issues
 - Deployment History
 
-**Output Example:** `.claude/logs/workflows/[id]/deployment-guide.md`
+**Output Example:** `.cursor/logs/workflows/[id]/deployment-guide.md`
 
 ---
 
@@ -175,7 +175,7 @@ Templates are **structured markdown documents** that define the format and conte
 - Team Information
 - Next Steps
 
-**Output Example:** `.claude/logs/workflows/[id]/confluence-page.txt`
+**Output Example:** `.cursor/logs/workflows/[id]/confluence-page.txt`
 
 **Special:** Uses Confluence markup (`h1.`, `||table||`, `{code}`, etc.)
 
@@ -243,10 +243,10 @@ confluence-page.mdc (Phase 8)
 ### Using Project Context
 
 Templates reference project-specific conventions from:
-- `.claude/project-contexts/[project]/conventions.md` - Naming, structure
-- `.claude/project-contexts/[project]/examples.md` - Code patterns
-- `.claude/project-contexts/[project]/project-config.yaml` - Tech stack
-- `.claude/project-contexts/[project]/rules.md` - Quality standards
+- `.cursor/project-contexts/[project]/conventions.md` - Naming, structure
+- `.cursor/project-contexts/[project]/examples.md` - Code patterns
+- `.cursor/project-contexts/[project]/project-config.yaml` - Tech stack
+- `.cursor/project-contexts/[project]/rules.md` - Quality standards
 
 ### Customizing Templates
 
@@ -314,7 +314,7 @@ Use clear heading hierarchy (h2, h3, h4) for navigation.
 
 Templates generate files in workflow directory:
 ```
-.claude/logs/workflows/[workflow-id]/
+.cursor/logs/workflows/[workflow-id]/
 ├── requirements.md
 ├── tech-spec.md
 ├── lld.md
@@ -337,7 +337,7 @@ Templates are MDC (Markdown Context) files:
 
 **Commit Templates:** Templates are version-controlled in `.cursor/rules/templates/`
 
-**Commit Outputs:** Generated documentation in `.claude/logs/workflows/` should:
+**Commit Outputs:** Generated documentation in `.cursor/logs/workflows/` should:
 - Be committed for project history
 - Be linked in PRs and JIRA tickets
 - Be copied to Confluence for stakeholder access
@@ -347,7 +347,7 @@ Templates are MDC (Markdown Context) files:
 - **Hooks:** `.cursor/rules/hooks/` - Lifecycle hooks that use these templates
 - **Core Rules:** `.cursor/rules/core.mdc` - Overall Aura Frog behavior
 - **Agents:** `.cursor/rules/agents/` - Agent-specific documentation patterns
-- **Project Context:** `.claude/project-contexts/[project]/` - Project conventions
+- **Project Context:** `.cursor/project-contexts/[project]/` - Project conventions
 
 ---
 

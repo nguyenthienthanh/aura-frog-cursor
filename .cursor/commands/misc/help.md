@@ -25,8 +25,8 @@ Command from Aura Frog workflow system
 ## References
 
 - Original Aura Frog command: `help`
-- Project context: `.claude/project-contexts/[project]/`
-- Workflow state: `.claude/logs/workflows/`
+- Project context: `.cursor/project-contexts/[project]/`
+- Workflow state: `.cursor/logs/workflows/`
 
 ## Notes
 

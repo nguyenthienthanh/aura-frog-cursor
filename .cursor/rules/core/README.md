@@ -81,8 +81,8 @@ To update rules:
 ## Integration with Project
 
 Project-specific configurations go in:
-- `.claude/project-contexts/[project-name]/conventions.md`
-- `.claude/project-contexts/[project-name]/rules.md`
-- `.claude/project-contexts/[project-name]/examples.md`
+- `.cursor/project-contexts/[project-name]/conventions.md`
+- `.cursor/project-contexts/[project-name]/rules.md`
+- `.cursor/project-contexts/[project-name]/examples.md`
 
 This keeps core rules generic and reusable across projects.

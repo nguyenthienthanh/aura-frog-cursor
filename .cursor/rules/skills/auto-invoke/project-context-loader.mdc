@@ -29,14 +29,14 @@ Cursor AI should activate this skill BEFORE:
 
 ### 1. Check Context Exists
 ```bash
-if [ ! -d ".claude/project-contexts" ]; then
+if [ ! -d ".cursor/project-contexts" ]; then
   echo "⚠️ Run: project:init"
 fi
 ```
 
 ### 2. Load Project Files
 
-**Location:** `.claude/project-contexts/[project]/`
+**Location:** `.cursor/project-contexts/[project]/`
 
 | File | Contains |
 |------|----------|
@@ -127,10 +127,10 @@ describe('User', () => {
 Run: `project:init`
 
 This will create:
-- .claude/project-contexts/[project]/project-config.yaml
-- .claude/project-contexts/[project]/conventions.md
-- .claude/project-contexts/[project]/rules.md
-- .claude/project-contexts/[project]/examples.md
+- .cursor/project-contexts/[project]/project-config.yaml
+- .cursor/project-contexts/[project]/conventions.md
+- .cursor/project-contexts/[project]/rules.md
+- .cursor/project-contexts/[project]/examples.md
 
 Continue with Aura Frog defaults? [yes/no]
 ```

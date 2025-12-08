@@ -194,7 +194,7 @@ saveApprovalData(approvalData);
 - Log completion
 
 ## Context Access
-- Workflow state: `.claude/logs/workflows/[workflow-id]/state.json`
+- Workflow state: `.cursor/logs/workflows/[workflow-id]/state.json`
 - Phase deliverables: From phase execution
 - Test results: From test runs
 - Coverage reports: From coverage tools

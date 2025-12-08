@@ -55,8 +55,8 @@ Phase 6: Assembling final doc... ✅
 ## References
 
 - Original Aura Frog command: `test:document`
-- Project context: `.claude/project-contexts/[project]/`
-- Workflow state: `.claude/logs/workflows/`
+- Project context: `.cursor/project-contexts/[project]/`
+- Workflow state: `.cursor/logs/workflows/`
 
 ## Notes
 

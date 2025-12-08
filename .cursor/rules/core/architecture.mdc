@@ -17,10 +17,10 @@ Dual-file architecture separates:
 ## Why Dual-File?
 
 ### Problem
-Claude Code auto-loads `.claude/CLAUDE.md` from project, but NOT plugin files.
+Claude Code auto-loads `.cursor/CLAUDE.md` from project, but NOT plugin files.
 
 ### Solution
-1. Project `.claude/CLAUDE.md` is lightweight loader
+1. Project `.cursor/CLAUDE.md` is lightweight loader
 2. It instructs Claude to read plugin CLAUDE.md
 3. Single source of truth for system instructions
 
@@ -32,7 +32,7 @@ Claude Code auto-loads `.claude/CLAUDE.md` from project, but NOT plugin files.
 
 ## File Responsibilities
 
-### Project Files (`.claude/`)
+### Project Files (`.cursor/`)
 
 | File | Purpose | Git Tracked |
 |------|---------|-------------|
@@ -41,7 +41,7 @@ Claude Code auto-loads `.claude/CLAUDE.md` from project, but NOT plugin files.
 | `settings.local.json` | Local secrets/overrides | No |
 | `project-contexts/` | Project conventions | Yes |
 
-### Global Files (`~/.claude/`)
+### Global Files (`~/.cursor/`)
 
 | File | Purpose |
 |------|---------|
@@ -58,7 +58,7 @@ Claude Code auto-loads `.claude/CLAUDE.md` from project, but NOT plugin files.
 Read: .cursor/rules/core/*.mdc
 
 ## Project Context
-Load from: .claude/project-contexts/my-app/
+Load from: .cursor/project-contexts/my-app/
 
 ## Overrides (if any)
 - Primary language: TypeScript
@@ -103,7 +103,7 @@ Read: .cursor/rules/core/*.mdc
 
 ### DO: Put Project Rules in Project Context
 ```markdown
-✅ .claude/project-contexts/my-app/rules.md:
+✅ .cursor/project-contexts/my-app/rules.md:
 # Project-specific rules
 ```
 

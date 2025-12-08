@@ -42,8 +42,8 @@ review:fix
 ## References
 
 - Original Aura Frog command: `review:fix`
-- Project context: `.claude/project-contexts/[project]/`
-- Workflow state: `.claude/logs/workflows/`
+- Project context: `.cursor/project-contexts/[project]/`
+- Workflow state: `.cursor/logs/workflows/`
 
 ## Notes
 

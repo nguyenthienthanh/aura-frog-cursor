@@ -14,9 +14,9 @@ Hooks are **guidance documents** (not executable scripts) that instruct the AI a
 **Purpose:** Validate project setup and configuration
 
 **Actions:**
-- Check for `.claude/project-contexts/` directory
+- Check for `.cursor/project-contexts/` directory
 - Verify `ccpm-config.yaml` exists
-- Check `.claude/settings.local.json`
+- Check `.cursor/settings.local.json`
 - Verify `.envrc` environment configuration
 - Display setup reminder if incomplete
 - Require user choice to proceed or cancel
@@ -219,8 +219,8 @@ Hooks track token usage throughout workflow:
 ## Context Access
 
 Hooks access:
-- **Workflow state:** `.claude/logs/workflows/[workflow-id]/state.json`
-- **Project context:** `.claude/project-contexts/[project]/`
+- **Workflow state:** `.cursor/logs/workflows/[workflow-id]/state.json`
+- **Project context:** `.cursor/project-contexts/[project]/`
 - **Phase definitions:** From CLAUDE.md or plugin config
 - **Deliverables:** From phase execution
 - **Metrics:** Test results, coverage, linter output, etc.
@@ -254,7 +254,7 @@ All hooks include error handling:
 - **Templates:** `.cursor/rules/templates/` - Documentation templates used in phases
 - **Core Rules:** `.cursor/rules/core.mdc` - Overall Aura Frog behavior
 - **Agents:** `.cursor/rules/agents/` - Specialized agent instructions
-- **Project Context:** `.claude/project-contexts/[project]/` - Project-specific config
+- **Project Context:** `.cursor/project-contexts/[project]/` - Project-specific config
 
 ---
 

@@ -41,8 +41,8 @@ AI:
 ## References
 
 - Original Aura Frog command: `bugfix`
-- Project context: `.claude/project-contexts/[project]/`
-- Workflow state: `.claude/logs/workflows/`
+- Project context: `.cursor/project-contexts/[project]/`
+- Workflow state: `.cursor/logs/workflows/`
 
 ## Notes
 

@@ -282,5 +282,5 @@ Brief description and purpose.
 ## References
 - Project context: `.cursor/project-contexts/[project]/`
 - Related phases: Phase 7 (Verify), Phase 9 (Share)
-- Templates: `~/.claude/plugins/marketplaces/aurafrog/aura-frog/templates/`
+- Templates: `~/.cursor/plugins/marketplaces/aurafrog/aura-frog/templates/`
 - Skills: `documentation`

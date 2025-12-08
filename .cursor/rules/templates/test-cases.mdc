@@ -338,9 +338,9 @@ it('handles user interactions', async () => {
 ## Project Customization
 
 Reference project-specific testing patterns:
-- **Test utilities:** `.claude/project-contexts/[project]/examples.md`
-- **Mock data:** `.claude/project-contexts/[project]/test-data/`
-- **Testing conventions:** `.claude/project-contexts/[project]/conventions.md`
+- **Test utilities:** `.cursor/project-contexts/[project]/examples.md`
+- **Mock data:** `.cursor/project-contexts/[project]/test-data/`
+- **Testing conventions:** `.cursor/project-contexts/[project]/conventions.md`
 
 ## Related Templates
 - `test-plan.mdc` - Overall testing strategy

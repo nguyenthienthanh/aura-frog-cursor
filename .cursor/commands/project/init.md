@@ -7,7 +7,7 @@ Initializes Aura Frog system for a project by analyzing the codebase, extracting
 **What it does:**
 1. Auto-detects project type, framework, and tech stack
 2. Indexes project structure and conventions
-3. Creates `.claude/project-contexts/[project]/` with rules and examples
+3. Creates `.cursor/project-contexts/[project]/` with rules and examples
 4. Generates project-specific configuration files
 5. Sets up environment variable templates
 6. Creates CLAUDE.md with agent banner instructions
@@ -46,13 +46,13 @@ Output: Detects Laravel + Vue, activates backend-laravel and web-vuejs agents
 ## References
 
 - Related commands: `/project:regen`, `/workflow:start`, `/setup:integrations`
-- Created files: `.claude/project-contexts/[project]/`
-- Configuration: `.claude/ccpm-config.yaml`
-- Agent banner: `.claude/CLAUDE.md`
+- Created files: `.cursor/project-contexts/[project]/`
+- Configuration: `.cursor/ccpm-config.yaml`
+- Agent banner: `.cursor/CLAUDE.md`
 
 ## Notes
 
-**Critical:** `.claude/CLAUDE.md` MUST exist for Aura Frog to work. It contains the agent identification banner format and points to plugin instructions.
+**Critical:** `.cursor/CLAUDE.md` MUST exist for Aura Frog to work. It contains the agent identification banner format and points to plugin instructions.
 
 **Next Steps:**
 1. Review generated files

@@ -668,7 +668,7 @@ State management includes automatic token tracking:
 - **Phase Guides**: `.cursor/workflows/phases/`
 - **Workflow System**: `.cursor/rules/core/workflow-system.mdc`
 - **Quick Reference**: `.cursor/workflows/QUICK_REFERENCE.md`
-- **Aura Frog Guide**: `~/.claude/plugins/marketplaces/aurafrog/aura-frog/SESSION_CONTINUATION_GUIDE.md`
+- **Aura Frog Guide**: `~/.cursor/plugins/marketplaces/aurafrog/aura-frog/SESSION_CONTINUATION_GUIDE.md`
 
 ---
 

@@ -289,9 +289,9 @@ Lists all outputs from the testing phases.
 ## Project Customization
 
 Reference project-specific testing conventions:
-- **Testing framework:** `.claude/project-contexts/[project]/project-config.yaml`
-- **Test patterns:** `.claude/project-contexts/[project]/examples.md`
-- **Coverage requirements:** `.claude/project-contexts/[project]/rules.md`
+- **Testing framework:** `.cursor/project-contexts/[project]/project-config.yaml`
+- **Test patterns:** `.cursor/project-contexts/[project]/examples.md`
+- **Coverage requirements:** `.cursor/project-contexts/[project]/rules.md`
 
 ## Related Templates
 - `test-cases.mdc` - Detailed individual test case specifications

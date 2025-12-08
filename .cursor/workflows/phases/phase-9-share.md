@@ -311,5 +311,5 @@ bash scripts/confluence/create-page.sh \
 ## References
 - Project context: `.cursor/project-contexts/[project]/`
 - Related phases: Phase 8 (Document)
-- Integration setup: `~/.claude/plugins/marketplaces/aurafrog/aura-frog/docs/INTEGRATION_SETUP_GUIDE.md`
-- Scripts: `~/.claude/plugins/marketplaces/aurafrog/aura-frog/scripts/`
+- Integration setup: `~/.cursor/plugins/marketplaces/aurafrog/aura-frog/docs/INTEGRATION_SETUP_GUIDE.md`
+- Scripts: `~/.cursor/plugins/marketplaces/aurafrog/aura-frog/scripts/`

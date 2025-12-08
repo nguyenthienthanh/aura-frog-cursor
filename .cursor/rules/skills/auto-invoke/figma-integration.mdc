@@ -316,7 +316,7 @@ export FIGMA_ACCESS_TOKEN="figd_your-token-here"
 
 ```bash
 # Test Figma connection
-bash ~/.claude/plugins/marketplaces/aurafrog/aura-frog/scripts/figma-test.sh
+bash ~/.cursor/plugins/marketplaces/aurafrog/aura-frog/scripts/figma-test.sh
 
 # Expected output:
 # ✅ Figma connection successful
@@ -605,7 +605,7 @@ I'll extract:
 - Add to `.gitignore`:
   ```
   .envrc
-  .claude/logs/figma/*.json
+  .cursor/logs/figma/*.json
   ```
 - Tokens can be deleted at: https://www.figma.com/settings
 

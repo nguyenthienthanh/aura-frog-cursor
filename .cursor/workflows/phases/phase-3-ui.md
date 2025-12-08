@@ -136,7 +136,7 @@ After approval, IMMEDIATELY proceed to Phase 4 (Test Planning).
 - Pure refactoring with no visual changes
 - Bug fix with no UI impact
 
-**Reference**: `~/.claude/plugins/marketplaces/aurafrog/aura-frog/skills/workflow-orchestrator/phase-skipping.md`
+**Reference**: `~/.cursor/plugins/marketplaces/aurafrog/aura-frog/skills/workflow-orchestrator/phase-skipping.md`
 
 ## References
 - Project context: `.cursor/project-contexts/[project]/`

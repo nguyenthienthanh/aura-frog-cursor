@@ -166,8 +166,8 @@ Load documentation templates and collect changes summary.
 Prepare notification data (JIRA, Confluence, Slack).
 
 ## Context Access
-- Workflow state: `.claude/logs/workflows/[workflow-id]/state.json`
-- Project context: `.claude/project-contexts/[project]/`
+- Workflow state: `.cursor/logs/workflows/[workflow-id]/state.json`
+- Project context: `.cursor/project-contexts/[project]/`
 - Current phase: Retrieved from workflow state
 - Previous deliverables: From prior phase state
 - Phase definitions: From CLAUDE.md or plugin configuration

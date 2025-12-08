@@ -295,9 +295,9 @@ Tracks stakeholder approval.
 ## Project Customization
 
 Reference project-specific conventions:
-- **File naming:** `.claude/project-contexts/[project]/conventions.md`
-- **Code patterns:** `.claude/project-contexts/[project]/examples.md`
-- **Tech stack:** `.claude/project-contexts/[project]/project-config.yaml`
+- **File naming:** `.cursor/project-contexts/[project]/conventions.md`
+- **Code patterns:** `.cursor/project-contexts/[project]/examples.md`
+- **Tech stack:** `.cursor/project-contexts/[project]/project-config.yaml`
 
 ## Related Templates
 - `requirements.mdc` - Phase 1 output, input to this template

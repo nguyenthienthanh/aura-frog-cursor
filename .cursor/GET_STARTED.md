@@ -705,7 +705,7 @@ cat .cursor/commands/workflow/start.md
 - **Quick Reference:** `.cursor/commands/QUICK_REFERENCE.md`
 - **Full Guide:** `.cursor/MASTER_CONVERSION_REPORT.md`
 - **Workflow Help:** `.cursor/workflows/QUICK_REFERENCE.md`
-- **Aura Frog Docs:** `~/.claude/plugins/marketplaces/aurafrog/aura-frog/`
+- **Aura Frog Docs:** `~/.cursor/plugins/marketplaces/aurafrog/aura-frog/`
 
 ---
 

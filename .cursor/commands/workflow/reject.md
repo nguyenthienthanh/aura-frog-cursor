@@ -55,8 +55,8 @@ Updated requirements with additional edge cases
 ## References
 
 - Original Aura Frog command: `workflow:reject`
-- Project context: `.claude/project-contexts/[project]/`
-- Workflow state: `.claude/logs/workflows/`
+- Project context: `.cursor/project-contexts/[project]/`
+- Workflow state: `.cursor/logs/workflows/`
 
 ## Notes
 

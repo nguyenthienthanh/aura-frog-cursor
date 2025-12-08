@@ -226,8 +226,8 @@ Story points, time estimate, and confidence level using standard Agile estimatio
 ## Project Customization
 
 Reference project-specific information:
-- **Acceptance criteria format:** `.claude/project-contexts/[project]/conventions.md`
-- **Estimation guidelines:** `.claude/project-contexts/[project]/examples.md`
+- **Acceptance criteria format:** `.cursor/project-contexts/[project]/conventions.md`
+- **Estimation guidelines:** `.cursor/project-contexts/[project]/examples.md`
 - **Story point reference:** `docs/STORY_POINTS_GUIDE.md`
 
 ## Related Templates

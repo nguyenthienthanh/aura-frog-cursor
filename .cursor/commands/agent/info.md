@@ -31,8 +31,8 @@ agent:info ui-designer
 ## References
 
 - Original Aura Frog command: `agent:info`
-- Project context: `.claude/project-contexts/[project]/`
-- Workflow state: `.claude/logs/workflows/`
+- Project context: `.cursor/project-contexts/[project]/`
+- Workflow state: `.cursor/logs/workflows/`
 
 ## Notes
 

@@ -140,7 +140,7 @@ Extracted:
 ### Step 2: Check Project Context
 ```bash
 # Read these files in order:
-1. .claude/project-contexts/[project]/project-config.yaml
+1. .cursor/project-contexts/[project]/project-config.yaml
 2. package.json / composer.json / pubspec.yaml / go.mod
 3. Check CWD path for project hints
 ```

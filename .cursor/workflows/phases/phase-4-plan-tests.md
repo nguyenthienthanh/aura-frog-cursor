@@ -159,6 +159,6 @@ After approval, IMMEDIATELY proceed to Phase 5a (TDD RED - Write Failing Tests).
 ## References
 - Project context: `.cursor/project-contexts/[project]/`
 - Related phases: Phase 3 (UI), Phase 5a (TDD RED)
-- Templates: `~/.claude/plugins/marketplaces/aurafrog/aura-frog/templates/test-plan.md`
+- Templates: `~/.cursor/plugins/marketplaces/aurafrog/aura-frog/templates/test-plan.md`
 - Rules: `.cursor/rules/core/tdd-workflow.mdc`
 - Skills: `test-writer`

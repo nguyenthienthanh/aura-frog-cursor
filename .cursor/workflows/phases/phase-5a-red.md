@@ -193,4 +193,4 @@ const ShareModal = ({ isOpen }) => {
 - Related phases: Phase 4 (Test Planning), Phase 5b (TDD GREEN)
 - Rules: `.cursor/rules/core/tdd-workflow.mdc`
 - Skills: `test-writer`
-- TDD Guide: `~/.claude/plugins/marketplaces/aurafrog/aura-frog/TESTING_GUIDE.md`
+- TDD Guide: `~/.cursor/plugins/marketplaces/aurafrog/aura-frog/TESTING_GUIDE.md`

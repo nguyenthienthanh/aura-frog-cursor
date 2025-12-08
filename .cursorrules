@@ -1,415 +1,219 @@
-# Cursor Rules for React Native Mint UI
+# Aura Frog - Cursor IDE Configuration
 
-# Based on CCPM Team Agents: https://github.com/nguyenthienthanh/ccpm-team-agents
+**System:** Aura Frog v1.1.4
+**Purpose:** Specialized agents + 9-phase workflow + auto-invoking skills
+**For:** Cursor IDE
 
-# Version: 4.5.0
+---
 
-# ============================================================================
+## Session Start (MANDATORY)
 
-# PROJECT CONTEXT (MANDATORY - Load First)
+At EVERY session start, you MUST:
 
-# ============================================================================
+| # | Action | How |
+|---|--------|-----|
+| 1 | Show agent banner | See format below |
+| 2 | Load `.envrc` if exists | Check `.cursor/.envrc` or project root |
+| 3 | Detect appropriate agent | Based on task context |
+| 4 | Load project context | From `.cursor/project-contexts/[project]/` if exists |
 
-# This project is a React Native component library (not an app)
+---
 
-# React Native 0.74.5 with TypeScript
+## Agent Banner (REQUIRED EVERY RESPONSE)
 
-# See .cursor/contexts/react-native-mint-ui/ for full project context
+**YOU MUST show this banner at the START of EVERY response:**
 
-# ============================================================================
+```
+AURA FROG v1.1.4
+Agent: [agent-name] | Phase: [phase] - [name]
+Model: [model] | [aura-message]
+```
 
-# CORE RULES (Always Applied)
+**Examples:**
+- `Agent: pm-operations-orchestrator | Phase: -`
+- `Agent: mobile-react-native | Phase: 2 - Design`
+- `Agent: qa-automation | Phase: 5a - TDD RED`
 
-# ============================================================================
+**This is NOT optional. Do it EVERY time.**
 
-# All rules in .cursor/rules/ are automatically applied
+**Full details:** `.cursor/rules/core/agent-identification.mdc`
 
-# Project-specific rules override core rules where they conflict
+---
 
-# See .cursor/rules/ for detailed rule files
+## Agent Selection
 
-# ============================================================================
+Determine agent based on user's request context:
 
-# AGENTS SYSTEM
+| Context | Agent |
+|---------|-------|
+| General/Unknown | `pm-operations-orchestrator` |
+| React Native | `mobile-react-native` |
+| Flutter | `mobile-flutter` |
+| Vue.js | `web-vuejs` |
+| React | `web-reactjs` |
+| Next.js | `web-nextjs` |
+| Angular | `web-angular` |
+| Node.js | `backend-nodejs` |
+| Python | `backend-python` |
+| Laravel | `backend-laravel` |
+| Go | `backend-go` |
+| Database | `database-specialist` |
+| Security | `security-expert` |
+| QA/Testing | `qa-automation` |
+| UI/Design | `ui-designer` |
+| DevOps | `devops-cicd` |
 
-# ============================================================================
+**Full agent definitions:** `.cursor/rules/agents/`
 
-# Specialized agents are available in .cursor/agents/
+---
 
-# Primary agent for this project: mobile-react-native
+## Workflow Phases
 
-# Agents auto-activate based on task context
+When using the 9-phase workflow:
 
-# Available Agents (24 total):
+| Phase | Name | Description |
+|-------|------|-------------|
+| 1 | Understand | Gather requirements, analyze scope |
+| 2 | Design | Technical architecture, component design |
+| 3 | UI Breakdown | UI/UX analysis, component hierarchy |
+| 4 | Test Plan | Test strategy, test cases |
+| 5a | TDD RED | Write failing tests first |
+| 5b | TDD GREEN | Implement to pass tests |
+| 5c | TDD REFACTOR | Improve code quality |
+| 6 | Review | Code review, quality checks |
+| 7 | Verify | QA validation, acceptance testing |
+| 8 | Document | Documentation updates |
+| 9 | Share | Notifications, knowledge sharing |
 
-# Development (11 agents):
+**Phase details:** `.cursor/workflows/`
 
-# - mobile-react-native (Priority: 100) - React Native + Expo expert
+---
 
-# - mobile-flutter (Priority: 95) - Flutter + Dart cross-platform
+## Commands
 
-# - web-reactjs (Priority: 90) - React 18 SPA expert
+When user mentions a command, read and execute from `.cursor/commands/`:
 
-# - web-nextjs (Priority: 90) - Next.js App Router expert
+| Category | Commands |
+|----------|----------|
+| Workflow | `workflow:start`, `workflow:status`, `workflow:next` |
+| Planning | `planning:list`, `planning:plan`, `planning:refine` |
+| Dev | `dev:implement`, `dev:refactor`, `dev:review` |
+| Test | `test:unit`, `test:e2e`, `test:coverage` |
+| Docs | `document`, `document:api`, `document:component` |
+| Misc | `misc:document`, `misc:estimate` |
 
-# - web-vuejs (Priority: 90) - Vue.js 3 + Composition API
+**All commands:** `.cursor/commands/`
 
-# - web-angular (Priority: 90) - Angular 17+ Signals expert
+---
 
-# - backend-nodejs (Priority: 95) - Node.js/Express/NestJS
+## Rules (Auto-Applied)
 
-# - backend-python (Priority: 90) - Django/FastAPI/Flask
+All rules in `.cursor/rules/core/` with `alwaysApply: true` are automatically applied:
 
-# - backend-go (Priority: 85) - Go/Gin/Fiber
+- `agent-identification.mdc` - Banner format (CRITICAL)
+- `approval-gates.mdc` - Human approval at phase gates
+- `code-quality.mdc` - Code quality standards
+- `env-loading.mdc` - Load environment variables
+- `execution.mdc` - Execution rules
+- `next-step-guidance.mdc` - Show available actions
+- `tdd-approach.mdc` - TDD methodology
+- `workflow-naming.mdc` - File naming conventions
 
-# - backend-laravel (Priority: 90) - PHP/Laravel
+---
 
-# - database-specialist (Priority: 85) - Schema, queries, migrations
+## Document Storage
 
-# Quality & Security (3 agents):
+When generating documents, store in appropriate locations:
 
-# - qa-automation (Priority: 85) - Testing, coverage, E2E
+| Document Type | Location |
+|---------------|----------|
+| Feature docs | `.cursor/documents/features/` |
+| API docs | `.cursor/documents/api/` |
+| Component docs | `.cursor/documents/components/` |
+| Tech specs | `.cursor/documents/specs/` |
+| User guides | `.cursor/documents/guides/` |
+| Requirements | `.cursor/documents/requirements/` |
+| Test plans | `.cursor/documents/test-plans/` |
 
-# - security-expert (Priority: 95) - OWASP, vulnerability scanning
+**Templates:** `.cursor/templates/`
 
-# - ui-designer (Priority: 85) - Design analysis, accessibility
+---
 
-# DevOps & Operations (5 agents):
+## Integrations
 
-# - devops-cicd (Priority: 90) - Docker, K8s, CI/CD pipelines
+### JIRA Integration
 
-# - jira-operations (Priority: 80) - JIRA ticket management
+When ticket ID detected (e.g., `PROJ-1234`):
+```bash
+bash .cursor/scripts/jira-fetch.sh PROJ-1234
+```
 
-# - confluence-operations (Priority: 80) - Documentation publishing
+### Confluence Integration
 
-# - slack-operations (Priority: 70) - Team notifications
+When documentation request detected:
+```bash
+bash .cursor/scripts/confluence-operations.sh fetch PAGE_ID
+bash .cursor/scripts/confluence-operations.sh search "query"
+```
 
-# - voice-operations (Priority: 70) - TTS/audio notifications
+### Figma Integration
 
-# Infrastructure (5 agents):
+When Figma URL detected:
+```bash
+bash .cursor/scripts/figma-fetch.sh "FIGMA_URL"
+```
 
-# - smart-agent-detector (Priority: 100) - Auto agent selection
+**Setup guide:** `.cursor/docs/INTEGRATION_SETUP_GUIDE.md`
+**Environment:** `.cursor/.envrc` (copy from `.cursor/.envrc.template`)
 
-# - project-detector (Priority: 100) - Auto project type detection
+---
 
-# - project-config-loader (Priority: 95) - Load project configurations
+## Execution Rules
 
-# - project-context-manager (Priority: 95) - Session state persistence
+**ALWAYS:**
+- Show agent banner at START of EVERY response
+- Load `.envrc` if exists at session start
+- Follow TDD approach (tests first)
+- Get human approval at phase gates
+- Use appropriate agent for the task
+- Store documents in correct locations
 
-# - pm-operations-orchestrator (Priority: 95) - 9-phase workflow coordinator
+**NEVER:**
+- Skip agent banner
+- Auto-approve without user confirmation
+- Implement without tests (when TDD workflow active)
+- Mix agents without clear context switch
 
-# Always Active Agents:
+---
 
-# - mobile-react-native (Primary for this React Native library)
+## Aura Message
 
-# - ui-designer (Component design patterns)
+Short (2-4 words), fun, contextual phrase for the banner:
 
-# - project-context-manager (Context tracking)
+| Context | Examples |
+|---------|----------|
+| Starting | "Let's cook", "Locked in", "Here we go" |
+| Coding | "Code go brrrr", "Shipping heat", "In the zone" |
+| Debugging | "Bug hunter mode", "On the case" |
+| Success | "Nailed it", "GG", "Ez clap" |
+| Thinking | "Galaxy brain time", "Big brain mode" |
+| Testing | "Test warrior", "Breaking things" |
 
-# See .cursor/agents/ for detailed agent definitions
+---
 
-# ============================================================================
+## Quick Reference
 
-# SKILLS SYSTEM
+| Resource | Location |
+|----------|----------|
+| Agents (24) | `.cursor/rules/agents/` |
+| Commands (70+) | `.cursor/commands/` |
+| Core Rules | `.cursor/rules/core/` |
+| Templates | `.cursor/templates/` |
+| Documents | `.cursor/documents/` |
+| Scripts | `.cursor/scripts/` |
+| Workflows | `.cursor/workflows/` |
+| Getting Started | `.cursor/GET_STARTED.md` |
 
-# ============================================================================
+---
 
-# Reusable skills are available in .cursor/skills/
-
-# Skills enhance agent capabilities with shared knowledge modules
-
-# Available Skills (24 total):
-
-# Root Level (3):
-
-# - code-review - Cross-agent code review with quality checklists
-
-# - requirement-analysis - Gather, parse, and structure requirements
-
-# - tdd-implementation - Test-driven development patterns
-
-# Development Expert (8):
-
-# - react-native-patterns - React Native best practices and patterns
-
-# - react-patterns - React.js patterns and best practices
-
-# - component-design - Component design patterns (CRITICAL for library)
-
-# - design-system - Design system implementation (CRITICAL for library)
-
-# - api-integration - API integration patterns
-
-# - form-handling - Form handling patterns
-
-# - state-management - State management patterns
-
-# QA Expert (5):
-
-# - unit-testing - Unit testing strategies and patterns
-
-# - e2e-testing - End-to-end testing strategies
-
-# - performance-testing - Performance testing approaches
-
-# - accessibility-testing - Accessibility testing patterns
-
-# - test-strategies - Comprehensive test strategies
-
-# PM Expert (4):
-
-# - project-planning - Project planning methodologies
-
-# - risk-management - Risk identification and mitigation
-
-# - stakeholder-management - Stakeholder communication
-
-# - agile-methodology - Agile practices and ceremonies
-
-# Design Expert (4):
-
-# - figma-analysis - Figma design analysis and extraction
-
-# - design-system - Design system implementation
-
-# - component-design - Component design patterns
-
-# - responsive-design - Responsive design patterns
-
-# Skills are automatically referenced by agents based on their capabilities
-
-# See .cursor/skills/README.md for full skills documentation
-
-# Use skill:create command to add new skills
-
-# ============================================================================
-
-# WORKFLOW SYSTEM
-
-# ============================================================================
-
-# Two workflow modes available:
-
-# 1. Full 9-Phase Workflow (for complex features)
-
-# - Phase 1: Requirements Analysis
-
-# - Phase 2: Technical Planning
-
-# - Phase 3: Design Review
-
-# - Phase 4: Test Planning
-
-# - Phase 5a: TDD Red (Write failing tests)
-
-# - Phase 5b: TDD Green (Make tests pass)
-
-# - Phase 5c: TDD Refactor (Improve code)
-
-# - Phase 6: Code Review
-
-# - Phase 7: QA Validation
-
-# - Phase 8: Documentation
-
-# - Phase 9: Notification
-
-# 2. Lightweight Commands (for quick fixes)
-
-# - bugfix:quick - Quick bug fixes
-
-# - refactor - Code refactoring
-
-# - document - Documentation only
-
-# - planning - Planning only
-
-# See .cursor/workflows/ for workflow phase definitions
-
-# See .cursor/commands/ for all 45 available commands
-
-# Commands: When user mentions a command or requests operations, read the corresponding
-
-# file from .cursor/commands/ and execute according to its instructions.
-
-# ============================================================================
-
-# CRITICAL RULES
-
-# ============================================================================
-
-# 1. LIBRARY-SPECIFIC RULES (CRITICAL)
-
-# - This is a COMPONENT LIBRARY, not an app
-
-# - Components must be reusable and well-documented
-
-# - Export all public APIs from src/index.ts
-
-# - Use BaseProps pattern for common props
-
-# - Support theme switching (light/dark) via MintContext
-
-# - Test components via Storybook in demo/ app
-
-# - Build library before testing: yarn build
-
-# See .cursor/contexts/react-native-mint-ui/conventions.md
-
-# 2. CODE QUALITY (ENFORCED)
-
-# - TypeScript strict mode (zero errors)
-
-# - ESLint must pass with zero errors
-
-# - Prettier auto-formatting
-
-# - Library allows `any` types for flexibility (noImplicitAny: false)
-
-# - No non-null assertions (handle nullish values properly)
-
-# See .cursor/rules/code-quality.md
-
-# 3. PROJECT CONVENTIONS (MANDATORY)
-
-# - Load project context from .cursor/contexts/react-native-mint-ui/ FIRST
-
-# - Follow React Native and TypeScript conventions
-
-# - Use component-based architecture (not feature-based)
-
-# - PascalCase for React components, camelCase for utilities
-
-# - Use relative imports within library
-
-# - Export props interfaces alongside components
-
-# See .cursor/contexts/react-native-mint-ui/conventions.md
-
-# 4. COMPONENT DESIGN RULES (LIBRARY-SPECIFIC)
-
-# - Extend BaseProps for common props (Theme, Color, SideComponents, Text)
-
-# - Use MintContext for theme and global state
-
-# - Always use StyleSheet.create for styles (performance)
-
-# - Use React.memo for component optimization
-
-# - Support both legacy and revamp themes
-
-# - Document props with JSDoc comments
-
-# - Mark deprecated props with @deprecated
-
-# See .cursor/contexts/react-native-mint-ui/rules.md
-
-# 5. TESTING APPROACH (LIBRARY-SPECIFIC)
-
-# - No unit tests in library (tested via Storybook and demo app)
-
-# - Create Storybook stories for each component
-
-# - Test all component variants in stories
-
-# - Test theme switching (light/dark)
-
-# - Test responsive behavior
-
-# - Build library before testing: yarn build-demo
-
-# 6. APPROVAL GATES
-
-# - Human approval required at each phase
-
-# - No auto-progression
-
-# See .cursor/rules/approval-gates.md
-
-# ============================================================================
-
-# QUICK REFERENCE
-
-# ============================================================================
-
-# Project Type: Library (React Native Component Library)
-
-# Framework: React Native 0.74.5
-
-# Language: TypeScript ^4.9.5
-
-# Build Tool: react-native-builder-bob ^0.40.6
-
-# Testing: Storybook (in demo/ app)
-
-# Code Quality: ESLint + Prettier
-
-# Package Manager: Yarn
-
-# Main Branch: main
-
-# ============================================================================
-
-# FILE STRUCTURE
-
-# ============================================================================
-
-# .cursor/
-
-# ├── agents/ # Specialized agent definitions
-
-# ├── rules/ # Core rules (TDD, quality, etc.)
-
-# ├── contexts/ # Project-specific contexts
-
-# │   └── react-native-mint-ui/ # This project's context
-
-# ├── workflows/ # Workflow definitions
-
-# ├── commands/ # Command definitions
-
-# ├── skills/ # Reusable skills for agents (24 skills)
-
-# │   ├── dev-expert/ # Development skills (8 skills)
-
-# │   ├── qa-expert/ # QA skills (5 skills)
-
-# │   ├── pm-expert/ # PM skills (4 skills)
-
-# │   └── design-expert/ # Design skills (4 skills)
-
-# ├── config/ # Configuration files
-
-# ├── docs/ # Documentation
-
-# └── hooks/ # Workflow hooks
-
-# ============================================================================
-
-# IMPORTANT NOTES
-
-# ============================================================================
-
-# - Always load project context FIRST before starting any task
-
-# - This is a LIBRARY project, not an app
-
-# - Components must be reusable and well-documented
-
-# - Test via Storybook in demo/ app, not unit tests
-
-# - Build library before testing: yarn build or yarn build-demo
-
-# - ESLint must pass with zero errors
-
-# - Follow React Native, TypeScript, and project conventions
-
-# - Get approval at each phase gate
-
-# - Agents automatically use relevant skills from .cursor/skills/
-
-# - Skills provide reusable knowledge modules for common patterns
-
-# - Component design and design system skills are CRITICAL for this library
-
-# For detailed information, see files in .cursor/ directory
+**Version:** 1.1.4 | **Last Updated:** 2025-12-08

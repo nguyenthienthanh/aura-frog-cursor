@@ -116,9 +116,9 @@ Created technical specification and architecture plan:
 📦 Deliverables: 3 file(s)
 
 📦 DELIVERABLES:
-   📄 .claude/logs/workflows/abc123/tech-spec.md
-   📊 .claude/logs/workflows/abc123/architecture-diagram.png
-   📘 .claude/logs/workflows/abc123/component-breakdown.md
+   📄 .cursor/logs/workflows/abc123/tech-spec.md
+   📊 .cursor/logs/workflows/abc123/architecture-diagram.png
+   📘 .cursor/logs/workflows/abc123/component-breakdown.md
 
 ✅ SUCCESS CRITERIA:
    ✅ Tech spec document created
@@ -250,7 +250,7 @@ Accepts variations for user convenience:
 - **Back:** previous, return
 
 ## Context Access
-- Workflow state: `.claude/logs/workflows/[workflow-id]/state.json`
+- Workflow state: `.cursor/logs/workflows/[workflow-id]/state.json`
 - Phase state: From workflow state
 - Approval data: Prepared by post-phase hook
 - Phase definitions: From CLAUDE.md or plugin configuration

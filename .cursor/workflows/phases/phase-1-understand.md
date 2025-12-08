@@ -119,6 +119,6 @@ After user approves, IMMEDIATELY proceed to Phase 2 (Design) without waiting for
 ## References
 - Project context: `.cursor/project-contexts/[project]/`
 - Related phases: Phase 2 (Design)
-- Templates: `~/.claude/plugins/marketplaces/aurafrog/aura-frog/templates/requirements-doc.md`
+- Templates: `~/.cursor/plugins/marketplaces/aurafrog/aura-frog/templates/requirements-doc.md`
 - Rules: `.cursor/rules/core/cross-review.mdc`
 - Skills: `jira-integration`, `project-context-loader`

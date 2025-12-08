@@ -25,8 +25,8 @@ No examples available. Refer to original Aura Frog documentation.
 ## References
 
 - Original Aura Frog command: `docker:create`
-- Project context: `.claude/project-contexts/[project]/`
-- Workflow state: `.claude/logs/workflows/`
+- Project context: `.cursor/project-contexts/[project]/`
+- Workflow state: `.cursor/logs/workflows/`
 
 ## Notes
 

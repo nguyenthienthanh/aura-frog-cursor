@@ -150,6 +150,6 @@ After approval, IMMEDIATELY proceed to Phase 3 (UI Breakdown). If no UI involved
 ## References
 - Project context: `.cursor/project-contexts/[project]/`
 - Related phases: Phase 1 (Understand), Phase 3 (UI)
-- Templates: `~/.claude/plugins/marketplaces/aurafrog/aura-frog/templates/tech-spec.md`
+- Templates: `~/.cursor/plugins/marketplaces/aurafrog/aura-frog/templates/tech-spec.md`
 - Rules: `.cursor/rules/core/kiss-principle.mdc`, `.cursor/rules/core/architecture-patterns.mdc`
 - Skills: `api-designer`, `refactor-expert`

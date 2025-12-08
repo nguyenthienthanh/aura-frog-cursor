@@ -30,8 +30,8 @@ skill:create database-optimization qa-expert
 ## References
 
 - Original Aura Frog command: `skill:create`
-- Project context: `.claude/project-contexts/[project]/`
-- Workflow state: `.claude/logs/workflows/`
+- Project context: `.cursor/project-contexts/[project]/`
+- Workflow state: `.cursor/logs/workflows/`
 
 ## Notes
 

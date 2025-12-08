@@ -29,8 +29,8 @@ The workflow includes:
 
 1. **Initialize Workflow**
    - Generate unique workflow ID
-   - Create workflow state file in `.claude/logs/workflows/{workflow-id}/`
-   - Load project context from `.claude/project-contexts/[project]/`
+   - Create workflow state file in `.cursor/logs/workflows/{workflow-id}/`
+   - Load project context from `.cursor/project-contexts/[project]/`
 
 2. **Detect and Activate Agents**
    - Analyze task description for keywords
@@ -72,9 +72,9 @@ Analyzes bug, creates fix strategy, implements with tests.
 ## References
 
 - Related commands: `/workflow:status`, `/workflow:approve`, `/workflow:handoff`
-- Project context: `.claude/project-contexts/[project]/project-config.yaml`
-- Workflow state: `.claude/logs/workflows/{workflow-id}/workflow-state.json`
-- Skills: `.claude/rules/skills/auto-invoke/workflow-orchestrator.mdc`
+- Project context: `.cursor/project-contexts/[project]/project-config.yaml`
+- Workflow state: `.cursor/logs/workflows/{workflow-id}/workflow-state.json`
+- Skills: `.cursor/rules/skills/auto-invoke/workflow-orchestrator.mdc`
 
 ## Notes
 

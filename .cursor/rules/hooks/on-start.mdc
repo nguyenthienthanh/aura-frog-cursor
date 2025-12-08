@@ -38,10 +38,10 @@ Phase 1: Understand begins
 ## Actions
 
 ### 1. Check Project Context
-Verify `.claude/project-contexts/` directory exists and contains at least one project configuration:
+Verify `.cursor/project-contexts/` directory exists and contains at least one project configuration:
 
 ```bash
-if [ ! -d ".claude/project-contexts" ] || [ -z "$(ls -A .claude/project-contexts 2>/dev/null)" ]; then
+if [ ! -d ".cursor/project-contexts" ] || [ -z "$(ls -A .cursor/project-contexts 2>/dev/null)" ]; then
   MISSING_PROJECT_CONTEXT=true
 else
   MISSING_PROJECT_CONTEXT=false
@@ -52,7 +52,7 @@ fi
 Verify `ccpm-config.yaml` exists (project-level or plugin-level):
 
 ```bash
-if [ -f ".claude/ccpm-config.yaml" ]; then
+if [ -f ".cursor/ccpm-config.yaml" ]; then
   MISSING_CONFIG=false
 elif [ -f "$PLUGIN_DIR/ccpm-config.yaml" ]; then
   MISSING_CONFIG=false
@@ -62,10 +62,10 @@ fi
 ```
 
 ### 3. Check Settings
-Verify `.claude/settings.local.json` exists:
+Verify `.cursor/settings.local.json` exists:
 
 ```bash
-if [ ! -f ".claude/settings.local.json" ]; then
+if [ ! -f ".cursor/settings.local.json" ]; then
   MISSING_SETTINGS=true
 else
   MISSING_SETTINGS=false
@@ -93,10 +93,10 @@ If any checks failed, show comprehensive setup reminder with:
 
 ## Context Access
 - Project root directory: Current working directory
-- Plugin directory: `~/.claude/plugins/marketplaces/aurafrog/aura-frog/`
+- Plugin directory: `~/.cursor/plugins/marketplaces/aurafrog/aura-frog/`
 - Required files:
-  - `.claude/project-contexts/[project]/project-config.yaml`
-  - `.claude/settings.local.json`
+  - `.cursor/project-contexts/[project]/project-config.yaml`
+  - `.cursor/settings.local.json`
   - `.envrc`
   - `ccpm-config.yaml` (project or plugin level)
 
@@ -124,27 +124,27 @@ This hook is **blocking** - it requires user decision before proceeding:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 🔧 Missing components detected:
-   ❌ Project context (.claude/project-contexts/)
+   ❌ Project context (.cursor/project-contexts/)
    ❌ Aura Frog configuration (ccpm-config.yaml)
-   ❌ Settings file (.claude/settings.local.json)
+   ❌ Settings file (.cursor/settings.local.json)
    ❌ Environment config (.envrc in your project root)
 
 📚 To complete setup, run:
    project:init
 
 This will:
-   • Create .claude/ folder in your project
+   • Create .cursor/ folder in your project
    • Analyze your project structure
    • Generate project-specific configuration
-   • Create .claude/settings.local.json from template
+   • Create .cursor/settings.local.json from template
    • Set up .envrc in your project root
    • Prepare Aura Frog for your tech stack
 
 After running project:init:
    • Edit .envrc in your project root to add integration tokens
    • Run 'direnv allow' to enable environment variables
-   • Customize .claude/settings.local.json if needed
-   • Review .claude/CLAUDE.md for project guide
+   • Customize .cursor/settings.local.json if needed
+   • Review .cursor/CLAUDE.md for project guide
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 Continue workflow anyway? (y/n)
@@ -180,12 +180,12 @@ If you see the reminder:
 ## Files Checked
 
 ### Plugin Root Files
-- `~/.claude/plugins/marketplaces/aurafrog/aura-frog/ccpm-config.yaml`
+- `~/.cursor/plugins/marketplaces/aurafrog/aura-frog/ccpm-config.yaml`
 
 ### Project Root Files
-- `.claude/` - Project Aura Frog data folder
-- `.claude/project-contexts/[project]/` - Project context
-- `.claude/settings.local.json` - Claude Code settings
+- `.cursor/` - Project Aura Frog data folder
+- `.cursor/project-contexts/[project]/` - Project context
+- `.cursor/settings.local.json` - Claude Code settings
 - `.envrc` - Project environment variables
 
 ---

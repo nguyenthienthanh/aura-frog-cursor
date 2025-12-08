@@ -221,7 +221,7 @@ User: "skip phase 3, this is backend only"
 ### Save State
 ```
 workflow:handoff
-→ Saves to .claude/logs/workflows/[workflow-id]/
+→ Saves to .cursor/logs/workflows/[workflow-id]/
 → Contains: current phase, deliverables, context
 ```
 

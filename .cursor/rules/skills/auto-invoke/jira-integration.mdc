@@ -161,13 +161,13 @@ Users should be able to login with email/password.
 
 ```bash
 # Update status
-bash ~/.claude/plugins/marketplaces/aurafrog/aura-frog/scripts/jira-update.sh PROJ-1234 status "In Progress"
+bash ~/.cursor/plugins/marketplaces/aurafrog/aura-frog/scripts/jira-update.sh PROJ-1234 status "In Progress"
 
 # Add comment
-bash ~/.claude/plugins/marketplaces/aurafrog/aura-frog/scripts/jira-update.sh PROJ-1234 comment "Implementation started - Phase 5b"
+bash ~/.cursor/plugins/marketplaces/aurafrog/aura-frog/scripts/jira-update.sh PROJ-1234 comment "Implementation started - Phase 5b"
 
 # Add work log
-bash ~/.claude/plugins/marketplaces/aurafrog/aura-frog/scripts/jira-update.sh PROJ-1234 worklog "2h" "Implemented authentication endpoints"
+bash ~/.cursor/plugins/marketplaces/aurafrog/aura-frog/scripts/jira-update.sh PROJ-1234 worklog "2h" "Implemented authentication endpoints"
 ```
 
 ## Setup
@@ -193,7 +193,7 @@ export JIRA_API_TOKEN="your-api-token-here"
 
 ```bash
 # Test JIRA connection
-bash ~/.claude/plugins/marketplaces/aurafrog/aura-frog/scripts/jira-test.sh
+bash ~/.cursor/plugins/marketplaces/aurafrog/aura-frog/scripts/jira-test.sh
 
 # Expected output:
 # ✅ JIRA connection successful
@@ -339,7 +339,7 @@ bash scripts/jira-update.sh PROJ-1234 worklog "3h 30m" "Implemented authenticati
 - Add to `.gitignore`:
   ```
   .envrc
-  .claude/logs/jira/*.json
+  .cursor/logs/jira/*.json
   ```
 - Tokens can be revoked at: https://id.atlassian.com/manage-profile/security/api-tokens
 
@@ -347,7 +347,7 @@ bash scripts/jira-update.sh PROJ-1234 worklog "3h 30m" "Implemented authenticati
 
 - JIRA REST API: https://developer.atlassian.com/cloud/jira/platform/rest/v3/
 - Setup guide: Project documentation
-- Integration scripts: `~/.claude/plugins/marketplaces/aurafrog/aura-frog/scripts/`
+- Integration scripts: `~/.cursor/plugins/marketplaces/aurafrog/aura-frog/scripts/`
 
 ## Note
 

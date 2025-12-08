@@ -365,7 +365,7 @@ Contains current workflow ID.
 ### Related Documentation
 - `.cursor/workflows/STATE_MANAGEMENT.md` - State persistence
 - `.cursor/workflows/QUICK_REFERENCE.md` - Visual workflow guide
-- `~/.claude/plugins/marketplaces/aurafrog/aura-frog/SESSION_CONTINUATION_GUIDE.md`
+- `~/.cursor/plugins/marketplaces/aurafrog/aura-frog/SESSION_CONTINUATION_GUIDE.md`
 
 ### Skills
 - `workflow-orchestrator` - Main workflow skill

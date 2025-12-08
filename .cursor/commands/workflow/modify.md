@@ -52,8 +52,8 @@ Updated test count: 73 → 76 tests
 ## References
 
 - Original Aura Frog command: `workflow:modify`
-- Project context: `.claude/project-contexts/[project]/`
-- Workflow state: `.claude/logs/workflows/`
+- Project context: `.cursor/project-contexts/[project]/`
+- Workflow state: `.cursor/logs/workflows/`
 
 ## Notes
 
