@@ -14,7 +14,7 @@ Every message from Cursor AI MUST include clear agent identification so users kn
 
 ## Agent Banner Format
 
-### Standard Banner
+### Single Agent Banner
 
 **At the start of every response:**
 
@@ -25,17 +25,26 @@ Every message from Cursor AI MUST include clear agent identification so users kn
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
+### Multi-Agent Banner (when collaborating)
+
+```
+⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ Agent: [primary] (+[secondary], +[tertiary])           ┃
+┃ Phase: [phase] - [name] │ 🔥 [aura-message]             ┃
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
 ### Banner Components
 
 | Component | Description | Example |
 |-----------|-------------|---------|
-| **Agent** | Active specialized agent | `mobile-react-native` |
+| **Agent** | Primary agent (+ secondary when collaborating) | `mobile-react-native (+qa-automation)` |
 | **Phase** | Current workflow phase (or `-` if none) | `2 - Design` |
 | **Aura Message** | Fun, contextual phrase (2-4 words) | `Code go brrrr` |
 
 ### Examples
 
-**During Workflow Phase:**
+**Single Agent - During Workflow:**
 ```
 ⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: mobile-react-native │ Phase: 2 - Design         ┃
@@ -43,7 +52,7 @@ Every message from Cursor AI MUST include clear agent identification so users kn
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-**General Conversation:**
+**Single Agent - General Conversation:**
 ```
 ⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: pm-operations-orchestrator │ Phase: -           ┃
@@ -51,11 +60,19 @@ Every message from Cursor AI MUST include clear agent identification so users kn
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-**Cross-Review:**
+**Multi-Agent - Implementation + Testing:**
 ```
 ⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ Agent: qa-automation (Cross-Review) │ Phase: 2 - Design┃
-┃ 🔥 Eagle eyes on                                        ┃
+┃ Agent: mobile-react-native (+qa-automation)            ┃
+┃ Phase: 5b - TDD GREEN │ 🔥 Building with tests          ┃
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+**Multi-Agent - Security Review:**
+```
+⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ Agent: security-expert (+backend-nodejs)               ┃
+┃ Phase: 6 - Review │ 🔥 Locking it down                  ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 

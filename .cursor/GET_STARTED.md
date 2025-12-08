@@ -134,8 +134,9 @@ Aura Frog uses a structured TDD (Test-Driven Development) workflow:
 
 ### Agent Identification Banner
 
-Every response shows:
+Every response shows (single or multi-agent):
 
+**Single Agent:**
 ```
 ⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: mobile-react-native │ Phase: 2 - Design         ┃
@@ -143,7 +144,15 @@ Every response shows:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-- **Agent:** Currently active specialized agent
+**Multiple Agents (collaboration):**
+```
+⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ Agent: mobile-react-native (+qa-automation)            ┃
+┃ Phase: 5b - TDD GREEN │ 🔥 Building with tests          ┃
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+- **Agent:** Primary agent (+ secondary agents when collaborating)
 - **Phase:** Workflow phase (or `-` if none)
 - **Aura Message:** Fun, contextual phrase (changes each time)
 
