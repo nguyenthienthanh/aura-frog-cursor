@@ -104,12 +104,133 @@ fi
 echo ""
 echo -e "${BLUE}[1/4] Copying .cursor folder...${NC}"
 
+# Function to append missing content to existing file
+append_missing_content() {
+    local source="$1"
+    local target="$2"
+    local marker="# --- AURA FROG APPEND ---"
+
+    # If target doesn't exist, just copy
+    if [ ! -f "$target" ]; then
+        cp "$source" "$target"
+        return 0
+    fi
+
+    # Check if source content is already in target
+    if grep -qF "AURA FROG" "$target" 2>/dev/null; then
+        # Aura Frog content exists, skip
+        return 1
+    fi
+
+    # Append source content to target with marker
+    echo "" >> "$target"
+    echo "$marker" >> "$target"
+    echo "" >> "$target"
+    cat "$source" >> "$target"
+    return 0
+}
+
+# Function to smart merge files
+smart_merge_files() {
+    local source_dir="$1"
+    local target_dir="$2"
+    local files_copied=0
+    local files_merged=0
+    local files_skipped=0
+
+    # Create target directory if it doesn't exist
+    mkdir -p "$target_dir"
+
+    # Process all files recursively
+    find "$source_dir" -type f | while read -r source_file; do
+        # Get relative path
+        local rel_path="${source_file#$source_dir/}"
+        local target_file="$target_dir/$rel_path"
+        local target_subdir="$(dirname "$target_file")"
+
+        # Create subdirectory if needed
+        mkdir -p "$target_subdir"
+
+        # Check if target file exists
+        if [ -f "$target_file" ]; then
+            if [ "$FORCE_OVERRIDE" = true ]; then
+                # Force mode: override
+                cp "$source_file" "$target_file"
+            else
+                # Merge mode: append if missing Aura Frog content
+                # For key config files, try to append
+                case "$rel_path" in
+                    *.md|*.mdc)
+                        # Check if Aura Frog content exists
+                        if ! grep -qF "AURA FROG" "$target_file" 2>/dev/null && \
+                           ! grep -qF "Aura Frog" "$target_file" 2>/dev/null; then
+                            # Append content
+                            echo "" >> "$target_file"
+                            echo "# --- Appended from Aura Frog ---" >> "$target_file"
+                            echo "" >> "$target_file"
+                            cat "$source_file" >> "$target_file"
+                        fi
+                        ;;
+                    *)
+                        # For other files, only copy if target is empty or doesn't exist
+                        if [ ! -s "$target_file" ]; then
+                            cp "$source_file" "$target_file"
+                        fi
+                        ;;
+                esac
+            fi
+        else
+            # Target doesn't exist, copy it
+            cp "$source_file" "$target_file"
+        fi
+    done
+}
+
 if [ -d "$TARGET_PROJECT/.cursor" ]; then
-    echo -e "${YELLOW}  Existing .cursor folder found. Merging files...${NC}"
+    echo -e "${YELLOW}  Existing .cursor folder found.${NC}"
+    if [ "$FORCE_OVERRIDE" = true ]; then
+        echo -e "${YELLOW}  Force mode: overriding all files...${NC}"
+        rsync -av --progress "$CURSOR_SOURCE/" "$TARGET_PROJECT/.cursor/" > /dev/null 2>&1
+    else
+        echo -e "${GREEN}  Merge mode: copying new files, appending to existing...${NC}"
+        smart_merge_files "$CURSOR_SOURCE" "$TARGET_PROJECT/.cursor"
+    fi
+else
+    # No existing folder, just copy everything
+    rsync -av --progress "$CURSOR_SOURCE/" "$TARGET_PROJECT/.cursor/" > /dev/null 2>&1
 fi
 
-# Use rsync to copy and override existing files
-rsync -av --progress "$CURSOR_SOURCE/" "$TARGET_PROJECT/.cursor/" > /dev/null 2>&1
+# Handle .cursorrules separately (critical config file)
+CURSORRULES_SOURCE="$SCRIPT_DIR/.cursorrules"
+CURSORRULES_TARGET="$TARGET_PROJECT/.cursorrules"
+
+if [ -f "$CURSORRULES_SOURCE" ]; then
+    if [ -f "$CURSORRULES_TARGET" ]; then
+        if [ "$FORCE_OVERRIDE" = true ]; then
+            cp "$CURSORRULES_SOURCE" "$CURSORRULES_TARGET"
+            echo -e "${GREEN}  ✓ .cursorrules overwritten${NC}"
+        else
+            # Check if Aura Frog content already exists
+            if grep -qF "AURA FROG" "$CURSORRULES_TARGET" 2>/dev/null || \
+               grep -qF "Aura Frog" "$CURSORRULES_TARGET" 2>/dev/null; then
+                echo -e "${YELLOW}  .cursorrules already contains Aura Frog config${NC}"
+            else
+                # Append Aura Frog config
+                echo "" >> "$CURSORRULES_TARGET"
+                echo "" >> "$CURSORRULES_TARGET"
+                echo "# ============================================" >> "$CURSORRULES_TARGET"
+                echo "# AURA FROG CONFIGURATION (Appended)" >> "$CURSORRULES_TARGET"
+                echo "# ============================================" >> "$CURSORRULES_TARGET"
+                echo "" >> "$CURSORRULES_TARGET"
+                cat "$CURSORRULES_SOURCE" >> "$CURSORRULES_TARGET"
+                echo -e "${GREEN}  ✓ Aura Frog config appended to .cursorrules${NC}"
+            fi
+        fi
+    else
+        cp "$CURSORRULES_SOURCE" "$CURSORRULES_TARGET"
+        echo -e "${GREEN}  ✓ .cursorrules created${NC}"
+    fi
+fi
 
 echo -e "${GREEN}  ✓ .cursor folder installed${NC}"
 
