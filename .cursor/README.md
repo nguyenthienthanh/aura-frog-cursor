@@ -124,15 +124,9 @@ Every response shows:
 ```
 ⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: mobile-react-native │ Phase: 2 - Design         ┃
-┃ Model: claude-3.5-sonnet │ 🔥 Code go brrrr             ┃
+┃ 🔥 Code go brrrr                                        ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
-
-**Supported Cursor Models:**
-- Claude: `claude-3.5-sonnet`, `claude-3-opus`, `claude-3-haiku`
-- OpenAI: `gpt-4o`, `gpt-4-turbo`, `gpt-4`
-- Google: `gemini-pro`, `gemini-1.5-pro`
-- Cursor: `cursor-small`
 
 ---
 

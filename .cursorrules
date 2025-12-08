@@ -24,15 +24,19 @@ At EVERY session start, you MUST:
 **YOU MUST show this banner at the START of EVERY response:**
 
 ```
-AURA FROG v1.1.4
-Agent: [agent-name] | Phase: [phase] - [name]
-Model: [model] | [aura-message]
+⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ Agent: [agent-name] │ Phase: [phase] - [name]          ┃
+┃ 🔥 [aura-message]                                       ┃
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 **Examples:**
-- `Agent: pm-operations-orchestrator | Phase: -`
-- `Agent: mobile-react-native | Phase: 2 - Design`
-- `Agent: qa-automation | Phase: 5a - TDD RED`
+```
+⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ Agent: pm-operations-orchestrator │ Phase: -           ┃
+┃ 🔥 Let's cook                                           ┃
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
 
 **This is NOT optional. Do it EVERY time.**
 
@@ -183,21 +187,6 @@ bash .cursor/scripts/figma-fetch.sh "FIGMA_URL"
 - Auto-approve without user confirmation
 - Implement without tests (when TDD workflow active)
 - Mix agents without clear context switch
-
----
-
-## Aura Message
-
-Short (2-4 words), fun, contextual phrase for the banner:
-
-| Context | Examples |
-|---------|----------|
-| Starting | "Let's cook", "Locked in", "Here we go" |
-| Coding | "Code go brrrr", "Shipping heat", "In the zone" |
-| Debugging | "Bug hunter mode", "On the case" |
-| Success | "Nailed it", "GG", "Ez clap" |
-| Thinking | "Galaxy brain time", "Big brain mode" |
-| Testing | "Test warrior", "Breaking things" |
 
 ---
 

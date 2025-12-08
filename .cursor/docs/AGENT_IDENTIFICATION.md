@@ -21,7 +21,7 @@ Every message from Cursor AI MUST include clear agent identification so users kn
 ```
 ⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: [agent-name] │ Phase: [phase] - [name]          ┃
-┃ Model: [model] │ 🔥 [aura-message]                      ┃
+┃ 🔥 [aura-message]                                       ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
@@ -31,7 +31,6 @@ Every message from Cursor AI MUST include clear agent identification so users kn
 |-----------|-------------|---------|
 | **Agent** | Active specialized agent | `mobile-react-native` |
 | **Phase** | Current workflow phase (or `-` if none) | `2 - Design` |
-| **Model** | Cursor AI model being used | `claude-3.5-sonnet` |
 | **Aura Message** | Fun, contextual phrase (2-4 words) | `Code go brrrr` |
 
 ### Examples
@@ -40,7 +39,7 @@ Every message from Cursor AI MUST include clear agent identification so users kn
 ```
 ⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: mobile-react-native │ Phase: 2 - Design         ┃
-┃ Model: claude-3.5-sonnet │ 🔥 Architecting greatness    ┃
+┃ 🔥 Architecting greatness                               ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
@@ -48,7 +47,7 @@ Every message from Cursor AI MUST include clear agent identification so users kn
 ```
 ⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: pm-operations-orchestrator │ Phase: -           ┃
-┃ Model: gpt-4o │ 🔥 Ready to rock                        ┃
+┃ 🔥 Ready to rock                                        ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
@@ -56,7 +55,7 @@ Every message from Cursor AI MUST include clear agent identification so users kn
 ```
 ⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: qa-automation (Cross-Review) │ Phase: 2 - Design┃
-┃ Model: claude-3-opus │ 🔥 Eagle eyes on                 ┃
+┃ 🔥 Eagle eyes on                                        ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
