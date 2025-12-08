@@ -150,7 +150,7 @@ When token threshold reached:
 3. Save workflow state to `.cursor/workflow-contexts/`
 4. Provide resume instructions
 
-**See:** `.cursor/skills/session-continuation/session-management.md` (if exists)
+**See:** `.cursor/rules/skills/auto-invoke/session-continuation/session-management.md` (if exists)
 
 ---
 
@@ -201,7 +201,7 @@ State will be saved to: .cursor/workflow-contexts/workflow-{id}/
 
 - **Workflow State:** `.cursor/workflow-contexts/workflow-{id}/`
 - **Logs:** `.cursor/logs/workflow-{id}.log`
-- **Session Continuation Skill:** `.cursor/skills/session-continuation/` (if exists)
+- **Session Continuation Skill:** `.cursor/rules/skills/auto-invoke/session-continuation/` (if exists)
 
 ---
 

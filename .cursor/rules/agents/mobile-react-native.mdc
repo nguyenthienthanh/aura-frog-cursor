@@ -217,7 +217,7 @@ describe('MyComponent', () => {
 ## References
 
 - Project context: `.cursor/project-contexts/[project]/`
-- Skills directory: `.cursor/skills/`
+- Skills directory: `.cursor/rules/skills/auto-invoke/`
 - Core rules: `.cursor/rules/core/`
 - React Native docs: https://reactnative.dev
 - Expo docs: https://docs.expo.dev

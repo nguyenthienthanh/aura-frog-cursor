@@ -410,7 +410,7 @@ When reviewing tests:
 
 ## References
 
-- Skills: `.cursor/skills/testing/`
+- Skills: `.cursor/rules/skills/auto-invoke/testing/`
 - Project contexts: `.cursor/project-contexts/[project]/`
 - Core rules: `.cursor/rules/core/`
 - Testing Library docs: https://testing-library.com

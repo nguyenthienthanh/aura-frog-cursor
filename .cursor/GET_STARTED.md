@@ -401,10 +401,10 @@ This guides you through setting up:
 - Slack notifications
 - Confluence documentation
 
-**Environment Variables (`.envrc`):**
+**Environment Variables (`.cursor/.envrc`):**
 
 ```bash
-# JIRA
+# JIRA (same Atlassian credentials work for Confluence)
 export JIRA_URL="https://company.atlassian.net"
 export JIRA_EMAIL="user@company.com"
 export JIRA_API_TOKEN="your-token"
@@ -415,11 +415,13 @@ export FIGMA_ACCESS_TOKEN="your-token"
 # Slack
 export SLACK_WEBHOOK_URL="https://hooks.slack.com/..."
 
-# Confluence
-export CONFLUENCE_URL="https://company.atlassian.net"
-export CONFLUENCE_EMAIL="user@company.com"
-export CONFLUENCE_API_TOKEN="your-token"
+# Confluence (optional - defaults to JIRA credentials)
+# export CONFLUENCE_URL="https://company.atlassian.net/wiki"
+# export CONFLUENCE_EMAIL="user@company.com"
+# export CONFLUENCE_API_TOKEN="your-token"
 ```
+
+**Note:** Confluence uses the same Atlassian account as JIRA, so JIRA credentials work for both.
 
 Then you can:
 
@@ -700,20 +702,20 @@ cat .cursor/commands/workflow/start.md
 
 ---
 
-## 📞 Need Help?
+## Need Help?
 
 - **Quick Reference:** `.cursor/commands/QUICK_REFERENCE.md`
-- **Full Guide:** `.cursor/MASTER_CONVERSION_REPORT.md`
 - **Workflow Help:** `.cursor/workflows/QUICK_REFERENCE.md`
-- **Aura Frog Docs:** `~/.cursor/plugins/marketplaces/aurafrog/aura-frog/`
+- **Agents Guide:** `.cursor/AGENTS.md`
+- **Original Aura Frog:** [github.com/nguyenthienthanh/aura-frog](https://github.com/nguyenthienthanh/aura-frog)
 
 ---
 
-**Welcome to Aura Frog!** 🐸✨
+**Welcome to Aura Frog!**
 
 Code with main character energy. Let's build something amazing!
 
 ---
 
 **Version:** 1.1.4
-**Last Updated:** 2025-12-04
+**Last Updated:** 2025-12-08

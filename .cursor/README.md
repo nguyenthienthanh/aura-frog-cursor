@@ -3,7 +3,7 @@
 **Version:** 1.1.4
 **Converted from:** [nguyenthienthanh/aura-frog](https://github.com/nguyenthienthanh/aura-frog) (Aura Frog Plugin for Claude Code)
 **Adapted for:** Cursor IDE
-**Last Updated:** 2025-12-04
+**Last Updated:** 2025-12-08
 
 ---
 
@@ -59,7 +59,21 @@ cat .cursor/GET_STARTED.md
 ├── 📂 scripts/                       # Integration scripts
 │   ├── jira-fetch.sh
 │   ├── figma-fetch.sh
+│   ├── confluence-operations.sh
 │   └── ...
+│
+├── 📂 templates/                     # Document templates
+│   ├── tech-spec.md
+│   ├── requirements.md
+│   ├── test-plan.md
+│   └── ...
+│
+├── 📂 documents/                     # Generated documentation output
+│   ├── features/
+│   ├── api/
+│   ├── components/
+│   ├── specs/
+│   └── guides/
 │
 └── 📂 project-contexts/              # Project customization
     └── [project-name]/
@@ -122,19 +136,21 @@ Every response shows:
 
 ---
 
-## ⚙️ Environment Setup (Optional)
+## Environment Setup (Optional)
 
 Copy and configure environment template:
 
 ```bash
-cp .cursor/.envrc.template .envrc
+cp .cursor/.envrc.template .cursor/.envrc
 ```
 
-Then edit `.envrc` with your integration tokens:
+Then edit `.cursor/.envrc` with your integration tokens:
 - JIRA_URL, JIRA_EMAIL, JIRA_API_TOKEN
 - FIGMA_ACCESS_TOKEN
 - SLACK_WEBHOOK_URL
-- CONFLUENCE_URL, CONFLUENCE_EMAIL, CONFLUENCE_API_TOKEN
+- CONFLUENCE (optional - defaults to JIRA credentials)
+
+**Note:** Confluence uses the same Atlassian account as JIRA, so JIRA credentials work for both.
 
 ---
 
@@ -207,5 +223,5 @@ See all commands: `cat .cursor/commands/QUICK_REFERENCE.md`
 **Code with main character energy!** 🐸✨
 
 **Version:** 1.1.4
-**Last Updated:** 2025-12-04
+**Last Updated:** 2025-12-08
 **Original:** [nguyenthienthanh/aura-frog](https://github.com/nguyenthienthanh/aura-frog)

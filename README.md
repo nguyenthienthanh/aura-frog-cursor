@@ -181,8 +181,20 @@ Phase 9: Share           → Deployment & notifications
 ├── 📂 scripts/                       # Integration scripts
 │   ├── jira-fetch.sh
 │   ├── figma-fetch.sh
-│   ├── workflow/
-│   │   └── workflow-manager.sh
+│   ├── confluence-operations.sh
+│   └── ...
+│
+├── 📂 documents/                     # Generated documentation
+│   ├── features/
+│   ├── api/
+│   ├── components/
+│   ├── specs/
+│   └── guides/
+│
+├── 📂 templates/                     # Document templates
+│   ├── tech-spec.md
+│   ├── requirements.md
+│   ├── test-plan.md
 │   └── ...
 │
 └── 📂 project-contexts/              # Project customization
@@ -193,10 +205,10 @@ Phase 9: Share           → Deployment & notifications
 
 ### Environment Setup (Optional)
 
-For JIRA and Figma integration, create `.envrc`:
+For JIRA, Figma, and Confluence integration, create `.cursor/.envrc`:
 
 ```bash
-# JIRA
+# JIRA (same Atlassian credentials work for Confluence)
 export JIRA_URL="https://company.atlassian.net"
 export JIRA_EMAIL="your-email@company.com"
 export JIRA_API_TOKEN="your-token"
@@ -207,13 +219,15 @@ export FIGMA_ACCESS_TOKEN="figd_your-token"
 # Slack
 export SLACK_WEBHOOK_URL="https://hooks.slack.com/..."
 
-# Confluence
-export CONFLUENCE_URL="https://company.atlassian.net"
-export CONFLUENCE_EMAIL="your-email@company.com"
-export CONFLUENCE_API_TOKEN="your-token"
+# Confluence (optional - defaults to JIRA credentials if not set)
+# export CONFLUENCE_URL="https://company.atlassian.net/wiki"
+# export CONFLUENCE_EMAIL="your-email@company.com"
+# export CONFLUENCE_API_TOKEN="your-token"
 ```
 
-**Important:** Add `.envrc` to `.gitignore`!
+**Note:** Confluence uses the same Atlassian account as JIRA, so JIRA credentials work for both.
+
+**Important:** Add `.cursor/.envrc` to `.gitignore`!
 
 ## Documentation
 
@@ -281,6 +295,6 @@ For questions:
 
 **Code with main character energy!** 🐸✨
 
-**Version:** 1.0.0
-**Converted:** 2025-11-30
+**Version:** 1.1.4
+**Last Updated:** 2025-12-08
 **Original:** [nguyenthienthanh/aura-frog](https://github.com/nguyenthienthanh/aura-frog)

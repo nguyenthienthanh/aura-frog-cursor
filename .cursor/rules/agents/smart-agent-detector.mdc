@@ -216,6 +216,6 @@ This agent coordinates with ALL agents by determining which should activate for 
 
 ## References
 
-- Skills: `.cursor/skills/agent-detector/`
+- Skills: `.cursor/rules/skills/auto-invoke/agent-detector/`
 - Agent catalog: `.cursor/rules/agents/`
 - Project contexts: `.cursor/project-contexts/`

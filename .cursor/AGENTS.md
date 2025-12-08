@@ -37,28 +37,28 @@ Cursor IDE loads instructions in this order:
 
 **⚠️ Aura Frog uses Skills that auto-invoke when context matches. You MUST:**
 
-1. **Read skill descriptions** from `.cursor/skills/` directory
+1. **Read skill descriptions** from `.cursor/rules/skills/auto-invoke/` directory
 2. **Match user intent** to appropriate skill(s)
 3. **Auto-invoke skills** when context matches (no manual invocation needed)
 
 **Auto-Invoking Skills (9):**
-- **agent-detector** (`.cursor/skills/agent-detector/agent-selection.md`) - ALWAYS runs FIRST for every message
-- **workflow-orchestrator** (`.cursor/skills/workflow-orchestrator/workflow-execution.md`) - Complex features
-- **project-context-loader** (`.cursor/skills/project-context-loader/context-loading.md`) - Before code generation
-- **bugfix-quick** (`.cursor/skills/bugfix-quick/quick-fix.md`) - Bug fixes
-- **test-writer** (`.cursor/skills/test-writer/test-generation.md`) - Test creation
-- **code-reviewer** (`.cursor/skills/code-reviewer/quality-review.md`) - Code quality review
-- **jira-integration** (`.cursor/skills/jira-integration/ticket-management.md`) - JIRA ticket detection
-- **figma-integration** (`.cursor/skills/figma-integration/design-extraction.md`) - Figma URL detection
-- **refactor-expert** (`.cursor/skills/refactor-expert/refactoring.md`) - Safe refactoring patterns
+- **agent-detector** (`.cursor/rules/skills/auto-invoke/agent-detector/agent-selection.md`) - ALWAYS runs FIRST for every message
+- **workflow-orchestrator** (`.cursor/rules/skills/auto-invoke/workflow-orchestrator/workflow-execution.md`) - Complex features
+- **project-context-loader** (`.cursor/rules/skills/auto-invoke/project-context-loader/context-loading.md`) - Before code generation
+- **bugfix-quick** (`.cursor/rules/skills/auto-invoke/bugfix-quick/quick-fix.md`) - Bug fixes
+- **test-writer** (`.cursor/rules/skills/auto-invoke/test-writer/test-generation.md`) - Test creation
+- **code-reviewer** (`.cursor/rules/skills/auto-invoke/code-reviewer/quality-review.md`) - Code quality review
+- **jira-integration** (`.cursor/rules/skills/auto-invoke/jira-integration/ticket-management.md`) - JIRA ticket detection
+- **figma-integration** (`.cursor/rules/skills/auto-invoke/figma-integration/design-extraction.md`) - Figma URL detection
+- **refactor-expert** (`.cursor/rules/skills/auto-invoke/refactor-expert/refactoring.md`) - Safe refactoring patterns
 
 **Reference Skills (11):** Use these during implementation
-- **api-designer** (`.cursor/skills/api-designer/api-design.md`) - RESTful API design
-- **performance-optimizer** (`.cursor/skills/performance-optimizer/optimization.md`) - Performance tuning
-- **migration-helper** (`.cursor/skills/migration-helper/migration.md`) - Database/code migrations
-- **phase-skipping** (`.cursor/skills/workflow-orchestrator/phase-skipping.md`) - Smart phase skip rules
-- **estimation** (`.cursor/skills/pm-expert/estimation.md`) - Effort estimation
-- **documentation** (`.cursor/skills/documentation/adr-runbook.md`) - ADR & Runbook templates
+- **api-designer** (`.cursor/rules/skills/auto-invoke/api-designer/api-design.md`) - RESTful API design
+- **performance-optimizer** (`.cursor/rules/skills/auto-invoke/performance-optimizer/optimization.md`) - Performance tuning
+- **migration-helper** (`.cursor/rules/skills/auto-invoke/migration-helper/migration.md`) - Database/code migrations
+- **phase-skipping** (`.cursor/rules/skills/auto-invoke/workflow-orchestrator/phase-skipping.md`) - Smart phase skip rules
+- **estimation** (`.cursor/rules/skills/auto-invoke/pm-expert/estimation.md`) - Effort estimation
+- **documentation** (`.cursor/rules/skills/auto-invoke/documentation/adr-runbook.md`) - ADR & Runbook templates
 
 **How Skills Work:**
 - Skills use **LLM reasoning** to match context
@@ -77,7 +77,7 @@ Auto-invokes:
 4. workflow-orchestrator (complex feature)
 ```
 
-**📚 See:** `.cursor/skills/README.md` for complete Skills documentation
+**📚 See:** `.cursor/rules/skills/auto-invoke/README.md` for complete Skills documentation
 
 ---
 

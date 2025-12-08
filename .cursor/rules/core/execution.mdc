@@ -185,7 +185,7 @@ Example:
 ```yaml
 User: "Skip phase 3"
 Action:
-  1. Check if skip is allowed (see .cursor/skills/workflow-orchestrator/phase-skipping.md)
+  1. Check if skip is allowed (see .cursor/rules/skills/auto-invoke/workflow-orchestrator/phase-skipping.md)
   2. If allowed: Document reason, proceed
   3. If not allowed: Explain why, suggest alternatives
 ```
