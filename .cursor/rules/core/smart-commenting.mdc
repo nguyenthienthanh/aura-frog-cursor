@@ -152,6 +152,329 @@ if (user.age < 18) {
 window.parent.postMessage({ type: 'SAVE', data }, '*');
 ```
 
+---
+
+## JSDoc Documentation
+
+### When to Use JSDoc
+
+Use JSDoc for:
+- Public APIs and exported functions
+- Complex function signatures
+- Library/SDK code
+- Reusable utilities
+
+### Function Documentation
+
+```typescript
+/**
+ * Calculates the insurance premium based on user profile and coverage.
+ *
+ * @param user - The user profile containing age, region, and risk factors
+ * @param coverage - The coverage amount in local currency
+ * @param options - Optional configuration for premium calculation
+ * @returns The calculated premium amount
+ * @throws {ValidationError} If user age is below minimum requirement
+ *
+ * @example
+ * const premium = calculatePremium(
+ *   { age: 30, region: 'MY' },
+ *   100000,
+ *   { includeRider: true }
+ * );
+ */
+function calculatePremium(
+  user: UserProfile,
+  coverage: number,
+  options?: PremiumOptions
+): number {
+  // Implementation
+}
+```
+
+### Interface/Type Documentation
+
+```typescript
+/**
+ * Represents a user's insurance policy.
+ *
+ * @property id - Unique policy identifier
+ * @property userId - Reference to the policy owner
+ * @property type - Type of insurance (life, health, motor)
+ * @property status - Current policy status
+ * @property premium - Monthly premium amount
+ * @property startDate - Policy effective date
+ * @property endDate - Policy expiration date (optional for lifetime policies)
+ */
+interface Policy {
+  id: string;
+  userId: string;
+  type: 'life' | 'health' | 'motor';
+  status: PolicyStatus;
+  premium: number;
+  startDate: Date;
+  endDate?: Date;
+}
+```
+
+### Component Documentation (React)
+
+```tsx
+/**
+ * Displays user profile information with edit capabilities.
+ *
+ * @component
+ * @param props - Component props
+ * @param props.user - User data to display
+ * @param props.onUpdate - Callback when user updates their profile
+ * @param props.isEditable - Whether the profile can be edited (default: true)
+ *
+ * @example
+ * <UserProfile
+ *   user={currentUser}
+ *   onUpdate={handleUserUpdate}
+ *   isEditable={hasPermission}
+ * />
+ */
+const UserProfile: React.FC<UserProfileProps> = ({
+  user,
+  onUpdate,
+  isEditable = true,
+}) => {
+  // Implementation
+};
+```
+
+### Hook Documentation
+
+```typescript
+/**
+ * Custom hook for managing form state with validation.
+ *
+ * @template T - The form data type
+ * @param initialValues - Initial form values
+ * @param validationSchema - Yup validation schema
+ * @returns Form state, handlers, and validation status
+ *
+ * @example
+ * const { values, errors, handleChange, handleSubmit } = useForm<LoginForm>(
+ *   { email: '', password: '' },
+ *   loginValidationSchema
+ * );
+ */
+function useForm<T extends Record<string, unknown>>(
+  initialValues: T,
+  validationSchema?: Schema<T>
+): UseFormReturn<T> {
+  // Implementation
+}
+```
+
+---
+
+## Code Section Dividers
+
+Use dividers to organize large files into logical sections.
+
+### Standard Divider Format
+
+```typescript
+// ============================================
+// SECTION NAME
+// ============================================
+```
+
+### File Organization Example
+
+```typescript
+// ============================================
+// IMPORTS
+// ============================================
+import React from 'react';
+import { View, Text } from 'react-native';
+import { useAuth } from '@/hooks';
+
+// ============================================
+// TYPES
+// ============================================
+interface UserCardProps {
+  user: User;
+  onPress?: () => void;
+}
+
+type CardVariant = 'default' | 'compact' | 'expanded';
+
+// ============================================
+// CONSTANTS
+// ============================================
+const CARD_PADDING = 16;
+const AVATAR_SIZE = 48;
+
+// ============================================
+// HELPERS
+// ============================================
+const formatUserName = (user: User): string => {
+  return `${user.firstName} ${user.lastName}`;
+};
+
+// ============================================
+// COMPONENT
+// ============================================
+export const UserCard: React.FC<UserCardProps> = ({ user, onPress }) => {
+  // Implementation
+};
+
+// ============================================
+// STYLES
+// ============================================
+const styles = StyleSheet.create({
+  container: { padding: CARD_PADDING },
+});
+
+// ============================================
+// EXPORTS
+// ============================================
+export default UserCard;
+export type { UserCardProps, CardVariant };
+```
+
+### Service/API File Example
+
+```typescript
+// ============================================
+// USER SERVICE
+// ============================================
+
+// --------------------------------------------
+// Configuration
+// --------------------------------------------
+const API_BASE = '/api/v1/users';
+const DEFAULT_TIMEOUT = 30000;
+
+// --------------------------------------------
+// Types
+// --------------------------------------------
+interface CreateUserPayload {
+  email: string;
+  name: string;
+}
+
+// --------------------------------------------
+// API Calls
+// --------------------------------------------
+
+/**
+ * Fetches user by ID
+ */
+export const getUser = async (id: string): Promise<User> => {
+  return api.get(`${API_BASE}/${id}`);
+};
+
+/**
+ * Creates a new user
+ */
+export const createUser = async (payload: CreateUserPayload): Promise<User> => {
+  return api.post(API_BASE, payload);
+};
+
+// --------------------------------------------
+// Utilities
+// --------------------------------------------
+
+/**
+ * Validates user email format
+ */
+export const isValidEmail = (email: string): boolean => {
+  return EMAIL_REGEX.test(email);
+};
+```
+
+### Lightweight Dividers
+
+For smaller sections within functions:
+
+```typescript
+function processOrder(order: Order): ProcessedOrder {
+  // --- Validation ---
+  validateOrder(order);
+
+  // --- Calculate totals ---
+  const subtotal = calculateSubtotal(order.items);
+  const tax = calculateTax(subtotal, order.region);
+  const total = subtotal + tax;
+
+  // --- Apply discounts ---
+  const discount = getApplicableDiscount(order.user, total);
+  const finalTotal = total - discount;
+
+  // --- Build result ---
+  return {
+    ...order,
+    subtotal,
+    tax,
+    discount,
+    total: finalTotal,
+  };
+}
+```
+
+---
+
+## File Header Comments
+
+### Standard File Header
+
+```typescript
+/**
+ * @file UserService.ts
+ * @description Handles all user-related API operations
+ * @module services/user
+ */
+```
+
+### Detailed File Header (for complex files)
+
+```typescript
+/**
+ * @file PaymentProcessor.ts
+ * @description Handles payment processing with multiple gateway support
+ * @module services/payment
+ *
+ * @requires stripe - Stripe SDK for card payments
+ * @requires paypal - PayPal SDK for PayPal payments
+ *
+ * @see {@link https://docs.stripe.com/api} Stripe API Documentation
+ * @see {@link https://developer.paypal.com/docs/api/} PayPal API Documentation
+ *
+ * @todo Add support for Apple Pay (Q2 2025)
+ * @todo Implement retry logic for failed payments
+ */
+```
+
+---
+
+## TODO/FIXME Comments
+
+### Standard Format
+
+```typescript
+// TODO: Implement caching for better performance
+// FIXME: Race condition when multiple users edit simultaneously
+// HACK: Workaround for iOS keyboard issue - remove when RN 0.75 released
+// NOTE: This algorithm is O(n²) but acceptable for small datasets (<100 items)
+// DEPRECATED: Use newMethod() instead - will be removed in v2.0
+```
+
+### With Attribution
+
+```typescript
+// TODO(john): Add error boundary for this component
+// FIXME(#123): Handle edge case when user has no policies
+// HACK(@jane): Temporary fix for Android crash - see PR #456
+```
+
+---
+
 ## Code Review Checklist
 
 During code review, check:
@@ -161,8 +484,29 @@ During code review, check:
 - [ ] Could better naming eliminate the need?
 - [ ] Is it up-to-date?
 - [ ] Does it add value?
+- [ ] Are JSDoc comments present for public APIs?
+- [ ] Are complex files organized with dividers?
+
+---
+
+## Summary
+
+| Comment Type | When to Use |
+|--------------|-------------|
+| **Inline (WHY)** | Business logic, workarounds, constraints |
+| **JSDoc** | Public APIs, complex functions, reusable code |
+| **Dividers** | Large files with multiple sections |
+| **File headers** | Entry points, complex modules, libraries |
+| **TODO/FIXME** | Technical debt, future improvements |
+
+---
 
 ## References
 - Code quality: `code-quality.mdc`
 - KISS principle: `kiss-principle.mdc`
 - Naming conventions: `naming-conventions.mdc`
+
+---
+
+**Version:** 1.1.4
+**Last Updated:** 2025-12-09
