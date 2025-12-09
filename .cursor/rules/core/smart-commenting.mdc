@@ -272,183 +272,81 @@ function useForm<T extends Record<string, unknown>>(
 
 ---
 
-## Code Section Dividers
+## Why NOT to Use Dividers
 
-Use dividers to organize large files into logical sections.
-
-### Standard Divider Format
-
+**Avoid section dividers like:**
 ```typescript
 // ============================================
 // SECTION NAME
 // ============================================
+
+// --------------------------------------------
+// Subsection
+// --------------------------------------------
+
+// --- inline divider ---
 ```
 
-### File Organization Example
+**Why dividers are bad:**
+- Code structure should be clear from indentation and whitespace
+- Section headers add visual noise without adding information
+- If you need sections, consider splitting into separate files
+- IDE folding and outline view provide better navigation
+
+### Instead of Dividers
+
+**Split large files into smaller, focused modules:**
 
 ```typescript
-// ============================================
-// IMPORTS
-// ============================================
+// ❌ BAD: One large file with dividers
+// user-service.ts (500+ lines with dividers)
+
+// ✅ GOOD: Split into focused modules
+// user-service/
+//   ├── index.ts          (exports)
+//   ├── api.ts            (API calls)
+//   ├── types.ts          (interfaces)
+//   ├── utils.ts          (helpers)
+//   └── constants.ts      (config)
+```
+
+**Use whitespace to separate logical groups:**
+
+```typescript
+// ✅ GOOD: Whitespace provides visual separation
 import React from 'react';
 import { View, Text } from 'react-native';
-import { useAuth } from '@/hooks';
 
-// ============================================
-// TYPES
-// ============================================
+import { useAuth } from '@/hooks';
+import { formatDate } from '@/utils';
+
+import { UserAvatar } from './UserAvatar';
+import { UserBadge } from './UserBadge';
+```
+
+**Let code structure speak for itself:**
+
+```typescript
+// ✅ GOOD: No dividers needed - structure is clear
 interface UserCardProps {
   user: User;
   onPress?: () => void;
 }
 
-type CardVariant = 'default' | 'compact' | 'expanded';
-
-// ============================================
-// CONSTANTS
-// ============================================
 const CARD_PADDING = 16;
-const AVATAR_SIZE = 48;
 
-// ============================================
-// HELPERS
-// ============================================
-const formatUserName = (user: User): string => {
-  return `${user.firstName} ${user.lastName}`;
-};
-
-// ============================================
-// COMPONENT
-// ============================================
 export const UserCard: React.FC<UserCardProps> = ({ user, onPress }) => {
-  // Implementation
+  return (
+    <Pressable onPress={onPress} style={styles.container}>
+      <UserAvatar user={user} />
+      <Text>{user.name}</Text>
+    </Pressable>
+  );
 };
 
-// ============================================
-// STYLES
-// ============================================
 const styles = StyleSheet.create({
   container: { padding: CARD_PADDING },
 });
-
-// ============================================
-// EXPORTS
-// ============================================
-export default UserCard;
-export type { UserCardProps, CardVariant };
-```
-
-### Service/API File Example
-
-```typescript
-// ============================================
-// USER SERVICE
-// ============================================
-
-// --------------------------------------------
-// Configuration
-// --------------------------------------------
-const API_BASE = '/api/v1/users';
-const DEFAULT_TIMEOUT = 30000;
-
-// --------------------------------------------
-// Types
-// --------------------------------------------
-interface CreateUserPayload {
-  email: string;
-  name: string;
-}
-
-// --------------------------------------------
-// API Calls
-// --------------------------------------------
-
-/**
- * Fetches user by ID
- */
-export const getUser = async (id: string): Promise<User> => {
-  return api.get(`${API_BASE}/${id}`);
-};
-
-/**
- * Creates a new user
- */
-export const createUser = async (payload: CreateUserPayload): Promise<User> => {
-  return api.post(API_BASE, payload);
-};
-
-// --------------------------------------------
-// Utilities
-// --------------------------------------------
-
-/**
- * Validates user email format
- */
-export const isValidEmail = (email: string): boolean => {
-  return EMAIL_REGEX.test(email);
-};
-```
-
-### Lightweight Dividers
-
-For smaller sections within functions:
-
-```typescript
-function processOrder(order: Order): ProcessedOrder {
-  // --- Validation ---
-  validateOrder(order);
-
-  // --- Calculate totals ---
-  const subtotal = calculateSubtotal(order.items);
-  const tax = calculateTax(subtotal, order.region);
-  const total = subtotal + tax;
-
-  // --- Apply discounts ---
-  const discount = getApplicableDiscount(order.user, total);
-  const finalTotal = total - discount;
-
-  // --- Build result ---
-  return {
-    ...order,
-    subtotal,
-    tax,
-    discount,
-    total: finalTotal,
-  };
-}
-```
-
----
-
-## File Header Comments
-
-### Standard File Header
-
-```typescript
-/**
- * @file UserService.ts
- * @description Handles all user-related API operations
- * @module services/user
- */
-```
-
-### Detailed File Header (for complex files)
-
-```typescript
-/**
- * @file PaymentProcessor.ts
- * @description Handles payment processing with multiple gateway support
- * @module services/payment
- *
- * @requires stripe - Stripe SDK for card payments
- * @requires paypal - PayPal SDK for PayPal payments
- *
- * @see {@link https://docs.stripe.com/api} Stripe API Documentation
- * @see {@link https://developer.paypal.com/docs/api/} PayPal API Documentation
- *
- * @todo Add support for Apple Pay (Q2 2025)
- * @todo Implement retry logic for failed payments
- */
 ```
 
 ---
@@ -495,9 +393,13 @@ During code review, check:
 |--------------|-------------|
 | **Inline (WHY)** | Business logic, workarounds, constraints |
 | **JSDoc** | Public APIs, complex functions, reusable code |
-| **Dividers** | Large files with multiple sections |
-| **File headers** | Entry points, complex modules, libraries |
 | **TODO/FIXME** | Technical debt, future improvements |
+
+| What to AVOID | Why |
+|---------------|-----|
+| **Dividers** | Add noise; split files instead |
+| **WHAT comments** | Code should be self-documenting |
+| **Commented code** | Use git history |
 
 ---
 
