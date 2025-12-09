@@ -9,6 +9,17 @@ alwaysApply: false
 ## Use Case
 Generate comprehensive technical specifications during **Phase 2: Technical Planning** of the Aura Frog workflow. This template provides a structured approach to documenting architecture, data models, API specifications, security, performance, testing strategy, and deployment plans.
 
+## IMPORTANT: Two Versions Required
+
+**You MUST create TWO spec documents (see `tech-spec-requirement.mdc`):**
+
+| Document | Purpose | Location | For |
+|----------|---------|----------|-----|
+| **TECH_SPEC_AI.md** | AI reference | `.cursor/documents/specs/[feature]/` | AI |
+| **Full Tech Spec** | Human reference | Confluence (single page) | Stakeholders |
+
+**AI reads TECH_SPEC_AI.md, NOT Confluence.**
+
 ## Associated Phase
 **Phase 2: Technical Planning**
 
@@ -17,8 +28,11 @@ Generate comprehensive technical specifications during **Phase 2: Technical Plan
 - Before implementation begins (Phase 5)
 - When defining system architecture and technical approach
 - For documenting complex features that require detailed planning
+- **MANDATORY:** Create TECH_SPEC_AI.md before Phase 5
 
-## Template Structure
+## Template Structure (Full Confluence Version)
+
+This is the **FULL** tech spec for Confluence. For the simplified AI version, see `tech-spec-requirement.mdc`.
 
 ```markdown
 # Technical Specification Template
@@ -303,6 +317,7 @@ Reference project-specific conventions:
 - `requirements.mdc` - Phase 1 output, input to this template
 - `lld.mdc` - More detailed component-level design
 - `test-plan.mdc` - Phase 4 testing approach
+- `tech-spec-requirement.mdc` - Rule for TECH_SPEC_AI.md creation (MANDATORY)
 
 ## Tips for Usage
 

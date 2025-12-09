@@ -34,13 +34,14 @@ Cursor AI should activate this skill when:
 2. **project-context-loader** → Load conventions (MANDATORY)
 3. **Show agent banner** at start of response
 4. **Verify task complexity** - if simple, suggest lighter approach
+5. **Create TECH_SPEC_AI.md** in Phase 2 (MANDATORY - see `tech-spec-requirement.mdc`)
 
 ## 9-Phase Workflow
 
 | Phase | Name | Lead Agent | Deliverable | Gate |
 |-------|------|------------|-------------|------|
 | 1 | Understand 🎯 | pm-operations-orchestrator | Requirements document | ✋ |
-| 2 | Design 🏗️ | Dev agent | Technical design | ✋ |
+| 2 | Design 🏗️ | Dev agent | Technical design + **TECH_SPEC_AI.md** | ✋ |
 | 3 | UI Breakdown 🎨 | ui-designer | Component breakdown | ✋ |
 | 4 | Plan Tests 🧪 | qa-automation | Test strategy | ✋ |
 | 5a | Write Tests 🔴 | qa-automation + Dev | Failing tests (TDD RED) | ✋ |
@@ -69,8 +70,9 @@ Phase 3 (UI) → Phase 4 (Plan Tests)
   Skip if: No UI component in task
 
 Phase 4 (Plan Tests) → Phase 5a (Write Tests)
-  Requires: approve
-  Blocker: No test strategy
+  Requires: approve + TECH_SPEC_AI.md exists
+  Blocker: No test strategy OR missing TECH_SPEC_AI.md
+  Pre-check: AI MUST read TECH_SPEC_AI.md before proceeding
 
 Phase 5a (RED) → Phase 5b (GREEN)
   Requires: approve + tests MUST fail
@@ -295,4 +297,5 @@ Works seamlessly with:
 
 - Phase guides: Project-specific phase documentation
 - Project context: `.cursor/rules/project-contexts/`
-- Rules: `tdd-workflow`, `kiss-principle`, `code-quality`
+- Rules: `tdd-workflow`, `kiss-principle`, `code-quality`, `tech-spec-requirement`
+- Tech spec template: `.cursor/rules/templates/tech-spec.mdc`

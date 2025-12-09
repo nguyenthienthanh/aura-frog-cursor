@@ -140,7 +140,9 @@ All rules in `.cursor/rules/core/` with `alwaysApply: true` are automatically ap
 - `execution.mdc` - Execution rules
 - `next-step-guidance.mdc` - Show available actions
 - `safe-refactoring.mdc` - Review all usages before changing code
+- `smart-commenting.mdc` - Comment standards (WHY not WHAT)
 - `tdd-approach.mdc` - TDD methodology
+- `tech-spec-requirement.mdc` - TECH_SPEC_AI.md creation (MANDATORY)
 - `workflow-naming.mdc` - File naming conventions
 
 ---
