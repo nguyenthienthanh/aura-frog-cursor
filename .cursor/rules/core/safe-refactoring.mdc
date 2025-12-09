@@ -1,0 +1,247 @@
+---
+description: Ensure safe refactoring by reviewing all usages before making changes to existing code
+globs: []
+alwaysApply: true
+---
+
+# Safe Refactoring Rule
+
+**Version:** 1.1.4
+**Priority:** HIGH - Must follow for all code changes
+**Type:** Rule (Mandatory)
+
+---
+
+## Core Principle
+
+**Before modifying any existing code, you MUST identify and review ALL places where it is used to prevent breaking changes.**
+
+---
+
+## Mandatory Steps
+
+### 1. Impact Analysis (BEFORE making changes)
+
+When refactoring or modifying existing code:
+
+```
+BEFORE CHANGE:
+1. Identify what you're changing (function, class, component, API, type, etc.)
+2. Search for ALL usages across the codebase
+3. List all affected files and locations
+4. Assess breaking change risk
+5. Plan migration strategy if needed
+```
+
+### 2. Search Checklist
+
+**Always search for:**
+
+| What to Search | How to Find |
+|----------------|-------------|
+| Direct imports | `import.*{name}` or `from.*{module}` |
+| Function calls | `{functionName}(` |
+| Class instantiation | `new {ClassName}` |
+| Type references | `: {TypeName}` or `<{TypeName}>` |
+| Interface implementations | `implements {InterfaceName}` |
+| Component usage | `<{ComponentName}` |
+| API endpoints | Route path patterns |
+| Event handlers | `on{EventName}` |
+| Hook usage | `use{HookName}` |
+| Test files | `describe.*{name}` or `it.*{name}` |
+
+### 3. Report Format
+
+**Before making changes, provide this summary:**
+
+```markdown
+## Impact Analysis
+
+**Changing:** [function/class/component name]
+**File:** [path/to/file.ts]
+**Type of change:** [signature change | rename | removal | behavior change]
+
+### Usages Found:
+1. `path/to/file1.ts:42` - [how it's used]
+2. `path/to/file2.ts:15` - [how it's used]
+3. `path/to/test.spec.ts:28` - [test case]
+
+### Breaking Change Risk: [LOW | MEDIUM | HIGH]
+
+### Migration Plan:
+- [ ] Update usage in file1.ts
+- [ ] Update usage in file2.ts
+- [ ] Update tests
+- [ ] Verify no runtime errors
+```
+
+---
+
+## Change Types & Requirements
+
+### Function/Method Changes
+
+| Change Type | Requirement |
+|-------------|-------------|
+| **Rename** | Update ALL call sites |
+| **Parameter added** | Provide default OR update ALL callers |
+| **Parameter removed** | Update ALL callers to remove argument |
+| **Parameter type changed** | Update ALL callers with new type |
+| **Return type changed** | Update ALL consumers |
+| **Behavior changed** | Review ALL usages for side effects |
+
+### Component Changes (React/Vue/Angular)
+
+| Change Type | Requirement |
+|-------------|-------------|
+| **Prop renamed** | Update ALL parent components |
+| **Prop removed** | Remove from ALL parent components |
+| **Prop type changed** | Update ALL parent components |
+| **Event renamed** | Update ALL event listeners |
+| **Slot/children changed** | Update ALL usage patterns |
+
+### Type/Interface Changes
+
+| Change Type | Requirement |
+|-------------|-------------|
+| **Property added (required)** | Update ALL object creations |
+| **Property removed** | Remove from ALL usages |
+| **Property type changed** | Update ALL assignments |
+| **Generic constraint changed** | Verify ALL generic usages |
+
+### API Changes
+
+| Change Type | Requirement |
+|-------------|-------------|
+| **Endpoint renamed** | Update ALL API calls (frontend + backend) |
+| **Request body changed** | Update ALL API callers |
+| **Response shape changed** | Update ALL response handlers |
+| **Auth requirement changed** | Update ALL protected routes |
+
+---
+
+## Verification Checklist
+
+After making changes:
+
+- [ ] **Compile/Build passes** - No type errors
+- [ ] **All tests pass** - No test failures
+- [ ] **No unused imports** - Clean up removed references
+- [ ] **No dead code** - Remove orphaned functions
+- [ ] **Search for string references** - Comments, configs, docs
+- [ ] **Check dynamic usages** - String-based lookups, reflection
+
+---
+
+## Red Flags (STOP and Review)
+
+**If you see these, extra caution needed:**
+
+| Red Flag | Why It's Risky |
+|----------|----------------|
+| `any` type usage | Compiler won't catch errors |
+| Dynamic property access `obj[key]` | String-based, not type-safe |
+| Spread operator `...props` | May pass unexpected props |
+| Re-exports `export * from` | Hidden dependencies |
+| Index signatures `[key: string]` | Any key accepted |
+| `eval()` or `new Function()` | Dynamic code execution |
+| String-based event names | Not type-checked |
+
+---
+
+## Examples
+
+### Example 1: Renaming a Function
+
+```typescript
+// BEFORE: Find all usages first
+// Search: "calculateTotal("
+// Found in: Cart.tsx:45, Checkout.tsx:78, cart.test.ts:23
+
+// WRONG: Just rename without checking
+function calculateSum(items) { ... }  // ❌ Breaks 3 files!
+
+// RIGHT: Rename and update all usages
+function calculateSum(items) { ... }
+// Updated: Cart.tsx:45, Checkout.tsx:78, cart.test.ts:23 ✅
+```
+
+### Example 2: Adding Required Parameter
+
+```typescript
+// BEFORE: Find all callers
+// Search: "fetchUser("
+// Found in: Profile.tsx:12, Settings.tsx:34, Admin.tsx:56
+
+// WRONG: Add required parameter
+function fetchUser(id: string, includeDetails: boolean) { ... }  // ❌ Breaks!
+
+// RIGHT: Add with default value
+function fetchUser(id: string, includeDetails: boolean = false) { ... }  // ✅
+// OR update all callers if default not appropriate
+```
+
+### Example 3: Changing Component Props
+
+```tsx
+// BEFORE: Find all parent components
+// Search: "<UserCard"
+// Found in: UserList.tsx:28, Dashboard.tsx:45, SearchResults.tsx:67
+
+// WRONG: Rename prop without updating parents
+interface UserCardProps {
+  userData: User;  // Was: user
+}  // ❌ Breaks 3 components!
+
+// RIGHT: Update prop and all usages
+// UserCard.tsx: userData -> user
+// UserList.tsx: <UserCard userData={...} /> ✅
+// Dashboard.tsx: <UserCard userData={...} /> ✅
+// SearchResults.tsx: <UserCard userData={...} /> ✅
+```
+
+---
+
+## Integration with Workflow
+
+### During TDD Phases
+
+| Phase | Safe Refactoring Action |
+|-------|------------------------|
+| **Phase 5a (RED)** | Tests define expected interface - don't break them |
+| **Phase 5b (GREEN)** | Minimal changes to pass tests |
+| **Phase 5c (REFACTOR)** | Full impact analysis required |
+| **Phase 6 (Review)** | Verify no breaking changes introduced |
+
+### During Code Review
+
+Reviewers should verify:
+1. All usages were identified
+2. All usages were updated
+3. No orphaned code remains
+4. Tests cover the changes
+
+---
+
+## Summary
+
+```
+┌─────────────────────────────────────────────────────────┐
+│  SAFE REFACTORING CHECKLIST                             │
+├─────────────────────────────────────────────────────────┤
+│  □ 1. SEARCH - Find ALL usages before changing          │
+│  □ 2. LIST - Document every affected file               │
+│  □ 3. ASSESS - Evaluate breaking change risk            │
+│  □ 4. PLAN - Strategy for updating all usages           │
+│  □ 5. CHANGE - Make the modification                    │
+│  □ 6. UPDATE - Fix all affected locations               │
+│  □ 7. VERIFY - Build, test, and review                  │
+└─────────────────────────────────────────────────────────┘
+```
+
+**Remember:** A refactor is only complete when ALL usages are updated and verified.
+
+---
+
+**Version:** 1.1.4
+**Last Updated:** 2025-12-09

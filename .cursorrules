@@ -139,6 +139,7 @@ All rules in `.cursor/rules/core/` with `alwaysApply: true` are automatically ap
 - `env-loading.mdc` - Load environment variables
 - `execution.mdc` - Execution rules
 - `next-step-guidance.mdc` - Show available actions
+- `safe-refactoring.mdc` - Review all usages before changing code
 - `tdd-approach.mdc` - TDD methodology
 - `workflow-naming.mdc` - File naming conventions
 
