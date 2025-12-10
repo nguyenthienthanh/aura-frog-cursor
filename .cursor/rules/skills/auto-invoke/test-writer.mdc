@@ -57,11 +57,12 @@ Cursor AI should activate this skill when:
 
 ### 2. Plan Test Strategy
 
-| Type | Use For | Scope |
-|------|---------|-------|
-| Unit | Individual functions/components | Single unit, mocked deps |
-| Integration | Module interactions, API calls | Multiple units together |
-| E2E | Complete user flows | Full system, real deps |
+```toon
+test_types[3]{type,use_for,scope}:
+ Unit,Individual functions/components,Single unit/mocked deps
+ Integration,Module interactions/API calls,Multiple units together
+ E2E,Complete user flows,Full system/real deps
+```
 
 **Coverage Strategy:**
 - Critical paths: 100% (auth, payment, security)
@@ -491,23 +492,25 @@ it('should process payment when card is valid', () => {
 
 ## Coverage Targets
 
-| Type | Target | Rationale |
-|------|--------|-----------|
-| Critical paths | 100% | Auth, payment, security |
-| Business logic | 90% | Core domain logic |
-| UI/Utilities | 80% | User-facing components |
-| Overall | 80% | Project minimum (or custom) |
+```toon
+coverage_targets[4]{type,target,rationale}:
+ Critical paths,100%,Auth/payment/security
+ Business logic,90%,Core domain logic
+ UI/Utilities,80%,User-facing components
+ Overall,80%,Project minimum (or custom)
+```
 
 ## Test File Naming Conventions
 
-| Framework | Test File | Location |
-|-----------|-----------|----------|
-| Jest | `*.test.ts`, `*.spec.ts` | `__tests__/` or alongside |
-| PHPUnit | `*Test.php` | `tests/Unit/`, `tests/Feature/` |
-| PyTest | `test_*.py`, `*_test.py` | `tests/` |
-| Go | `*_test.go` | Same package |
-| Detox | `*.e2e.ts` | `e2e/` |
-| Cypress | `*.cy.ts` | `cypress/e2e/` |
+```toon
+test_naming[6]{framework,test_file,location}:
+ Jest,*.test.ts/*.spec.ts,__tests__/ or alongside
+ PHPUnit,*Test.php,tests/Unit//tests/Feature/
+ PyTest,test_*.py/*_test.py,tests/
+ Go,*_test.go,Same package
+ Detox,*.e2e.ts,e2e/
+ Cypress,*.cy.ts,cypress/e2e/
+```
 
 ## Running Tests by Framework
 

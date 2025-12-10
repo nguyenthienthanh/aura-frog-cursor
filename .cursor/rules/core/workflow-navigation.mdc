@@ -54,14 +54,15 @@ Will skip: Phase 3 (no UI components detected)
 
 ## When to Show Navigation
 
-| Event | Show Navigation? |
-|-------|------------------|
-| Phase completed | Yes |
-| Approval gate | Yes (include in gate) |
-| Phase rejected | Yes (show re-do info) |
-| Phase modified | Yes (show updated path) |
-| Workflow started | Yes (show full roadmap) |
-| Workflow resumed | Yes (show remaining) |
+```toon
+show_navigation[6]{event,show}:
+ Phase completed,Yes
+ Approval gate,Yes (include in gate)
+ Phase rejected,Yes (show re-do info)
+ Phase modified,Yes (show updated path)
+ Workflow started,Yes (show full roadmap)
+ Workflow resumed,Yes (show remaining)
+```
 
 ---
 
@@ -81,11 +82,12 @@ Tip: These can be unskipped with "include phase 3"
 
 ### Skip Reasons
 
-| Phase | Auto-Skip When |
-|-------|----------------|
-| Phase 3 (UI) | No UI components detected |
-| Phase 9 (Share) | Slack not configured |
-| Any phase | User explicitly skipped |
+```toon
+skip_reasons[3]{phase,auto_skip_when}:
+ Phase 3 (UI),No UI components detected
+ Phase 9 (Share),Slack not configured
+ Any phase,User explicitly skipped
+```
 
 ---
 
@@ -99,13 +101,14 @@ Progress: ████████░░░░░░░░ 50% (4/8 phases)
 
 ### Phase Status Icons
 
-| Icon | Meaning |
-|------|---------|
-| [done] | Completed |
-| [current] | In progress |
-| [pending] | Pending |
-| [skip] | Will be skipped |
-| [rejected] | Rejected (redo needed) |
+```toon
+status_icons[5]{icon,meaning}:
+ [done],Completed
+ [current],In progress
+ [pending],Pending
+ [skip],Will be skipped
+ [rejected],Rejected (redo needed)
+```
 
 ---
 

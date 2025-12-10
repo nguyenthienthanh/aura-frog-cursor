@@ -12,12 +12,13 @@ Manage workflow state across sessions with handoff and resume for long-running w
 
 ## When This Skill Activates
 
-| Trigger | Action |
-|---------|--------|
-| Token count reaches 150K (75%) | Suggest handoff |
-| User says "handoff" / "save state" | Execute handoff |
-| User says "resume" + workflow ID | Execute resume |
-| Session about to end | Auto-save state |
+```toon
+activation_triggers[4]{trigger,action}:
+ Token count reaches 150K (75%),Suggest handoff
+ User says "handoff"/"save state",Execute handoff
+ User says "resume" + workflow ID,Execute resume
+ Session about to end,Auto-save state
+```
 
 ## Handoff Flow
 
@@ -93,11 +94,12 @@ Type "continue" to proceed.
 
 ## Commands
 
-| Command | Description |
-|---------|-------------|
-| `workflow:handoff` | Save state and generate resume instructions |
-| `workflow:resume <id>` | Load and continue from saved state |
-| `workflow:list` | Show all saved workflows |
+```toon
+commands[3]{command,description}:
+ workflow:handoff,Save state and generate resume instructions
+ workflow:resume <id>,Load and continue from saved state
+ workflow:list,Show all saved workflows
+```
 
 ## Auto-Save Behavior
 

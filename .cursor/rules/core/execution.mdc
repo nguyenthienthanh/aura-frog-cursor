@@ -22,38 +22,42 @@ These are the fundamental ALWAYS/NEVER rules that govern Aura Frog behavior acro
 
 ### Before Any Task
 
-| # | Rule | Why |
-|---|------|-----|
-| 1 | **Show agent banner** | User must know which agent is active |
-| 2 | **Load project context** | Must follow project conventions from `.cursor/project-contexts/` |
-| 3 | **Detect appropriate agent** | Right specialist for the task |
+```toon
+always_before[3]{num,rule,why}:
+ 1,Show agent banner,User must know which agent is active
+ 2,Load project context,Must follow project conventions from .cursor/project-contexts/
+ 3,Detect appropriate agent,Right specialist for the task
+```
 
 ### During Workflow
 
-| # | Rule | Why |
-|---|------|-----|
-| 4 | **Read command definition** | Follow exact execution steps from `.cursor/commands/` |
-| 5 | **Follow phase order** | Phases build on each other |
-| 6 | **Execute hooks** | Pre/post phase automation from `.cursor/hooks/` |
-| 7 | **Load relevant rules** | Apply quality standards from `.cursor/rules/` |
-| 8 | **Activate appropriate agents** | Multi-agent collaboration |
-| 9 | **Generate deliverables** | Tangible outputs per phase |
+```toon
+always_during[6]{num,rule,why}:
+ 4,Read command definition,Follow exact execution steps from .cursor/commands/
+ 5,Follow phase order,Phases build on each other
+ 6,Execute hooks,Pre/post phase automation from .cursor/hooks/
+ 7,Load relevant rules,Apply quality standards from .cursor/rules/
+ 8,Activate appropriate agents,Multi-agent collaboration
+ 9,Generate deliverables,Tangible outputs per phase
+```
 
 ### At Phase Completion
 
-| # | Rule | Why |
-|---|------|-----|
-| 10 | **Show approval gate** | Human oversight required |
-| 11 | **Wait for explicit approval** | No auto-progression |
-| 12 | **Save workflow state** | Enable resume if interrupted (`.cursor/workflow-contexts/`) |
+```toon
+always_completion[3]{num,rule,why}:
+ 10,Show approval gate,Human oversight required
+ 11,Wait for explicit approval,No auto-progression
+ 12,Save workflow state,Enable resume if interrupted (.cursor/workflow-contexts/)
+```
 
 ### After User Approval
 
-| # | Rule | Why |
-|---|------|-----|
-| 13 | **IMMEDIATELY execute next phase** | Auto-continue flow |
-| 14 | **Show token usage** | Monitor consumption |
-| 15 | **Continue until blocking event** | Efficient execution |
+```toon
+always_after_approval[3]{num,rule,why}:
+ 13,IMMEDIATELY execute next phase,Auto-continue flow
+ 14,Show token usage,Monitor consumption
+ 15,Continue until blocking event,Efficient execution
+```
 
 ---
 
@@ -61,44 +65,49 @@ These are the fundamental ALWAYS/NEVER rules that govern Aura Frog behavior acro
 
 ### Context & Loading
 
-| # | Rule | Why |
-|---|------|-----|
-| 1 | **Skip project context loading** | Will use wrong conventions |
-| 2 | **Ignore instruction hierarchy** | Miss critical overrides |
-| 3 | **Assume tech stack** | Must detect/verify from `.cursor/project-contexts/` |
+```toon
+never_context[3]{num,rule,why}:
+ 1,Skip project context loading,Will use wrong conventions
+ 2,Ignore instruction hierarchy,Miss critical overrides
+ 3,Assume tech stack,Must detect/verify from .cursor/project-contexts/
+```
 
 ### Approvals & Safety
 
-| # | Rule | Why |
-|---|------|-----|
-| 4 | **Ignore approval gates** | Human oversight required |
-| 5 | **Auto-approve without user** | User must confirm |
-| 6 | **Skip confirmation for destructive actions** | Safety first |
+```toon
+never_approvals[3]{num,rule,why}:
+ 4,Ignore approval gates,Human oversight required
+ 5,Auto-approve without user,User must confirm
+ 6,Skip confirmation for destructive actions,Safety first
+```
 
 ### External Systems
 
-| # | Rule | Why |
-|---|------|-----|
-| 7 | **Write to external systems without confirmation** | Side effects need approval |
-| 8 | **Commit credentials/tokens** | Security risk |
-| 9 | **Push to main/master without approval** | Critical branch protection |
+```toon
+never_external[3]{num,rule,why}:
+ 7,Write to external systems without confirmation,Side effects need approval
+ 8,Commit credentials/tokens,Security risk
+ 9,Push to main/master without approval,Critical branch protection
+```
 
 ### Code Quality
 
-| # | Rule | Why |
-|---|------|-----|
-| 10 | **Implement without tests** | TDD is mandatory |
-| 11 | **Skip RED phase in TDD** | Tests must fail first |
-| 12 | **Ignore linter errors** | Code quality standard |
-| 13 | **Leave any/unknown types** | TypeScript strictness |
+```toon
+never_quality[4]{num,rule,why}:
+ 10,Implement without tests,TDD is mandatory
+ 11,Skip RED phase in TDD,Tests must fail first
+ 12,Ignore linter errors,Code quality standard
+ 13,Leave any/unknown types,TypeScript strictness
+```
 
 ### Workflow Control
 
-| # | Rule | Why |
-|---|------|-----|
-| 14 | **Skip phases without justification** | Phases exist for a reason |
-| 15 | **Proceed if tests don't pass** | Quality gate |
-| 16 | **Continue if coverage below target** | Coverage requirement |
+```toon
+never_workflow[3]{num,rule,why}:
+ 14,Skip phases without justification,Phases exist for a reason
+ 15,Proceed if tests don't pass,Quality gate
+ 16,Continue if coverage below target,Coverage requirement
+```
 
 ---
 

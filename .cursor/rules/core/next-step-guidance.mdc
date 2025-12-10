@@ -71,34 +71,37 @@ Show relevant options based on current phase:
 
 ### Workflow Control
 
-| Command | Description |
-|---------|-------------|
-| `approve` / `yes` | Accept and continue |
-| `reject: <reason>` | Reject with feedback |
-| `modify: <changes>` | Adjust deliverables |
-| `skip` | Skip current phase |
-| `done` | Complete workflow |
-| `pause` | Save and pause |
+```toon
+workflow_control[6]{command,description}:
+ approve/yes,Accept and continue
+ reject: <reason>,Reject with feedback
+ modify: <changes>,Adjust deliverables
+ skip,Skip current phase
+ done,Complete workflow
+ pause,Save and pause
+```
 
 ### Phase Navigation
 
-| Command | Description |
-|---------|-------------|
-| `workflow:status` | Show progress |
-| `workflow:skip <phase>` | Skip specific phase |
-| `workflow:force <phase>` | Jump to phase |
-| `workflow:handoff` | Prepare session handoff |
+```toon
+phase_navigation[4]{command,description}:
+ workflow:status,Show progress
+ workflow:skip <phase>,Skip specific phase
+ workflow:force <phase>,Jump to phase
+ workflow:handoff,Prepare session handoff
+```
 
 ### Speed Commands
 
-| Command | Description |
-|---------|-------------|
-| `skip brainstorming` | Skip requirement analysis |
-| `skip ui` | Skip Phase 3 |
-| `skip tests` | Skip test writing |
-| `skip docs` | Skip Phase 8 |
-| `force implementation` | Jump to coding |
-| `force complete` | End immediately |
+```toon
+speed_commands[6]{command,description}:
+ skip brainstorming,Skip requirement analysis
+ skip ui,Skip Phase 3
+ skip tests,Skip test writing
+ skip docs,Skip Phase 8
+ force implementation,Jump to coding
+ force complete,End immediately
+```
 
 ---
 

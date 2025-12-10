@@ -10,13 +10,14 @@ alwaysApply: true
 
 ## Log Levels
 
-| Level | When to Use | Example |
-|-------|-------------|---------|
-| ERROR | Failures requiring attention | Database connection failed |
-| WARN | Potential issues, recoverable | Rate limit approaching |
-| INFO | Important business events | User registered, order placed |
-| DEBUG | Development troubleshooting | Function input/output |
-| TRACE | Detailed execution flow | Loop iterations |
+```toon
+log_levels[5]{level,when_to_use,example}:
+ ERROR,Failures requiring attention,Database connection failed
+ WARN,Potential issues/recoverable,Rate limit approaching
+ INFO,Important business events,User registered/order placed
+ DEBUG,Development troubleshooting,Function input/output
+ TRACE,Detailed execution flow,Loop iterations
+```
 
 ### Level Selection
 ```typescript
@@ -117,11 +118,12 @@ logger.info('Processing request', {
 
 ## Environment-Specific
 
-| Environment | Level | Format | Output |
-|-------------|-------|--------|--------|
-| Development | DEBUG | Pretty | Console |
-| Staging | DEBUG | JSON | Console + File |
-| Production | INFO | JSON | Aggregator (DataDog, etc.) |
+```toon
+env_logging[3]{environment,level,format,output}:
+ Development,DEBUG,Pretty,Console
+ Staging,DEBUG,JSON,Console + File
+ Production,INFO,JSON,Aggregator (DataDog/etc.)
+```
 
 ## Logging Checklist
 

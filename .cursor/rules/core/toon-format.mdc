@@ -1,0 +1,149 @@
+---
+description: TOON (Token-Oriented Object Notation) format specification for token-efficient data representation
+globs: []
+alwaysApply: true
+---
+
+# TOON Format Reference
+
+**Version:** 1.0
+**Source:** https://github.com/toon-format/toon
+**License:** See original repository for license terms
+
+---
+
+## What is TOON?
+
+TOON (Token-Oriented Object Notation) is a compact, human-readable encoding of the JSON data model that minimizes tokens for LLM input. It achieves ~40% fewer tokens compared to standard JSON/markdown tables while maintaining deterministic, lossless round-trips.
+
+**Attribution:** TOON format was created by the toon-format project.
+**Repository:** https://github.com/toon-format/toon
+
+---
+
+## Why Use TOON?
+
+```toon
+benefits[4]{benefit,description}:
+ Token Efficiency,~40% fewer tokens vs markdown tables
+ Explicit Schema,[N]{fields} headers improve LLM parsing
+ Human Readable,CSV-like compact rows maintain readability
+ Lossless,Deterministic round-trips to/from JSON
+```
+
+---
+
+## Syntax Rules
+
+### Array Header Format
+
+```
+name[count]{field1,field2,field3}:
+```
+
+- `name` - Identifier for the data
+- `[count]` - Number of rows
+- `{fields}` - Comma-separated field names
+- `:` - Separator before data rows
+
+### Data Rows
+
+```
+ value1,value2,value3
+```
+
+- Single space prefix for each row
+- Comma-separated values matching header fields
+- Use `/` for multiple values within a field (instead of `,`)
+
+---
+
+## Examples
+
+### Before (Markdown Table)
+
+```markdown
+| Technology | Keywords | Agent | Score |
+|------------|----------|-------|-------|
+| React Native | react-native, expo | mobile-react-native | +60 |
+| Flutter | flutter, dart | mobile-flutter | +60 |
+```
+
+### After (TOON Format)
+
+```toon
+tech[2]{technology,keywords,agent,score}:
+ React Native,react-native/expo,mobile-react-native,+60
+ Flutter,flutter/dart,mobile-flutter,+60
+```
+
+### Nested Objects (YAML-style)
+
+```toon
+config:
+ task: Build feature
+ priority: high
+ tags[3]: frontend,testing,urgent
+```
+
+---
+
+## When to Use TOON
+
+### Best For
+
+- Uniform arrays of objects (tables with consistent columns)
+- Configuration data with repeated structure
+- Reference data that AI reads frequently
+- Any tabular data in rules/documentation
+
+### Less Suitable For
+
+- Deeply nested structures
+- Non-uniform data (varying fields per row)
+- Code examples (keep as-is)
+- Human-readable output templates
+
+---
+
+## Conversion Guidelines
+
+### DO Convert
+
+- Agent detection tables
+- Workflow phase tables
+- Scoring/threshold tables
+- Configuration mappings
+- Reference data tables
+
+### DO NOT Convert
+
+- Code examples in documentation
+- Template output examples (meant for humans)
+- Single-row data (no benefit)
+- Complex nested structures
+
+---
+
+## Usage in Aura Frog
+
+All `.mdc` files in this project use TOON format for tables where applicable. When adding new rules or documentation:
+
+1. Use TOON for any table with 3+ rows
+2. Use `[N]` count matching actual row count
+3. Use `/` separator for multiple values in a field
+4. Wrap in ```toon code blocks for syntax highlighting
+
+---
+
+## References
+
+- **Official Repository:** https://github.com/toon-format/toon
+- **Format Specification:** See repository README
+- **Token Savings:** ~40% reduction for uniform arrays
+
+---
+
+**Version:** 1.0
+**Last Updated:** 2025-12-10
+**Attribution:** TOON format by https://github.com/toon-format/toon

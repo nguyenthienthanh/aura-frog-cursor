@@ -38,12 +38,13 @@ fi
 
 **Location:** `.cursor/project-contexts/[project]/`
 
-| File | Contains |
-|------|----------|
-| `project-config.yaml` | Tech stack, team, integrations |
-| `conventions.md` | File naming, directory structure, import aliases |
-| `rules.md` | Quality rules, testing requirements, git workflow |
-| `examples.md` | Real code examples from project |
+```toon
+project_files[4]{file,contains}:
+ project-config.yaml,Tech stack/team/integrations
+ conventions.md,File naming/directory structure/import aliases
+ rules.md,Quality rules/testing requirements/git workflow
+ examples.md,Real code examples from project
+```
 
 ### 3. Load Aura Frog Core Rules
 From plugin `rules/`:
@@ -86,13 +87,14 @@ Project rules.md > Aura Frog core rules > Generic defaults
 
 ## Application Examples
 
-| Without Context | With Context |
-|-----------------|--------------|
-| `userProfile.tsx` | `UserProfile.tsx` (PascalCase) |
-| StyleSheet.create | NativeWind className |
-| 80% coverage | 85% coverage (project rule) |
-| Relative imports | `@/components/Button` |
-| Generic component | Project-specific pattern |
+```toon
+context_examples[5]{without_context,with_context}:
+ userProfile.tsx,UserProfile.tsx (PascalCase)
+ StyleSheet.create,NativeWind className
+ 80% coverage,85% coverage (project rule)
+ Relative imports,@/components/Button
+ Generic component,Project-specific pattern
+```
 
 ## Context Usage
 

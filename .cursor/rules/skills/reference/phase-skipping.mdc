@@ -19,15 +19,16 @@ Use this skill when:
 
 ## Phase Skip Rules
 
-| Condition | Skip Phases | Keep Phases | Reason |
-|-----------|-------------|-------------|--------|
-| Backend-only task | Phase 3 (UI) | All others | No UI to design |
-| Prototype/POC | Phase 4, 5a, 7, 8 | 1, 2, 5b, 6 | Quick validation |
-| "No tests" stated | Phase 4, 5a, 7 | All others | User preference (not recommended) |
-| Bug fix (small) | Phase 2, 3, 4 | 1, 5b, 6, 7 | Direct to bugfix-quick |
-| Documentation only | Phase 2-7 | 1, 8, 9 | No code changes |
-| Config change only | Phase 2, 3, 4, 5a, 6, 8 | 1, 5b, 7 | Simple update |
-| Frontend-only | - | All | Full workflow (UI important) |
+```toon
+skip_rules[7]{condition,skip_phases,keep_phases,reason}:
+ Backend-only task,Phase 3 (UI),All others,No UI to design
+ Prototype/POC,Phase 4/5a/7/8,1/2/5b/6,Quick validation
+ "No tests" stated,Phase 4/5a/7,All others,User preference (not recommended)
+ Bug fix (small),Phase 2/3/4,1/5b/6/7,Direct to bugfix-quick
+ Documentation only,Phase 2-7,1/8/9,No code changes
+ Config change only,Phase 2/3/4/5a/6/8,1/5b/7,Simple update
+ Frontend-only,-,All,Full workflow (UI important)
+```
 
 ## Detection Logic
 

@@ -29,12 +29,13 @@ Use this skill when:
 
 ## Profiling Strategy
 
-| Layer | Tools | Key Metrics |
-|-------|-------|-------------|
-| Frontend | Lighthouse, Chrome DevTools | FCP, LCP, TTI, CLS |
-| Backend | APM tools, profilers | Response time, throughput, CPU |
-| Database | EXPLAIN, slow query log | Query time, index usage |
-| Memory | Heap snapshots | Allocation, leaks, GC pauses |
+```toon
+profiling[4]{layer,tools,key_metrics}:
+ Frontend,Lighthouse/Chrome DevTools,FCP/LCP/TTI/CLS
+ Backend,APM tools/profilers,Response time/throughput/CPU
+ Database,EXPLAIN/slow query log,Query time/index usage
+ Memory,Heap snapshots,Allocation/leaks/GC pauses
+```
 
 ### When to Profile
 
@@ -46,13 +47,14 @@ Use this skill when:
 
 ### Core Web Vitals Targets
 
-| Metric | Good | Needs Improvement | Poor | Description |
-|--------|------|-------------------|------|-------------|
-| LCP | < 2.5s | 2.5s - 4s | > 4s | Largest Contentful Paint |
-| FID | < 100ms | 100ms - 300ms | > 300ms | First Input Delay |
-| CLS | < 0.1 | 0.1 - 0.25 | > 0.25 | Cumulative Layout Shift |
-| FCP | < 1.8s | 1.8s - 3s | > 3s | First Contentful Paint |
-| TTI | < 3.8s | 3.8s - 7.3s | > 7.3s | Time to Interactive |
+```toon
+web_vitals[5]{metric,good,needs_improvement,poor,description}:
+ LCP,< 2.5s,2.5s - 4s,> 4s,Largest Contentful Paint
+ FID,< 100ms,100ms - 300ms,> 300ms,First Input Delay
+ CLS,< 0.1,0.1 - 0.25,> 0.25,Cumulative Layout Shift
+ FCP,< 1.8s,1.8s - 3s,> 3s,First Contentful Paint
+ TTI,< 3.8s,3.8s - 7.3s,> 7.3s,Time to Interactive
+```
 
 ### Quick Wins
 
@@ -133,14 +135,15 @@ const handleClick = useCallback(() => {
 
 ### Common Bottlenecks & Solutions
 
-| Issue | Problem | Solution |
-|-------|---------|----------|
-| N+1 Queries | Multiple DB calls in loop | Eager loading, batching |
-| Missing Indexes | Full table scans | Add appropriate indexes |
-| Unbounded Queries | Loading entire tables | Pagination, limits |
-| Synchronous Blocking | Sequential operations | Async/parallel processing |
-| No Caching | Repeated expensive operations | Cache hot data |
-| Large Payloads | Sending unnecessary data | Field selection, compression |
+```toon
+bottlenecks[6]{issue,problem,solution}:
+ N+1 Queries,Multiple DB calls in loop,Eager loading/batching
+ Missing Indexes,Full table scans,Add appropriate indexes
+ Unbounded Queries,Loading entire tables,Pagination/limits
+ Synchronous Blocking,Sequential operations,Async/parallel processing
+ No Caching,Repeated expensive operations,Cache hot data
+ Large Payloads,Sending unnecessary data,Field selection/compression
+```
 
 ### Quick Wins
 
@@ -218,13 +221,14 @@ EXPLAIN ANALYZE SELECT * FROM orders WHERE user_id = 123;
 
 ### Index Strategy
 
-| Query Pattern | Index Type | Example |
-|---------------|------------|---------|
-| Exact match (=) | B-tree | `WHERE user_id = 123` |
-| Range (<, >, BETWEEN) | B-tree | `WHERE created_at > '2025-01-01'` |
-| Full-text search | GIN/GiST | `WHERE description @@ 'search terms'` |
-| JSON fields | GIN | `WHERE data @> '{"key": "value"}'` |
-| Partial match (LIKE) | GIN with pg_trgm | `WHERE name LIKE '%john%'` |
+```toon
+index_strategy[5]{query_pattern,index_type,example}:
+ Exact match (=),B-tree,WHERE user_id = 123
+ Range (< > BETWEEN),B-tree,WHERE created_at > '2025-01-01'
+ Full-text search,GIN/GiST,WHERE description @@ 'search terms'
+ JSON fields,GIN,WHERE data @> '{"key": "value"}'
+ Partial match (LIKE),GIN with pg_trgm,WHERE name LIKE '%john%'
+```
 
 ### Index Examples
 
@@ -254,12 +258,13 @@ CREATE INDEX CONCURRENTLY idx_users_email ON users(email);
 
 ## Caching Strategy
 
-| Cache Level | TTL | Use Case | Example |
-|-------------|-----|----------|---------|
-| Browser | Hours-Days | Static assets | CSS, JS, images |
-| CDN | Minutes-Hours | API responses, pages | Edge caching |
-| Application | Seconds-Minutes | Computed data, queries | Redis, Memcached |
-| Database | Varies | Query results | Postgres query cache |
+```toon
+caching[4]{cache_level,ttl,use_case,example}:
+ Browser,Hours-Days,Static assets,CSS/JS/images
+ CDN,Minutes-Hours,API responses/pages,Edge caching
+ Application,Seconds-Minutes,Computed data/queries,Redis/Memcached
+ Database,Varies,Query results,Postgres query cache
+```
 
 ### Cache Invalidation Patterns
 
@@ -287,13 +292,14 @@ const data = await cache.get(`data:v${version}`);
 
 ### Common Memory Leaks
 
-| Cause | Problem | Fix |
-|-------|---------|-----|
-| Event listeners not removed | Accumulate over time | Cleanup in useEffect/componentWillUnmount |
-| Closures holding references | Prevent GC | Null out references when done |
-| Growing arrays/maps | Unbounded growth | Use WeakMap, clear periodically |
-| Timers not cleared | Keep running | clearInterval/clearTimeout |
-| Large cached data | Out of memory | Implement LRU cache, size limits |
+```toon
+memory_leaks[5]{cause,problem,fix}:
+ Event listeners not removed,Accumulate over time,Cleanup in useEffect/componentWillUnmount
+ Closures holding references,Prevent GC,Null out references when done
+ Growing arrays/maps,Unbounded growth,Use WeakMap/clear periodically
+ Timers not cleared,Keep running,clearInterval/clearTimeout
+ Large cached data,Out of memory,Implement LRU cache/size limits
+```
 
 ### Leak Detection
 

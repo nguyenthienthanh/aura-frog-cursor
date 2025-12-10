@@ -22,12 +22,13 @@ alwaysApply: true
 
 ### Thresholds
 
-| Level | Tokens | % of 200K | Action |
-|-------|--------|-----------|--------|
-| Normal | 0-100K | 0-50% | Continue normally |
-| Moderate | 100K-150K | 50-75% | Show usage occasionally |
-| Warning | 150K-175K | 75-87% | **Warn user**, suggest handoff |
-| Critical | 175K-200K | 87-100% | **Strongly recommend** handoff |
+```toon
+token_thresholds[4]{level,tokens,percent,action}:
+ Normal,0-100K,0-50%,Continue normally
+ Moderate,100K-150K,50-75%,Show usage occasionally
+ Warning,150K-175K,75-87%,WARN user/suggest handoff
+ Critical,175K-200K,87-100%,STRONGLY RECOMMEND handoff
+```
 
 ### When to Show Token Status
 
@@ -63,14 +64,15 @@ Estimate = (conversation_length_chars / 4) + (code_generated_chars / 3)
 
 ### Show Processing Time For
 
-| Operation | Show Time? |
-|-----------|------------|
-| Quick answer | No |
-| File read/search | No |
-| Code generation | Yes |
-| Phase completion | Yes |
-| Multi-file changes | Yes |
-| Test execution | Yes |
+```toon
+show_time[6]{operation,show_time}:
+ Quick answer,No
+ File read/search,No
+ Code generation,Yes
+ Phase completion,Yes
+ Multi-file changes,Yes
+ Test execution,Yes
+```
 
 ### Format
 
@@ -134,11 +136,12 @@ Type `workflow:handoff` to save, or continue if near completion.
 
 ## User Commands
 
-| Command | Action |
-|---------|--------|
-| `tokens` or `token usage` | Show current estimate |
-| `workflow:handoff` | Save state to `.cursor/workflow-contexts/` for later |
-| `workflow:resume <id>` | Resume saved workflow from `.cursor/workflow-contexts/` |
+```toon
+user_commands[3]{command,action}:
+ tokens/token usage,Show current estimate
+ workflow:handoff,Save state to `.cursor/workflow-contexts/` for later
+ workflow:resume <id>,Resume saved workflow from `.cursor/workflow-contexts/`
+```
 
 ---
 
@@ -187,13 +190,14 @@ State will be saved to: .cursor/workflow-contexts/workflow-{id}/
 
 ## Enforcement
 
-| Scenario | Action |
-|----------|--------|
-| Every phase completion | Show summary with tokens/time |
-| Token > 75% | Show warning |
-| Token > 87% | Show critical alert |
-| User asks | Show detailed status |
-| Long operation | Show time taken |
+```toon
+enforcement[5]{scenario,action}:
+ Every phase completion,Show summary with tokens/time
+ Token > 75%,Show warning
+ Token > 87%,Show critical alert
+ User asks,Show detailed status
+ Long operation,Show time taken
+```
 
 ---
 

@@ -10,21 +10,23 @@ alwaysApply: true
 
 ## Dependency Categories
 
-| Type | Location | Example |
-|------|----------|---------|
-| Production | dependencies | react, express |
-| Development | devDependencies | jest, eslint |
-| Peer | peerDependencies | Plugin requirements |
-| Optional | optionalDependencies | Platform-specific |
+```toon
+dep_categories[4]{type,location,example}:
+ Production,dependencies,react/express
+ Development,devDependencies,jest/eslint
+ Peer,peerDependencies,Plugin requirements
+ Optional,optionalDependencies,Platform-specific
+```
 
 ## Version Pinning Strategy
 
-| Symbol | Meaning | Example | Risk |
-|--------|---------|---------|------|
-| None | Exact | `1.2.3` | None |
-| `~` | Patch | `~1.2.3` → `1.2.x` | Low |
-| `^` | Minor | `^1.2.3` → `1.x.x` | Medium |
-| `*` | Any | `*` | High |
+```toon
+version_pinning[4]{symbol,meaning,example,risk}:
+ None,Exact,1.2.3,None
+ ~,Patch,~1.2.3 → 1.2.x,Low
+ ^,Minor,^1.2.3 → 1.x.x,Medium
+ *,Any,*,High
+```
 
 ### Recommendations
 ```json
@@ -39,11 +41,12 @@ alwaysApply: true
 
 ## Lock Files
 
-| Manager | Lock File | Action |
-|---------|-----------|--------|
-| npm | package-lock.json | Commit |
-| yarn | yarn.lock | Commit |
-| pnpm | pnpm-lock.yaml | Commit |
+```toon
+lock_files[3]{manager,lock_file,action}:
+ npm,package-lock.json,Commit
+ yarn,yarn.lock,Commit
+ pnpm,pnpm-lock.yaml,Commit
+```
 
 **Always commit lock files** - ensures reproducible builds.
 
@@ -59,13 +62,15 @@ alwaysApply: true
 ```
 
 ### Evaluation Checklist
-| Check | Pass Criteria |
-|-------|---------------|
-| Stars | >1000 (for core deps) |
-| Last commit | <6 months |
-| Open issues | Reasonable ratio |
-| Bundle size | Justified for use case |
-| License | MIT, Apache, BSD |
+
+```toon
+eval_checklist[5]{check,pass_criteria}:
+ Stars,>1000 (for core deps)
+ Last commit,<6 months
+ Open issues,Reasonable ratio
+ Bundle size,Justified for use case
+ License,MIT/Apache/BSD
+```
 
 ## Security
 

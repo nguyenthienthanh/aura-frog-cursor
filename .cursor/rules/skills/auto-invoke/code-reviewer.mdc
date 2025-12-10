@@ -35,12 +35,13 @@ git diff --name-only main...HEAD
 
 ### 2. Multi-Agent Review
 
-| Agent | Checks |
-|-------|--------|
-| **Security** | OWASP Top 10, secrets, SQL injection, XSS, auth issues |
-| **Dev** | KISS principle, structure, error handling, conventions |
-| **QA** | Coverage, test quality, edge cases, assertions |
-| **Performance** | Algorithms, memory, queries, bundle size, lazy loading |
+```toon
+multi_agent_review[4]{agent,checks}:
+ Security,OWASP Top 10/secrets/SQL injection/XSS/auth issues
+ Dev,KISS principle/structure/error handling/conventions
+ QA,Coverage/test quality/edge cases/assertions
+ Performance,Algorithms/memory/queries/bundle size/lazy loading
+```
 
 ### 3. Generate Report
 

@@ -87,16 +87,17 @@ Does file contain JSX/TSX elements?
 
 ## Specific Cases
 
-| File Type | Contains JSX? | Extension |
-|-----------|--------------|-----------|
-| React Component | ✅ Yes | `.tsx` / `.jsx` |
-| Hook (with component) | ✅ Yes | `.tsx` / `.jsx` |
-| Hook (no JSX) | ❌ No | `.ts` / `.js` |
-| Utility functions | ❌ No | `.ts` / `.js` |
-| Constants | ❌ No | `.ts` / `.js` |
-| Type definitions | ❌ No | `.ts` (never `.tsx`) |
-| HOC returning component | ✅ Yes | `.tsx` / `.jsx` |
-| Context Provider | ✅ Yes | `.tsx` / `.jsx` |
+```toon
+file_extensions[8]{file_type,contains_jsx,extension}:
+ React Component,Yes,.tsx/.jsx
+ Hook (with component),Yes,.tsx/.jsx
+ Hook (no JSX),No,.ts/.js
+ Utility functions,No,.ts/.js
+ Constants,No,.ts/.js
+ Type definitions,No,.ts (never .tsx)
+ HOC returning component,Yes,.tsx/.jsx
+ Context Provider,Yes,.tsx/.jsx
+```
 
 ## Common Mistakes
 

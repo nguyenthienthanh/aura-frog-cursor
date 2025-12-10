@@ -84,11 +84,12 @@ If reviewers disagree:
 
 ## Timeline Impact
 
-| Phase | Without Review | With Review | Time Added |
-|-------|---------------|-------------|------------|
-| Phase 1 | 45 min | 70 min | +25 min |
-| Phase 2 | 90 min | 115 min | +25 min |
-| Phase 4 | 60 min | 75 min | +15 min |
+```toon
+timeline_impact[3]{phase,without_review,with_review,time_added}:
+ Phase 1,45 min,70 min,+25 min
+ Phase 2,90 min,115 min,+25 min
+ Phase 4,60 min,75 min,+15 min
+```
 
 **Total added time:** ~65 minutes
 **Quality improvement:** Significant

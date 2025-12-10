@@ -22,15 +22,16 @@ Use this skill when:
 
 ### Story Points (Fibonacci Scale)
 
-| Points | Complexity | Typical Duration | Example |
-|--------|------------|------------------|---------|
-| 1 | Trivial | 2-4 hours | Config change, typo fix |
-| 2 | Simple | Half day (4h) | Small bug fix, simple component |
-| 3 | Moderate | 1-2 days | Standard feature, API endpoint |
-| 5 | Complex | 2-4 days | Complex feature, integration |
-| 8 | Very Complex | 1 week | Large feature, multi-component |
-| 13 | Epic-size | Needs breakdown | Too large, must split |
-| 21+ | Too large | Must split | Break into smaller tasks |
+```toon
+story_points[7]{points,complexity,typical_duration,example}:
+ 1,Trivial,2-4 hours,Config change/typo fix
+ 2,Simple,Half day (4h),Small bug fix/simple component
+ 3,Moderate,1-2 days,Standard feature/API endpoint
+ 5,Complex,2-4 days,Complex feature/integration
+ 8,Very Complex,1 week,Large feature/multi-component
+ 13,Epic-size,Needs breakdown,Too large/must split
+ 21+,Too large,Must split,Break into smaller tasks
+```
 
 **Rule:** If > 8 points, break into smaller tasks.
 
@@ -38,13 +39,14 @@ Use this skill when:
 
 ### T-Shirt Sizing (Quick Estimates)
 
-| Size | Points Equivalent | Use Case |
-|------|-------------------|----------|
-| XS | 1 | Config change, typo fix, one-line change |
-| S | 2-3 | Small feature, bug fix, simple component |
-| M | 5 | Standard feature, typical task |
-| L | 8 | Complex feature, requires design |
-| XL | 13+ | Epic, needs breakdown into smaller tasks |
+```toon
+tshirt_sizing[5]{size,points_equivalent,use_case}:
+ XS,1,Config change/typo fix/one-line change
+ S,2-3,Small feature/bug fix/simple component
+ M,5,Standard feature/typical task
+ L,8,Complex feature/requires design
+ XL,13+,Epic/needs breakdown into smaller tasks
+```
 
 **Use for:** Initial rough estimates, backlog grooming
 
@@ -83,28 +85,30 @@ Estimate = (Optimistic + 4×Most Likely + Pessimistic) / 6
 
 ### Estimation by Task Type
 
-| Task Type | Base Estimate | Notes |
-|-----------|---------------|-------|
-| Bug fix (known cause) | 2-4h | Use bugfix-quick |
-| Bug fix (unknown cause) | 4h + investigation time | Add 50% buffer |
-| New API endpoint | 4-8h | Backend-only, skip UI phase |
-| UI component | 4-8h | Include design, tests |
-| Integration (3rd party) | 8-16h | Add 1.5x multiplier |
-| Database migration | 4-8h | Add testing, rollback time |
-| New feature (full stack) | Sum of parts | Use phase estimates |
+```toon
+task_estimates[7]{task_type,base_estimate,notes}:
+ Bug fix (known cause),2-4h,Use bugfix-quick
+ Bug fix (unknown cause),4h + investigation,Add 50% buffer
+ New API endpoint,4-8h,Backend-only/skip UI phase
+ UI component,4-8h,Include design/tests
+ Integration (3rd party),8-16h,Add 1.5x multiplier
+ Database migration,4-8h,Add testing/rollback time
+ New feature (full stack),Sum of parts,Use phase estimates
+```
 
 ## Estimation Adjustments
 
 ### Multipliers (Apply to Base Estimate)
 
-| Factor | Multiplier | Example |
-|--------|------------|---------|
-| New developer | 1.5x | Unfamiliar with codebase |
-| Unfamiliar tech | 1.5x | First time using library/framework |
-| Legacy code | 1.3x | Poor docs, technical debt |
-| Third-party integration | 1.5x | API docs, rate limits, testing |
-| Unclear requirements | 1.5x | Need investigation time |
-| **Multiple combined** | Multiply together | 1.5x × 1.3x = 1.95x |
+```toon
+multipliers[6]{factor,multiplier,example}:
+ New developer,1.5x,Unfamiliar with codebase
+ Unfamiliar tech,1.5x,First time using library/framework
+ Legacy code,1.3x,Poor docs/technical debt
+ Third-party integration,1.5x,API docs/rate limits/testing
+ Unclear requirements,1.5x,Need investigation time
+ Multiple combined,Multiply together,1.5x × 1.3x = 1.95x
+```
 
 **Example:**
 ```
@@ -116,11 +120,12 @@ Legacy code (1.3x): 12 × 1.3 = 15.6 hours
 
 ### Buffer Guidelines
 
-| Confidence Level | Buffer | When to Use |
-|------------------|--------|-------------|
-| High (done before) | 10% | Familiar task, clear requirements |
-| Medium (similar work) | 20% | Similar but not identical |
-| Low (new territory) | 30-50% | New tech, unclear scope |
+```toon
+buffer_guidelines[3]{confidence_level,buffer,when_to_use}:
+ High (done before),10%,Familiar task/clear requirements
+ Medium (similar work),20%,Similar but not identical
+ Low (new territory),30-50%,New tech/unclear scope
+```
 
 **Example with buffer:**
 ```
@@ -163,14 +168,15 @@ Total: 8 + (8 × 0.2) = 9.6 hours ≈ 10 hours
 
 ## Estimation Anti-Patterns
 
-| Anti-Pattern | Problem | Fix |
-|--------------|---------|-----|
-| Padding excessively | Creates distrust, delays | Use explicit buffer instead |
-| Single point estimate | Ignores risk, no range | Use three-point estimation |
-| Copying estimates | Different contexts | Estimate fresh each time |
-| Not tracking actuals | No learning | Track and compare |
-| Estimating alone | Bias, blind spots | Team estimation (Planning Poker) |
-| Treating as deadlines | Pressure, shortcuts | Estimates are guesses, not commitments |
+```toon
+anti_patterns[6]{anti_pattern,problem,fix}:
+ Padding excessively,Creates distrust/delays,Use explicit buffer instead
+ Single point estimate,Ignores risk/no range,Use three-point estimation
+ Copying estimates,Different contexts,Estimate fresh each time
+ Not tracking actuals,No learning,Track and compare
+ Estimating alone,Bias/blind spots,Team estimation (Planning Poker)
+ Treating as deadlines,Pressure/shortcuts,Estimates are guesses/not commitments
+```
 
 ## Tracking & Learning
 

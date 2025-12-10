@@ -192,15 +192,16 @@ Test MUST pass to confirm fix works.
 
 ## Comparison to Full Workflow
 
-| Aspect | Bugfix Quick | Full Workflow |
-|--------|--------------|---------------|
-| Phases | 4 | 9 |
-| Approval Gates | 3 | 9 |
-| Time | 40-70 min | 4-8 hours |
-| Use For | Bugs only | New features |
-| Design Phase | No | Yes |
-| UI Phase | No | Yes (if needed) |
-| Security Review | Lightweight | Comprehensive |
+```toon
+comparison[7]{aspect,bugfix_quick,full_workflow}:
+ Phases,4,9
+ Approval Gates,3,9
+ Time,40-70 min,4-8 hours
+ Use For,Bugs only,New features
+ Design Phase,No,Yes
+ UI Phase,No,Yes (if needed)
+ Security Review,Lightweight,Comprehensive
+```
 
 ## When to Escalate
 
