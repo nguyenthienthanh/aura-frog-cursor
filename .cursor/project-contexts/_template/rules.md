@@ -1,6 +1,7 @@
 # Project Quality Rules
 
-This file defines project-specific quality rules that override Aura Frog defaults.
+This file defines project-specific quality rules that are MERGED with Aura Frog defaults.
+Rules here are ADDED to Aura Frog rules, not replacing them.
 
 ## Linting Rules
 
@@ -17,15 +18,17 @@ Enforcement:
 
 ### Critical Lint Rules
 
-These rules are NON-NEGOTIABLE for this project:
+These project-specific rules are ADDED to Aura Frog defaults:
 
 ```yaml
-Must Pass:
-  - no-console          # No console.log (use logger instead)
-  - no-any              # No TypeScript any type
-  - no-unused-vars      # No unused variables/imports
+# Aura Frog defaults (always included):
+#   - no-console, no-any, no-unused-vars, prefer-const, eqeqeq, no-var
+
+# Project-specific additions (merged with above):
+Additional Must Pass:
   - react-hooks/*       # All React hooks rules
   - @typescript-eslint/strict-*  # TypeScript strict rules
+  # Add more project-specific rules here
 ```
 
 ### Allowed Exceptions

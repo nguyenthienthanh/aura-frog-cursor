@@ -53,9 +53,12 @@ From plugin `rules/`:
 - `kiss-principle.md` - Simplicity rules
 - `cross-review.md` - Multi-agent review process
 
-### 4. Merge (Project Overrides Core)
+### 4. Merge Rules (Combined, Not Replaced)
 ```
-Project rules.md > Aura Frog core rules > Generic defaults
+Final Rules = Aura Frog core rules + Project rules.md
+             - ignored_rules (if specified)
+
+Both apply together. Project wins on conflicts.
 ```
 
 ## Key Context Items

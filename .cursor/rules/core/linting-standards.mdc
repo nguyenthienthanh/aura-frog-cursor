@@ -47,13 +47,19 @@ config_detection[6]{linter,config_files,priority}:
  TypeScript,tsconfig.json (for strict settings),6
 ```
 
-### Step 3: Apply Rules
+### Step 3: Merge Rules
 
 ```yaml
-Priority Order:
-  1. Project context critical_rules (highest)
-  2. Project linter config file
-  3. Aura Frog defaults (lowest)
+Merge Strategy:
+  - COMBINE Aura Frog defaults + Project-specific rules
+  - Both sets of rules apply together
+  - If conflict: Project rule wins
+  - Result: Union of all rules
+
+Example:
+  Aura Frog defaults: [no-console, no-any, no-unused-vars]
+  Project critical:   [no-console, react-hooks/exhaustive-deps]
+  Merged result:      [no-console, no-any, no-unused-vars, react-hooks/exhaustive-deps]
 ```
 
 ---
@@ -238,6 +244,23 @@ common_violations[8]{violation,bad_example,good_example}:
 
 ## Project Context Integration
 
+### Rule Merging Strategy
+
+```yaml
+How Rules Are Merged:
+  1. Start with Aura Frog default rules (this file)
+  2. Add project-specific rules from project-config.yaml
+  3. Both sets apply - NOT replacement
+  4. Conflicts resolved by project preference
+
+Example Merge:
+  Aura Frog:  no-console, no-any, no-unused-vars, prefer-const
+  Project:    no-console (already in), custom-rule, react-hooks/*
+
+  Final Set:  no-console, no-any, no-unused-vars, prefer-const,
+              custom-rule, react-hooks/*
+```
+
 ### Loading from Project Context
 
 ```yaml
@@ -246,9 +269,13 @@ File: .cursor/project-contexts/[project]/project-config.yaml
 linting:
   type: "eslint"
   config_file: ".eslintrc.js"
+
+  # These are ADDED to Aura Frog defaults (merged)
   critical_rules:
-    - "no-console"
-    - "no-any"
+    - "react-hooks/exhaustive-deps"
+    - "custom-project-rule"
+
+  # These are REMOVED from merged set
   ignored_rules:
     - "max-len"  # Prettier handles this
 ```
@@ -259,8 +286,8 @@ linting:
 File: .cursor/project-contexts/[project]/rules.md
 
 Read the "Linting Rules" section for:
-  - Critical rules for this project
-  - Allowed exceptions
+  - Additional rules for this project (merged with defaults)
+  - Rules to ignore (subtracted from merged set)
   - Project-specific patterns
 ```
 

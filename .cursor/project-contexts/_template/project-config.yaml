@@ -15,7 +15,7 @@ tech_stack:
   testing: "jest"        # jest | vitest | pytest | phpunit | go-test
 
 # Linting Configuration
-# AI will follow these linting rules during code generation
+# These rules are MERGED with Aura Frog defaults (not replaced)
 linting:
   # Linter type (auto-detected from config files if not specified)
   type: "eslint"  # eslint | tslint | biome | prettier-only
@@ -29,16 +29,17 @@ linting:
   # Fix command
   fix_command: "npm run lint:fix"
 
-  # Critical rules that MUST be followed (AI will prioritize these)
+  # Additional critical rules (MERGED with Aura Frog defaults)
+  # Aura Frog defaults: no-console, no-any, no-unused-vars, prefer-const, eqeqeq, no-var
+  # Add project-specific rules here:
   critical_rules:
-    - "no-console"           # No console.log in production
-    - "no-any"               # No TypeScript any type
-    - "no-unused-vars"       # No unused variables
     - "react-hooks/rules-of-hooks"  # React hooks rules
     - "react-hooks/exhaustive-deps" # Dependency arrays
+    # Add more project-specific rules...
 
-  # Rules to ignore (AI won't enforce these)
+  # Rules to REMOVE from merged set (subtract from Aura Frog + project rules)
   ignored_rules: []
+  # Example: ["max-len"]  # If Prettier handles line length
 
   # Auto-fix on save (for code generation)
   auto_fix: true

@@ -13,16 +13,20 @@ alwaysApply: true
 
 ## Project-Specific Configuration
 
-**IMPORTANT:** Always check for project-specific rules before applying defaults.
+**IMPORTANT:** Project rules are MERGED with Aura Frog defaults, not replaced.
 
 ```yaml
-Check First:
-  1. .cursor/project-contexts/[project]/rules.md
-  2. .cursor/project-contexts/[project]/project-config.yaml
-  3. Project's eslint/tslint config files
-  4. Project's tsconfig.json
+Rule Merging:
+  1. Start with Aura Frog defaults (this file)
+  2. Add project rules from .cursor/project-contexts/[project]/
+  3. Both sets apply together
+  4. Conflicts: Project preference wins
 
-Project rules OVERRIDE these defaults.
+Load and Merge:
+  - .cursor/project-contexts/[project]/rules.md (merged)
+  - .cursor/project-contexts/[project]/project-config.yaml (merged)
+  - Project's eslint/tslint config files (merged)
+  - Project's tsconfig.json (merged)
 ```
 
 ---
@@ -246,14 +250,17 @@ Before submitting code:
 
 ```yaml
 Before Code Generation:
-  1. Load project context from .cursor/project-contexts/[project]/
-  2. Apply project-specific rules from rules.md
-  3. Follow conventions from conventions.md
-  4. Match patterns from examples.md
+  1. Load Aura Frog defaults (always applied)
+  2. Load project context from .cursor/project-contexts/[project]/
+  3. MERGE project rules with Aura Frog defaults
+  4. Follow merged conventions
+  5. Match patterns from examples.md
 
-If No Project Context:
-  - Use Aura Frog defaults from this file
-  - Suggest running 'project:init' to create context
+Rule Merging:
+  - Aura Frog defaults: Always included
+  - Project rules: Added to defaults
+  - ignored_rules: Removed from merged set
+  - Conflicts: Project wins
 ```
 
 ---
