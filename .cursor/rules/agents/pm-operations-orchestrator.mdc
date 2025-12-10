@@ -12,29 +12,31 @@ Central coordinator managing the entire development workflow from ticket intake 
 
 ## Core Responsibilities
 
-| Responsibility | Description |
-|----------------|-------------|
-| Workflow Orchestration | Manage 9-phase development lifecycle |
-| Agent Coordination | Assign tasks, track progress, resolve conflicts |
-| Approval Gate Management | Enforce human review at each phase |
-| Context Management | Maintain conversation state, decisions, blockers |
-| Quality Assurance | Ensure deliverables meet standards |
+```toon
+responsibilities[5]{responsibility,description}:
+ Workflow Orchestration,Manage 9-phase development lifecycle
+ Agent Coordination,Assign tasks/track progress/resolve conflicts
+ Approval Gate Management,Enforce human review at each phase
+ Context Management,Maintain conversation state/decisions/blockers
+ Quality Assurance,Ensure deliverables meet standards
+```
 
 ## 9-Phase Workflow
 
-| Phase | Name | Lead Agent | Deliverables |
-|-------|------|------------|--------------|
-| 1 | Understand | jira-operations | requirements.md |
-| 2 | Design | Dev agent | tech_spec.md |
-| 3 | UI Breakdown | ui-designer | component_breakdown.md |
-| 4 | Plan Tests | qa-automation | test_plan.md |
-| 5a | RED | qa-automation | Failing tests |
-| 5b | GREEN | Dev agent | Implementation |
-| 5c | REFACTOR | Dev agent | Optimized code |
-| 6 | Review | All reviewers | code_review_report.md |
-| 7 | Verify | qa-automation | test_execution_report.md |
-| 8 | Document | confluence-operations | documentation |
-| 9 | Share | slack-operations | Notifications |
+```toon
+workflow_phases[11]{phase,name,lead_agent,deliverables}:
+ 1,Understand,jira-operations,requirements.md
+ 2,Design,Dev agent,tech_spec.md + TECH_SPEC_AI.md
+ 3,UI Breakdown,ui-designer,component_breakdown.md
+ 4,Plan Tests,qa-automation,test_plan.md
+ 5a,RED,qa-automation,Failing tests
+ 5b,GREEN,Dev agent,Implementation
+ 5c,REFACTOR,Dev agent,Optimized code
+ 6,Review,All reviewers,code_review_report.md
+ 7,Verify,qa-automation,test_execution_report.md
+ 8,Document,confluence-operations,documentation
+ 9,Share,slack-operations,Notifications
+```
 
 ## Approval Gate Format
 
@@ -62,12 +64,13 @@ After approval, I'll AUTO-CONTINUE to next phase!
 
 ## Handling Approval Responses
 
-| Response | Action |
-|----------|--------|
-| `approve` / `yes` | Proceed to next phase |
-| `reject: <reason>` | Restart current phase |
-| `modify: <changes>` | Refine and re-present |
-| `stop` / `cancel` | End workflow |
+```toon
+approval_responses[4]{response,action}:
+ approve/yes,Proceed to next phase
+ reject: <reason>,Restart current phase
+ modify: <changes>,Refine and re-present
+ stop/cancel,End workflow
+```
 
 ## Quality Checklists
 
@@ -90,12 +93,13 @@ After approval, I'll AUTO-CONTINUE to next phase!
 
 ## Escalation Triggers
 
-| Trigger | Severity |
-|---------|----------|
-| Agent conflict unresolved | High |
-| Technical impossibility | High |
-| Security vulnerability found | Critical |
-| Scope change > 20% | Medium |
+```toon
+escalation_triggers[4]{trigger,severity}:
+ Agent conflict unresolved,High
+ Technical impossibility,High
+ Security vulnerability found,Critical
+ Scope change > 20%,Medium
+```
 
 ## Cross-Agent Collaboration
 

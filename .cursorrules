@@ -10,12 +10,13 @@
 
 At EVERY session start, you MUST:
 
-| # | Action | How |
-|---|--------|-----|
-| 1 | Show agent banner | See format below |
-| 2 | Load `.envrc` if exists | Check `.cursor/.envrc` or project root |
-| 3 | Detect appropriate agent | Based on task context |
-| 4 | Load project context | From `.cursor/project-contexts/[project]/` if exists |
+```toon
+session_start[4]{step,action,how}:
+ 1,Show agent banner,See format below
+ 2,Load .envrc if exists,Check .cursor/.envrc or project root
+ 3,Detect appropriate agent,Based on task context
+ 4,Load project context,From .cursor/project-contexts/[project]/ if exists
+```
 
 ---
 
@@ -67,24 +68,25 @@ Multiple agents:
 
 Determine agent based on user's request context:
 
-| Context | Agent |
-|---------|-------|
-| General/Unknown | `pm-operations-orchestrator` |
-| React Native | `mobile-react-native` |
-| Flutter | `mobile-flutter` |
-| Vue.js | `web-vuejs` |
-| React | `web-reactjs` |
-| Next.js | `web-nextjs` |
-| Angular | `web-angular` |
-| Node.js | `backend-nodejs` |
-| Python | `backend-python` |
-| Laravel | `backend-laravel` |
-| Go | `backend-go` |
-| Database | `database-specialist` |
-| Security | `security-expert` |
-| QA/Testing | `qa-automation` |
-| UI/Design | `ui-designer` |
-| DevOps | `devops-cicd` |
+```toon
+agent_selection[16]{context,agent}:
+ General/Unknown,pm-operations-orchestrator
+ React Native,mobile-react-native
+ Flutter,mobile-flutter
+ Vue.js,web-vuejs
+ React,web-reactjs
+ Next.js,web-nextjs
+ Angular,web-angular
+ Node.js,backend-nodejs
+ Python,backend-python
+ Laravel,backend-laravel
+ Go,backend-go
+ Database,database-specialist
+ Security,security-expert
+ QA/Testing,qa-automation
+ UI/Design,ui-designer
+ DevOps,devops-cicd
+```
 
 **Full agent definitions:** `.cursor/rules/agents/`
 
@@ -94,19 +96,20 @@ Determine agent based on user's request context:
 
 When using the 9-phase workflow:
 
-| Phase | Name | Description |
-|-------|------|-------------|
-| 1 | Understand | Gather requirements, analyze scope |
-| 2 | Design | Technical architecture, component design |
-| 3 | UI Breakdown | UI/UX analysis, component hierarchy |
-| 4 | Test Plan | Test strategy, test cases |
-| 5a | TDD RED | Write failing tests first |
-| 5b | TDD GREEN | Implement to pass tests |
-| 5c | TDD REFACTOR | Improve code quality |
-| 6 | Review | Code review, quality checks |
-| 7 | Verify | QA validation, acceptance testing |
-| 8 | Document | Documentation updates |
-| 9 | Share | Notifications, knowledge sharing |
+```toon
+workflow_phases[11]{phase,name,description}:
+ 1,Understand,Gather requirements/analyze scope
+ 2,Design,Technical architecture/component design
+ 3,UI Breakdown,UI/UX analysis/component hierarchy
+ 4,Test Plan,Test strategy/test cases
+ 5a,TDD RED,Write failing tests first
+ 5b,TDD GREEN,Implement to pass tests
+ 5c,TDD REFACTOR,Improve code quality
+ 6,Review,Code review/quality checks
+ 7,Verify,QA validation/acceptance testing
+ 8,Document,Documentation updates
+ 9,Share,Notifications/knowledge sharing
+```
 
 **Phase details:** `.cursor/workflows/`
 
@@ -116,14 +119,15 @@ When using the 9-phase workflow:
 
 When user mentions a command, read and execute from `.cursor/commands/`:
 
-| Category | Commands |
-|----------|----------|
-| Workflow | `workflow:start`, `workflow:status`, `workflow:next` |
-| Planning | `planning:list`, `planning:plan`, `planning:refine` |
-| Dev | `dev:implement`, `dev:refactor`, `dev:review` |
-| Test | `test:unit`, `test:e2e`, `test:coverage` |
-| Docs | `document`, `document:api`, `document:component` |
-| Misc | `misc:document`, `misc:estimate` |
+```toon
+commands[6]{category,commands}:
+ Workflow,workflow:start/workflow:status/workflow:next
+ Planning,planning:list/planning:plan/planning:refine
+ Dev,dev:implement/dev:refactor/dev:review
+ Test,test:unit/test:e2e/test:coverage
+ Docs,document/document:api/document:component
+ Misc,misc:document/misc:estimate
+```
 
 **All commands:** `.cursor/commands/`
 
@@ -151,15 +155,16 @@ All rules in `.cursor/rules/core/` with `alwaysApply: true` are automatically ap
 
 When generating documents, store in appropriate locations:
 
-| Document Type | Location |
-|---------------|----------|
-| Feature docs | `.cursor/documents/features/` |
-| API docs | `.cursor/documents/api/` |
-| Component docs | `.cursor/documents/components/` |
-| Tech specs | `.cursor/documents/specs/` |
-| User guides | `.cursor/documents/guides/` |
-| Requirements | `.cursor/documents/requirements/` |
-| Test plans | `.cursor/documents/test-plans/` |
+```toon
+doc_storage[7]{document_type,location}:
+ Feature docs,.cursor/documents/features/
+ API docs,.cursor/documents/api/
+ Component docs,.cursor/documents/components/
+ Tech specs,.cursor/documents/specs/
+ User guides,.cursor/documents/guides/
+ Requirements,.cursor/documents/requirements/
+ Test plans,.cursor/documents/test-plans/
+```
 
 **Templates:** `.cursor/templates/`
 
@@ -214,17 +219,18 @@ bash .cursor/scripts/figma-fetch.sh "FIGMA_URL"
 
 ## Quick Reference
 
-| Resource | Location |
-|----------|----------|
-| Agents (24) | `.cursor/rules/agents/` |
-| Commands (70+) | `.cursor/commands/` |
-| Core Rules | `.cursor/rules/core/` |
-| Templates | `.cursor/templates/` |
-| Documents | `.cursor/documents/` |
-| Scripts | `.cursor/scripts/` |
-| Workflows | `.cursor/workflows/` |
-| Getting Started | `.cursor/GET_STARTED.md` |
+```toon
+quick_ref[8]{resource,location}:
+ Agents (24),.cursor/rules/agents/
+ Commands (70+),.cursor/commands/
+ Core Rules,.cursor/rules/core/
+ Templates,.cursor/templates/
+ Documents,.cursor/documents/
+ Scripts,.cursor/scripts/
+ Workflows,.cursor/workflows/
+ Getting Started,.cursor/GET_STARTED.md
+```
 
 ---
 
-**Version:** 1.1.4 | **Last Updated:** 2025-12-08
+**Version:** 1.1.4 | **Last Updated:** 2025-12-10

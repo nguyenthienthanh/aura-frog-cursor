@@ -38,19 +38,20 @@ Cursor AI should activate this skill when:
 
 ## 9-Phase Workflow
 
-| Phase | Name | Lead Agent | Deliverable | Gate |
-|-------|------|------------|-------------|------|
-| 1 | Understand 🎯 | pm-operations-orchestrator | Requirements document | ✋ |
-| 2 | Design 🏗️ | Dev agent | Technical design + **TECH_SPEC_AI.md** | ✋ |
-| 3 | UI Breakdown 🎨 | ui-designer | Component breakdown | ✋ |
-| 4 | Plan Tests 🧪 | qa-automation | Test strategy | ✋ |
-| 5a | Write Tests 🔴 | qa-automation + Dev | Failing tests (TDD RED) | ✋ |
-| 5b | Build 🟢 | Dev agent | Implementation (TDD GREEN) | ✋ |
-| 5c | Polish ♻️ | Dev agent | Refactored code (TDD REFACTOR) | ✋ |
-| 6 | Review 👀 | security-expert | Quality review report | ✋ |
-| 7 | Verify ✅ | qa-automation | All tests pass, coverage ≥80% | ✋ |
-| 8 | Document 📚 | pm-operations-orchestrator | Documentation | ✋ |
-| 9 | Share 🔔 | slack-operations | Team notification | Auto |
+```toon
+workflow_phases[11]{phase,name,lead_agent,deliverable,gate}:
+ 1,Understand 🎯,pm-operations-orchestrator,Requirements document,✋
+ 2,Design 🏗️,Dev agent,Technical design + TECH_SPEC_AI.md,✋
+ 3,UI Breakdown 🎨,ui-designer,Component breakdown,✋
+ 4,Plan Tests 🧪,qa-automation,Test strategy,✋
+ 5a,Write Tests 🔴,qa-automation + Dev,Failing tests (TDD RED),✋
+ 5b,Build 🟢,Dev agent,Implementation (TDD GREEN),✋
+ 5c,Polish ♻️,Dev agent,Refactored code (TDD REFACTOR),✋
+ 6,Review 👀,security-expert,Quality review report,✋
+ 7,Verify ✅,qa-automation,All tests pass/coverage ≥80%,✋
+ 8,Document 📚,pm-operations-orchestrator,Documentation,✋
+ 9,Share 🔔,slack-operations,Team notification,Auto
+```
 
 ## Phase Transition Rules
 
@@ -132,12 +133,13 @@ Phase 8 (Document) → Phase 9 (Share)
 
 ### Valid Responses
 
-| Response | Action |
-|----------|--------|
-| `approve` / `yes` | Continue to next phase immediately |
-| `reject: <reason>` | Restart current phase with feedback |
-| `modify: <changes>` | Adjust deliverables then re-show gate |
-| `stop` / `cancel` | End workflow, save state |
+```toon
+valid_responses[4]{response,action}:
+ approve/yes,Continue to next phase immediately
+ reject: <reason>,Restart current phase with feedback
+ modify: <changes>,Adjust deliverables then re-show gate
+ stop/cancel,End workflow and save state
+```
 
 ## AUTO-CONTINUE Behavior
 
@@ -195,12 +197,13 @@ Phase 5c (REFACTOR):
 
 ### Cross-Review
 
-| Phase | Creator | Reviewers |
-|-------|---------|-----------|
-| 1 (Understand) | PM | Dev + QA + UI |
-| 2 (Design) | Dev | Secondary Dev + QA |
-| 4 (Plan Tests) | QA | Dev |
-| 6 (Review) | Security | All |
+```toon
+cross_review[4]{phase,creator,reviewers}:
+ 1 (Understand),PM,Dev + QA + UI
+ 2 (Design),Dev,Secondary Dev + QA
+ 4 (Plan Tests),QA,Dev
+ 6 (Review),Security,All
+```
 
 ## Phase Skip Rules
 
