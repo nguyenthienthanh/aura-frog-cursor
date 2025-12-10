@@ -37,18 +37,19 @@ BEFORE CHANGE:
 
 **Always search for:**
 
-| What to Search | How to Find |
-|----------------|-------------|
-| Direct imports | `import.*{name}` or `from.*{module}` |
-| Function calls | `{functionName}(` |
-| Class instantiation | `new {ClassName}` |
-| Type references | `: {TypeName}` or `<{TypeName}>` |
-| Interface implementations | `implements {InterfaceName}` |
-| Component usage | `<{ComponentName}` |
-| API endpoints | Route path patterns |
-| Event handlers | `on{EventName}` |
-| Hook usage | `use{HookName}` |
-| Test files | `describe.*{name}` or `it.*{name}` |
+```toon
+search_checklist[10]{what_to_search,how_to_find}:
+ Direct imports,import.*{name} or from.*{module}
+ Function calls,{functionName}(
+ Class instantiation,new {ClassName}
+ Type references,: {TypeName} or <{TypeName}>
+ Interface implementations,implements {InterfaceName}
+ Component usage,<{ComponentName}
+ API endpoints,Route path patterns
+ Event handlers,on{EventName}
+ Hook usage,use{HookName}
+ Test files,describe.*{name} or it.*{name}
+```
 
 ### 3. Report Format
 
@@ -81,42 +82,46 @@ BEFORE CHANGE:
 
 ### Function/Method Changes
 
-| Change Type | Requirement |
-|-------------|-------------|
-| **Rename** | Update ALL call sites |
-| **Parameter added** | Provide default OR update ALL callers |
-| **Parameter removed** | Update ALL callers to remove argument |
-| **Parameter type changed** | Update ALL callers with new type |
-| **Return type changed** | Update ALL consumers |
-| **Behavior changed** | Review ALL usages for side effects |
+```toon
+function_changes[6]{change_type,requirement}:
+ Rename,Update ALL call sites
+ Parameter added,Provide default OR update ALL callers
+ Parameter removed,Update ALL callers to remove argument
+ Parameter type changed,Update ALL callers with new type
+ Return type changed,Update ALL consumers
+ Behavior changed,Review ALL usages for side effects
+```
 
 ### Component Changes (React/Vue/Angular)
 
-| Change Type | Requirement |
-|-------------|-------------|
-| **Prop renamed** | Update ALL parent components |
-| **Prop removed** | Remove from ALL parent components |
-| **Prop type changed** | Update ALL parent components |
-| **Event renamed** | Update ALL event listeners |
-| **Slot/children changed** | Update ALL usage patterns |
+```toon
+component_changes[5]{change_type,requirement}:
+ Prop renamed,Update ALL parent components
+ Prop removed,Remove from ALL parent components
+ Prop type changed,Update ALL parent components
+ Event renamed,Update ALL event listeners
+ Slot/children changed,Update ALL usage patterns
+```
 
 ### Type/Interface Changes
 
-| Change Type | Requirement |
-|-------------|-------------|
-| **Property added (required)** | Update ALL object creations |
-| **Property removed** | Remove from ALL usages |
-| **Property type changed** | Update ALL assignments |
-| **Generic constraint changed** | Verify ALL generic usages |
+```toon
+type_changes[4]{change_type,requirement}:
+ Property added (required),Update ALL object creations
+ Property removed,Remove from ALL usages
+ Property type changed,Update ALL assignments
+ Generic constraint changed,Verify ALL generic usages
+```
 
 ### API Changes
 
-| Change Type | Requirement |
-|-------------|-------------|
-| **Endpoint renamed** | Update ALL API calls (frontend + backend) |
-| **Request body changed** | Update ALL API callers |
-| **Response shape changed** | Update ALL response handlers |
-| **Auth requirement changed** | Update ALL protected routes |
+```toon
+api_changes[4]{change_type,requirement}:
+ Endpoint renamed,Update ALL API calls (frontend + backend)
+ Request body changed,Update ALL API callers
+ Response shape changed,Update ALL response handlers
+ Auth requirement changed,Update ALL protected routes
+```
 
 ---
 
@@ -137,15 +142,16 @@ After making changes:
 
 **If you see these, extra caution needed:**
 
-| Red Flag | Why It's Risky |
-|----------|----------------|
-| `any` type usage | Compiler won't catch errors |
-| Dynamic property access `obj[key]` | String-based, not type-safe |
-| Spread operator `...props` | May pass unexpected props |
-| Re-exports `export * from` | Hidden dependencies |
-| Index signatures `[key: string]` | Any key accepted |
-| `eval()` or `new Function()` | Dynamic code execution |
-| String-based event names | Not type-checked |
+```toon
+red_flags[7]{red_flag,why_risky}:
+ any type usage,Compiler won't catch errors
+ Dynamic property access obj[key],String-based/not type-safe
+ Spread operator ...props,May pass unexpected props
+ Re-exports export * from,Hidden dependencies
+ Index signatures [key: string],Any key accepted
+ eval() or new Function(),Dynamic code execution
+ String-based event names,Not type-checked
+```
 
 ---
 
@@ -206,12 +212,13 @@ interface UserCardProps {
 
 ### During TDD Phases
 
-| Phase | Safe Refactoring Action |
-|-------|------------------------|
-| **Phase 5a (RED)** | Tests define expected interface - don't break them |
-| **Phase 5b (GREEN)** | Minimal changes to pass tests |
-| **Phase 5c (REFACTOR)** | Full impact analysis required |
-| **Phase 6 (Review)** | Verify no breaking changes introduced |
+```toon
+tdd_refactoring[4]{phase,safe_refactoring_action}:
+ Phase 5a (RED),Tests define expected interface - don't break them
+ Phase 5b (GREEN),Minimal changes to pass tests
+ Phase 5c (REFACTOR),Full impact analysis required
+ Phase 6 (Review),Verify no breaking changes introduced
+```
 
 ### During Code Review
 

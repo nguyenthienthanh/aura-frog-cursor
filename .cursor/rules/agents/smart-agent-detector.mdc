@@ -17,88 +17,96 @@ Advanced intelligent agent selection system that uses multi-layer analysis of na
 
 ## Multi-Layer Detection System
 
-| Layer | Name | Description |
-|-------|------|-------------|
-| 1 | Natural Language | Analyze user message for intent, domain, complexity |
-| 2 | Context Analysis | CWD, recent files, project structure, conversation history |
-| 3 | Domain Patterns | Match task patterns against agent capabilities |
-| 4 | Confidence Scoring | Weighted multi-criteria algorithm |
-| 5 | Recommendation | Primary, secondary, optional agents with reasoning |
+```toon
+detection_layers[5]{layer,name,description}:
+ 1,Natural Language,Analyze user message for intent/domain/complexity
+ 2,Context Analysis,CWD/recent files/project structure/conversation history
+ 3,Domain Patterns,Match task patterns against agent capabilities
+ 4,Confidence Scoring,Weighted multi-criteria algorithm
+ 5,Recommendation,Primary/secondary/optional agents with reasoning
+```
 
 ## Scoring Algorithm
 
 ### Weights
 
-| Criterion | Points | Description |
-|-----------|--------|-------------|
-| Explicit Mention | +60 | User directly mentions technology |
-| Keyword Exact Match | +50 | Direct keyword match to intent |
-| Project Context | +40 | CWD, file structure, package files |
-| Semantic Match | +35 | Contextual/implied match |
-| Task Complexity | +30 | Inferred complexity level |
-| Conversation History | +25 | Previous context, active agents |
-| File Patterns | +20 | Recent files, naming conventions |
+```toon
+scoring_weights[7]{criterion,points,description}:
+ Explicit Mention,+60,User directly mentions technology
+ Keyword Exact Match,+50,Direct keyword match to intent
+ Project Context,+40,CWD/file structure/package files
+ Semantic Match,+35,Contextual/implied match
+ Task Complexity,+30,Inferred complexity level
+ Conversation History,+25,Previous context/active agents
+ File Patterns,+20,Recent files/naming conventions
+```
 
 ### Thresholds
 
-| Role | Score | Description |
-|------|-------|-------------|
-| Primary Agent | ≥80 | Lead development |
-| Secondary Agent | 50-79 | Supporting role |
-| Optional Agent | 30-49 | Nice-to-have |
-| Not Activated | <30 | Insufficient match |
+```toon
+score_thresholds[4]{role,score,description}:
+ Primary Agent,≥80,Lead development
+ Secondary Agent,50-79,Supporting role
+ Optional Agent,30-49,Nice-to-have
+ Not Activated,<30,Insufficient match
+```
 
 ## Intent Detection Patterns
 
-| Intent | Keywords | Primary Agent | Secondary |
-|--------|----------|---------------|-----------|
-| Implementation | `implement`, `create`, `add`, `build`, `develop` | Dev agent | qa-automation, ui-designer |
-| Bug Fix | `fix`, `bug`, `error`, `issue`, `broken`, `debug` | Dev agent | qa-automation |
-| Refactoring | `refactor`, `improve`, `optimize`, `clean up` | Dev agent | qa-automation |
-| Testing | `test`, `testing`, `QA`, `coverage`, `spec` | qa-automation | Dev agent |
-| Design/UI | `design`, `UI`, `UX`, `figma`, `layout`, `styling` | ui-designer | Dev agent |
-| Documentation | `document`, `docs`, `README`, `explain` | pm-operations-orchestrator | - |
-| Database | `database`, `schema`, `migration`, `query`, `SQL` | database-specialist | Backend agent |
-| Security | `security`, `vulnerability`, `audit`, `OWASP` | security-expert | Dev agent |
-| Performance | `performance`, `slow`, `optimize`, `lighthouse` | devops-cicd | Dev agent |
-| Deployment | `deploy`, `docker`, `kubernetes`, `CI/CD`, `pipeline` | devops-cicd | - |
+```toon
+intent_patterns[10]{intent,keywords,primary_agent,secondary}:
+ Implementation,implement/create/add/build/develop,Dev agent,qa-automation/ui-designer
+ Bug Fix,fix/bug/error/issue/broken/debug,Dev agent,qa-automation
+ Refactoring,refactor/improve/optimize/clean up,Dev agent,qa-automation
+ Testing,test/testing/QA/coverage/spec,qa-automation,Dev agent
+ Design/UI,design/UI/UX/figma/layout/styling,ui-designer,Dev agent
+ Documentation,document/docs/README/explain,pm-operations-orchestrator,-
+ Database,database/schema/migration/query/SQL,database-specialist,Backend agent
+ Security,security/vulnerability/audit/OWASP,security-expert,Dev agent
+ Performance,performance/slow/optimize/lighthouse,devops-cicd,Dev agent
+ Deployment,deploy/docker/kubernetes/CI-CD/pipeline,devops-cicd,-
+```
 
 ## Technology Detection
 
 ### Mobile Frameworks
 
-| Framework | Keywords | Files | Patterns |
-|-----------|----------|-------|----------|
-| React Native | `react-native`, `expo`, `RN` | `app.json` (expo), `package.json` | `*.phone.tsx`, `*.tablet.tsx` |
-| Flutter | `flutter`, `dart`, `bloc`, `riverpod` | `pubspec.yaml` | `*.dart`, `lib/` |
+```toon
+mobile_frameworks[2]{framework,keywords,files,patterns}:
+ React Native,react-native/expo/RN,app.json (expo)/package.json,*.phone.tsx/*.tablet.tsx
+ Flutter,flutter/dart/bloc/riverpod,pubspec.yaml,*.dart/lib/
+```
 
 ### Web Frameworks
 
-| Framework | Keywords | Files | Patterns |
-|-----------|----------|-------|----------|
-| Angular | `angular`, `ngrx`, `rxjs`, `signals` | `angular.json` | `*.component.ts`, `*.service.ts` |
-| Vue.js | `vue`, `pinia`, `nuxt`, `composition api` | `*.vue` files | `composables/`, `stores/` |
-| React | `react`, `hooks`, `context` | `package.json` (react, no next) | `*.jsx`, `*.tsx` |
-| Next.js | `next`, `nextjs`, `ssr`, `ssg`, `app router` | `next.config.js` | `app/`, `pages/`, `route.ts` |
+```toon
+web_frameworks[4]{framework,keywords,files,patterns}:
+ Angular,angular/ngrx/rxjs/signals,angular.json,*.component.ts/*.service.ts
+ Vue.js,vue/pinia/nuxt/composition api,*.vue files,composables//stores/
+ React,react/hooks/context,package.json (react no next),*.jsx/*.tsx
+ Next.js,next/nextjs/ssr/ssg/app router,next.config.js,app//pages//route.ts
+```
 
 ### Backend Frameworks
 
-| Framework | Keywords | Files | Patterns |
-|-----------|----------|-------|----------|
-| Node.js | `nodejs`, `express`, `nestjs`, `fastify` | `package.json` | `*.controller.ts`, `*.module.ts` |
-| Python | `python`, `django`, `fastapi`, `flask` | `requirements.txt`, `pyproject.toml` | `views.py`, `models.py` |
-| Go | `go`, `golang`, `gin`, `fiber`, `grpc` | `go.mod`, `go.sum` | `*.go`, `handler.go` |
-| Laravel | `laravel`, `php`, `eloquent`, `artisan` | `artisan`, `composer.json` | `*Controller.php`, `routes/` |
+```toon
+backend_frameworks[4]{framework,keywords,files,patterns}:
+ Node.js,nodejs/express/nestjs/fastify,package.json,*.controller.ts/*.module.ts
+ Python,python/django/fastapi/flask,requirements.txt/pyproject.toml,views.py/models.py
+ Go,go/golang/gin/fiber/grpc,go.mod/go.sum,*.go/handler.go
+ Laravel,laravel/php/eloquent/artisan,artisan/composer.json,*Controller.php/routes/
+```
 
 ## QA Agent Conditional Activation
 
 ### Activate When
 
-| Condition | Points |
-|-----------|--------|
-| User explicitly requests testing | +50 (Primary) |
-| Implementation intent + test infrastructure exists | +30 (Optional) |
-| Bug fix intent + test infrastructure exists | +35 (Optional) |
+```toon
+qa_activation[3]{condition,points}:
+ User explicitly requests testing,+50 (Primary)
+ Implementation intent + test infrastructure exists,+30 (Optional)
+ Bug fix intent + test infrastructure exists,+35 (Optional)
+```
 
 ### Skip When
 
@@ -108,13 +116,14 @@ Advanced intelligent agent selection system that uses multi-layer analysis of na
 
 ### Test Infrastructure Detection
 
-| Language | Check For |
-|----------|-----------|
-| JavaScript | `jest.config.js`, `vitest.config.ts`, `cypress.config.js`, `package.json` scripts.test |
-| Python | `pytest.ini`, `setup.cfg`, `requirements.txt` (pytest) |
-| PHP | `phpunit.xml`, `composer.json` (phpunit/phpunit) |
-| Go | `*_test.go` files |
-| General | `tests/`, `__tests__/`, `test/`, `spec/` directories |
+```toon
+test_infra[5]{language,check_for}:
+ JavaScript,jest.config.js/vitest.config.ts/cypress.config.js/package.json scripts.test
+ Python,pytest.ini/setup.cfg/requirements.txt (pytest)
+ PHP,phpunit.xml/composer.json (phpunit/phpunit)
+ Go,*_test.go files
+ General,tests//__tests__//test//spec/ directories
+```
 
 ## Context Analysis
 
@@ -204,11 +213,12 @@ These agents don't require scoring:
 
 ## Fallback Strategies
 
-| Scenario | Action |
-|----------|--------|
-| No agents ≥30 pts | Ask user for clarification |
-| Multiple agents tie | Prefer higher base priority |
-| Context unclear | Show top 3 options, let user choose |
+```toon
+fallback_strategies[3]{scenario,action}:
+ No agents ≥30 pts,Ask user for clarification
+ Multiple agents tie,Prefer higher base priority
+ Context unclear,Show top 3 options/let user choose
+```
 
 ## Integration with Other Agents
 
