@@ -1,0 +1,101 @@
+# Project Configuration Template
+# Copy this folder to .cursor/project-contexts/[your-project-name]/
+# and customize for your project
+
+project:
+  name: "your-project-name"
+  type: "react-native"  # react-native | nextjs | react | vue | angular | nodejs | laravel | python | go
+
+# Technology Stack
+tech_stack:
+  framework: "react-native"
+  language: "typescript"
+  styling: "nativewind"  # nativewind | tailwind | styled-components | css-modules | scss
+  state: "zustand"       # zustand | redux | mobx | context | pinia | vuex
+  testing: "jest"        # jest | vitest | pytest | phpunit | go-test
+
+# Linting Configuration
+# AI will follow these linting rules during code generation
+linting:
+  # Linter type (auto-detected from config files if not specified)
+  type: "eslint"  # eslint | tslint | biome | prettier-only
+
+  # Path to config file (relative to project root)
+  config_file: ".eslintrc.js"  # .eslintrc.js | .eslintrc.json | eslint.config.js | tslint.json | biome.json
+
+  # Run lint command
+  lint_command: "npm run lint"
+
+  # Fix command
+  fix_command: "npm run lint:fix"
+
+  # Critical rules that MUST be followed (AI will prioritize these)
+  critical_rules:
+    - "no-console"           # No console.log in production
+    - "no-any"               # No TypeScript any type
+    - "no-unused-vars"       # No unused variables
+    - "react-hooks/rules-of-hooks"  # React hooks rules
+    - "react-hooks/exhaustive-deps" # Dependency arrays
+
+  # Rules to ignore (AI won't enforce these)
+  ignored_rules: []
+
+  # Auto-fix on save (for code generation)
+  auto_fix: true
+
+# TypeScript Configuration
+typescript:
+  strict: true
+  config_file: "tsconfig.json"
+  # Strictness level for AI code generation
+  strictness:
+    no_any: true              # Disallow 'any' type
+    no_non_null_assertion: true  # Disallow '!' assertions
+    strict_null_checks: true  # Strict null checking
+    no_implicit_any: true     # Require explicit types
+
+# Prettier/Formatting Configuration
+formatting:
+  enabled: true
+  config_file: ".prettierrc"
+  # These will be applied during code generation
+  rules:
+    semi: true
+    single_quote: true
+    tab_width: 2
+    trailing_comma: "es5"
+    print_width: 100
+
+# Test Configuration
+testing:
+  framework: "jest"
+  config_file: "jest.config.js"
+  coverage:
+    threshold: 80
+    critical_paths: 90
+    ui_components: 70
+  patterns:
+    unit: "*.test.ts"
+    integration: "*.integration.test.ts"
+    e2e: "*.e2e.ts"
+
+# Agent Preferences
+agents:
+  primary: "mobile-react-native"
+  secondary:
+    - "qa-automation"
+    - "ui-designer"
+
+# Integrations
+integrations:
+  jira:
+    enabled: false
+    project_key: ""
+  figma:
+    enabled: false
+  slack:
+    enabled: false
+    channel: ""
+  confluence:
+    enabled: false
+    space_key: ""

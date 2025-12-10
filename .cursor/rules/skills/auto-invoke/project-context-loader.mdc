@@ -67,6 +67,17 @@ Project rules.md > Aura Frog core rules > Generic defaults
 - State management (Redux, Zustand, Context)
 - Testing framework (Jest, PyTest, PHPUnit)
 
+**Linting (from project-config.yaml):**
+- Linter type (eslint, tslint, biome)
+- Config file location
+- Critical rules to follow
+- Auto-fix settings
+
+**TypeScript (from project-config.yaml):**
+- Strict mode settings
+- no-any enforcement
+- Non-null assertion rules
+
 **Conventions:**
 - File naming (kebab-case, PascalCase, snake_case)
 - Import aliases (`@/`, `~/`, relative)
@@ -75,7 +86,7 @@ Project rules.md > Aura Frog core rules > Generic defaults
 
 **Rules:**
 - Coverage target (default 80%, may be higher)
-- Linting configuration
+- Linting critical rules
 - PR requirements
 - Git workflow
 

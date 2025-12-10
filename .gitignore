@@ -11,8 +11,8 @@ logs/
 .cursor/workflow-contexts/
 .cursor/project-contexts/*/
 
-# Keep template structure for project-contexts
-!.cursor/project-contexts/.gitkeep
+# Keep template for project-contexts (should be committed)
+!.cursor/project-contexts/_template/
 
 # OS files
 .DS_Store

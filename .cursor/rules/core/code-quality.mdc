@@ -6,7 +6,26 @@ alwaysApply: true
 
 # Code Quality Rules
 
+**Version:** 1.1.4
 **Purpose:** Ensure consistent, high-quality code across all projects
+
+---
+
+## Project-Specific Configuration
+
+**IMPORTANT:** Always check for project-specific rules before applying defaults.
+
+```yaml
+Check First:
+  1. .cursor/project-contexts/[project]/rules.md
+  2. .cursor/project-contexts/[project]/project-config.yaml
+  3. Project's eslint/tslint config files
+  4. Project's tsconfig.json
+
+Project rules OVERRIDE these defaults.
+```
+
+---
 
 ## General Code Standards
 
@@ -210,19 +229,49 @@ if (!user.hasPermission) return;
 
 Before submitting code:
 
-- [ ] No ESLint warnings
-- [ ] TypeScript strict compliance
-- [ ] Test coverage >= threshold
+- [ ] Linter passes (use project's lint config)
+- [ ] TypeScript strict compliance (check project's tsconfig.json)
+- [ ] Test coverage >= threshold (check project config, default 80%)
 - [ ] All tests pass
-- [ ] No console.logs in production
+- [ ] No console.logs in production (use logger)
 - [ ] Proper error handling
 - [ ] Code is readable
 - [ ] No code smells
 - [ ] Documentation updated
-- [ ] Follows naming conventions
+- [ ] Follows project naming conventions
+
+---
+
+## Project Context Integration
+
+```yaml
+Before Code Generation:
+  1. Load project context from .cursor/project-contexts/[project]/
+  2. Apply project-specific rules from rules.md
+  3. Follow conventions from conventions.md
+  4. Match patterns from examples.md
+
+If No Project Context:
+  - Use Aura Frog defaults from this file
+  - Suggest running 'project:init' to create context
+```
+
+---
 
 ## References
-- Project conventions: `project-contexts/[project]/conventions.md`
-- Project-specific rules: `project-contexts/[project]/rules.md`
-- Naming conventions: `naming-conventions.mdc`
-- Smart commenting: `smart-commenting.mdc`
+
+- **Project-specific (highest priority):**
+  - `.cursor/project-contexts/[project]/project-config.yaml`
+  - `.cursor/project-contexts/[project]/rules.md`
+  - `.cursor/project-contexts/[project]/conventions.md`
+  - `.cursor/project-contexts/[project]/examples.md`
+
+- **Aura Frog defaults:**
+  - `linting-standards.mdc` - Linting rule details
+  - `naming-conventions.mdc` - Naming patterns
+  - `smart-commenting.mdc` - Comment standards
+
+---
+
+**Version:** 1.1.4
+**Last Updated:** 2025-12-10

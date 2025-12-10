@@ -1,0 +1,279 @@
+---
+description: Follow project-specific linting rules from ESLint/TSLint/Biome configuration
+globs: []
+alwaysApply: true
+---
+
+# Linting Standards
+
+**Version:** 1.1.4
+**Priority:** HIGH - All generated code must pass project linter
+**Type:** Rule (Mandatory)
+
+---
+
+## Core Principle
+
+**Generated code MUST pass the project's linter. Always follow project-specific linting rules over generic defaults.**
+
+---
+
+## Loading Project Linting Config
+
+### Step 1: Check Project Context
+
+```yaml
+Location: .cursor/project-contexts/[project]/project-config.yaml
+
+Look for:
+  linting:
+    type: "eslint"           # eslint | tslint | biome
+    config_file: ".eslintrc.js"
+    lint_command: "npm run lint"
+    critical_rules: [...]
+```
+
+### Step 2: Detect from Project Files
+
+If no project context, auto-detect from:
+
+```toon
+config_detection[6]{linter,config_files,priority}:
+ ESLint,eslint.config.js/.eslintrc.js/.eslintrc.json/.eslintrc,1
+ TSLint,tslint.json,2
+ Biome,biome.json,3
+ Prettier,.prettierrc/.prettierrc.json/prettier.config.js,4
+ EditorConfig,.editorconfig,5
+ TypeScript,tsconfig.json (for strict settings),6
+```
+
+### Step 3: Apply Rules
+
+```yaml
+Priority Order:
+  1. Project context critical_rules (highest)
+  2. Project linter config file
+  3. Aura Frog defaults (lowest)
+```
+
+---
+
+## Critical Lint Rules
+
+These rules are commonly critical and should always be followed unless project config says otherwise:
+
+```toon
+critical_rules[12]{rule,category,reason}:
+ no-console,Code Quality,Use logger instead of console
+ no-any,TypeScript,Avoid type safety bypass
+ no-unused-vars,Code Quality,Clean up dead code
+ no-explicit-any,TypeScript,Prefer unknown over any
+ @typescript-eslint/no-non-null-assertion,TypeScript,Avoid ! assertions
+ react-hooks/rules-of-hooks,React,Hooks must follow rules
+ react-hooks/exhaustive-deps,React,Dependencies must be complete
+ no-undef,JavaScript,Catch undefined variables
+ prefer-const,Code Style,Use const when not reassigning
+ eqeqeq,Code Quality,Use === instead of ==
+ no-var,Modern JS,Use let/const instead of var
+ @typescript-eslint/explicit-function-return-type,TypeScript,Explicit return types (optional)
+```
+
+---
+
+## How to Handle Lint Errors
+
+### During Code Generation
+
+```yaml
+MUST:
+  - Generate code that passes linter
+  - Follow project's lint config
+  - Use project's code style (semicolons, quotes, etc.)
+
+MUST NOT:
+  - Generate code with lint errors
+  - Use // eslint-disable without good reason
+  - Ignore critical rules
+```
+
+### When Lint Error Occurs
+
+```yaml
+Steps:
+  1. Identify the rule being violated
+  2. Check if rule is in project's critical_rules
+  3. If critical: Fix the code properly
+  4. If non-critical: Fix if possible, or document exception
+
+Exception Format:
+  // eslint-disable-next-line <rule-name> -- <reason>
+```
+
+---
+
+## ESLint Integration
+
+### Reading ESLint Config
+
+```typescript
+// ESLint flat config (eslint.config.js)
+export default [
+  {
+    rules: {
+      'no-console': 'error',
+      'no-unused-vars': 'warn',
+      // ... read these and follow them
+    }
+  }
+];
+
+// Legacy config (.eslintrc.js)
+module.exports = {
+  rules: {
+    'no-console': 'error',
+    // ... read these and follow them
+  }
+};
+```
+
+### Running Lint Check
+
+```bash
+# After generating code, verify:
+npm run lint
+
+# Or with fix:
+npm run lint:fix
+```
+
+---
+
+## TypeScript Strict Mode
+
+### Check tsconfig.json
+
+```json
+{
+  "compilerOptions": {
+    "strict": true,              // Follow all strict rules
+    "noImplicitAny": true,       // No implicit any
+    "strictNullChecks": true,    // Null safety
+    "noUnusedLocals": true,      // No unused variables
+    "noUnusedParameters": true   // No unused parameters
+  }
+}
+```
+
+### Strict Mode Requirements
+
+```toon
+strict_requirements[5]{setting,requirement,example}:
+ noImplicitAny,Explicit types required,function foo(x: string) not foo(x)
+ strictNullChecks,Handle null/undefined,user?.name ?? 'Guest'
+ noUnusedLocals,Remove unused variables,Delete or use the variable
+ noUnusedParameters,Prefix with _,function foo(_unused: string)
+ strictFunctionTypes,Correct function types,Check callback signatures
+```
+
+---
+
+## Prettier Integration
+
+### When Prettier is Used
+
+```yaml
+If project uses Prettier:
+  - Follow Prettier config for formatting
+  - Don't fight Prettier with conflicting styles
+  - Use eslint-config-prettier to avoid conflicts
+```
+
+### Common Prettier Settings
+
+```json
+{
+  "semi": true,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "es5",
+  "printWidth": 100
+}
+```
+
+---
+
+## Code Generation Checklist
+
+Before generating code:
+
+- [ ] Read project linting config (if exists)
+- [ ] Check for TypeScript strict mode
+- [ ] Note critical rules to follow
+- [ ] Check formatting preferences (Prettier)
+
+After generating code:
+
+- [ ] Code would pass linter (verify mentally or run)
+- [ ] No // eslint-disable unless documented
+- [ ] TypeScript types are explicit (no any)
+- [ ] Formatting matches project style
+
+---
+
+## Common Violations to Avoid
+
+```toon
+common_violations[8]{violation,bad_example,good_example}:
+ console.log,console.log('debug'),logger.debug('debug')
+ any type,data: any,data: unknown then type guard
+ ! assertion,user!.name,user?.name ?? 'Guest'
+ == comparison,x == null,x === null
+ var keyword,var x = 1,const x = 1 or let x = 1
+ unused imports,import { unused },Remove the import
+ missing await,promise.then(),await promise
+ empty catch,catch (e) {},catch (e) { logger.error(e) }
+```
+
+---
+
+## Project Context Integration
+
+### Loading from Project Context
+
+```yaml
+File: .cursor/project-contexts/[project]/project-config.yaml
+
+linting:
+  type: "eslint"
+  config_file: ".eslintrc.js"
+  critical_rules:
+    - "no-console"
+    - "no-any"
+  ignored_rules:
+    - "max-len"  # Prettier handles this
+```
+
+### Using rules.md
+
+```yaml
+File: .cursor/project-contexts/[project]/rules.md
+
+Read the "Linting Rules" section for:
+  - Critical rules for this project
+  - Allowed exceptions
+  - Project-specific patterns
+```
+
+---
+
+## References
+
+- Project config: `.cursor/project-contexts/[project]/project-config.yaml`
+- Project rules: `.cursor/project-contexts/[project]/rules.md`
+- ESLint docs: https://eslint.org/docs/rules/
+- TypeScript ESLint: https://typescript-eslint.io/rules/
+
+---
+
+**Version:** 1.1.4
+**Last Updated:** 2025-12-10
