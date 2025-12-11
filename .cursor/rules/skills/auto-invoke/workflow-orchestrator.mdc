@@ -35,13 +35,14 @@ Cursor AI should activate this skill when:
 3. **Show agent banner** at start of response
 4. **Verify task complexity** - if simple, suggest lighter approach
 5. **Create TECH_SPEC_AI.md** in Phase 2 (MANDATORY - see `tech-spec-requirement.mdc`)
+6. **Create Mermaid diagrams** in Phase 2 (see `mermaid-diagrams.mdc`)
 
 ## 9-Phase Workflow
 
 ```toon
 workflow_phases[11]{phase,name,lead_agent,deliverable,gate}:
  1,Understand 🎯,pm-operations-orchestrator,Requirements document,✋
- 2,Design 🏗️,Dev agent,Technical design + TECH_SPEC_AI.md,✋
+ 2,Design 🏗️,Dev agent,Technical design + TECH_SPEC_AI.md + Mermaid diagrams,✋
  3,UI Breakdown 🎨,ui-designer,Component breakdown,✋
  4,Plan Tests 🧪,qa-automation,Test strategy,✋
  5a,Write Tests 🔴,qa-automation + Dev,Failing tests (TDD RED),✋
@@ -262,6 +263,11 @@ Phase 2: Design 🏗️  [AUTO-CONTINUE]
 ├── Design JWT architecture
 ├── Define API endpoints
 ├── Plan database schema
+├── Create TECH_SPEC_AI.md
+├── Create Mermaid diagrams:
+│   ├── Sequence diagram (auth flow)
+│   ├── ERD (user/token tables)
+│   └── Architecture diagram (if multi-service)
 ├── Cross-review
 └── Show approval gate ✋
 
@@ -302,3 +308,4 @@ Works seamlessly with:
 - Project context: `.cursor/rules/project-contexts/`
 - Rules: `tdd-workflow`, `kiss-principle`, `code-quality`, `tech-spec-requirement`
 - Tech spec template: `.cursor/rules/templates/tech-spec.mdc`
+- Mermaid diagrams: `.cursor/rules/skills/reference/mermaid-diagrams.mdc`

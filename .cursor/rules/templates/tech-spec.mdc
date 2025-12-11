@@ -90,22 +90,95 @@ What is included and what is out of scope.
 
 ---
 
-## 4. Data Models
+## 4. Diagrams (Mermaid)
 
-### 4.1 Frontend Models (TypeScript)
+### 4.1 Sequence Diagram - Main Flow
+```mermaid
+sequenceDiagram
+    autonumber
+    participant U as User
+    participant C as Client
+    participant A as API
+    participant D as Database
+
+    U->>C: User action
+    C->>A: API request
+    A->>D: Query/mutation
+    D-->>A: Result
+    A-->>C: Response
+    C-->>U: UI feedback
+```
+
+### 4.2 Architecture Diagram
+```mermaid
+flowchart TB
+    subgraph Client["Client Layer"]
+        APP[Application]
+    end
+
+    subgraph API["API Layer"]
+        GW[Gateway]
+        SVC[Service]
+    end
+
+    subgraph Data["Data Layer"]
+        DB[(Database)]
+        CACHE[(Cache)]
+    end
+
+    APP --> GW
+    GW --> SVC
+    SVC --> DB
+    SVC --> CACHE
+```
+
+### 4.3 Entity Relationship Diagram
+```mermaid
+erDiagram
+    ENTITY1 ||--o{ ENTITY2 : relationship
+    ENTITY1 {
+        uuid id PK
+        string field1
+        timestamp created_at
+    }
+    ENTITY2 {
+        uuid id PK
+        uuid entity1_id FK
+        string field1
+    }
+```
+
+### 4.4 State Diagram (if applicable)
+```mermaid
+stateDiagram-v2
+    [*] --> Initial
+    Initial --> Processing: trigger
+    Processing --> Complete: success
+    Processing --> Error: failure
+    Error --> Initial: retry
+    Complete --> [*]
+```
+
+> **Note:** Include only relevant diagrams. See `mermaid-diagrams.mdc` skill for diagram types and syntax.
+
+---
+
+## 5. Data Models
+
+### 5.1 Frontend Models (TypeScript)
 [Define TypeScript interfaces and types]
 
-### 4.2 Backend Models
+### 5.2 Backend Models
 [Define backend data models - Laravel, Node.js, etc.]
 
-### 4.3 Database Schema
+### 5.3 Database Schema
 [Define database tables, indexes, relationships]
 
 ---
 
-## 5. API Specification
+## 6. API Specification
 
-### 5.1 Endpoints
+### 6.1 Endpoints
 For each endpoint, document:
 - HTTP method and path
 - Description
@@ -116,98 +189,98 @@ For each endpoint, document:
 
 ---
 
-## 6. State Management
+## 7. State Management
 
-### 6.1 Global State
+### 7.1 Global State
 [Define global state structure - Zustand, Redux, etc.]
 
-### 6.2 Server State
+### 7.2 Server State
 [Define React Query queries and mutations]
 
 ---
 
-## 7. Security Considerations
+## 8. Security Considerations
 
-### 7.1 Authentication & Authorization
-### 7.2 Input Validation
-### 7.3 Data Protection
-### 7.4 Rate Limiting
+### 8.1 Authentication & Authorization
+### 8.2 Input Validation
+### 8.3 Data Protection
+### 8.4 Rate Limiting
 
 ---
 
-## 8. Performance Considerations
+## 9. Performance Considerations
 
-### 8.1 Frontend Performance
+### 9.1 Frontend Performance
 - Initial Load: < 2 seconds
 - Component Render: < 100ms
 - Memory Usage: < 150MB
 
-### 8.2 Backend Performance
+### 9.2 Backend Performance
 - API Response Time: < 500ms (p95)
 - Database Query Time: < 100ms (p95)
 
-### 8.3 Network Performance
+### 9.3 Network Performance
 
 ---
 
-## 9. Error Handling
+## 10. Error Handling
 
-### 9.1 Frontend Error Handling
-### 9.2 Backend Error Handling
-### 9.3 User-Facing Error Messages
+### 10.1 Frontend Error Handling
+### 10.2 Backend Error Handling
+### 10.3 User-Facing Error Messages
 
 ---
 
-## 10. Testing Strategy
+## 11. Testing Strategy
 
-### 10.1 Unit Tests
+### 11.1 Unit Tests
 **Target Coverage:** 85%
 
-### 10.2 Component Tests
+### 11.2 Component Tests
 **Target Coverage:** 75%
 
-### 10.3 Integration Tests
-### 10.4 E2E Tests (Critical Flows)
+### 11.3 Integration Tests
+### 11.4 E2E Tests (Critical Flows)
 
 ---
 
-## 11. Deployment Strategy
+## 12. Deployment Strategy
 
-### 11.1 Environment Setup
-### 11.2 Feature Flags
-### 11.3 Gradual Rollout
-### 11.4 Monitoring
-
----
-
-## 12. Rollback Plan
-
-### 12.1 Rollback Triggers
-### 12.2 Rollback Steps
+### 12.1 Environment Setup
+### 12.2 Feature Flags
+### 12.3 Gradual Rollout
+### 12.4 Monitoring
 
 ---
 
-## 13. Documentation
+## 13. Rollback Plan
 
-### 13.1 Code Documentation
-### 13.2 User Documentation
-### 13.3 Developer Documentation
+### 13.1 Rollback Triggers
+### 13.2 Rollback Steps
 
 ---
 
-## 14. Success Metrics
+## 14. Documentation
 
-### 14.1 Technical Metrics
+### 14.1 Code Documentation
+### 14.2 User Documentation
+### 14.3 Developer Documentation
+
+---
+
+## 15. Success Metrics
+
+### 15.1 Technical Metrics
 - [ ] Test coverage >= 85%
 - [ ] API response time < 500ms (p95)
 - [ ] Frontend render < 100ms
 - [ ] Zero critical bugs in production
 
-### 14.2 Business Metrics
+### 15.2 Business Metrics
 
 ---
 
-## 15. Risks & Mitigations
+## 16. Risks & Mitigations
 
 | Risk | Impact | Probability | Mitigation |
 |------|--------|-------------|------------|
@@ -215,15 +288,15 @@ For each endpoint, document:
 
 ---
 
-## 16. Dependencies
+## 17. Dependencies
 
-### 16.1 Technical Dependencies
-### 16.2 External Services
-### 16.3 Internal Dependencies
+### 17.1 Technical Dependencies
+### 17.2 External Services
+### 17.3 Internal Dependencies
 
 ---
 
-## 17. Timeline & Milestones
+## 18. Timeline & Milestones
 
 | Phase | Duration | Deliverables |
 |-------|----------|--------------|
@@ -235,7 +308,7 @@ For each endpoint, document:
 
 ---
 
-## 18. Approval & Sign-off
+## 19. Approval & Sign-off
 
 | Role | Name | Signature | Date |
 |------|------|-----------|------|

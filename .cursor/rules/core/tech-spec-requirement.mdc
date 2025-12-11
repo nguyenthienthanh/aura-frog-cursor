@@ -92,6 +92,39 @@ interface ExampleType {
 
 ---
 
+## Diagrams
+
+### Sequence Diagram (Main Flow)
+```mermaid
+sequenceDiagram
+    autonumber
+    participant U as User
+    participant C as Client
+    participant A as API
+    participant D as Database
+
+    U->>C: [User action]
+    C->>A: [API request]
+    A->>D: [Database operation]
+    D-->>A: [Result]
+    A-->>C: [Response]
+    C-->>U: [Feedback]
+```
+
+### ERD (if database changes)
+```mermaid
+erDiagram
+    TABLE1 ||--o{ TABLE2 : relationship
+    TABLE1 {
+        uuid id PK
+        string field
+    }
+```
+
+> Include: Sequence (required), ERD (if DB), Architecture (if multi-service), State (if lifecycle)
+
+---
+
 ## Implementation Notes
 
 ### Key Decisions

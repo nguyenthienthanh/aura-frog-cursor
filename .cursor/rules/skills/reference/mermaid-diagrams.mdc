@@ -1,0 +1,359 @@
+---
+description: Create Mermaid diagrams for technical documentation - sequence diagrams, flowcharts, ERD, architecture. Auto-triggers in Phase 2 (Design) for complex features.
+globs: []
+alwaysApply: false
+---
+
+# Mermaid Diagrams Skill
+
+**Type:** Reference
+**Trigger:** During Phase 2 (Design) or when visualizing system behavior
+
+## Purpose
+
+Generate Mermaid diagrams to visualize:
+- API flows and sequences
+- System architecture
+- Data models and relationships
+- State machines
+- User flows
+
+## When to Create Diagrams
+
+```toon
+diagram_triggers[5]{scenario,diagram_type,mandatory}:
+ API interactions,Sequence diagram,Yes
+ Component relationships,Architecture/Component diagram,Yes
+ Database design,Entity Relationship (ERD),Yes
+ Complex logic flow,Flowchart,Optional
+ State changes,State diagram,Optional
+```
+
+## Diagram Types
+
+### 1. Sequence Diagram (API Flows)
+
+**Use for:** API calls, authentication flows, service interactions
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant U as User
+    participant C as Client App
+    participant A as API Gateway
+    participant S as Service
+    participant D as Database
+
+    U->>C: Action (e.g., Login)
+    C->>A: POST /api/auth/login
+    A->>S: Validate credentials
+    S->>D: Query user
+    D-->>S: User data
+    S-->>A: JWT token
+    A-->>C: 200 OK + token
+    C-->>U: Success feedback
+```
+
+**Key elements:**
+- `participant` - Define actors/systems
+- `->>` - Solid line with arrow (request)
+- `-->>` - Dashed line with arrow (response)
+- `autonumber` - Auto-number steps
+- `Note` - Add context notes
+- `alt/else/end` - Conditional flows
+- `loop/end` - Repeated actions
+- `par/and/end` - Parallel actions
+
+### 2. Flowchart (Logic Flow)
+
+**Use for:** Decision trees, process flows, algorithms
+
+```mermaid
+flowchart TD
+    A[Start] --> B{User authenticated?}
+    B -->|Yes| C[Load dashboard]
+    B -->|No| D[Show login]
+    D --> E[Enter credentials]
+    E --> F{Valid?}
+    F -->|Yes| G[Create session]
+    F -->|No| H[Show error]
+    H --> E
+    G --> C
+    C --> I[End]
+```
+
+**Direction options:**
+- `TD` - Top to Down
+- `LR` - Left to Right
+- `BT` - Bottom to Top
+- `RL` - Right to Left
+
+**Node shapes:**
+- `[text]` - Rectangle
+- `(text)` - Rounded
+- `{text}` - Diamond (decision)
+- `[[text]]` - Subroutine
+- `[(text)]` - Cylinder (database)
+- `((text))` - Circle
+
+### 3. Entity Relationship Diagram (ERD)
+
+**Use for:** Database schema, data models
+
+```mermaid
+erDiagram
+    USER ||--o{ POST : creates
+    USER ||--o{ COMMENT : writes
+    POST ||--o{ COMMENT : has
+    POST ||--o{ TAG : tagged_with
+    USER {
+        uuid id PK
+        string email UK
+        string name
+        timestamp created_at
+    }
+    POST {
+        uuid id PK
+        uuid user_id FK
+        string title
+        text content
+        timestamp published_at
+    }
+    COMMENT {
+        uuid id PK
+        uuid user_id FK
+        uuid post_id FK
+        text content
+    }
+    TAG {
+        uuid id PK
+        string name UK
+    }
+```
+
+**Relationship symbols:**
+- `||--||` - One to one
+- `||--o{` - One to many
+- `o{--o{` - Many to many
+- `|o--o|` - Zero or one
+
+### 4. Architecture/Component Diagram
+
+**Use for:** System architecture, component relationships
+
+```mermaid
+flowchart TB
+    subgraph Client["Client Layer"]
+        MA[Mobile App]
+        WA[Web App]
+    end
+
+    subgraph Gateway["API Gateway"]
+        AG[API Gateway]
+        AUTH[Auth Service]
+    end
+
+    subgraph Services["Microservices"]
+        US[User Service]
+        PS[Post Service]
+        NS[Notification Service]
+    end
+
+    subgraph Data["Data Layer"]
+        PG[(PostgreSQL)]
+        RD[(Redis Cache)]
+        S3[(S3 Storage)]
+    end
+
+    MA --> AG
+    WA --> AG
+    AG --> AUTH
+    AG --> US
+    AG --> PS
+    AG --> NS
+    US --> PG
+    PS --> PG
+    PS --> S3
+    NS --> RD
+```
+
+### 5. State Diagram
+
+**Use for:** Object lifecycles, UI states, workflow states
+
+```mermaid
+stateDiagram-v2
+    [*] --> Draft
+    Draft --> PendingReview: Submit
+    PendingReview --> Approved: Approve
+    PendingReview --> Draft: Request changes
+    Approved --> Published: Publish
+    Published --> Archived: Archive
+    Archived --> [*]
+
+    state PendingReview {
+        [*] --> WaitingReviewer
+        WaitingReviewer --> InReview: Assign reviewer
+        InReview --> [*]
+    }
+```
+
+### 6. Class Diagram (TypeScript Interfaces)
+
+**Use for:** Type relationships, inheritance
+
+```mermaid
+classDiagram
+    class User {
+        +string id
+        +string email
+        +string name
+        +Role role
+        +login()
+        +logout()
+    }
+
+    class Post {
+        +string id
+        +string title
+        +string content
+        +User author
+        +publish()
+        +archive()
+    }
+
+    class Comment {
+        +string id
+        +string content
+        +User author
+        +Post post
+    }
+
+    User "1" --> "*" Post : creates
+    User "1" --> "*" Comment : writes
+    Post "1" --> "*" Comment : has
+```
+
+### 7. C4 Context Diagram
+
+**Use for:** High-level system context
+
+```mermaid
+flowchart TB
+    subgraph boundary [System Boundary]
+        S[("Our System")]
+    end
+
+    U[👤 User]
+    E1[External Service 1]
+    E2[External Service 2]
+    DB[(Database)]
+
+    U -->|"Uses"| S
+    S -->|"Calls API"| E1
+    S -->|"Sends data"| E2
+    S -->|"Reads/Writes"| DB
+```
+
+## Integration with Tech Spec
+
+### In TECH_SPEC_AI.md
+
+Add diagrams section after Architecture:
+
+```markdown
+## Diagrams
+
+### Sequence Diagram - Main Flow
+\`\`\`mermaid
+sequenceDiagram
+    [diagram content]
+\`\`\`
+
+### Architecture Diagram
+\`\`\`mermaid
+flowchart TB
+    [diagram content]
+\`\`\`
+
+### Data Model (ERD)
+\`\`\`mermaid
+erDiagram
+    [diagram content]
+\`\`\`
+```
+
+### Required Diagrams by Feature Type
+
+```toon
+required_diagrams[6]{feature_type,required_diagrams}:
+ API feature,Sequence diagram + ERD
+ UI feature,Flowchart (user flow) + State diagram
+ Full-stack feature,Sequence + ERD + Architecture
+ Data migration,ERD (before/after)
+ Authentication,Sequence + State diagram
+ Integration,Sequence + Architecture
+```
+
+## Best Practices
+
+### Do's
+- Keep diagrams focused (one concern per diagram)
+- Use consistent naming across diagrams
+- Add notes for complex interactions
+- Use subgraphs to group related components
+- Include error flows in sequence diagrams
+
+### Don'ts
+- Don't overcrowd diagrams (split if >15 nodes)
+- Don't mix abstraction levels
+- Don't skip the happy path
+- Don't use ambiguous labels
+
+## Diagram Decision Matrix
+
+```toon
+diagram_decision[8]{question,if_yes,if_no}:
+ Multiple services communicate?,Sequence diagram,Skip
+ Database tables involved?,ERD,Skip
+ Complex decision logic?,Flowchart,Skip
+ Object has lifecycle states?,State diagram,Skip
+ Component dependencies?,Architecture diagram,Skip
+ Type inheritance/relationships?,Class diagram,Skip
+ External system integration?,C4 Context,Skip
+ User journey?,Flowchart (LR),Skip
+```
+
+## Workflow Integration
+
+```toon
+workflow_diagrams[4]{phase,diagram_action}:
+ Phase 1 (Understand),Identify diagram needs from requirements
+ Phase 2 (Design),CREATE all required diagrams in TECH_SPEC_AI.md
+ Phase 3 (UI),Add user flow diagrams if UI-heavy
+ Phase 8 (Document),Include diagrams in Confluence spec
+```
+
+## Rendering
+
+Mermaid diagrams render in:
+- GitHub/GitLab markdown
+- Confluence (with Mermaid plugin)
+- VS Code (with Mermaid extension)
+- Most modern documentation tools
+
+For Confluence without Mermaid:
+- Use Mermaid Live Editor: https://mermaid.live
+- Export as PNG/SVG
+- Embed in Confluence
+
+## References
+
+- Mermaid documentation: https://mermaid.js.org/
+- Mermaid Live Editor: https://mermaid.live/
+- C4 Model: https://c4model.com/
+
+---
+
+**Version:** 1.1.4
+**Last Updated:** 2025-12-11
