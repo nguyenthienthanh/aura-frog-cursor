@@ -33,6 +33,14 @@ This directory contains 21+ core quality rules converted from Aura Frog to Curso
 - **execution.mdc** - Execution rules
 - **priority-hierarchy.mdc** - Priority hierarchy
 - **token-awareness.mdc** - Token usage awareness
+- **tech-spec-requirement.mdc** - Tech spec creation rules
+- **linting-standards.mdc** - Project-specific linting
+- **toon-format.mdc** - TOON format for token optimization
+
+## Related Skills
+
+- **mermaid-diagrams.mdc** - Diagram creation (Sequence, ERD, Architecture, State)
+- Located in: `.cursor/rules/skills/reference/`
 
 ## MDC Format
 

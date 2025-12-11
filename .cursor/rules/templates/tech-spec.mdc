@@ -403,7 +403,7 @@ Reference project-specific conventions:
 
 ---
 
-**Version:** 1.1.4
+**Version:** 1.1.5
 **Phase:** 2 - Technical Planning
 **Agent:** Typically mobile-react-native, web-reactjs, backend-nodejs, etc.
-**Adapted for Cursor:** 2025-11-30
+**Adapted for Cursor:** 2025-12-11

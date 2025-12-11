@@ -1,9 +1,9 @@
 # Aura Frog for Cursor IDE
 
-**Version:** 1.1.4
+**Version:** 1.1.5
 **Converted from:** [nguyenthienthanh/aura-frog](https://github.com/nguyenthienthanh/aura-frog) (Aura Frog Plugin for Claude Code)
 **Adapted for:** Cursor IDE
-**Last Updated:** 2025-12-08
+**Last Updated:** 2025-12-11
 
 ---
 
@@ -87,7 +87,8 @@ cat .cursor/GET_STARTED.md
 ✅ **9-Phase TDD Workflow** - Structured development (RED-GREEN-REFACTOR)
 ✅ **70 Slash Commands** - All development tasks covered
 ✅ **26 Quality Rules** - Always enforced
-✅ **14 Auto-Invoking Skills** - Context-aware activation
+✅ **15 Auto-Invoking Skills** - Context-aware activation
+✅ **Mermaid Diagrams** - Sequence, ERD, Architecture, State diagrams
 ✅ **Multi-Session Support** - Workflow handoff/resume
 ✅ **Project Customization** - Generic core + project context
 ✅ **Integrations** - JIRA, Figma, Slack, Confluence
@@ -225,6 +226,6 @@ See all commands: `cat .cursor/commands/QUICK_REFERENCE.md`
 
 **Code with main character energy!** 🐸✨
 
-**Version:** 1.1.4
-**Last Updated:** 2025-12-08
+**Version:** 1.1.5
+**Last Updated:** 2025-12-11
 **Original:** [nguyenthienthanh/aura-frog](https://github.com/nguyenthienthanh/aura-frog)

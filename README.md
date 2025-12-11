@@ -12,7 +12,7 @@ This repository contains the **Aura Frog** system adapted for **Cursor IDE**, pr
 - **9-Phase TDD Workflow** - Structured development (RED-GREEN-REFACTOR)
 - **70+ Slash Commands** - All development tasks covered
 - **26 Quality Rules** - Always enforced
-- **14 Auto-Invoking Skills** - Context-aware activation
+- **15 Auto-Invoking Skills** - Context-aware activation
 - **Multi-Session Support** - Workflow handoff/resume
 - **JIRA & Figma Integration** - With cache-first approach
 
@@ -102,7 +102,7 @@ That's it! Aura Frog will guide you through all 9 phases.
 
 ```
 Phase 1: Understand      → Requirements analysis
-Phase 2: Design          → Technical planning
+Phase 2: Design          → Technical planning + Mermaid diagrams
 Phase 3: UI Breakdown    → Component structure
 Phase 4: Test Planning   → Test strategy
 Phase 5: TDD             → RED → GREEN → REFACTOR
@@ -111,6 +111,15 @@ Phase 7: Verify          → QA validation
 Phase 8: Document        → Documentation
 Phase 9: Share           → Deployment & notifications
 ```
+
+### 📊 Mermaid Diagrams (Phase 2)
+
+Automatically generates visualization diagrams:
+- **Sequence diagrams** - API flows, authentication
+- **ERD** - Database models
+- **Architecture diagrams** - Component relationships
+- **State diagrams** - Object lifecycles
+- **Flowcharts** - Decision logic
 
 ### ⚡ 70+ Slash Commands
 
@@ -255,7 +264,7 @@ export SLACK_WEBHOOK_URL="https://hooks.slack.com/..."
 - **MDC Rules:** 56 files
 - **Commands:** 70+ slash commands
 - **Agents:** 24 specialized agents
-- **Skills:** 14 (9 auto-invoke, 5 reference)
+- **Skills:** 15 (9 auto-invoke, 6 reference)
 - **Workflows:** 9 phases with 11 guide files
 
 ## Contributing
@@ -295,6 +304,6 @@ For questions:
 
 **Code with main character energy!** 🐸✨
 
-**Version:** 1.1.4
-**Last Updated:** 2025-12-08
+**Version:** 1.1.5
+**Last Updated:** 2025-12-11
 **Original:** [nguyenthienthanh/aura-frog](https://github.com/nguyenthienthanh/aura-frog)

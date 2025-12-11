@@ -105,7 +105,8 @@ Aura Frog uses a structured TDD (Test-Driven Development) workflow:
 ```
 ┌─────────────────────────────────────────────┐
 │  PLANNING & PREPARATION (Phases 1-4)        │
-│  ◆ Understand → Design → UI → Plan Tests   │
+│  ◆ Understand → Design (+Diagrams) → UI →  │
+│    Plan Tests                               │
 │  ⏱️ 2-3 hours │ 📊 ~135K tokens             │
 └─────────────────────────────────────────────┘
            ↓
@@ -194,8 +195,12 @@ Aura Frog has 24 specialized agents that auto-activate based on context:
 # 1. Select appropriate agent
 # 2. Load project context
 # 3. Guide through phases
-# 4. Request approval at each step
-# 5. Auto-continue after approval
+# 4. Create Mermaid diagrams (Phase 2):
+#    - Sequence diagram (API flow)
+#    - ERD (database changes)
+#    - Architecture diagram (if multi-service)
+# 5. Request approval at each step
+# 6. Auto-continue after approval
 ```
 
 ### Quick Bug Fix
@@ -725,5 +730,5 @@ Code with main character energy. Let's build something amazing!
 
 ---
 
-**Version:** 1.1.4
-**Last Updated:** 2025-12-08
+**Version:** 1.1.5
+**Last Updated:** 2025-12-11

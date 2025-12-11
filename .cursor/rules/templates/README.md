@@ -34,12 +34,13 @@ Templates are **structured markdown documents** that define the format and conte
 ### Phase 2: Technical Planning
 
 #### tech-spec.mdc
-**Purpose:** Define comprehensive technical specification
+**Purpose:** Define comprehensive technical specification with visualizations
 
 **Sections:**
 - Overview and Stakeholders
 - Requirements Summary
 - Architecture (high-level, component structure, data flow)
+- **Diagrams (Mermaid)** - Sequence, ERD, Architecture, State diagrams
 - Data Models (frontend, backend, database)
 - API Specification (all endpoints with examples)
 - State Management (global, server, local)
@@ -54,7 +55,9 @@ Templates are **structured markdown documents** that define the format and conte
 
 **Output Example:** `.cursor/logs/workflows/[id]/tech-spec.md`
 
-**Related:** `lld.mdc` for detailed component design
+**Related:**
+- `lld.mdc` for detailed component design
+- `mermaid-diagrams.mdc` skill for diagram syntax
 
 ---
 
@@ -186,7 +189,7 @@ Templates are **structured markdown documents** that define the format and conte
 | Phase | Templates Used | Purpose |
 |-------|----------------|---------|
 | 1. Requirements Analysis | `requirements.mdc` | Document what needs to be built |
-| 2. Technical Planning | `tech-spec.mdc`, `lld.mdc` | Define how it will be built |
+| 2. Technical Planning | `tech-spec.mdc`, `lld.mdc`, `mermaid-diagrams.mdc` | Define how it will be built + visualizations |
 | 3. Design Review | *(Uses tech-spec)* | Validate design alignment |
 | 4. Test Planning | `test-plan.mdc`, `test-cases.mdc` | Plan testing approach |
 | 5a. Write Tests (RED) | `test-cases.mdc` | Implement test code |
@@ -205,6 +208,7 @@ Templates are **structured markdown documents** that define the format and conte
 requirements.mdc (Phase 1)
       ↓ feeds into
 tech-spec.mdc (Phase 2)
+  + mermaid-diagrams.mdc → Sequence, ERD, Architecture diagrams
       ↓ feeds into
 test-plan.mdc (Phase 4)
       ↓ feeds into
@@ -351,7 +355,7 @@ Templates are MDC (Markdown Context) files:
 
 ---
 
-**Version:** 1.1.4
+**Version:** 1.1.5
 **Adapted from:** Aura Frog templates system
 **For:** Cursor IDE
-**Date:** 2025-11-30
+**Date:** 2025-12-11
