@@ -11,8 +11,8 @@ This repository contains the **Aura Frog** system adapted for **Cursor IDE**, pr
 - **24 Specialized Agents** - Auto-detect based on your tech stack
 - **9-Phase TDD Workflow** - Structured development (RED-GREEN-REFACTOR)
 - **70+ Slash Commands** - All development tasks covered
-- **26 Quality Rules** - Always enforced
-- **15 Auto-Invoking Skills** - Context-aware activation
+- **37 Quality Rules** - Always enforced
+- **29 Skills** - 10 auto-invoke + 19 reference skills
 - **Multi-Session Support** - Workflow handoff/resume
 - **JIRA & Figma Integration** - With cache-first approach
 
@@ -22,7 +22,7 @@ This is a conversion of the **Aura Frog** plugin for Claude Code:
 - **Original Repository:** [github.com/nguyenthienthanh/aura-frog](https://github.com/nguyenthienthanh/aura-frog)
 - **Converted for:** Cursor IDE
 - **Conversion Date:** 2025-11-30
-- **Version:** 1.1.4
+- **Version:** 1.1.5
 
 ## Quick Start
 
@@ -170,9 +170,9 @@ Automatically generates visualization diagrams:
 ├── 📄 GET_STARTED.md                 # Quick start guide
 │
 ├── 📂 rules/                         # All rules (MDC format)
-│   ├── core/                         # 26 core quality rules
+│   ├── core/                         # 37 core quality rules
 │   ├── agents/                       # 24 specialized agents
-│   ├── skills/                       # 14 auto-invoking skills
+│   ├── skills/                       # 29 skills (10 auto-invoke, 19 reference)
 │   ├── hooks/                        # 4 lifecycle hooks
 │   └── templates/                    # 8 documentation templates
 │
@@ -259,13 +259,14 @@ export SLACK_WEBHOOK_URL="https://hooks.slack.com/..."
 
 ## Statistics
 
-- **Total Files:** 167
-- **Total Size:** 1.0 MB
-- **MDC Rules:** 56 files
+- **Total Files:** 250+
+- **Total Size:** ~1.5 MB
+- **MDC Rules:** 103 files
 - **Commands:** 70+ slash commands
 - **Agents:** 24 specialized agents
-- **Skills:** 15 (9 auto-invoke, 6 reference)
-- **Workflows:** 9 phases with 11 guide files
+- **Skills:** 29 (10 auto-invoke, 19 reference)
+- **Core Rules:** 37 quality rules
+- **Workflows:** 9 phases
 
 ## Contributing
 

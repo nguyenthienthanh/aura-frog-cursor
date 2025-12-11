@@ -52,7 +52,7 @@ CURSOR_SOURCE="$SCRIPT_DIR/.cursor"
 # Banner
 echo -e "${CYAN}"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "  🐸 AURA FROG for Cursor IDE - Setup Script v1.1.4"
+echo "  🐸 AURA FROG for Cursor IDE - Setup Script v1.1.5"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo -e "${NC}"
 

@@ -23,7 +23,7 @@
 **YOU MUST show this banner at the START of EVERY response:**
 
 ```
-AURA FROG v1.1.4
+AURA FROG v1.1.5
 Agent: [agent-name] | Phase: [phase] - [name]
 Model: [model] | [aura-message]
 ```

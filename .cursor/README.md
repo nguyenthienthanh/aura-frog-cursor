@@ -39,9 +39,9 @@ cat .cursor/GET_STARTED.md
 ├── 📄 .envrc.template                # Environment setup
 │
 ├── 📂 rules/                         # All rules (MDC format)
-│   ├── core/                         # 26 core quality rules
+│   ├── core/                         # 37 core quality rules
 │   ├── agents/                       # 24 specialized agents
-│   ├── skills/                       # 14 auto-invoking skills
+│   ├── skills/                       # 29 skills (10 auto-invoke, 19 reference)
 │   ├── hooks/                        # 4 lifecycle hooks
 │   └── templates/                    # 8 documentation templates
 │
@@ -85,9 +85,9 @@ cat .cursor/GET_STARTED.md
 
 ✅ **24 Specialized Agents** - Auto-detect based on context
 ✅ **9-Phase TDD Workflow** - Structured development (RED-GREEN-REFACTOR)
-✅ **70 Slash Commands** - All development tasks covered
-✅ **26 Quality Rules** - Always enforced
-✅ **15 Auto-Invoking Skills** - Context-aware activation
+✅ **70+ Slash Commands** - All development tasks covered
+✅ **37 Quality Rules** - Always enforced
+✅ **29 Skills** - 10 auto-invoke + 19 reference skills
 ✅ **Mermaid Diagrams** - Sequence, ERD, Architecture, State diagrams
 ✅ **Multi-Session Support** - Workflow handoff/resume
 ✅ **Project Customization** - Generic core + project context
@@ -107,12 +107,10 @@ cat .cursor/GET_STARTED.md
 Located in subdirectories:
 - `rules/core/README.md` - Core rules overview
 - `rules/agents/README.md` - Agents guide
-- `rules/skills/README.md` - Skills guide
 - `rules/hooks/README.md` - Hooks lifecycle
 - `rules/templates/README.md` - Templates usage
 - `commands/README.md` - Commands overview
 - `commands/QUICK_REFERENCE.md` - Quick command lookup
-- `commands/INDEX.md` - Alphabetical index
 - `workflows/QUICK_REFERENCE.md` - Workflow cheat sheet
 - `workflows/STATE_MANAGEMENT.md` - State persistence
 
@@ -124,7 +122,7 @@ Every response shows (single or multi-agent):
 
 **Single Agent:**
 ```
-⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.1.5 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: mobile-react-native │ Phase: 2 - Design         ┃
 ┃ 🔥 Code go brrrr                                        ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -132,7 +130,7 @@ Every response shows (single or multi-agent):
 
 **Multiple Agents (collaboration):**
 ```
-⚡ 🐸 AURA FROG v1.1.4 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.1.5 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: mobile-react-native (+qa-automation)            ┃
 ┃ Phase: 5b - TDD GREEN │ 🔥 Building with tests          ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -190,12 +188,13 @@ See all commands: `cat .cursor/commands/QUICK_REFERENCE.md`
 
 ## 📊 Statistics
 
-- **Total Files:** 164
-- **Total Size:** 1.1 MB
-- **Rules:** 76 .mdc files
+- **Total Files:** 250+
+- **Total Size:** ~1.5 MB
+- **MDC Rules:** 103 files
 - **Commands:** 70+ slash commands
-- **Documentation:** 97 .md files
-- **Scripts:** ~20 integration scripts
+- **Agents:** 24 specialized agents
+- **Skills:** 29 (10 auto-invoke, 19 reference)
+- **Core Rules:** 37 quality rules
 
 ---
 
