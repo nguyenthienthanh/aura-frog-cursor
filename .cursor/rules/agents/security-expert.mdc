@@ -147,8 +147,13 @@ trivy image myimage:latest
 - **mobile agents** - Mobile app security
 - **devops-cicd** - Secure deployment, secrets management
 
+## Related Rules
+
+- **sast-security.mdc** - SAST rules with OWASP Top 10 and CWE patterns
+- **code-quality.mdc** - General code quality including security
+
 ---
 
 **Agent ID:** security-expert
-**Version:** 1.1.4
+**Version:** 1.1.5
 **Status:** Active

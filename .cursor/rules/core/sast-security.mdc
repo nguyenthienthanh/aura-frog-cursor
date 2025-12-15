@@ -1,0 +1,414 @@
+---
+description: Static Application Security Testing (SAST) rules - OWASP Top 10, CWE patterns, secure coding practices
+globs: []
+alwaysApply: true
+---
+
+# SAST Security Rules
+
+**Version:** 1.1.5
+**Priority:** HIGH - Security vulnerabilities must be prevented
+**Type:** Rule (Mandatory)
+
+---
+
+## Core Principle
+
+**All generated code MUST be free of known security vulnerabilities. Apply SAST principles during code generation and review.**
+
+---
+
+## OWASP Top 10 (2021) Checklist
+
+### A01: Broken Access Control
+
+```toon
+access_control_checks[6]{vulnerability,prevention,cwe}:
+ Missing authorization,Check permissions before resource access,CWE-862
+ IDOR (Insecure Direct Object Reference),Validate user owns resource,CWE-639
+ Path traversal,Sanitize file paths and reject ../,CWE-22
+ Privilege escalation,Enforce role-based access control,CWE-269
+ CORS misconfiguration,Whitelist allowed origins only,CWE-942
+ Missing function-level access control,Check auth on every endpoint,CWE-285
+```
+
+**Code Pattern:**
+```typescript
+// ❌ VULNERABLE: No authorization check
+app.get('/api/users/:id', async (req, res) => {
+  const user = await User.findById(req.params.id);
+  res.json(user);
+});
+
+// ✅ SECURE: Authorization enforced
+app.get('/api/users/:id', authenticate, async (req, res) => {
+  const userId = req.params.id;
+
+  // Check ownership or admin role
+  if (req.user.id !== userId && !req.user.roles.includes('admin')) {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+
+  const user = await User.findById(userId);
+  res.json(user);
+});
+```
+
+---
+
+### A02: Cryptographic Failures
+
+```toon
+crypto_checks[5]{vulnerability,prevention,cwe}:
+ Weak hashing (MD5/SHA1),Use bcrypt/argon2 for passwords,CWE-328
+ Hardcoded secrets,Use environment variables or vault,CWE-798
+ Weak encryption,Use AES-256-GCM or ChaCha20,CWE-327
+ Missing TLS,Enforce HTTPS everywhere,CWE-319
+ Exposed sensitive data,Encrypt PII at rest and in transit,CWE-312
+```
+
+**Code Pattern:**
+```typescript
+// ❌ VULNERABLE: Weak hashing
+const hash = crypto.createHash('md5').update(password).digest('hex');
+
+// ✅ SECURE: Strong password hashing
+import bcrypt from 'bcrypt';
+const SALT_ROUNDS = 12;
+const hash = await bcrypt.hash(password, SALT_ROUNDS);
+```
+
+---
+
+### A03: Injection
+
+```toon
+injection_checks[6]{vulnerability,prevention,cwe}:
+ SQL injection,Use parameterized queries/ORM,CWE-89
+ NoSQL injection,Sanitize query objects,CWE-943
+ Command injection,Avoid shell execution or sanitize,CWE-78
+ LDAP injection,Use parameterized LDAP queries,CWE-90
+ XPath injection,Use parameterized XPath,CWE-643
+ Template injection,Avoid user input in templates,CWE-1336
+```
+
+**Code Pattern:**
+```typescript
+// ❌ VULNERABLE: SQL injection
+const query = `SELECT * FROM users WHERE email = '${email}'`;
+db.query(query);
+
+// ✅ SECURE: Parameterized query
+const query = 'SELECT * FROM users WHERE email = $1';
+db.query(query, [email]);
+
+// ✅ SECURE: ORM (safe by default)
+const user = await prisma.user.findUnique({
+  where: { email }
+});
+```
+
+---
+
+### A04: Insecure Design
+
+```toon
+design_checks[4]{vulnerability,prevention,cwe}:
+ Missing rate limiting,Implement rate limits on all endpoints,CWE-770
+ No input validation,Validate all inputs server-side,CWE-20
+ Insecure defaults,Secure by default configuration,CWE-1188
+ Missing threat modeling,Document and mitigate threats,CWE-1059
+```
+
+---
+
+### A05: Security Misconfiguration
+
+```toon
+config_checks[6]{vulnerability,prevention,cwe}:
+ Debug mode in production,Disable debug/verbose errors,CWE-489
+ Default credentials,Force password change on first login,CWE-1392
+ Unnecessary features enabled,Disable unused services/ports,CWE-1220
+ Missing security headers,Add CSP/HSTS/X-Frame-Options,CWE-693
+ Exposed error details,Generic error messages to users,CWE-209
+ Open cloud storage,Restrict bucket/blob access,CWE-284
+```
+
+**Security Headers:**
+```typescript
+// ✅ SECURE: Helmet.js for Express
+import helmet from 'helmet';
+app.use(helmet());
+
+// Or manual headers
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  res.setHeader('Content-Security-Policy', "default-src 'self'");
+  next();
+});
+```
+
+---
+
+### A06: Vulnerable Components
+
+```toon
+component_checks[4]{vulnerability,prevention,cwe}:
+ Outdated dependencies,Regular npm audit/updates,CWE-1104
+ Known CVEs,Monitor security advisories,CWE-1035
+ Unmaintained packages,Replace abandoned dependencies,CWE-1329
+ Missing lockfile,Commit package-lock.json,CWE-829
+```
+
+**Commands:**
+```bash
+# Check for vulnerabilities
+npm audit
+npx snyk test
+
+# Update dependencies
+npm update
+npx npm-check-updates -u
+```
+
+---
+
+### A07: Authentication Failures
+
+```toon
+auth_checks[6]{vulnerability,prevention,cwe}:
+ Weak passwords allowed,Enforce password complexity,CWE-521
+ No brute force protection,Implement account lockout,CWE-307
+ Session fixation,Regenerate session on login,CWE-384
+ Insecure session storage,Use httpOnly secure cookies,CWE-614
+ Missing MFA,Offer/require 2FA for sensitive actions,CWE-308
+ Credential stuffing,Implement CAPTCHA/rate limiting,CWE-799
+```
+
+**Code Pattern:**
+```typescript
+// ✅ SECURE: Session configuration
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
+}));
+
+// ✅ SECURE: Regenerate session on login
+req.session.regenerate((err) => {
+  req.session.userId = user.id;
+  res.redirect('/dashboard');
+});
+```
+
+---
+
+### A08: Software and Data Integrity
+
+```toon
+integrity_checks[4]{vulnerability,prevention,cwe}:
+ Unsigned updates,Verify package signatures,CWE-494
+ CI/CD pipeline compromise,Secure build pipelines,CWE-829
+ Deserialization attacks,Validate serialized data,CWE-502
+ Missing integrity checks,Use SRI for CDN resources,CWE-353
+```
+
+---
+
+### A09: Security Logging Failures
+
+```toon
+logging_checks[4]{vulnerability,prevention,cwe}:
+ Missing audit logs,Log security events,CWE-778
+ Sensitive data in logs,Sanitize PII from logs,CWE-532
+ No alerting,Set up security alerts,CWE-223
+ Log injection,Sanitize log inputs,CWE-117
+```
+
+**Code Pattern:**
+```typescript
+// ❌ VULNERABLE: Logging sensitive data
+logger.info(`User login: ${email}, password: ${password}`);
+
+// ✅ SECURE: Sanitized logging
+logger.info('User login attempt', {
+  email: maskEmail(email),
+  ip: req.ip,
+  userAgent: req.headers['user-agent'],
+  timestamp: new Date().toISOString()
+});
+```
+
+---
+
+### A10: Server-Side Request Forgery (SSRF)
+
+```toon
+ssrf_checks[3]{vulnerability,prevention,cwe}:
+ Unvalidated URL input,Whitelist allowed domains,CWE-918
+ Internal network access,Block private IP ranges,CWE-441
+ Protocol smuggling,Restrict to http/https only,CWE-918
+```
+
+**Code Pattern:**
+```typescript
+// ❌ VULNERABLE: SSRF
+app.get('/fetch', async (req, res) => {
+  const response = await fetch(req.query.url);
+  res.send(await response.text());
+});
+
+// ✅ SECURE: URL validation
+const ALLOWED_DOMAINS = ['api.example.com', 'cdn.example.com'];
+
+app.get('/fetch', async (req, res) => {
+  const url = new URL(req.query.url);
+
+  if (!ALLOWED_DOMAINS.includes(url.hostname)) {
+    return res.status(400).json({ error: 'Domain not allowed' });
+  }
+
+  if (!['http:', 'https:'].includes(url.protocol)) {
+    return res.status(400).json({ error: 'Invalid protocol' });
+  }
+
+  const response = await fetch(url.toString());
+  res.send(await response.text());
+});
+```
+
+---
+
+## Language-Specific Patterns
+
+### JavaScript/TypeScript
+
+```toon
+js_security[6]{pattern,risk,fix}:
+ eval(userInput),Code injection,Avoid eval entirely
+ innerHTML = userInput,XSS,Use textContent or sanitize
+ new Function(userInput),Code injection,Avoid dynamic functions
+ document.write(userInput),XSS,Use DOM methods
+ setTimeout(userInput),Code injection,Pass function not string
+ JSON.parse(untrusted),Prototype pollution,Use JSON.parse with reviver
+```
+
+### Python
+
+```toon
+python_security[5]{pattern,risk,fix}:
+ pickle.loads(untrusted),Arbitrary code execution,Use JSON instead
+ exec(userInput),Code injection,Avoid exec entirely
+ os.system(userInput),Command injection,Use subprocess with shell=False
+ yaml.load(untrusted),Code execution,Use yaml.safe_load
+ eval(userInput),Code injection,Use ast.literal_eval for data
+```
+
+### Go
+
+```toon
+go_security[4]{pattern,risk,fix}:
+ fmt.Sprintf in SQL,SQL injection,Use parameterized queries
+ exec.Command with user input,Command injection,Validate/sanitize input
+ template.HTML(userInput),XSS,Use text/template escaping
+ filepath.Join with ..,Path traversal,Use filepath.Clean and validate
+```
+
+---
+
+## SAST Tool Integration
+
+### Recommended Tools
+
+```toon
+sast_tools[6]{tool,language,purpose}:
+ Semgrep,Multi-language,Pattern-based security scanning
+ SonarQube,Multi-language,Code quality and security
+ Snyk Code,Multi-language,Real-time vulnerability detection
+ ESLint security plugins,JavaScript,Static analysis rules
+ Bandit,Python,Security linter
+ gosec,Go,Security scanner
+```
+
+### CI/CD Integration
+
+```yaml
+# GitHub Actions example
+security-scan:
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v4
+
+    - name: Run Semgrep
+      uses: returntocorp/semgrep-action@v1
+      with:
+        config: p/owasp-top-ten
+
+    - name: Run npm audit
+      run: npm audit --audit-level=high
+
+    - name: Run Snyk
+      uses: snyk/actions/node@master
+      env:
+        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+```
+
+---
+
+## Code Review Checklist
+
+Before approving code:
+
+- [ ] No SQL/NoSQL injection vulnerabilities
+- [ ] No XSS vulnerabilities (output encoding applied)
+- [ ] Authentication checks on all protected routes
+- [ ] Authorization checks (user owns resource)
+- [ ] Input validation on all user inputs
+- [ ] Sensitive data not logged
+- [ ] No hardcoded secrets/credentials
+- [ ] Dependencies checked for known CVEs
+- [ ] Error messages don't leak sensitive info
+- [ ] Rate limiting on authentication endpoints
+
+---
+
+## Quick Reference
+
+### Dangerous Functions to Avoid
+
+```toon
+dangerous_functions[10]{function,language,alternative}:
+ eval(),JavaScript,Avoid or use safe alternatives
+ innerHTML,JavaScript,textContent or DOMPurify
+ exec(),Python,subprocess with shell=False
+ pickle.loads(),Python,json.loads()
+ system(),PHP,escapeshellarg + exec
+ deserialize(),PHP,json_decode()
+ Runtime.exec(),Java,ProcessBuilder with validation
+ sprintf in SQL,Go,Parameterized queries
+ os.system(),Python,subprocess.run()
+ document.write(),JavaScript,DOM methods
+```
+
+---
+
+## References
+
+- OWASP Top 10: https://owasp.org/Top10/
+- CWE Top 25: https://cwe.mitre.org/top25/
+- OWASP Cheat Sheets: https://cheatsheetseries.owasp.org/
+- Semgrep Rules: https://semgrep.dev/explore
+
+---
+
+**Version:** 1.1.5
+**Last Updated:** 2025-12-11
