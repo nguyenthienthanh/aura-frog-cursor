@@ -190,16 +190,50 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 provideHttpClient(withInterceptors([authInterceptor]))
 ```
 
+## Strict Null Handling
+
+**CRITICAL: See `typescript-strict-nulls.mdc` for comprehensive rules.**
+
+```typescript
+// ❌ BAD: Truthy/falsy checks hide valid values
+if (user.name) { }       // "" is falsy but valid!
+if (item.price) { }      // 0 is falsy but valid!
+const x = val || 'default';  // "" and 0 become 'default'!
+
+// ✅ GOOD: Explicit null checks
+if (user.name != null) { }
+const x = val ?? 'default';  // Nullish coalescing
+
+// ✅ GOOD: Signal with explicit check
+displayName = computed(() => this.user()?.name ?? 'Guest');
+hasScore = computed(() => this.user()?.score != null);
+```
+
+```html
+<!-- ❌ BAD: @if with potential falsy values -->
+@if (user().score) { <span>{{ user().score }}</span> }
+
+<!-- ✅ GOOD: Explicit checks -->
+@if (user().score != null) { <span>{{ user().score }}</span> }
+@if (user().score !== undefined) { <span>{{ user().score }}</span> }
+```
+
 ## Quality Standards
 
 - Standalone components
 - OnPush change detection
 - Signals for reactive state
 - Typed reactive forms
+- Explicit null/undefined handling (see `typescript-strict-nulls.mdc`)
 - Test coverage >= 80%
+
+## Related Rules
+
+- **typescript-strict-nulls.mdc** - Explicit null handling (MUST READ)
+- **code-quality.mdc** - TypeScript strict mode, error handling
 
 ---
 
 **Agent ID:** web-angular
-**Version:** 1.1.4
+**Version:** 1.1.5
 **Status:** Active

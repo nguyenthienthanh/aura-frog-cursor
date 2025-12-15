@@ -171,6 +171,25 @@ export const config = {
 };
 ```
 
+## Strict Null Handling
+
+**CRITICAL: See `typescript-strict-nulls.mdc` for comprehensive rules.**
+
+```typescript
+// ❌ BAD: Truthy/falsy checks hide valid values
+if (user.name) { }       // "" is falsy but valid!
+if (item.price) { }      // 0 is falsy but valid (free)!
+const x = val || 'default';  // "" and 0 become 'default'!
+
+// ✅ GOOD: Explicit null checks
+if (user.name != null) { }
+const x = val ?? 'default';  // Nullish coalescing
+
+// ✅ GOOD: JSX with explicit boolean (Client Components)
+{count > 0 && <Badge count={count} />}
+{name != null && <Header name={name} />}
+```
+
 ## Quality Standards
 
 - Server Components for data fetching
@@ -181,9 +200,16 @@ export const config = {
 - Proper metadata (SEO)
 - Image optimization (next/image)
 - Input validation (zod)
+- Explicit null/undefined handling (see `typescript-strict-nulls.mdc`)
+
+## Related Rules
+
+- **typescript-strict-nulls.mdc** - Explicit null handling (MUST READ)
+- **code-quality.mdc** - TypeScript strict mode, error handling
+- **api-design.mdc** - API route design patterns
 
 ---
 
 **Agent ID:** web-nextjs
-**Version:** 1.1.4
+**Version:** 1.1.5
 **Status:** Active

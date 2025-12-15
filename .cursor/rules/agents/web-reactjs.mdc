@@ -171,17 +171,47 @@ describe('MyComponent', () => {
 });
 ```
 
+## Strict Null Handling
+
+**CRITICAL: See `typescript-strict-nulls.mdc` for comprehensive rules.**
+
+```typescript
+// ❌ BAD: Truthy/falsy checks hide valid values
+if (user.name) { }       // "" is falsy but valid!
+if (item.price) { }      // 0 is falsy but valid (free)!
+const x = val || 'default';  // "" and 0 become 'default'!
+
+// ❌ BAD: JSX conditional renders 0 as "0"
+{count && <Badge count={count} />}  // Shows "0" when count is 0!
+
+// ✅ GOOD: Explicit null checks
+if (user.name != null) { }  // Handles null/undefined only
+const x = val ?? 'default';  // Nullish coalescing
+
+// ✅ GOOD: JSX with explicit boolean
+{count > 0 && <Badge count={count} />}
+{name != null && <Header name={name} />}
+{Boolean(items?.length) && <List items={items} />}
+```
+
 ## Quality Standards
 
 - TypeScript strict mode
 - Functional components with hooks
 - Proper dependency arrays
+- Explicit null/undefined handling (see `typescript-strict-nulls.mdc`)
 - Test coverage >= 80%
 - ESLint + Prettier passing
 - Accessibility (semantic HTML, ARIA)
 
+## Related Rules
+
+- **typescript-strict-nulls.mdc** - Explicit null handling (MUST READ)
+- **code-quality.mdc** - TypeScript strict mode, error handling
+- **performance.mdc** - Performance optimization patterns
+
 ---
 
 **Agent ID:** web-reactjs
-**Version:** 1.1.4
+**Version:** 1.1.5
 **Status:** Active

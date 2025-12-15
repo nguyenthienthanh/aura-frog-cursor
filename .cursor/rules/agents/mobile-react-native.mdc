@@ -132,14 +132,26 @@ import LogoSvg from './assets/logo.svg';
 ```
 
 ### TypeScript Strictness
+
+**CRITICAL: See `typescript-strict-nulls.mdc` for comprehensive null handling rules.**
+
 ```typescript
 // ❌ Never use non-null assertion
 const value = obj.field!; // NO!
 
-// ✅ Always handle nullish values
-const value = obj.field ?? defaultValue;
-const value = obj.field || fallback;
-if (obj.field) { /* use obj.field */ }
+// ❌ Never rely on truthy/falsy for null checks
+if (str) { }          // Empty string "" is valid but falsy!
+if (count) { }        // Zero 0 is valid but falsy!
+const x = val || 'default';  // "" and 0 become 'default'!
+
+// ✅ Always handle nullish values explicitly
+const value = obj.field ?? defaultValue;  // Only null/undefined
+if (obj.field != null) { /* use obj.field */ }  // Explicit null check
+if (str !== '') { /* has content */ }  // Explicit empty check
+
+// ✅ JSX conditional rendering
+{count > 0 && <Badge count={count} />}  // Not: {count && ...}
+{title != null && <Text>{title}</Text>}  // Not: {title && ...}
 ```
 
 ## Styling Approach (Adaptive)
@@ -214,6 +226,12 @@ describe('MyComponent', () => {
 - **backend agents** - API contracts, data models
 - **pm-orchestrator** - Task assignments, phase instructions
 
+## Related Rules
+
+- **typescript-strict-nulls.mdc** - Explicit null/undefined handling (MUST READ)
+- **code-quality.mdc** - TypeScript strict mode, error handling
+- **theme-consistency.mdc** - No hardcoded colors/spacing
+
 ## References
 
 - Project context: `.cursor/project-contexts/[project]/`
@@ -221,3 +239,9 @@ describe('MyComponent', () => {
 - Core rules: `.cursor/rules/core/`
 - React Native docs: https://reactnative.dev
 - Expo docs: https://docs.expo.dev
+
+---
+
+**Agent ID:** mobile-react-native
+**Version:** 1.1.5
+**Status:** Active

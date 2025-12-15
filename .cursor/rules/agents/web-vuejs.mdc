@@ -206,16 +206,59 @@ describe('MyComponent', () => {
 });
 ```
 
+## Strict Null Handling
+
+**CRITICAL: See `typescript-strict-nulls.mdc` for comprehensive rules.**
+
+```typescript
+// ❌ BAD: Truthy/falsy checks hide valid values
+if (user.name) { }       // "" is falsy but valid!
+if (item.price) { }      // 0 is falsy but valid (free)!
+const x = val || 'default';  // "" and 0 become 'default'!
+
+// ✅ GOOD: Explicit null checks
+if (user.name != null) { }
+const x = val ?? 'default';  // Nullish coalescing
+```
+
+```vue
+<!-- ❌ BAD: v-if with potential falsy values -->
+<div v-if="user.score">Score: {{ user.score }}</div>
+<span v-if="item.name">{{ item.name }}</span>
+
+<!-- ✅ GOOD: Explicit checks -->
+<div v-if="user.score != null">Score: {{ user.score }}</div>
+<span v-if="item.name !== ''">{{ item.name }}</span>
+<div v-if="typeof count === 'number'">Count: {{ count }}</div>
+```
+
+```typescript
+// ❌ BAD: Truthy check in computed
+const hasDiscount = computed(() => !!product.discount);
+
+// ✅ GOOD: Explicit check
+const hasDiscount = computed(() =>
+  product.discount != null && product.discount > 0
+);
+```
+
 ## Quality Standards
 
 - TypeScript strict mode
 - Composition API with script setup
 - Proper reactive patterns
+- Explicit null/undefined handling (see `typescript-strict-nulls.mdc`)
 - Test coverage >= 80%
 - ESLint + Prettier passing
+
+## Related Rules
+
+- **typescript-strict-nulls.mdc** - Explicit null handling (MUST READ)
+- **code-quality.mdc** - TypeScript strict mode, error handling
+- **performance.mdc** - Performance optimization patterns
 
 ---
 
 **Agent ID:** web-vuejs
-**Version:** 1.1.4
+**Version:** 1.1.5
 **Status:** Active
