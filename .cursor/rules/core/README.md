@@ -37,6 +37,7 @@ This directory contains 21+ core quality rules converted from Aura Frog to Curso
 - **linting-standards.mdc** - Project-specific linting
 - **toon-format.mdc** - TOON format for token optimization
 - **sast-security.mdc** - SAST security rules (OWASP Top 10, CWE)
+- **use-existing-libraries.mdc** - Use lodash/es-toolkit instead of custom utils
 
 ## Related Skills
 
