@@ -13,25 +13,20 @@ alwaysApply: false
 
 ## Load Expert Skills
 
-**BEFORE coding, load these expert skills for comprehensive patterns:**
+**REQUIRED: Load these expert skills for comprehensive patterns:**
 
-```
-.cursor/rules/skills/experts/typescript-expert.mdc  # TS/JS patterns
-.cursor/rules/skills/experts/angular-expert.mdc     # Angular patterns
-.cursor/rules/skills/experts/testing-expert.mdc     # Testing patterns
-.cursor/rules/skills/experts/security-expert.mdc    # Security patterns
-```
-
-## Role & Expertise
-
-You are an Angular 17+ expert specializing in standalone components, Signals, NgRx state management, and modern Angular features (control flow, defer).
+| Skill | Contains |
+|-------|----------|
+| `typescript-expert.mdc` | TS/JS patterns, strict nulls, async |
+| `angular-expert.mdc` | Signals, RxJS, NgRx, control flow |
+| `testing-expert.mdc` | TDD, Jasmine/Jest, Cypress |
+| `security-expert.mdc` | XSS prevention, input validation |
 
 ## When to Activate
 
-This agent auto-activates when:
-- Working on Angular projects
-- Files match: `angular.json`, `*.component.ts`, `*.service.ts`
-- User mentions: "angular", "ngrx", "signals", "rxjs"
+- Angular projects
+- Files: `angular.json`, `*.component.ts`, `*.service.ts`
+- Keywords: "angular", "ngrx", "signals", "rxjs"
 
 ## Tech Stack
 
@@ -44,207 +39,18 @@ testing: Jasmine / Jest + Cypress
 styling: SCSS / Tailwind
 ```
 
-## Best Practices (CRITICAL)
+## Quality Checklist
 
-### Standalone Components
-```typescript
-@Component({
-  selector: 'app-user-profile',
-  standalone: true,
-  imports: [CommonModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    @if (loading()) {
-      <p>Loading...</p>
-    } @else if (user()) {
-      <h2>{{ user()?.name }}</h2>
-    }
-  `,
-})
-export class UserProfileComponent {
-  user = signal<User | null>(null);
-  loading = signal(false);
-  displayName = computed(() => this.user()?.name ?? 'Guest');
-}
-```
-
-### Signals (Angular 16+)
-```typescript
-// Basic signals
-const count = signal(0);
-count.set(5);
-count.update(v => v + 1);
-
-// Computed signals
-const fullName = computed(() => `${firstName()} ${lastName()}`);
-
-// Effects for side effects
-effect(() => {
-  console.log('User changed:', this.user());
-  localStorage.setItem('user', JSON.stringify(this.user()));
-});
-
-// Signal inputs (Angular 17.1+)
-userId = input.required<string>();
-showAvatar = input(true);
-
-// toSignal - Convert Observable to Signal
-users = toSignal(this.userService.getUsers(), { initialValue: [] });
-```
-
-### RxJS Best Practices
-```typescript
-// Use async pipe (auto-unsubscribe)
-users$ = this.userService.getUsers();
-// Template: {{ users$ | async }}
-
-// takeUntilDestroyed() (Angular 16+)
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-
-private destroyRef = inject(DestroyRef);
-
-ngOnInit() {
-  this.userService.getUsers()
-    .pipe(takeUntilDestroyed(this.destroyRef))
-    .subscribe(users => this.users.set(users));
-}
-
-// Use inject() function
-private userService = inject(UserService);
-private router = inject(Router);
-```
-
-### Control Flow (Angular 17+)
-```typescript
-@if (loading()) {
-  <p>Loading...</p>
-} @else if (users().length > 0) {
-  @for (user of users(); track user.id) {
-    <user-card [user]="user" />
-  } @empty {
-    <p>No users found</p>
-  }
-}
-
-@switch (status()) {
-  @case ('loading') { <spinner /> }
-  @case ('error') { <error-message /> }
-  @case ('success') { <content /> }
-}
-```
-
-### Defer Loading (Angular 17+)
-```typescript
-@defer (on viewport) {
-  <heavy-chart-component />
-} @placeholder {
-  <p>Chart loading...</p>
-} @loading (minimum 500ms) {
-  <spinner />
-}
-
-@defer (on interaction; prefetch on hover) {
-  <modal-content />
-}
-```
-
-### NgRx Best Practices
-```typescript
-// createFeature (NgRx 15+)
-export const usersFeature = createFeature({
-  name: 'users',
-  reducer: createReducer(
-    initialState,
-    on(UsersActions.loadSuccess, (state, { users }) => ({
-      ...state, users, loading: false
-    }))
-  ),
-});
-
-// createActionGroup
-export const UsersActions = createActionGroup({
-  source: 'Users',
-  events: {
-    'Load': emptyProps(),
-    'Load Success': props<{ users: User[] }>(),
-  }
-});
-
-// Functional effects
-export const loadUsers = createEffect(
-  (actions$ = inject(Actions), userService = inject(UserService)) => {
-    return actions$.pipe(
-      ofType(UsersActions.load),
-      exhaustMap(() => userService.getUsers().pipe(
-        map(users => UsersActions.loadSuccess({ users })),
-        catchError(error => of(UsersActions.loadFailure({ error })))
-      ))
-    );
-  },
-  { functional: true }
-);
-```
-
-### HTTP Interceptors (Functional)
-```typescript
-export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const token = inject(AuthService).getToken();
-  if (token) {
-    req = req.clone({
-      setHeaders: { Authorization: `Bearer ${token}` }
-    });
-  }
-  return next(req);
-};
-
-// Register in app.config.ts
-provideHttpClient(withInterceptors([authInterceptor]))
-```
-
-## Strict Null Handling
-
-**CRITICAL: See `typescript-strict-nulls.mdc` for comprehensive rules.**
-
-```typescript
-// ❌ BAD: Truthy/falsy checks hide valid values
-if (user.name) { }       // "" is falsy but valid!
-if (item.price) { }      // 0 is falsy but valid!
-const x = val || 'default';  // "" and 0 become 'default'!
-
-// ✅ GOOD: Explicit null checks
-if (user.name != null) { }
-const x = val ?? 'default';  // Nullish coalescing
-
-// ✅ GOOD: Signal with explicit check
-displayName = computed(() => this.user()?.name ?? 'Guest');
-hasScore = computed(() => this.user()?.score != null);
-```
-
-```html
-<!-- ❌ BAD: @if with potential falsy values -->
-@if (user().score) { <span>{{ user().score }}</span> }
-
-<!-- ✅ GOOD: Explicit checks -->
-@if (user().score != null) { <span>{{ user().score }}</span> }
-@if (user().score !== undefined) { <span>{{ user().score }}</span> }
-```
-
-## Quality Standards
-
-- Standalone components
-- OnPush change detection
-- Signals for reactive state
-- Typed reactive forms
-- Explicit null/undefined handling (see `typescript-strict-nulls.mdc`)
-- Test coverage >= 80%
-
-## Related Rules
-
-- **typescript-strict-nulls.mdc** - Explicit null handling (MUST READ)
-- **code-quality.mdc** - TypeScript strict mode, error handling
+- [ ] Standalone components
+- [ ] OnPush change detection
+- [ ] Signals for reactive state (not BehaviorSubject)
+- [ ] `inject()` instead of constructor injection
+- [ ] `takeUntilDestroyed()` for subscriptions
+- [ ] Explicit null checks in templates (see `angular-expert.mdc`)
+- [ ] Test coverage >= 80%
 
 ---
 
 **Agent ID:** web-angular
-**Version:** 1.1.5
+**Version:** 1.1.6
 **Status:** Active

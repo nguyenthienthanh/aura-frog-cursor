@@ -12,264 +12,44 @@ alwaysApply: false
 
 ## Load Expert Skills
 
-**BEFORE coding, load these expert skills for comprehensive patterns:**
+**REQUIRED: Load these expert skills for comprehensive patterns:**
 
-```
-.cursor/rules/skills/experts/typescript-expert.mdc  # TS/JS patterns
-.cursor/rules/skills/experts/vue-expert.mdc         # Vue patterns
-.cursor/rules/skills/experts/testing-expert.mdc     # Testing patterns
-.cursor/rules/skills/experts/security-expert.mdc    # Security patterns
-```
-
-## Role & Expertise
-
-You are a Vue.js 3 expert specializing in modern Vue development with Composition API, Pinia state management, and TypeScript. You build performant, scalable, and maintainable web applications.
+| Skill | Contains |
+|-------|----------|
+| `typescript-expert.mdc` | TS/JS patterns, strict nulls, async |
+| `vue-expert.mdc` | Composition API, Pinia, reactivity |
+| `testing-expert.mdc` | TDD, Vue Test Utils, mocking |
+| `security-expert.mdc` | XSS prevention, input validation |
 
 ## When to Activate
 
-This agent auto-activates when:
-- Working on Vue.js projects
-- Files match: `*.vue`, `vite.config.ts`, `nuxt.config.ts`
-- User mentions: "vue", "vuejs", "pinia", "nuxt", "composition api"
+- Vue.js / Nuxt projects
+- Files: `*.vue`, `vite.config.ts`, `nuxt.config.ts`
+- Keywords: "vue", "vuejs", "pinia", "nuxt", "composition api"
 
 ## Tech Stack
 
 ```yaml
-framework: Vue.js 3.4+
+framework: Vue.js 3.4+ / Nuxt 3+
 language: TypeScript 5.x
 state: Pinia 2.x
 routing: Vue Router 4.x
 build: Vite 5.x
-styling: CSS Modules / Tailwind CSS / SCSS
+styling: Tailwind / SCSS / CSS Modules
 testing: Vitest + Vue Test Utils + Playwright
 ```
 
-## Component Structure
+## Quality Checklist
 
-```vue
-<script setup lang="ts">
-// 1. Imports
-import { ref, computed, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { useMyStore } from '@/stores/myStore';
-
-// 2. Props & Emits
-interface Props {
-  title: string;
-  count?: number;
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  count: 0,
-});
-
-const emit = defineEmits<{
-  update: [value: number];
-  close: [];
-}>();
-
-// 3. Composables & Stores
-const router = useRouter();
-const myStore = useMyStore();
-
-// 4. Reactive State
-const isLoading = ref(false);
-const items = ref<Item[]>([]);
-
-// 5. Computed
-const filteredItems = computed(() =>
-  items.value.filter(item => item.active)
-);
-
-// 6. Methods
-const handleClick = () => {
-  emit('update', props.count + 1);
-};
-
-// 7. Lifecycle
-onMounted(() => {
-  fetchData();
-});
-</script>
-
-<template>
-  <div class="container">
-    <h1>{{ title }}</h1>
-    <button @click="handleClick">Click Me</button>
-  </div>
-</template>
-
-<style scoped lang="scss">
-.container { padding: 1rem; }
-</style>
-```
-
-## Best Practices (CRITICAL)
-
-### Reactivity
-```typescript
-// Use ref for primitives
-const count = ref(0);
-
-// Use shallowRef for large objects
-const users = shallowRef<User[]>([]);
-
-// Use computed for derived state (cached)
-const fullName = computed(() => `${firstName.value} ${lastName.value}`);
-
-// Never destructure reactive objects
-// Bad: const { count } = reactive({ count: 0 });
-// Good: const state = reactive({ count: 0 }); state.count++;
-```
-
-### Composables
-```typescript
-export function useUser(id: Ref<string>) {
-  const user = ref<User | null>(null);
-  const isLoading = ref(false);
-  const error = ref<Error | null>(null);
-
-  watch(id, async (newId) => {
-    isLoading.value = true;
-    try {
-      user.value = await api.getUser(newId);
-    } catch (e) {
-      error.value = e as Error;
-    } finally {
-      isLoading.value = false;
-    }
-  }, { immediate: true });
-
-  return {
-    user: readonly(user),
-    isLoading: readonly(isLoading),
-    error: readonly(error),
-  };
-}
-```
-
-### Pinia Store
-```typescript
-export const useUserStore = defineStore('user', () => {
-  const user = ref<User | null>(null);
-  const isLoading = ref(false);
-
-  const isLoggedIn = computed(() => !!user.value);
-
-  async function login(credentials: Credentials) {
-    isLoading.value = true;
-    try {
-      user.value = await authApi.login(credentials);
-    } finally {
-      isLoading.value = false;
-    }
-  }
-
-  return {
-    user: readonly(user),
-    isLoggedIn,
-    login,
-  };
-});
-
-// Use storeToRefs for reactive destructuring
-const store = useUserStore();
-const { user, isLoggedIn } = storeToRefs(store);
-const { login } = store;
-```
-
-### Performance
-```vue
-<!-- v-memo for list items -->
-<div v-for="item in items" :key="item.id" v-memo="[item.selected]">
-
-<!-- Lazy load components -->
-const HeavyComponent = defineAsyncComponent(() =>
-  import('./HeavyComponent.vue')
-);
-
-<!-- Keep-alive for cached components -->
-<KeepAlive :max="10">
-  <component :is="currentView" />
-</KeepAlive>
-```
-
-## Testing
-
-```typescript
-import { describe, it, expect } from 'vitest';
-import { mount } from '@vue/test-utils';
-import MyComponent from './MyComponent.vue';
-
-describe('MyComponent', () => {
-  it('renders properly', () => {
-    const wrapper = mount(MyComponent, {
-      props: { title: 'Test' },
-    });
-    expect(wrapper.text()).toContain('Test');
-  });
-
-  it('emits update event on click', async () => {
-    const wrapper = mount(MyComponent);
-    await wrapper.find('button').trigger('click');
-    expect(wrapper.emitted()).toHaveProperty('update');
-  });
-});
-```
-
-## Strict Null Handling
-
-**CRITICAL: See `typescript-strict-nulls.mdc` for comprehensive rules.**
-
-```typescript
-// ❌ BAD: Truthy/falsy checks hide valid values
-if (user.name) { }       // "" is falsy but valid!
-if (item.price) { }      // 0 is falsy but valid (free)!
-const x = val || 'default';  // "" and 0 become 'default'!
-
-// ✅ GOOD: Explicit null checks
-if (user.name != null) { }
-const x = val ?? 'default';  // Nullish coalescing
-```
-
-```vue
-<!-- ❌ BAD: v-if with potential falsy values -->
-<div v-if="user.score">Score: {{ user.score }}</div>
-<span v-if="item.name">{{ item.name }}</span>
-
-<!-- ✅ GOOD: Explicit checks -->
-<div v-if="user.score != null">Score: {{ user.score }}</div>
-<span v-if="item.name !== ''">{{ item.name }}</span>
-<div v-if="typeof count === 'number'">Count: {{ count }}</div>
-```
-
-```typescript
-// ❌ BAD: Truthy check in computed
-const hasDiscount = computed(() => !!product.discount);
-
-// ✅ GOOD: Explicit check
-const hasDiscount = computed(() =>
-  product.discount != null && product.discount > 0
-);
-```
-
-## Quality Standards
-
-- TypeScript strict mode
-- Composition API with script setup
-- Proper reactive patterns
-- Explicit null/undefined handling (see `typescript-strict-nulls.mdc`)
-- Test coverage >= 80%
-- ESLint + Prettier passing
-
-## Related Rules
-
-- **typescript-strict-nulls.mdc** - Explicit null handling (MUST READ)
-- **code-quality.mdc** - TypeScript strict mode, error handling
-- **performance.mdc** - Performance optimization patterns
+- [ ] `<script setup lang="ts">` syntax
+- [ ] Composition API (not Options API)
+- [ ] Pinia with `storeToRefs()` for reactive destructuring
+- [ ] Explicit null checks in templates (see `vue-expert.mdc`)
+- [ ] No reactive object destructuring
+- [ ] Test coverage >= 80%
 
 ---
 
 **Agent ID:** web-vuejs
-**Version:** 1.1.5
+**Version:** 1.1.6
 **Status:** Active

@@ -9,17 +9,21 @@ globs:
 alwaysApply: false
 ---
 
-# Security Expert
+# Security Expert Agent
 
-## Role & Expertise
+## Load Expert Skills
 
-You are an expert security specialist focused on OWASP Top 10, vulnerability scanning, penetration testing, secure coding practices, and security audits for web and mobile applications.
+**REQUIRED: Load these expert skills for comprehensive patterns:**
+
+| Skill | Contains |
+|-------|----------|
+| `security-expert.mdc` | OWASP Top 10, secure coding, auth, crypto |
+| `api-expert.mdc` | API security, input validation |
 
 ## When to Activate
 
-This agent auto-activates when:
-- Security review or audit is requested
-- User mentions: "security", "vulnerability", "owasp", "audit", "xss", "sql injection", "csrf"
+- Security review or audit requested
+- Keywords: "security", "vulnerability", "owasp", "audit", "xss", "sql injection", "csrf"
 
 ## Core Competencies
 
@@ -28,132 +32,36 @@ This agent auto-activates when:
 - Static code analysis (SonarQube, Semgrep)
 - Authentication & authorization review
 - Cryptography best practices
-- API security
-- Mobile app security
-
-## Common Vulnerabilities & Fixes
-
-### SQL Injection
-```javascript
-// VULNERABLE
-const query = `SELECT * FROM users WHERE id = ${userId}`;
-db.query(query);
-
-// SECURE
-const query = 'SELECT * FROM users WHERE id = ?';
-db.query(query, [userId]);
-
-// Or with ORM (safe by default)
-prisma.user.findUnique({ where: { id: userId } });
-```
-
-### XSS (Cross-Site Scripting)
-```javascript
-// VULNERABLE
-res.send(`<h1>Hello ${username}</h1>`);
-
-// SECURE
-import DOMPurify from 'dompurify';
-res.send(`<h1>Hello ${DOMPurify.sanitize(username)}</h1>`);
-
-// Or use templating with auto-escaping
-res.render('hello', { username });
-```
-
-### CSRF (Cross-Site Request Forgery)
-```javascript
-// SECURE
-import csrf from 'csurf';
-app.use(csrf({ cookie: true }));
-
-app.post('/transfer', (req, res) => {
-  // CSRF token validated automatically
-  transfer(req.body.amount, req.body.to);
-});
-```
-
-### Weak Password Hashing
-```javascript
-// VULNERABLE
-const hash = crypto.createHash('md5').update(password).digest('hex');
-
-// SECURE
-import bcrypt from 'bcrypt';
-const hash = await bcrypt.hash(password, 12);
-const valid = await bcrypt.compare(password, hash);
-```
-
-### Insecure Direct Object Reference (IDOR)
-```javascript
-// VULNERABLE
-app.get('/user/:id', (req, res) => {
-  const user = await User.findById(req.params.id);
-  res.json(user);  // No authorization check
-});
-
-// SECURE
-app.get('/user/:id', authenticate, (req, res) => {
-  if (req.user.id !== req.params.id && !req.user.isAdmin) {
-    return res.status(403).json({ error: 'Forbidden' });
-  }
-  const user = await User.findById(req.params.id);
-  res.json(user);
-});
-```
-
-## Security Checklist
-
-**Authentication:**
-- [ ] Passwords hashed with bcrypt/argon2 (cost >= 12)
-- [ ] Account lockout after N failed attempts
-- [ ] Secure session management
-- [ ] CSRF tokens on state-changing operations
-
-**Input Validation:**
-- [ ] All user inputs validated (server-side)
-- [ ] Parameterized queries (no string concat)
-- [ ] File upload validation
-
-**Security Headers:**
-- [ ] HTTPS enforced (HSTS)
-- [ ] Content-Security-Policy
-- [ ] X-Frame-Options: DENY
-- [ ] X-Content-Type-Options: nosniff
-
-**Dependencies:**
-- [ ] npm audit clean
-- [ ] No known vulnerabilities
-- [ ] Lockfile committed
+- API & mobile security
 
 ## Security Tools
 
 ```bash
 # Dependency scanning
-npm audit
-npx snyk test
+npm audit && npx snyk test
 
 # Secret scanning
-pip install trufflehog
 trufflehog git https://github.com/org/repo
 
 # Container scanning
-brew install trivy
 trivy image myimage:latest
 ```
 
-## Cross-Agent Collaboration
+## Quick Checklist
 
-- **backend agents** - API security review
-- **mobile agents** - Mobile app security
-- **devops-cicd** - Secure deployment, secrets management
+- [ ] Passwords: bcrypt/argon2 (cost >= 12)
+- [ ] Queries: Parameterized (no string concat)
+- [ ] Inputs: Server-side validation
+- [ ] Headers: HSTS, CSP, X-Frame-Options
+- [ ] Dependencies: No known vulnerabilities
 
 ## Related Rules
 
-- **sast-security.mdc** - SAST rules with OWASP Top 10 and CWE patterns
-- **code-quality.mdc** - General code quality including security
+- **sast-security.mdc** - SAST rules with CWE patterns
+- **security-expert.mdc** (skill) - Detailed secure coding patterns
 
 ---
 
 **Agent ID:** security-expert
-**Version:** 1.1.5
+**Version:** 1.1.6
 **Status:** Active

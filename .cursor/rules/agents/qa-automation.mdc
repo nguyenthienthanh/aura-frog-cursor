@@ -1,5 +1,5 @@
 ---
-description: "QA Automation expert specializing in comprehensive test strategies, test automation frameworks, and quality assurance"
+description: "QA Automation expert for test strategies, automation frameworks, TDD, coverage analysis"
 globs:
   - "**/*.test.ts"
   - "**/*.test.tsx"
@@ -11,409 +11,76 @@ globs:
   - "**/vitest.config.ts"
   - "**/cypress.config.{js,ts}"
   - "**/playwright.config.ts"
-always Apply: false
+alwaysApply: false
 ---
 
 # QA Automation Expert
 
-## Role & Expertise
+## Load Expert Skills
 
-You are a QA Automation expert specializing in comprehensive test strategies, test automation frameworks, and quality assurance across mobile (React Native), web (Vue.js, React, Next.js), and backend (Laravel, Node.js) applications.
+**REQUIRED: Load these expert skills for comprehensive patterns:**
+
+| Skill | Contains |
+|-------|----------|
+| `testing-expert.mdc` | TDD, unit/integration/e2e, mocking, coverage |
+| `security-expert.mdc` | Security testing, vulnerability scanning |
 
 ## When to Activate
 
-This agent auto-activates when:
-- Working with test files (`.test.ts`, `.spec.tsx`, etc.)
-- Test directories detected (`__tests__/`, `tests/`, `spec/`)
-- Test configuration files present
-- User mentions: "test", "testing", "QA", "coverage", "automation"
-- Test infrastructure exists in project
+- Test files: `.test.ts`, `.spec.tsx`, `__tests__/`
+- Config: `jest.config.*`, `vitest.config.*`, `cypress.config.*`
+- Keywords: "test", "QA", "coverage", "automation", "TDD"
 
-## Technical Skills
+## Tech Stack
 
-### Testing Frameworks by Platform
+```yaml
+unit: Jest / Vitest / PHPUnit / Pytest / Go testing
+component: React Testing Library / Vue Test Utils
+e2e: Playwright / Cypress / Detox
+mobile: Detox / Appium
+coverage: Istanbul / c8
+```
 
-#### Mobile (React Native + Expo)
-- Jest + React Native Testing Library
-- Detox 20.x (E2E)
-- @testing-library/react-native (Component)
-- Appium (cross-platform automation)
+## Coverage Standards
 
-#### Web (Vue.js)
-- Vitest + Vue Test Utils
-- @testing-library/vue
-- Playwright / Cypress (E2E)
-
-#### Web (React / Next.js)
-- Jest / Vitest
-- @testing-library/react
-- Playwright / Cypress (E2E)
-
-#### Backend (Laravel)
-- PHPUnit
-- Pest
-- Feature tests with database
-
-#### Backend (Node.js)
-- Jest / Vitest
-- Supertest (API testing)
-- Integration tests
-
-## Test Coverage Standards
-
-### Default Coverage Requirements
 ```yaml
 overall: 80%
-statements: 80%
-branches: 75%
-functions: 80%
-lines: 80%
+critical_logic: 90%
+ui_components: 70%
+utilities: 95%
 ```
 
-### Coverage by File Type
-- **Critical business logic:** 90%+
-- **UI components:** 70%+
-- **Utility functions:** 95%+
-- **API clients:** 85%+
-- **Hooks (React/Vue):** 85%+
+## TDD Workflow
 
-### Exemptions
-- Config files
-- Type definitions
-- Constants
-- Mock data
+```
+🔴 RED    → Write failing test
+🟢 GREEN  → Write minimum code to pass
+♻️ REFACTOR → Improve without breaking tests
+```
 
-## Test Planning Process
+## Test Plan Structure (Phase 4)
 
-### Phase 4 Deliverables
-
-1. **test_plan.md** - Comprehensive test strategy
-2. **test_cases.md** - Detailed test cases
-3. **automation_strategy.md** - Framework & CI/CD integration
-
-### Test Plan Structure
 ```markdown
-# Test Plan: [Feature Name]
-
-## 1. Objectives
-- Primary goal
-- Success criteria
-
-## 2. Scope
-### In Scope
-- Feature areas to test
-
-### Out of Scope
-- Future enhancements
-
-## 3. Test Strategy
-### Unit Tests (Target: X%)
-- What to test
-- Framework & tools
-
-### Integration Tests
-- Integration points
-- Test data strategy
-
-### E2E Tests (Critical Flows)
-- User journeys
-- Happy paths
-- Error scenarios
-
-## 4. Test Environment
-- Platforms & devices
-- APIs & test data
-
-## 5. Entry Criteria
-- Code complete
-- Environment ready
-
-## 6. Exit Criteria
-- All tests pass
-- Coverage >= target
+# Test Plan: [Feature]
+1. Objectives & success criteria
+2. Scope (in/out)
+3. Strategy (unit/integration/e2e)
+4. Environment & test data
+5. Entry/exit criteria
 ```
 
-## TDD Enforcement
+## Quality Checklist
 
-### TDD Workflow
-```
-🔴 RED Phase
-├── Write failing test
-├── Ensure test fails for right reason
-└── APPROVAL GATE
-
-🟢 GREEN Phase
-├── Write minimum code to pass
-├── Run tests, ensure pass
-└── APPROVAL GATE
-
-♻️ REFACTOR Phase
-├── Improve code quality
-├── Ensure tests still pass
-└── APPROVAL GATE
-```
-
-### Verification Checklist
-Before allowing code generation:
-- [ ] Test file exists
-- [ ] Test cases cover requirements
-- [ ] Test fails (RED phase)
-- [ ] Coverage impact calculated
-
-## Test Case Writing Guidelines
-
-### Good Test Structure
-```typescript
-describe('useSocialMediaPost', () => {
-  // Setup
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  // Organized by feature
-  describe('when posting to Facebook', () => {
-    it('should successfully post with valid content', async () => {
-      // Arrange
-      const { result } = renderHook(() => useSocialMediaPost());
-      const mockPost = createMockPost({ platform: 'facebook' });
-
-      // Act
-      await act(async () => {
-        await result.current.post(mockPost);
-      });
-
-      // Assert
-      expect(result.current.status).toBe('success');
-      expect(facebookApi.post).toHaveBeenCalledWith(mockPost);
-    });
-
-    it('should handle API errors gracefully', async () => {
-      // Arrange
-      const { result } = renderHook(() => useSocialMediaPost());
-      facebookApi.post.mockRejectedValue(new Error('API Error'));
-
-      // Act
-      await act(async () => {
-        await result.current.post(mockPost);
-      });
-
-      // Assert
-      expect(result.current.status).toBe('error');
-      expect(result.current.error).toBe('API Error');
-    });
-  });
-});
-```
-
-### Test Naming Convention
-```
-Pattern: should [expected behavior] when [condition]
-
-Good:
-✅ should display error message when API returns 400
-✅ should disable submit button when form is invalid
-✅ should retry post when network error occurs
-
-Bad:
-❌ test post
-❌ error handling
-❌ it works
-```
-
-### Coverage of Edge Cases
-```typescript
-// Happy path
-it('should post successfully with valid data', ...)
-
-// Validation
-it('should reject empty content', ...)
-it('should reject content exceeding 5000 chars', ...)
-
-// Error scenarios
-it('should handle network timeout', ...)
-it('should handle API rate limit (429)', ...)
-it('should handle unauthorized (401)', ...)
-
-// Edge cases
-it('should handle posting to disconnected platform', ...)
-it('should handle media upload failure', ...)
-
-// Concurrency
-it('should prevent duplicate posts when clicked multiple times', ...)
-
-// Accessibility
-it('should have proper ARIA labels', ...)
-it('should be keyboard navigable', ...)
-```
-
-## Test Execution (Phase 7)
-
-### Execution Process
-```markdown
-1. Environment Setup
-   - Spin up test environments
-   - Seed test data
-
-2. Unit Test Execution
-   - Run: yarn test:unit
-   - Generate coverage
-   - Verify threshold
-
-3. Integration Test Execution
-   - Run: yarn test:integration
-   - Check API integrations
-
-4. E2E Test Execution (if applicable)
-   - Run: yarn test:e2e
-   - Record videos/screenshots
-
-5. Coverage Analysis
-   - Generate HTML report
-   - Check thresholds
-   - Identify gaps
-
-6. Report Generation
-   - Test execution report
-   - Coverage report
-   - Bug report (if any)
-```
-
-### Test Execution Report Template
-```markdown
-# Test Execution Report: [Feature Name]
-
-## Summary
-**Execution Date:** 2025-11-30
-**Environment:** Staging
-
-| Metric | Value | Status |
-|--------|-------|--------|
-| Total Tests | 53 | - |
-| Passed | 53 | ✅ |
-| Failed | 0 | ✅ |
-| Coverage | 89% | ✅ (Target: 80%) |
-| Duration | 2m 45s | ✅ |
-
-## Test Results by Type
-
-### Unit Tests ✅ 38/38 PASS
-| Test Suite | Tests | Pass | Fail | Duration |
-|------------|-------|------|------|----------|
-| useSocialMediaPost | 28 | 28 | 0 | 1.2s |
-| ShareModal | 10 | 10 | 0 | 0.8s |
-
-### Integration Tests ✅ 10/10 PASS
-| Test Suite | Tests | Pass | Fail | Duration |
-|------------|-------|------|------|----------|
-| Facebook API | 4 | 4 | 0 | 3.5s |
-| Instagram API | 3 | 3 | 0 | 2.8s |
-
-### E2E Tests ✅ 5/5 PASS
-| Test Case | Status | Duration |
-|-----------|--------|----------|
-| TC-001: Post to FB | ✅ | 12s |
-| TC-002: Post to IG | ✅ | 15s |
-| TC-003: Handle errors | ✅ | 8s |
-
-## Coverage Report
-
-### Overall Coverage ✅ 89% (Target: 80%)
-| Metric | Coverage | Status |
-|--------|----------|--------|
-| Statements | 90% | ✅ |
-| Branches | 85% | ✅ |
-| Functions | 92% | ✅ |
-| Lines | 89% | ✅ |
-
-**Verdict:** ✅ **ALL TESTS PASS**
-```
-
-## Common Testing Anti-Patterns to Avoid
-
-### ❌ Testing Implementation Details
-```typescript
-// BAD
-it('should call useState hook', () => {
-  expect(mockUseState).toHaveBeenCalled();
-});
-
-// GOOD
-it('should display username when provided', () => {
-  const { getByText } = render(<User name="John" />);
-  expect(getByText('John')).toBeTruthy();
-});
-```
-
-### ❌ Flaky Tests with Timers
-```typescript
-// BAD
-it('should show message after delay', () => {
-  renderComponent();
-  setTimeout(() => {
-    expect(getByText('Message')).toBeTruthy();
-  }, 1000); // Flaky!
-});
-
-// GOOD
-it('should show message after delay', async () => {
-  renderComponent();
-  await waitFor(() => {
-    expect(getByText('Message')).toBeTruthy();
-  });
-});
-```
-
-## Test Review Checklist
-
-When reviewing tests:
-
-### Structure
-- [ ] Tests are organized by feature/behavior
-- [ ] Descriptive test names (should...when...)
-- [ ] Proper setup/teardown
-- [ ] No test interdependencies
-
-### Quality
-- [ ] Tests are independent and isolated
-- [ ] Mocks are properly reset
-- [ ] No hard-coded values (use factories)
-- [ ] No test.skip or test.only
-
-### Coverage
-- [ ] Happy path covered
-- [ ] Error scenarios covered
+- [ ] TDD workflow followed
+- [ ] Descriptive test names (`should...when...`)
+- [ ] AAA pattern (Arrange, Act, Assert)
+- [ ] No implementation detail testing
+- [ ] No flaky tests (use waitFor, not setTimeout)
+- [ ] Coverage >= 80%
 - [ ] Edge cases covered
-- [ ] Coverage meets threshold
 
-### Maintainability
-- [ ] Tests are readable
-- [ ] Reusable test utilities extracted
-- [ ] No flaky tests
+---
 
-## Integration with Other Agents
-
-**Works with:**
-- **Development agents** - Receive implementation code, provide test requirements
-- **ui-designer** - Receive component specs, provide visual regression tests
-- **pm-orchestrator** - Receive test planning requests, provide execution reports
-
-## Best Practices
-- ✅ Follow TDD workflow (RED, GREEN, REFACTOR)
-- ✅ Use descriptive test names
-- ✅ Test behavior, not implementation
-- ✅ Keep tests independent
-- ✅ Use factories for test data
-- ✅ Aim for 80%+ coverage
-- ❌ Avoid testing implementation details
-- ❌ Avoid flaky tests
-- ❌ Don't skip tests in production code
-
-## References
-
-- Skills: `.cursor/rules/skills/auto-invoke/testing/`
-- Project contexts: `.cursor/project-contexts/[project]/`
-- Core rules: `.cursor/rules/core/`
-- Testing Library docs: https://testing-library.com
-- Jest docs: https://jestjs.io
-- Vitest docs: https://vitest.dev
-- Playwright docs: https://playwright.dev
+**Agent ID:** qa-automation
+**Version:** 1.1.6
+**Status:** Active

@@ -12,196 +12,87 @@ alwaysApply: false
 
 ## Load Expert Skills
 
-**BEFORE coding, load these expert skills for comprehensive patterns:**
+**REQUIRED: Load these expert skills for comprehensive patterns:**
 
-```
-.cursor/rules/skills/experts/api-expert.mdc         # API/Backend patterns
-.cursor/rules/skills/experts/testing-expert.mdc     # Testing patterns
-.cursor/rules/skills/experts/security-expert.mdc    # Security patterns
-```
-
-## Role & Expertise
-
-You are a Laravel expert specializing in RESTful API development, database design, authentication, and scalable backend architectures with PHP 8.2+.
+| Skill | Contains |
+|-------|----------|
+| `api-expert.mdc` | REST design, validation, error handling, DB |
+| `testing-expert.mdc` | TDD, PHPUnit, feature tests |
+| `security-expert.mdc` | OWASP Top 10, auth, CSRF |
 
 ## When to Activate
 
-This agent auto-activates when:
-- Working on Laravel/PHP projects
-- Files match: `*.php`, `composer.json`, `artisan`
-- User mentions: "laravel", "php", "eloquent", "sanctum"
+- Laravel / PHP projects
+- Files: `*.php`, `composer.json`, `artisan`, `*.blade.php`
+- Keywords: "laravel", "php", "eloquent", "artisan"
 
 ## Tech Stack
 
 ```yaml
-framework: Laravel 10.x / 11.x
 language: PHP 8.2+
-database: MySQL 8+ / PostgreSQL 14+
-cache: Redis
-queue: Redis / Database
+framework: Laravel 10.x / 11.x
+orm: Eloquent ORM
+auth: Laravel Sanctum / Passport
+validation: Form Requests
 testing: PHPUnit / Pest
-api: Laravel Sanctum / Passport
+queue: Laravel Queue (Redis/SQS)
 ```
 
-## Best Practices (CRITICAL)
+## Key Patterns
 
-### Eloquent Best Practices
 ```php
-// Use Eager Loading to prevent N+1 queries
-$users = User::with('posts')->get();
-
-// Use withCount for counting relations
-$users = User::withCount('posts')->get();
-
-// Use chunk() for large datasets
-User::chunk(1000, function ($users) {
-    foreach ($users as $user) {
-        // Process user
-    }
-});
-
-// Use updateOrCreate for upserts
-User::updateOrCreate(
-    ['email' => $email],
-    ['name' => $name, 'role' => $role]
-);
-
-// Use exists() instead of count()
-if (User::where('email', $email)->exists()) { }
-```
-
-### Service Layer Pattern
-```php
-class UserService
-{
-    public function __construct(
-        private readonly UserRepository $repository,
-        private readonly NotificationService $notificationService,
-    ) {}
-
-    public function createUser(CreateUserDTO $dto): User
-    {
-        return DB::transaction(function () use ($dto) {
-            $user = $this->repository->create([
-                'name' => $dto->name,
-                'email' => $dto->email,
-                'password' => Hash::make($dto->password),
-            ]);
-            $this->notificationService->sendWelcomeEmail($user);
-            return $user;
-        });
-    }
-}
-```
-
-### Request Validation
-```php
-class CreateUserRequest extends FormRequest
+// Form Request validation
+class StoreUserRequest extends FormRequest
 {
     public function rules(): array
     {
         return [
+            'email' => ['required', 'email', 'unique:users'],
             'name' => ['required', 'string', 'min:2', 'max:100'],
-            'email' => ['required', 'email', 'unique:users,email'],
-            'password' => ['required', 'confirmed', Password::defaults()],
         ];
     }
+}
 
-    protected function prepareForValidation(): void
+// Controller with dependency injection
+class UserController extends Controller
+{
+    public function __construct(
+        private readonly UserService $userService
+    ) {}
+
+    public function store(StoreUserRequest $request): JsonResponse
     {
-        $this->merge([
-            'email' => strtolower($this->email),
-        ]);
+        $user = $this->userService->create($request->validated());
+        return response()->json($user, 201);
     }
 }
-```
 
-### API Resources
-```php
+// API Resource for transformation
 class UserResource extends JsonResource
 {
-    public function toArray($request): array
+    public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
-            'posts' => PostResource::collection($this->whenLoaded('posts')),
-            'posts_count' => $this->when(isset($this->posts_count), $this->posts_count),
         ];
     }
 }
 ```
 
-### Queue Jobs
-```php
-class SendWelcomeEmail implements ShouldQueue
-{
-    use InteractsWithQueue, Queueable, SerializesModels;
+## Quality Checklist
 
-    public int $tries = 3;
-    public int $timeout = 30;
-
-    public function __construct(public readonly User $user) {}
-
-    public function handle(MailService $mailService): void
-    {
-        $mailService->sendWelcomeEmail($this->user);
-    }
-
-    public function failed(Throwable $exception): void
-    {
-        Log::error('Failed to send welcome email', [
-            'user_id' => $this->user->id,
-            'error' => $exception->getMessage(),
-        ]);
-    }
-}
-```
-
-## Testing
-
-```php
-// Feature Tests
-public function test_can_create_user(): void
-{
-    $response = $this->postJson('/api/users', [
-        'name' => 'John Doe',
-        'email' => 'john@example.com',
-        'password' => 'password123',
-    ]);
-
-    $response->assertStatus(201)
-        ->assertJson(['data' => ['name' => 'John Doe']]);
-
-    $this->assertDatabaseHas('users', ['email' => 'john@example.com']);
-}
-
-// Pest Tests
-it('creates a user', function () {
-    $user = $service->createUser([...]);
-    expect($user)->toBeInstanceOf(User::class)
-        ->and($user->email)->toBe('john@example.com');
-});
-```
-
-## Quality Standards
-
-- RESTful API conventions
-- Request validation with FormRequest
-- API Resources for responses
-- Service layer for business logic
-- Test coverage >= 80%
-- Eloquent eager loading (N+1 prevention)
-
-## Cross-Agent Collaboration
-
-- **database-specialist** - Schema design, migrations
-- **security-expert** - Security audits
-- **qa-automation** - PHPUnit/Pest testing
+- [ ] Form Request validation
+- [ ] API Resources for responses
+- [ ] Repository pattern for data access
+- [ ] Eloquent relationships properly defined
+- [ ] No N+1 queries (use eager loading)
+- [ ] Feature tests for endpoints
+- [ ] PHPStan / Larastan passing
 
 ---
 
 **Agent ID:** backend-laravel
-**Version:** 1.1.4
+**Version:** 1.1.6
 **Status:** Active

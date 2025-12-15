@@ -5,34 +5,46 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.1.6] - 2025-12-15
 
 ### Added
-- **Expert Skills System** - Domain-specific bundled best practices
+- **Expert Skills System** - Domain-specific bundled best practices (~3500 lines total)
   - `typescript-expert.mdc` - TS/JS patterns, strict typing, null handling
-  - `react-expert.mdc` - Hooks, performance, state management
+  - `react-expert.mdc` - Hooks, performance, state management, JSX patterns
   - `vue-expert.mdc` - Composition API, Pinia, reactivity
   - `angular-expert.mdc` - Signals, RxJS, NgRx, standalone components
-  - `api-expert.mdc` - REST design, validation, error handling, DB
-  - `testing-expert.mdc` - TDD, unit/integration/e2e, mocking
-  - `security-expert.mdc` - OWASP Top 10, secure coding, auth
-- **TypeScript Strict Nulls Rule** (`typescript-strict-nulls.mdc`)
-  - Avoid truthy/falsy pitfalls
-  - Use `??` instead of `||` for defaults
-  - Explicit JSX conditional rendering patterns
+  - `api-expert.mdc` - REST design, validation, error handling, DB patterns
+  - `testing-expert.mdc` - TDD, unit/integration/e2e, mocking, coverage
+  - `security-expert.mdc` - OWASP Top 10, secure coding, auth, crypto
 
 ### Changed
-- All frontend agents now load expert skills:
-  - `mobile-react-native.mdc` → typescript + react + testing + security
-  - `web-reactjs.mdc` → typescript + react + testing + security
-  - `web-vuejs.mdc` → typescript + vue + testing + security
-  - `web-angular.mdc` → typescript + angular + testing + security
-  - `web-nextjs.mdc` → typescript + react + api + testing + security
-- All backend agents now load expert skills:
-  - `backend-nodejs.mdc` → typescript + api + testing + security
-  - `backend-python.mdc` → api + testing + security
-  - `backend-go.mdc` → api + testing + security
-  - `backend-laravel.mdc` → api + testing + security
+- **Agent Optimization** - All 15 development agents slimmed down (~70% reduction)
+  - Agents now reference expert skills instead of embedding patterns
+  - Reduced from ~200-420 lines to ~60-90 lines per agent
+  - Consistent "Load Expert Skills" table format across all agents
+- **Updated Agents:**
+  - Frontend: `web-reactjs`, `web-vuejs`, `web-angular`, `web-nextjs`, `mobile-react-native`, `mobile-flutter`
+  - Backend: `backend-nodejs`, `backend-python`, `backend-go`, `backend-laravel`
+  - Specialists: `qa-automation`, `security-expert`, `database-specialist`, `devops-cicd`, `ui-designer`
+
+### Removed
+- **Redundant Core Rules** (now in expert skills):
+  - `typescript-strict-nulls.mdc` → `typescript-expert.mdc`
+  - `tdd-workflow.mdc` → `testing-expert.mdc`
+  - `api-design.mdc` → `api-expert.mdc`
+- **Redundant Reference Skills** (merged into experts):
+  - `unit-testing.mdc` → `testing-expert.mdc`
+  - `e2e-testing.mdc` → `testing-expert.mdc`
+  - `api-designer.mdc` → `api-expert.mdc`
+  - `react-native-patterns.mdc` → `react-expert.mdc`
+  - `state-management.mdc` → `react-expert.mdc` / `vue-expert.mdc`
+  - `qa-expert.mdc` → `testing-expert.mdc`
+  - `dev-expert.mdc` → expert skills
+
+### Stats
+- Rules reduced from ~114 to 103 files
+- Total lines saved: ~4000+ lines across agents and rules
+- Expert skills provide comprehensive patterns in dedicated files
 
 ## [1.1.5] - 2025-12-15
 
@@ -118,6 +130,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.1.6 | 2025-12-15 | Expert skills system, agent optimization (~70% reduction) |
 | 1.1.5 | 2025-12-15 | SAST security, Mermaid diagrams, library usage rule |
 | 1.1.4 | 2025-12-11 | TOON format, project-contexts, linting standards |
 | 1.1.3 | 2025-12-01 | Confluence integration, design system |

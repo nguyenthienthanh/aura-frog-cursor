@@ -12,186 +12,81 @@ alwaysApply: false
 
 ## Load Expert Skills
 
-**BEFORE coding, load these expert skills for comprehensive patterns:**
+**REQUIRED: Load these expert skills for comprehensive patterns:**
 
-```
-.cursor/rules/skills/experts/api-expert.mdc         # API/Backend patterns
-.cursor/rules/skills/experts/testing-expert.mdc     # Testing patterns
-.cursor/rules/skills/experts/security-expert.mdc    # Security patterns
-```
-
-## Role & Expertise
-
-You are an expert Go backend developer specializing in high-performance APIs, microservices, concurrent programming, and cloud-native applications using Gin, Fiber, Echo, and gRPC.
+| Skill | Contains |
+|-------|----------|
+| `api-expert.mdc` | REST design, validation, error handling, DB |
+| `testing-expert.mdc` | TDD, table-driven tests, mocking |
+| `security-expert.mdc` | OWASP Top 10, auth, input validation |
 
 ## When to Activate
 
-This agent auto-activates when:
-- Working on Go projects
-- Files match: `*.go`, `go.mod`, `go.sum`, `*.proto`
-- User mentions: "go", "golang", "gin", "fiber", "grpc", "microservice"
+- Go projects
+- Files: `*.go`, `go.mod`, `go.sum`, `*.proto`
+- Keywords: "go", "golang", "gin", "fiber", "grpc"
 
 ## Tech Stack
 
 ```yaml
 language: Go 1.21+
-frameworks: Gin, Fiber, Echo, Chi
-orm: GORM, sqlx, pgx
-grpc: Protocol Buffers, gRPC-Go
-testing: testing, testify
-concurrency: goroutines, channels, sync
+frameworks: Gin / Fiber / Echo / Chi
+database: sqlx / GORM / ent
+grpc: google.golang.org/grpc
+validation: go-playground/validator
+testing: testing + testify
 ```
 
-## Project Structure
+## Key Patterns
 
-```
-myapp/
-├── cmd/
-│   └── server/
-│       └── main.go
-├── internal/
-│   ├── handler/
-│   ├── service/
-│   ├── repository/
-│   └── model/
-├── pkg/
-│   ├── auth/
-│   └── middleware/
-├── api/
-│   └── proto/
-├── config/
-├── migrations/
-├── go.mod
-└── go.sum
-```
-
-## Best Practices (CRITICAL)
-
-### Error Handling
 ```go
-// Always check errors - NEVER ignore
-user, err := userService.GetUser(id)
-if err != nil {
-    return nil, fmt.Errorf("get user: %w", err)
-}
+// Handler with error handling
+func (h *UserHandler) GetUser(c *gin.Context) {
+    id := c.Param("id")
 
-// Custom sentinel errors
-var (
-    ErrUserNotFound = errors.New("user not found")
-    ErrInvalidInput = errors.New("invalid input")
-)
-
-// Check for specific errors
-if errors.Is(err, ErrUserNotFound) {
-    return c.JSON(http.StatusNotFound, gin.H{"error": "user not found"})
-}
-```
-
-### Concurrency Best Practices
-```go
-// Always use context for cancellation
-func (s *Service) FetchUser(ctx context.Context, id string) (*User, error) {
-    select {
-    case <-ctx.Done():
-        return nil, ctx.Err()
-    default:
+    user, err := h.userService.GetByID(c.Request.Context(), id)
+    if err != nil {
+        if errors.Is(err, ErrNotFound) {
+            c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+            return
+        }
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Internal error"})
+        return
     }
-    return s.repo.GetUser(ctx, id)
+
+    c.JSON(http.StatusOK, user)
 }
 
-// Worker pool pattern
-func processItems(ctx context.Context, items []Item, workers int) []Result {
-    jobs := make(chan Item, len(items))
-    results := make(chan Result, len(items))
-    var wg sync.WaitGroup
-
-    for i := 0; i < workers; i++ {
-        wg.Add(1)
-        go func() {
-            defer wg.Done()
-            for item := range jobs {
-                results <- processItem(item)
-            }
-        }()
-    }
-    // ...
-}
-
-// Use errgroup for parallel operations
-g, ctx := errgroup.WithContext(ctx)
-g.Go(func() error { users, err = fetchUsers(ctx); return err })
-g.Go(func() error { orders, err = fetchOrders(ctx); return err })
-if err := g.Wait(); err != nil { return nil, err }
-```
-
-### Context Best Practices
-```go
-// Pass context as first parameter
-func (s *Service) GetUser(ctx context.Context, id string) (*User, error) {
-    return s.repo.FindByID(ctx, id)
-}
-
-// Set timeouts
-ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-defer cancel()
-```
-
-### Interface Best Practices
-```go
-// Accept interfaces, return structs
-type UserRepository interface {
-    FindByID(ctx context.Context, id string) (*User, error)
-    Save(ctx context.Context, user *User) error
-}
-
-// Keep interfaces small (1-3 methods)
-type Reader interface {
-    Read(p []byte) (n int, err error)
-}
-```
-
-## Testing
-
-```go
 // Table-driven tests
 func TestGetUser(t *testing.T) {
     tests := []struct {
-        name    string
-        id      string
-        want    *User
-        wantErr bool
+        name     string
+        id       string
+        wantCode int
     }{
-        {"valid user", "123", &User{ID: "123"}, false},
-        {"not found", "999", nil, true},
+        {"valid", "123", 200},
+        {"not found", "999", 404},
     }
-
     for _, tt := range tests {
         t.Run(tt.name, func(t *testing.T) {
-            got, err := service.GetUser(context.Background(), tt.id)
-            if (err != nil) != tt.wantErr {
-                t.Errorf("GetUser() error = %v, wantErr %v", err, tt.wantErr)
-            }
+            // test implementation
         })
     }
 }
 ```
 
-## Quality Standards
+## Quality Checklist
 
-- Always check and handle errors
-- Use context for cancellation and timeouts
-- Proper goroutine lifecycle management
-- Table-driven tests
-- Race condition detection (-race flag)
-
-## Cross-Agent Collaboration
-
-- **database-specialist** - Schema design, performance
-- **devops-cicd** - Docker, Kubernetes deployment
-- **security-expert** - Security audits
+- [ ] Error handling (no ignored errors)
+- [ ] Context propagation
+- [ ] Graceful shutdown
+- [ ] Structured logging (slog)
+- [ ] Input validation
+- [ ] Table-driven tests
+- [ ] go vet / staticcheck passing
 
 ---
 
 **Agent ID:** backend-go
-**Version:** 1.1.4
+**Version:** 1.1.6
 **Status:** Active

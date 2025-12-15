@@ -14,245 +14,64 @@ alwaysApply: false
 
 ## Load Expert Skills
 
-**BEFORE coding, load these expert skills for comprehensive patterns:**
+**REQUIRED: Load these expert skills for comprehensive patterns:**
 
-```
-.cursor/rules/skills/experts/typescript-expert.mdc  # TS/JS patterns
-.cursor/rules/skills/experts/react-expert.mdc       # React/RN patterns
-.cursor/rules/skills/experts/testing-expert.mdc     # Testing patterns
-.cursor/rules/skills/experts/security-expert.mdc    # Security patterns
-```
-
-## Role & Expertise
-
-You are a specialized React Native + Expo mobile development expert with deep knowledge of:
-- React Native 0.76+ & Expo SDK 52+
-- TypeScript 5.3+ strict mode
-- Multi-region architecture (PH, MY, ID, IB, HK)
-- Responsive development (phone/tablet variants)
-- State management (Zustand with slices pattern)
-- Data fetching (@tanstack/react-query)
-- Form management (react-hook-form + yup)
-- Navigation (@react-navigation v6)
-- Animations (react-native-reanimated)
+| Skill | Contains |
+|-------|----------|
+| `typescript-expert.mdc` | TS/JS patterns, strict nulls, async |
+| `react-expert.mdc` | Hooks, performance, state, RN patterns |
+| `testing-expert.mdc` | TDD, React Native Testing Library |
+| `security-expert.mdc` | Input validation, secure storage |
 
 ## When to Activate
 
-This agent auto-activates when:
-- Working on React Native/Expo projects
-- Files match: `*.tsx`, `*.ts`, `*.phone.tsx`, `*.tablet.tsx`
-- `app.json` with expo configuration detected
-- User mentions: "react native", "expo", "mobile", "RN"
+- React Native / Expo projects
+- Files: `*.tsx`, `*.phone.tsx`, `*.tablet.tsx`, `app.json`
+- Keywords: "react native", "expo", "mobile", "RN"
 
-## Project Structure Pattern
+## Tech Stack
+
+```yaml
+framework: React Native 0.76+ / Expo SDK 52+
+language: TypeScript 5.3+
+state: Zustand with slices pattern
+data: @tanstack/react-query
+forms: react-hook-form + yup
+navigation: @react-navigation v6
+animations: react-native-reanimated
+styling: Check project context (NativeWind or StyleSheet)
+```
+
+## Project Structure
 
 ```
 src/
-├── features/[feature-name]/
-│   ├── components/          # Shared components
-│   ├── [region]/            # Region-specific (ph, my, id, ib, hk)
-│   │   ├── phone/
-│   │   │   ├── FeatureName.tsx
-│   │   │   └── SubFeature/
-│   │   ├── tablet/
-│   │   │   ├── FeatureName.tsx
-│   │   │   └── SubFeature/
-│   │   └── validation/      # Yup schemas
-│   ├── hooks/               # Feature hooks
-│   ├── translation/         # i18next by region
-│   └── utils/               # Feature utilities
-├── screens/[screen-name]/
-│   ├── index.ts                    # Entry point
-│   ├── [screen-name].tsx           # Delegates to phone/tablet
-│   ├── [screen-name].phone.tsx     # Phone with region switch
-│   └── [screen-name].tablet.tsx    # Tablet implementation
-└── hooks/useBoundStore.tsx         # Zustand combined store
+├── features/[feature]/
+│   ├── components/           # Shared components
+│   ├── [region]/             # Region-specific (ph, my, id)
+│   │   ├── phone/            # Phone UI
+│   │   └── tablet/           # Tablet UI
+│   ├── hooks/                # Feature hooks
+│   └── utils/                # Feature utilities
+├── screens/[screen]/
+│   ├── [screen].tsx          # Delegates to phone/tablet
+│   ├── [screen].phone.tsx    # Phone implementation
+│   └── [screen].tablet.tsx   # Tablet implementation
+└── hooks/useBoundStore.tsx   # Zustand combined store
 ```
 
-## Technical Standards
+## Quality Checklist
 
-### File Naming
-```
-Components:     PascalCase.{phone|tablet}.tsx
-Hooks:          useCamelCase.tsx
-Utils:          camelCase.ts
-Types:          PascalCase.ts
-Features:       kebab-case/{region}/{phone|tablet}/
-```
-
-### Component Structure
-```typescript
-import { FC, useCallback } from 'react';
-import { View } from 'react-native';
-
-interface Props {
-  title: string;
-  onPress: () => void;
-}
-
-export const FeatureName: FC<Props> = ({ title, onPress }) => {
-  // 1. Hooks & State
-  const { data } = useFeatureData();
-
-  // 2. Handlers
-  const handlePress = useCallback(() => {
-    onPress();
-  }, [onPress]);
-
-  // 3. Render
-  return (
-    <View>
-      {/* Component content */}
-    </View>
-  );
-};
-```
-
-### Import Order
-```typescript
-// 1. React & React Native
-import { useCallback, useMemo } from 'react';
-import { View, StyleSheet } from 'react-native';
-
-// 2. Third-party libraries
-import { useQuery } from '@tanstack/react-query';
-
-// 3. Navigation
-import { useNavigation } from '@react-navigation/native';
-
-// 4. Store & State
-import { useBoundStore } from 'hooks/useBoundStore';
-
-// 5. API
-import { leadApi } from 'api/leadApi';
-
-// 6. Components
-import { Button, Typography } from 'proj-ui-components';
-
-// 7. Hooks
-import { useCustomHook } from './hooks/useCustomHook';
-
-// 8. Utils & Constants
-import { formatDate } from 'utils/dateUtils';
-
-// 9. Types
-import type { Lead } from 'types/lead';
-
-// 10. Assets
-import LogoSvg from './assets/logo.svg';
-```
-
-### TypeScript Strictness
-
-**CRITICAL: See `typescript-strict-nulls.mdc` for comprehensive null handling rules.**
-
-```typescript
-// ❌ Never use non-null assertion
-const value = obj.field!; // NO!
-
-// ❌ Never rely on truthy/falsy for null checks
-if (str) { }          // Empty string "" is valid but falsy!
-if (count) { }        // Zero 0 is valid but falsy!
-const x = val || 'default';  // "" and 0 become 'default'!
-
-// ✅ Always handle nullish values explicitly
-const value = obj.field ?? defaultValue;  // Only null/undefined
-if (obj.field != null) { /* use obj.field */ }  // Explicit null check
-if (str !== '') { /* has content */ }  // Explicit empty check
-
-// ✅ JSX conditional rendering
-{count > 0 && <Badge count={count} />}  // Not: {count && ...}
-{title != null && <Text>{title}</Text>}  // Not: {title && ...}
-```
-
-## Styling Approach (Adaptive)
-
-**CRITICAL: Check project context FIRST before choosing styling approach!**
-
-**Priority Order:**
-1. **Project Context** - Use styling defined in `.cursor/project-contexts/[project]/project-config.yaml`
-2. **Existing Patterns** - Follow what's already in the codebase
-3. **NativeWind** - Recommend for new projects (if not specified)
-4. **StyleSheet** - Fallback if no preference
-
-## Multi-Region Pattern
-
-```typescript
-// src/features/myFeature/components/MyFeature.tsx
-import { COUNTRY } from 'constants/env';
-
-export const MyFeature = () => {
-  switch (COUNTRY) {
-    case 'ph':
-      return <MyFeaturePH />;
-    case 'my':
-      return <MyFeatureMY />;
-    // ... other regions
-    default:
-      return <MyFeatureGeneric />;
-  }
-};
-```
-
-## Testing Requirements
-
-- **Minimum Coverage:** 80% (configurable)
-- **Unit Tests:** All utility functions, hooks
-- **Component Tests:** Critical user flows
-- **Integration Tests:** API integration, navigation flows
-
-```typescript
-// MyComponent.test.tsx
-import { render, fireEvent } from '@testing-library/react-native';
-
-describe('MyComponent', () => {
-  it('should render correctly', () => {
-    const { getByText } = render(<MyComponent title="Test" />);
-    expect(getByText('Test')).toBeTruthy();
-  });
-});
-```
-
-## ESLint Rules (Critical)
-- React Hooks exhaustive deps (includes Reanimated)
-- TanStack Query exhaustive deps
-- No non-null assertions
-- No unused variables
-- Warn on color literals (use theme)
-
-## Best Practices
-- ✅ Use const constructors
-- ✅ Break components into 3 parts (hooks, handlers, render)
-- ✅ Follow naming conventions strictly
-- ✅ Always check project context first
-- ✅ Responsive design (phone/tablet)
-- ❌ Never hardcode colors (use theme)
-- ❌ Never use `any` type
-
-## Integration with Other Agents
-
-**Works with:**
-- **ui-designer** - Component breakdown, design tokens
-- **qa-automation** - Test requirements, coverage goals
-- **backend agents** - API contracts, data models
-- **pm-orchestrator** - Task assignments, phase instructions
-
-## Related Rules
-
-- **typescript-strict-nulls.mdc** - Explicit null/undefined handling (MUST READ)
-- **code-quality.mdc** - TypeScript strict mode, error handling
-- **theme-consistency.mdc** - No hardcoded colors/spacing
-
-## References
-
-- Project context: `.cursor/project-contexts/[project]/`
-- Skills directory: `.cursor/rules/skills/auto-invoke/`
-- Core rules: `.cursor/rules/core/`
-- React Native docs: https://reactnative.dev
-- Expo docs: https://docs.expo.dev
+- [ ] TypeScript strict mode
+- [ ] Responsive design (phone/tablet variants)
+- [ ] useCallback for callbacks to children
+- [ ] Explicit null checks in JSX (see `react-expert.mdc`)
+- [ ] No hardcoded colors (use theme)
+- [ ] FlatList with proper keyExtractor
+- [ ] Test coverage >= 80%
 
 ---
 
 **Agent ID:** mobile-react-native
-**Version:** 1.1.5
+**Version:** 1.1.6
 **Status:** Active

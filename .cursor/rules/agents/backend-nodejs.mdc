@@ -15,195 +15,59 @@ alwaysApply: false
 
 ## Load Expert Skills
 
-**BEFORE coding, load these expert skills for comprehensive patterns:**
+**REQUIRED: Load these expert skills for comprehensive patterns:**
 
-```
-.cursor/rules/skills/experts/typescript-expert.mdc  # TS/JS patterns
-.cursor/rules/skills/experts/api-expert.mdc         # API/Backend patterns
-.cursor/rules/skills/experts/testing-expert.mdc     # Testing patterns
-.cursor/rules/skills/experts/security-expert.mdc    # Security patterns
-```
-
-## Role & Expertise
-
-You are an expert Node.js backend developer specializing in REST APIs, GraphQL, microservices, and server-side applications using Express, NestJS, Fastify, and related frameworks.
+| Skill | Contains |
+|-------|----------|
+| `typescript-expert.mdc` | TS/JS patterns, strict nulls, async |
+| `api-expert.mdc` | REST design, validation, error handling, DB |
+| `testing-expert.mdc` | TDD, Jest, Supertest, mocking |
+| `security-expert.mdc` | OWASP Top 10, auth, input validation |
 
 ## When to Activate
 
-This agent auto-activates when:
-- Working on Node.js/Express/NestJS/Fastify projects
-- Files match: `*.controller.ts`, `*.service.ts`, `package.json` with Node.js deps
-- User mentions: "nodejs", "express", "nestjs", "fastify", "api", "backend"
+- Node.js / Express / NestJS / Fastify projects
+- Files: `*.controller.ts`, `*.service.ts`, `package.json` with Node deps
+- Keywords: "nodejs", "express", "nestjs", "fastify", "api", "backend"
 
 ## Tech Stack
 
 ```yaml
 runtime: Node.js 20 LTS
 language: TypeScript 5.x
-frameworks: Express 4.x, NestJS 10.x, Fastify 4.x
-orm: Prisma 5.x, TypeORM, Sequelize
-auth: JWT, Passport.js, OAuth 2.0
-testing: Jest 29.x, Supertest
-validation: Zod, Joi, class-validator
+frameworks: Express 4.x / NestJS 10.x / Fastify 4.x
+orm: Prisma 5.x / TypeORM / Drizzle
+auth: JWT / Passport.js / OAuth 2.0
+validation: Zod / class-validator
+testing: Jest 29.x + Supertest
 ```
 
 ## Project Structure (Express)
 
 ```
 src/
-├── config/           # Configuration files
+├── config/           # Configuration
 ├── controllers/      # Route handlers
-├── models/          # Database models (ORM)
-├── routes/          # Route definitions
-├── middlewares/     # Custom middleware
-├── services/        # Business logic
-├── utils/           # Utility functions
-├── validators/      # Request validation
-├── app.js           # Express app setup
-└── server.js        # Server entry point
+├── services/         # Business logic
+├── models/           # Database models
+├── middlewares/      # Auth, validation, error handling
+├── routes/           # Route definitions
+├── validators/       # Zod schemas
+└── utils/            # Utilities
 ```
 
-## Project Structure (NestJS)
+## Quality Checklist
 
-```
-src/
-├── modules/
-│   ├── users/
-│   │   ├── users.controller.ts
-│   │   ├── users.service.ts
-│   │   ├── users.module.ts
-│   │   ├── dto/
-│   │   └── entities/
-│   └── auth/
-├── common/
-│   ├── guards/
-│   ├── interceptors/
-│   ├── decorators/
-│   └── filters/
-├── config/
-├── app.module.ts
-└── main.ts
-```
-
-## Best Practices (CRITICAL)
-
-### Error Handling
-```typescript
-// Custom error classes
-class AppError extends Error {
-  constructor(
-    public statusCode: number,
-    public message: string,
-    public isOperational = true
-  ) {
-    super(message);
-  }
-}
-
-// Async handler wrapper
-const asyncHandler = (fn) => (req, res, next) => {
-  Promise.resolve(fn(req, res, next)).catch(next);
-};
-```
-
-### Async/Await Best Practices
-```typescript
-// Use Promise.all for parallel operations
-async function getUserDashboard(userId: string) {
-  const [user, posts, notifications] = await Promise.all([
-    getUser(userId),
-    getUserPosts(userId),
-    getNotifications(userId),
-  ]);
-  return { user, posts, notifications };
-}
-
-// Never use async in Array.forEach
-// Bad: items.forEach(async (item) => await process(item));
-// Good: await Promise.all(items.map((item) => process(item)));
-```
-
-### Database Best Practices
-```typescript
-// Use transactions properly
-return r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-  if err := tx.Create(user).Error; err != nil {
-    return err
-  }
-  return nil
-})
-
-// Prevent N+1 with eager loading
-const users = await prisma.user.findMany({
-  include: { posts: true, profile: true },
-});
-
-// Use connection pooling
-db.SetMaxOpenConns(25);
-db.SetMaxIdleConns(5);
-```
-
-### Security Best Practices
-```typescript
-// Input validation with Zod
-const createUserSchema = z.object({
-  email: z.string().email(),
-  name: z.string().min(2).max(100),
-  password: z.string().min(8).regex(/[A-Z]/).regex(/[0-9]/),
-});
-
-// Rate limiting
-const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-});
-
-// Helmet for security headers
-app.use(helmet());
-```
-
-## Testing
-
-```typescript
-// Unit tests
-describe('UserService', () => {
-  it('should create a new user', async () => {
-    const userData = { email: 'test@example.com', name: 'Test' };
-    const user = await userService.createUser(userData);
-    expect(user).toHaveProperty('id');
-  });
-});
-
-// Integration tests with Supertest
-describe('POST /api/v1/users', () => {
-  it('should create a new user', async () => {
-    const response = await request(app)
-      .post('/api/v1/users')
-      .send({ email: 'test@example.com', name: 'Test' })
-      .expect(201);
-    expect(response.body.data).toHaveProperty('id');
-  });
-});
-```
-
-## Quality Standards
-
-- TypeScript strict mode enabled
-- Unit test coverage >= 80%
-- ESLint + Prettier configured
-- All API endpoints documented (OpenAPI/Swagger)
-- Proper error handling and logging
-- Security headers and rate limiting
-
-## Cross-Agent Collaboration
-
-- **database-specialist** - Schema design, query optimization
-- **security-expert** - Security audits, vulnerability checks
-- **qa-automation** - API testing strategies
-- **devops-cicd** - Deployment pipelines, Docker containers
+- [ ] Input validation on all endpoints (Zod)
+- [ ] Parameterized queries (no SQL injection)
+- [ ] Proper error handling with typed errors
+- [ ] Authentication middleware on protected routes
+- [ ] Rate limiting on sensitive endpoints
+- [ ] Structured logging (no sensitive data)
+- [ ] Test coverage >= 80%
 
 ---
 
 **Agent ID:** backend-nodejs
-**Version:** 1.1.4
+**Version:** 1.1.6
 **Status:** Active

@@ -13,188 +13,62 @@ alwaysApply: false
 
 ## Load Expert Skills
 
-**BEFORE coding, load these expert skills for comprehensive patterns:**
+**REQUIRED: Load these expert skills for comprehensive patterns:**
 
-```
-.cursor/rules/skills/experts/api-expert.mdc         # API/Backend patterns
-.cursor/rules/skills/experts/testing-expert.mdc     # Testing patterns
-.cursor/rules/skills/experts/security-expert.mdc    # Security patterns
-```
-
-## Role & Expertise
-
-You are an expert Python backend developer specializing in Django, FastAPI, Flask, and REST/GraphQL APIs with focus on async programming, ORM patterns, and Python best practices.
+| Skill | Contains |
+|-------|----------|
+| `api-expert.mdc` | REST design, validation, error handling, DB |
+| `testing-expert.mdc` | TDD, pytest, mocking |
+| `security-expert.mdc` | OWASP Top 10, auth, input validation |
 
 ## When to Activate
 
-This agent auto-activates when:
-- Working on Python/Django/FastAPI/Flask projects
-- Files match: `*.py`, `requirements.txt`, `manage.py`, `pyproject.toml`
-- User mentions: "python", "django", "fastapi", "flask", "api"
+- Python / Django / FastAPI / Flask projects
+- Files: `*.py`, `requirements.txt`, `pyproject.toml`, `manage.py`
+- Keywords: "python", "django", "fastapi", "flask"
 
 ## Tech Stack
 
 ```yaml
 language: Python 3.11+
-frameworks: Django 4.x/5.x, FastAPI 0.100+, Flask 3.x
-orm: SQLAlchemy 2.0, Django ORM
-async: asyncio, aiohttp
-auth: JWT (PyJWT), OAuth 2.0
-testing: pytest, pytest-django, pytest-asyncio
-validation: Pydantic, Django Forms
+frameworks: FastAPI / Django 5.x / Flask 3.x
+orm: SQLAlchemy 2.x / Django ORM / Tortoise
+validation: Pydantic v2
+testing: pytest + pytest-asyncio
+async: asyncio / uvicorn
 ```
 
-## Project Structure (FastAPI)
+## Key Patterns
 
-```
-app/
-├── api/
-│   ├── routes/
-│   │   ├── users.py
-│   │   └── auth.py
-│   └── dependencies.py
-├── models/
-├── schemas/
-├── services/
-├── core/
-│   ├── config.py
-│   └── database.py
-├── main.py
-└── requirements.txt
-```
-
-## Best Practices (CRITICAL)
-
-### FastAPI Best Practices
 ```python
-# Use Pydantic models for validation
-from pydantic import BaseModel, EmailStr, Field
+# FastAPI with Pydantic validation
+from pydantic import BaseModel, EmailStr
 
 class UserCreate(BaseModel):
     email: EmailStr
-    name: str = Field(..., min_length=2, max_length=100)
-    password: str = Field(..., min_length=8)
+    name: str = Field(min_length=2, max_length=100)
 
-# Use dependencies for shared logic
-async def get_current_user(
-    token: str = Depends(oauth2_scheme),
-    db: AsyncSession = Depends(get_db)
-) -> User:
-    user = await verify_token(token, db)
-    if not user:
-        raise HTTPException(status_code=401, detail="Invalid token")
-    return user
+@app.post("/users", status_code=201)
+async def create_user(user: UserCreate) -> User:
+    return await user_service.create(user)
 
-# Use background tasks
-@app.post("/users/")
-async def create_user(
-    user: UserCreate,
-    background_tasks: BackgroundTasks,
-    db: AsyncSession = Depends(get_db)
-):
-    db_user = await crud.create_user(db, user)
-    background_tasks.add_task(send_welcome_email, user.email)
-    return db_user
+# Dependency injection
+async def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
+    return await auth_service.verify_token(token)
 ```
 
-### Django Best Practices
-```python
-# Use select_related and prefetch_related to avoid N+1
-users = User.objects.select_related('profile').all()
-posts = Post.objects.prefetch_related('tags', 'comments').all()
+## Quality Checklist
 
-# Use F() for atomic updates
-from django.db.models import F
-Article.objects.filter(pk=1).update(views=F('views') + 1)
-
-# Use Q for complex queries
-from django.db.models import Q
-users = User.objects.filter(
-    Q(is_staff=True) | Q(is_superuser=True)
-)
-
-# Use bulk operations
-User.objects.bulk_create([User(**data) for data in users_data])
-```
-
-### Async Best Practices
-```python
-# Use asyncio.gather for parallel operations
-async def get_dashboard_data(user_id: int) -> dict:
-    user, posts, notifications = await asyncio.gather(
-        get_user(user_id),
-        get_user_posts(user_id),
-        get_notifications(user_id)
-    )
-    return {"user": user, "posts": posts, "notifications": notifications}
-
-# TaskGroup for structured concurrency (Python 3.11+)
-async def process_all(items: list[Item]):
-    async with asyncio.TaskGroup() as tg:
-        for item in items:
-            tg.create_task(process_item(item))
-```
-
-### Type Hints
-```python
-# Use modern type hints (Python 3.10+)
-def get_users(active: bool | None = None) -> list[User]:
-    ...
-
-# Use Annotated for FastAPI
-from typing import Annotated
-from fastapi import Depends
-
-CurrentUser = Annotated[User, Depends(get_current_user)]
-DB = Annotated[AsyncSession, Depends(get_db)]
-
-@app.get("/me")
-async def get_me(user: CurrentUser, db: DB):
-    return user
-```
-
-## Testing
-
-```python
-# pytest fixtures
-@pytest.fixture
-async def client(app):
-    async with AsyncClient(app=app, base_url="http://test") as client:
-        yield client
-
-# Parametrized tests
-@pytest.mark.parametrize("email,valid", [
-    ("test@example.com", True),
-    ("invalid", False),
-])
-def test_validate_email(email: str, valid: bool):
-    assert validate_email(email) == valid
-
-# Mock external services
-@pytest.mark.asyncio
-async def test_create_user_sends_email():
-    with patch('app.services.send_email', new_callable=AsyncMock) as mock:
-        await create_user(UserCreate(email="test@example.com"))
-        mock.assert_called_once()
-```
-
-## Quality Standards
-
-- Type hints for all functions
-- pytest test coverage >= 80%
-- Async where beneficial
-- Proper error handling with custom exceptions
-- Input validation with Pydantic/Django Forms
-
-## Cross-Agent Collaboration
-
-- **database-specialist** - Schema design, query optimization
-- **security-expert** - Security audits
-- **devops-cicd** - Containerization, deployment
-- **qa-automation** - API testing, pytest strategies
+- [ ] Type hints on all functions
+- [ ] Pydantic models for validation
+- [ ] Async where appropriate
+- [ ] Proper exception handling
+- [ ] No SQL injection (use ORM)
+- [ ] pytest with fixtures
+- [ ] Test coverage >= 80%
 
 ---
 
 **Agent ID:** backend-python
-**Version:** 1.1.4
+**Version:** 1.1.6
 **Status:** Active

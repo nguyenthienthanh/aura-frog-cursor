@@ -13,25 +13,20 @@ alwaysApply: false
 
 ## Load Expert Skills
 
-**BEFORE coding, load these expert skills for comprehensive patterns:**
+**REQUIRED: Load these expert skills for comprehensive patterns:**
 
-```
-.cursor/rules/skills/experts/typescript-expert.mdc  # TS/JS patterns
-.cursor/rules/skills/experts/react-expert.mdc       # React patterns
-.cursor/rules/skills/experts/testing-expert.mdc     # Testing patterns
-.cursor/rules/skills/experts/security-expert.mdc    # Security patterns
-```
-
-## Role & Expertise
-
-You are a React 18 expert specializing in modern React development with hooks, functional components, and TypeScript. You build performant, scalable SPAs with best practices.
+| Skill | Contains |
+|-------|----------|
+| `typescript-expert.mdc` | TS/JS patterns, strict nulls, async |
+| `react-expert.mdc` | Hooks, performance, state, JSX patterns |
+| `testing-expert.mdc` | TDD, React Testing Library, mocking |
+| `security-expert.mdc` | XSS prevention, input validation |
 
 ## When to Activate
 
-This agent auto-activates when:
-- Working on React SPA projects (not Next.js)
-- Files match: `*.tsx`, `*.jsx`, `vite.config.ts`
-- User mentions: "react", "spa", "vite", "hooks"
+- React SPA projects (not Next.js)
+- Files: `*.tsx`, `*.jsx`, `vite.config.ts`
+- Keywords: "react", "spa", "vite", "hooks"
 
 ## Tech Stack
 
@@ -42,187 +37,22 @@ state: Redux Toolkit / Zustand
 routing: React Router 6.x
 data: @tanstack/react-query
 build: Vite 5.x
-styling: CSS Modules / Styled Components / Tailwind
+styling: Tailwind / CSS Modules / Styled Components
 testing: Jest + React Testing Library
 ```
 
-## Component Structure
+## Quality Checklist
 
-```typescript
-import { FC, useState, useCallback } from 'react';
-
-interface Props {
-  title: string;
-  onUpdate: (value: number) => void;
-}
-
-export const MyComponent: FC<Props> = ({ title, onUpdate }) => {
-  // 1. Hooks
-  const [count, setCount] = useState(0);
-
-  // 2. Handlers
-  const handleClick = useCallback(() => {
-    const newValue = count + 1;
-    setCount(newValue);
-    onUpdate(newValue);
-  }, [count, onUpdate]);
-
-  // 3. Render
-  return (
-    <div>
-      <h1>{title}</h1>
-      <button onClick={handleClick}>Count: {count}</button>
-    </div>
-  );
-};
-```
-
-## Best Practices (CRITICAL)
-
-### useCallback - Memoize Functions
-```typescript
-// ALWAYS use useCallback for callbacks passed to child components
-const handleClick = useCallback(() => {
-  setCount(prev => prev + 1);
-}, []);
-
-// Include dependencies that change
-const handleUpdate = useCallback((newValue: string) => {
-  onUpdate(id, newValue);
-}, [id, onUpdate]);
-
-// BAD: Creates new function on every render
-<Button onClick={() => setCount(count + 1)} />
-
-// GOOD: Stable function reference
-<Button onClick={handleClick} />
-```
-
-### useMemo - Memoize Values
-```typescript
-// Use useMemo for expensive computations
-const sortedItems = useMemo(() => {
-  return items.slice().sort((a, b) => a.name.localeCompare(b.name));
-}, [items]);
-
-// Use useMemo for derived state
-const filteredUsers = useMemo(() => {
-  return users.filter(user =>
-    user.name.toLowerCase().includes(search.toLowerCase())
-  );
-}, [users, search]);
-```
-
-### useEffect - Side Effects
-```typescript
-// Cleanup subscriptions
-useEffect(() => {
-  const subscription = eventEmitter.subscribe(handleEvent);
-  return () => subscription.unsubscribe();
-}, [handleEvent]);
-
-// AbortController for fetch
-useEffect(() => {
-  const controller = new AbortController();
-  fetch('/api/data', { signal: controller.signal })
-    .then(res => res.json())
-    .then(setData);
-  return () => controller.abort();
-}, []);
-```
-
-### Performance Optimization
-```typescript
-// React.memo for expensive components
-const UserCard = React.memo(({ user, onSelect }: Props) => {
-  return <div onClick={() => onSelect(user.id)}>{user.name}</div>;
-});
-
-// Lazy load routes/heavy components
-const Dashboard = React.lazy(() => import('./Dashboard'));
-
-<Suspense fallback={<Spinner />}>
-  <Dashboard />
-</Suspense>
-
-// Virtual scrolling for long lists
-import { FixedSizeList } from 'react-window';
-```
-
-### State Management
-```typescript
-// Use functional updates when depending on previous state
-setCount(prev => prev + 1);
-
-// Batch related state into objects
-const [form, setForm] = useState({ name: '', email: '' });
-setForm(prev => ({ ...prev, name: 'John' }));
-
-// Use lazy initialization for expensive values
-const [data] = useState(() => computeExpensiveValue());
-```
-
-## Testing
-
-```typescript
-import { render, screen, fireEvent } from '@testing-library/react';
-
-describe('MyComponent', () => {
-  it('renders title', () => {
-    render(<MyComponent title="Test" onUpdate={jest.fn()} />);
-    expect(screen.getByText('Test')).toBeInTheDocument();
-  });
-
-  it('calls onUpdate when clicked', () => {
-    const onUpdate = jest.fn();
-    render(<MyComponent title="Test" onUpdate={onUpdate} />);
-    fireEvent.click(screen.getByRole('button'));
-    expect(onUpdate).toHaveBeenCalledWith(1);
-  });
-});
-```
-
-## Strict Null Handling
-
-**CRITICAL: See `typescript-strict-nulls.mdc` for comprehensive rules.**
-
-```typescript
-// ❌ BAD: Truthy/falsy checks hide valid values
-if (user.name) { }       // "" is falsy but valid!
-if (item.price) { }      // 0 is falsy but valid (free)!
-const x = val || 'default';  // "" and 0 become 'default'!
-
-// ❌ BAD: JSX conditional renders 0 as "0"
-{count && <Badge count={count} />}  // Shows "0" when count is 0!
-
-// ✅ GOOD: Explicit null checks
-if (user.name != null) { }  // Handles null/undefined only
-const x = val ?? 'default';  // Nullish coalescing
-
-// ✅ GOOD: JSX with explicit boolean
-{count > 0 && <Badge count={count} />}
-{name != null && <Header name={name} />}
-{Boolean(items?.length) && <List items={items} />}
-```
-
-## Quality Standards
-
-- TypeScript strict mode
-- Functional components with hooks
-- Proper dependency arrays
-- Explicit null/undefined handling (see `typescript-strict-nulls.mdc`)
-- Test coverage >= 80%
-- ESLint + Prettier passing
-- Accessibility (semantic HTML, ARIA)
-
-## Related Rules
-
-- **typescript-strict-nulls.mdc** - Explicit null handling (MUST READ)
-- **code-quality.mdc** - TypeScript strict mode, error handling
-- **performance.mdc** - Performance optimization patterns
+- [ ] TypeScript strict mode enabled
+- [ ] Functional components with hooks
+- [ ] useCallback for callbacks to children
+- [ ] useMemo for expensive computations
+- [ ] Explicit null checks (see `typescript-expert.mdc`)
+- [ ] JSX conditionals use explicit booleans
+- [ ] Test coverage >= 80%
 
 ---
 
 **Agent ID:** web-reactjs
-**Version:** 1.1.5
+**Version:** 1.1.6
 **Status:** Active

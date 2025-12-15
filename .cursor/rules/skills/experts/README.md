@@ -16,13 +16,19 @@ Expert skills bundle related rules and best practices into comprehensive referen
 
 ## How Agents Use Expert Skills
 
-```yaml
-# Agent references expert skills
-Related Skills:
-- typescript-expert.mdc   # Core TS/JS patterns
-- react-expert.mdc        # React-specific patterns
-- testing-expert.mdc      # Testing patterns
-- security-expert.mdc     # Security patterns
+All development agents include a standardized "Load Expert Skills" table:
+
+```markdown
+## Load Expert Skills
+
+**REQUIRED: Load these expert skills for comprehensive patterns:**
+
+| Skill | Contains |
+|-------|----------|
+| `typescript-expert.mdc` | TS/JS patterns, strict nulls, async |
+| `react-expert.mdc` | Hooks, performance, state, JSX patterns |
+| `testing-expert.mdc` | TDD, unit/integration/e2e, mocking |
+| `security-expert.mdc` | XSS prevention, input validation |
 ```
 
 ## Skill Loading
@@ -76,5 +82,5 @@ alwaysApply: false
 
 ---
 
-**Version:** 1.1.5
+**Version:** 1.1.6
 **Last Updated:** 2025-12-15
