@@ -14,14 +14,13 @@ alwaysApply: false
 
 ## Load Expert Skills
 
-**REQUIRED: Load these expert skills for comprehensive patterns:**
-
-| Skill | Contains |
-|-------|----------|
-| `typescript-expert.mdc` | TS/JS patterns, strict nulls, async |
-| `react-expert.mdc` | Hooks, performance, state, RN patterns |
-| `testing-expert.mdc` | TDD, React Native Testing Library |
-| `security-expert.mdc` | Input validation, secure storage |
+```toon
+skills[4]{skill,contains}:
+ typescript-expert.mdc,TS/JS patterns/strict nulls/async
+ react-expert.mdc,Hooks/performance/state/RN patterns
+ testing-expert.mdc,TDD/React Native Testing Library
+ security-expert.mdc,Input validation/secure storage
+```
 
 ## When to Activate
 
@@ -31,15 +30,16 @@ alwaysApply: false
 
 ## Tech Stack
 
-```yaml
-framework: React Native 0.76+ / Expo SDK 52+
-language: TypeScript 5.3+
-state: Zustand with slices pattern
-data: @tanstack/react-query
-forms: react-hook-form + yup
-navigation: @react-navigation v6
-animations: react-native-reanimated
-styling: Check project context (NativeWind or StyleSheet)
+```toon
+stack[8]{key,value}:
+ framework,React Native 0.76+ / Expo SDK 52+
+ language,TypeScript 5.3+
+ state,Zustand with slices pattern
+ data,@tanstack/react-query
+ forms,react-hook-form + yup
+ navigation,@react-navigation v6
+ animations,react-native-reanimated
+ styling,Check project context (NativeWind or StyleSheet)
 ```
 
 ## Project Structure

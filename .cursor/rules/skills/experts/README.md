@@ -4,31 +4,27 @@ Expert skills bundle related rules and best practices into comprehensive referen
 
 ## Available Expert Skills
 
-| Skill | Description | Use For |
-|-------|-------------|---------|
-| `typescript-expert.mdc` | TypeScript/JS patterns, strict typing, null handling | All TS/JS projects |
-| `react-expert.mdc` | React hooks, performance, state management | React, RN, Next.js |
-| `vue-expert.mdc` | Composition API, Pinia, reactivity | Vue.js, Nuxt |
-| `angular-expert.mdc` | Signals, RxJS, NgRx, standalone components | Angular |
-| `api-expert.mdc` | REST design, validation, error handling, DB | Backend APIs |
-| `testing-expert.mdc` | TDD, unit/integration/e2e, mocking | All testing |
-| `security-expert.mdc` | OWASP Top 10, secure coding, auth | All projects |
+```toon
+experts[7]{skill,description,use_for}:
+ typescript-expert.mdc,TypeScript/JS patterns/strict typing/null handling,All TS/JS projects
+ react-expert.mdc,React hooks/performance/state management,React/RN/Next.js
+ vue-expert.mdc,Composition API/Pinia/reactivity,Vue.js/Nuxt
+ angular-expert.mdc,Signals/RxJS/NgRx/standalone components,Angular
+ api-expert.mdc,REST design/validation/error handling/DB,Backend APIs
+ testing-expert.mdc,TDD/unit/integration/e2e/mocking,All testing
+ security-expert.mdc,OWASP Top 10/secure coding/auth,All projects
+```
 
 ## How Agents Use Expert Skills
 
-All development agents include a standardized "Load Expert Skills" table:
+All development agents include a standardized "Load Expert Skills" section using TOON format:
 
-```markdown
-## Load Expert Skills
-
-**REQUIRED: Load these expert skills for comprehensive patterns:**
-
-| Skill | Contains |
-|-------|----------|
-| `typescript-expert.mdc` | TS/JS patterns, strict nulls, async |
-| `react-expert.mdc` | Hooks, performance, state, JSX patterns |
-| `testing-expert.mdc` | TDD, unit/integration/e2e, mocking |
-| `security-expert.mdc` | XSS prevention, input validation |
+```toon
+skills[4]{skill,contains}:
+ typescript-expert.mdc,TS/JS patterns/strict nulls/async
+ react-expert.mdc,Hooks/performance/state/JSX patterns
+ testing-expert.mdc,TDD/unit/integration/e2e/mocking
+ security-expert.mdc,XSS prevention/input validation
 ```
 
 ## Skill Loading

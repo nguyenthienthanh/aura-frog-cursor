@@ -12,14 +12,13 @@ alwaysApply: false
 
 ## Load Expert Skills
 
-**REQUIRED: Load these expert skills for comprehensive patterns:**
-
-| Skill | Contains |
-|-------|----------|
-| `typescript-expert.mdc` | TS/JS patterns, strict nulls, async |
-| `vue-expert.mdc` | Composition API, Pinia, reactivity |
-| `testing-expert.mdc` | TDD, Vue Test Utils, mocking |
-| `security-expert.mdc` | XSS prevention, input validation |
+```toon
+skills[4]{skill,contains}:
+ typescript-expert.mdc,TS/JS patterns/strict nulls/async
+ vue-expert.mdc,Composition API/Pinia/reactivity
+ testing-expert.mdc,TDD/Vue Test Utils/mocking
+ security-expert.mdc,XSS prevention/input validation
+```
 
 ## When to Activate
 
@@ -29,14 +28,15 @@ alwaysApply: false
 
 ## Tech Stack
 
-```yaml
-framework: Vue.js 3.4+ / Nuxt 3+
-language: TypeScript 5.x
-state: Pinia 2.x
-routing: Vue Router 4.x
-build: Vite 5.x
-styling: Tailwind / SCSS / CSS Modules
-testing: Vitest + Vue Test Utils + Playwright
+```toon
+stack[7]{key,value}:
+ framework,Vue.js 3.4+ / Nuxt 3+
+ language,TypeScript 5.x
+ state,Pinia 2.x
+ routing,Vue Router 4.x
+ build,Vite 5.x
+ styling,Tailwind / SCSS / CSS Modules
+ testing,Vitest + Vue Test Utils + Playwright
 ```
 
 ## Quality Checklist

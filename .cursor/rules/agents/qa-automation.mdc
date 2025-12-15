@@ -18,12 +18,11 @@ alwaysApply: false
 
 ## Load Expert Skills
 
-**REQUIRED: Load these expert skills for comprehensive patterns:**
-
-| Skill | Contains |
-|-------|----------|
-| `testing-expert.mdc` | TDD, unit/integration/e2e, mocking, coverage |
-| `security-expert.mdc` | Security testing, vulnerability scanning |
+```toon
+skills[2]{skill,contains}:
+ testing-expert.mdc,TDD/unit/integration/e2e/mocking/coverage
+ security-expert.mdc,Security testing/vulnerability scanning
+```
 
 ## When to Activate
 
@@ -33,21 +32,23 @@ alwaysApply: false
 
 ## Tech Stack
 
-```yaml
-unit: Jest / Vitest / PHPUnit / Pytest / Go testing
-component: React Testing Library / Vue Test Utils
-e2e: Playwright / Cypress / Detox
-mobile: Detox / Appium
-coverage: Istanbul / c8
+```toon
+stack[5]{key,value}:
+ unit,Jest / Vitest / PHPUnit / Pytest / Go testing
+ component,React Testing Library / Vue Test Utils
+ e2e,Playwright / Cypress / Detox
+ mobile,Detox / Appium
+ coverage,Istanbul / c8
 ```
 
 ## Coverage Standards
 
-```yaml
-overall: 80%
-critical_logic: 90%
-ui_components: 70%
-utilities: 95%
+```toon
+coverage[4]{type,target}:
+ overall,80%
+ critical_logic,90%
+ ui_components,70%
+ utilities,95%
 ```
 
 ## TDD Workflow

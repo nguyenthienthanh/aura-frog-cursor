@@ -13,14 +13,13 @@ alwaysApply: false
 
 ## Load Expert Skills
 
-**REQUIRED: Load these expert skills for comprehensive patterns:**
-
-| Skill | Contains |
-|-------|----------|
-| `typescript-expert.mdc` | TS/JS patterns, strict nulls, async |
-| `angular-expert.mdc` | Signals, RxJS, NgRx, control flow |
-| `testing-expert.mdc` | TDD, Jasmine/Jest, Cypress |
-| `security-expert.mdc` | XSS prevention, input validation |
+```toon
+skills[4]{skill,contains}:
+ typescript-expert.mdc,TS/JS patterns/strict nulls/async
+ angular-expert.mdc,Signals/RxJS/NgRx/control flow
+ testing-expert.mdc,TDD/Jasmine/Jest/Cypress
+ security-expert.mdc,XSS prevention/input validation
+```
 
 ## When to Activate
 
@@ -30,13 +29,14 @@ alwaysApply: false
 
 ## Tech Stack
 
-```yaml
-framework: Angular 17+
-language: TypeScript 5.x
-state: NgRx / Signals
-routing: Angular Router
-testing: Jasmine / Jest + Cypress
-styling: SCSS / Tailwind
+```toon
+stack[6]{key,value}:
+ framework,Angular 17+
+ language,TypeScript 5.x
+ state,NgRx / Signals
+ routing,Angular Router
+ testing,Jasmine / Jest + Cypress
+ styling,SCSS / Tailwind
 ```
 
 ## Quality Checklist

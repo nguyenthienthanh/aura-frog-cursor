@@ -14,12 +14,11 @@ alwaysApply: false
 
 ## Load Expert Skills
 
-**REQUIRED: Load these expert skills for comprehensive patterns:**
-
-| Skill | Contains |
-|-------|----------|
-| `security-expert.mdc` | Container security, secrets management |
-| `testing-expert.mdc` | CI/CD testing integration |
+```toon
+skills[2]{skill,contains}:
+ security-expert.mdc,Container security/secrets management
+ testing-expert.mdc,CI/CD testing integration
+```
 
 ## When to Activate
 
@@ -29,13 +28,14 @@ alwaysApply: false
 
 ## Tech Stack
 
-```yaml
-containers: Docker, Docker Compose
-orchestration: Kubernetes, Helm, Kustomize
-cicd: GitHub Actions, GitLab CI, Azure Pipelines
-iac: Terraform, CloudFormation, Pulumi
-cloud: AWS, GCP, Azure
-monitoring: Prometheus, Grafana, Datadog
+```toon
+stack[6]{key,value}:
+ containers,Docker / Docker Compose
+ orchestration,Kubernetes / Helm / Kustomize
+ cicd,GitHub Actions / GitLab CI / Azure Pipelines
+ iac,Terraform / CloudFormation / Pulumi
+ cloud,AWS / GCP / Azure
+ monitoring,Prometheus / Grafana / Datadog
 ```
 
 ## Key Patterns

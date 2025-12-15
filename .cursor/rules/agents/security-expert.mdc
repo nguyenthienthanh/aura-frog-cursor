@@ -13,12 +13,11 @@ alwaysApply: false
 
 ## Load Expert Skills
 
-**REQUIRED: Load these expert skills for comprehensive patterns:**
-
-| Skill | Contains |
-|-------|----------|
-| `security-expert.mdc` | OWASP Top 10, secure coding, auth, crypto |
-| `api-expert.mdc` | API security, input validation |
+```toon
+skills[2]{skill,contains}:
+ security-expert.mdc,OWASP Top 10/secure coding/auth/crypto
+ api-expert.mdc,API security/input validation
+```
 
 ## When to Activate
 

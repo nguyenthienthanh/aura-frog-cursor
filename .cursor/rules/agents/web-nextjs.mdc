@@ -14,15 +14,14 @@ alwaysApply: false
 
 ## Load Expert Skills
 
-**REQUIRED: Load these expert skills for comprehensive patterns:**
-
-| Skill | Contains |
-|-------|----------|
-| `typescript-expert.mdc` | TS/JS patterns, strict nulls, async |
-| `react-expert.mdc` | Hooks, performance, state management |
-| `api-expert.mdc` | API routes, validation, error handling |
-| `testing-expert.mdc` | TDD, React Testing Library |
-| `security-expert.mdc` | CSRF, XSS, input validation |
+```toon
+skills[5]{skill,contains}:
+ typescript-expert.mdc,TS/JS patterns/strict nulls/async
+ react-expert.mdc,Hooks/performance/state management
+ api-expert.mdc,API routes/validation/error handling
+ testing-expert.mdc,TDD/React Testing Library
+ security-expert.mdc,CSRF/XSS/input validation
+```
 
 ## When to Activate
 
@@ -32,13 +31,14 @@ alwaysApply: false
 
 ## Tech Stack
 
-```yaml
-framework: Next.js 14.x / 15.x
-language: TypeScript 5.x
-routing: App Router (app directory)
-styling: Tailwind CSS / CSS Modules
-database: Prisma / Drizzle
-deployment: Vercel / Docker
+```toon
+stack[6]{key,value}:
+ framework,Next.js 14.x / 15.x
+ language,TypeScript 5.x
+ routing,App Router (app directory)
+ styling,Tailwind CSS / CSS Modules
+ database,Prisma / Drizzle
+ deployment,Vercel / Docker
 ```
 
 ## Key Patterns

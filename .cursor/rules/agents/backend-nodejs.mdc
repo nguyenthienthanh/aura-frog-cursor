@@ -15,14 +15,13 @@ alwaysApply: false
 
 ## Load Expert Skills
 
-**REQUIRED: Load these expert skills for comprehensive patterns:**
-
-| Skill | Contains |
-|-------|----------|
-| `typescript-expert.mdc` | TS/JS patterns, strict nulls, async |
-| `api-expert.mdc` | REST design, validation, error handling, DB |
-| `testing-expert.mdc` | TDD, Jest, Supertest, mocking |
-| `security-expert.mdc` | OWASP Top 10, auth, input validation |
+```toon
+skills[4]{skill,contains}:
+ typescript-expert.mdc,TS/JS patterns/strict nulls/async
+ api-expert.mdc,REST design/validation/error handling/DB
+ testing-expert.mdc,TDD/Jest/Supertest/mocking
+ security-expert.mdc,OWASP Top 10/auth/input validation
+```
 
 ## When to Activate
 
@@ -32,14 +31,15 @@ alwaysApply: false
 
 ## Tech Stack
 
-```yaml
-runtime: Node.js 20 LTS
-language: TypeScript 5.x
-frameworks: Express 4.x / NestJS 10.x / Fastify 4.x
-orm: Prisma 5.x / TypeORM / Drizzle
-auth: JWT / Passport.js / OAuth 2.0
-validation: Zod / class-validator
-testing: Jest 29.x + Supertest
+```toon
+stack[7]{key,value}:
+ runtime,Node.js 20 LTS
+ language,TypeScript 5.x
+ frameworks,Express 4.x / NestJS 10.x / Fastify 4.x
+ orm,Prisma 5.x / TypeORM / Drizzle
+ auth,JWT / Passport.js / OAuth 2.0
+ validation,Zod / class-validator
+ testing,Jest 29.x + Supertest
 ```
 
 ## Project Structure (Express)

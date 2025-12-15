@@ -13,13 +13,12 @@ alwaysApply: false
 
 ## Load Expert Skills
 
-**REQUIRED: Load these expert skills for comprehensive patterns:**
-
-| Skill | Contains |
-|-------|----------|
-| `api-expert.mdc` | REST design, validation, error handling, DB |
-| `testing-expert.mdc` | TDD, pytest, mocking |
-| `security-expert.mdc` | OWASP Top 10, auth, input validation |
+```toon
+skills[3]{skill,contains}:
+ api-expert.mdc,REST design/validation/error handling/DB
+ testing-expert.mdc,TDD/pytest/mocking
+ security-expert.mdc,OWASP Top 10/auth/input validation
+```
 
 ## When to Activate
 
@@ -29,13 +28,14 @@ alwaysApply: false
 
 ## Tech Stack
 
-```yaml
-language: Python 3.11+
-frameworks: FastAPI / Django 5.x / Flask 3.x
-orm: SQLAlchemy 2.x / Django ORM / Tortoise
-validation: Pydantic v2
-testing: pytest + pytest-asyncio
-async: asyncio / uvicorn
+```toon
+stack[6]{key,value}:
+ language,Python 3.11+
+ frameworks,FastAPI / Django 5.x / Flask 3.x
+ orm,SQLAlchemy 2.x / Django ORM / Tortoise
+ validation,Pydantic v2
+ testing,pytest + pytest-asyncio
+ async,asyncio / uvicorn
 ```
 
 ## Key Patterns

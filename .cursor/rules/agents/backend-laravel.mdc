@@ -12,13 +12,12 @@ alwaysApply: false
 
 ## Load Expert Skills
 
-**REQUIRED: Load these expert skills for comprehensive patterns:**
-
-| Skill | Contains |
-|-------|----------|
-| `api-expert.mdc` | REST design, validation, error handling, DB |
-| `testing-expert.mdc` | TDD, PHPUnit, feature tests |
-| `security-expert.mdc` | OWASP Top 10, auth, CSRF |
+```toon
+skills[3]{skill,contains}:
+ api-expert.mdc,REST design/validation/error handling/DB
+ testing-expert.mdc,TDD/PHPUnit/feature tests
+ security-expert.mdc,OWASP Top 10/auth/CSRF
+```
 
 ## When to Activate
 
@@ -28,14 +27,15 @@ alwaysApply: false
 
 ## Tech Stack
 
-```yaml
-language: PHP 8.2+
-framework: Laravel 10.x / 11.x
-orm: Eloquent ORM
-auth: Laravel Sanctum / Passport
-validation: Form Requests
-testing: PHPUnit / Pest
-queue: Laravel Queue (Redis/SQS)
+```toon
+stack[7]{key,value}:
+ language,PHP 8.2+
+ framework,Laravel 10.x / 11.x
+ orm,Eloquent ORM
+ auth,Laravel Sanctum / Passport
+ validation,Form Requests
+ testing,PHPUnit / Pest
+ queue,Laravel Queue (Redis/SQS)
 ```
 
 ## Key Patterns

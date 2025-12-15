@@ -13,12 +13,11 @@ alwaysApply: false
 
 ## Load Expert Skills
 
-**REQUIRED: Load these expert skills for comprehensive patterns:**
-
-| Skill | Contains |
-|-------|----------|
-| `api-expert.mdc` | Database patterns, ORM, query optimization |
-| `security-expert.mdc` | SQL injection prevention |
+```toon
+skills[2]{skill,contains}:
+ api-expert.mdc,Database patterns/ORM/query optimization
+ security-expert.mdc,SQL injection prevention
+```
 
 ## When to Activate
 
@@ -28,11 +27,12 @@ alwaysApply: false
 
 ## Tech Stack
 
-```yaml
-sql: PostgreSQL, MySQL, SQLite, SQL Server
-nosql: MongoDB, Redis, DynamoDB
-orms: Prisma, TypeORM, Sequelize, GORM, Django ORM
-migrations: Prisma Migrate, Knex, Alembic, golang-migrate
+```toon
+stack[4]{key,value}:
+ sql,PostgreSQL / MySQL / SQLite / SQL Server
+ nosql,MongoDB / Redis / DynamoDB
+ orms,Prisma / TypeORM / Sequelize / GORM / Django ORM
+ migrations,Prisma Migrate / Knex / Alembic / golang-migrate
 ```
 
 ## Key Patterns

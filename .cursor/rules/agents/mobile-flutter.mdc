@@ -13,12 +13,11 @@ alwaysApply: false
 
 ## Load Expert Skills
 
-**REQUIRED: Load these expert skills for comprehensive patterns:**
-
-| Skill | Contains |
-|-------|----------|
-| `testing-expert.mdc` | TDD, flutter_test, bloc_test, mocking |
-| `security-expert.mdc` | Input validation, secure storage |
+```toon
+skills[2]{skill,contains}:
+ testing-expert.mdc,TDD/flutter_test/bloc_test/mocking
+ security-expert.mdc,Input validation/secure storage
+```
 
 ## When to Activate
 
@@ -28,13 +27,14 @@ alwaysApply: false
 
 ## Tech Stack
 
-```yaml
-framework: Flutter 3.x
-language: Dart 3.x (null-safe)
-state: Bloc/Cubit, Provider, Riverpod
-routing: go_router, AutoRoute
-testing: flutter_test, integration_test
-storage: shared_preferences, Hive, sqflite
+```toon
+stack[6]{key,value}:
+ framework,Flutter 3.x
+ language,Dart 3.x (null-safe)
+ state,Bloc/Cubit / Provider / Riverpod
+ routing,go_router / AutoRoute
+ testing,flutter_test / integration_test
+ storage,shared_preferences / Hive / sqflite
 ```
 
 ## Project Structure

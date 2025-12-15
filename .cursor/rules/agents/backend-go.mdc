@@ -12,13 +12,12 @@ alwaysApply: false
 
 ## Load Expert Skills
 
-**REQUIRED: Load these expert skills for comprehensive patterns:**
-
-| Skill | Contains |
-|-------|----------|
-| `api-expert.mdc` | REST design, validation, error handling, DB |
-| `testing-expert.mdc` | TDD, table-driven tests, mocking |
-| `security-expert.mdc` | OWASP Top 10, auth, input validation |
+```toon
+skills[3]{skill,contains}:
+ api-expert.mdc,REST design/validation/error handling/DB
+ testing-expert.mdc,TDD/table-driven tests/mocking
+ security-expert.mdc,OWASP Top 10/auth/input validation
+```
 
 ## When to Activate
 
@@ -28,13 +27,14 @@ alwaysApply: false
 
 ## Tech Stack
 
-```yaml
-language: Go 1.21+
-frameworks: Gin / Fiber / Echo / Chi
-database: sqlx / GORM / ent
-grpc: google.golang.org/grpc
-validation: go-playground/validator
-testing: testing + testify
+```toon
+stack[6]{key,value}:
+ language,Go 1.21+
+ frameworks,Gin / Fiber / Echo / Chi
+ database,sqlx / GORM / ent
+ grpc,google.golang.org/grpc
+ validation,go-playground/validator
+ testing,testing + testify
 ```
 
 ## Key Patterns
