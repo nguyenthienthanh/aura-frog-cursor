@@ -1,0 +1,500 @@
+---
+description: Vue.js expert - Composition API, Pinia, reactivity, performance patterns
+globs:
+  - "**/*.vue"
+  - "**/vite.config.ts"
+  - "**/nuxt.config.ts"
+alwaysApply: false
+---
+
+# Vue Expert Skill
+
+**Version:** 1.1.5
+**Type:** Expert Skill (Bundled Best Practices)
+
+---
+
+## Overview
+
+This skill bundles all Vue.js 3 best practices. Load this skill for Vue/Nuxt development.
+
+**Applies to:**
+- Vue.js 3.4+
+- Nuxt 3+
+- Pinia 2+
+
+**Bundles:**
+- `typescript-expert.mdc` - TypeScript patterns
+- `performance.mdc` - Performance optimization
+
+---
+
+## 1. Composition API
+
+### Script Setup (Recommended)
+
+```vue
+<script setup lang="ts">
+// 1. Imports
+import { ref, computed, onMounted, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/user';
+
+// 2. Props & Emits
+interface Props {
+  title: string;
+  count?: number;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  count: 0,
+});
+
+const emit = defineEmits<{
+  update: [value: number];
+  close: [];
+}>();
+
+// 3. Composables & Stores
+const router = useRouter();
+const userStore = useUserStore();
+
+// 4. Reactive State
+const isLoading = ref(false);
+const items = ref<Item[]>([]);
+
+// 5. Computed
+const filteredItems = computed(() =>
+  items.value.filter(item => item.active)
+);
+
+// 6. Methods
+const handleClick = () => {
+  emit('update', props.count + 1);
+};
+
+// 7. Lifecycle
+onMounted(() => {
+  fetchData();
+});
+</script>
+```
+
+---
+
+## 2. Reactivity Best Practices
+
+### ref vs reactive
+
+```typescript
+// ✅ GOOD - Use ref for primitives
+const count = ref(0);
+const name = ref('');
+const isLoading = ref(false);
+
+// ✅ GOOD - Use ref for objects you might reassign
+const user = ref<User | null>(null);
+user.value = await fetchUser();
+
+// ✅ GOOD - Use shallowRef for large objects
+const users = shallowRef<User[]>([]);
+users.value = newUsers;  // Triggers reactivity
+users.value[0].name = 'New';  // Does NOT trigger (use triggerRef if needed)
+
+// ⚠️ CAREFUL - reactive loses reactivity on reassign
+const state = reactive({ count: 0 });
+state.count++;  // ✅ Works
+// state = { count: 1 };  // ❌ Breaks reactivity!
+
+// ❌ BAD - Never destructure reactive objects
+const { count } = reactive({ count: 0 });  // Loses reactivity!
+```
+
+### computed
+
+```typescript
+// ✅ GOOD - Derived state (cached)
+const fullName = computed(() => `${firstName.value} ${lastName.value}`);
+
+// ✅ GOOD - Writable computed
+const firstName = ref('John');
+const lastName = ref('Doe');
+
+const fullName = computed({
+  get: () => `${firstName.value} ${lastName.value}`,
+  set: (value: string) => {
+    const [first, last] = value.split(' ');
+    firstName.value = first;
+    lastName.value = last ?? '';
+  },
+});
+```
+
+### watch & watchEffect
+
+```typescript
+// ✅ GOOD - Watch specific source
+watch(userId, async (newId, oldId) => {
+  if (newId !== oldId) {
+    user.value = await fetchUser(newId);
+  }
+}, { immediate: true });
+
+// ✅ GOOD - Watch multiple sources
+watch([firstName, lastName], ([first, last]) => {
+  fullName.value = `${first} ${last}`;
+});
+
+// ✅ GOOD - watchEffect for auto-tracking
+watchEffect(() => {
+  console.log('User changed:', user.value?.name);
+});
+
+// ✅ GOOD - Cleanup in watch
+watchEffect((onCleanup) => {
+  const controller = new AbortController();
+  fetchData(controller.signal);
+  onCleanup(() => controller.abort());
+});
+```
+
+---
+
+## 3. Template Best Practices
+
+### Conditional Rendering
+
+```vue
+<!-- ❌ BAD - v-if with potential falsy values -->
+<div v-if="user.score">Score: {{ user.score }}</div>
+<span v-if="item.name">{{ item.name }}</span>
+
+<!-- ✅ GOOD - Explicit checks -->
+<div v-if="user.score != null">Score: {{ user.score }}</div>
+<div v-if="user.score !== undefined">Score: {{ user.score }}</div>
+<span v-if="item.name !== ''">{{ item.name }}</span>
+
+<!-- ✅ GOOD - Type check -->
+<div v-if="typeof user.score === 'number'">Score: {{ user.score }}</div>
+
+<!-- ✅ GOOD - v-show for frequent toggles -->
+<div v-show="isVisible">Frequently toggled content</div>
+```
+
+### List Rendering
+
+```vue
+<!-- ✅ GOOD - Always use key -->
+<div v-for="item in items" :key="item.id">
+  {{ item.name }}
+</div>
+
+<!-- ✅ GOOD - v-for with index when needed -->
+<div v-for="(item, index) in items" :key="item.id">
+  {{ index + 1 }}. {{ item.name }}
+</div>
+
+<!-- ❌ BAD - Don't use index as key for dynamic lists -->
+<div v-for="(item, index) in items" :key="index">  <!-- BAD -->
+
+<!-- ✅ GOOD - v-for with v-if (use computed instead) -->
+<template v-for="item in activeItems" :key="item.id">
+  <ItemCard :item="item" />
+</template>
+
+<!-- Instead of: -->
+<template v-for="item in items" :key="item.id">
+  <ItemCard v-if="item.active" :item="item" />  <!-- Inefficient -->
+</template>
+```
+
+### Event Handling
+
+```vue
+<!-- ✅ GOOD - Method reference -->
+<button @click="handleClick">Click</button>
+
+<!-- ✅ GOOD - Inline for simple operations -->
+<button @click="count++">Increment</button>
+
+<!-- ✅ GOOD - Modifiers -->
+<form @submit.prevent="handleSubmit">
+<input @keyup.enter="search">
+<div @click.stop="handleClick">  <!-- Stop propagation -->
+<div @click.once="handleClick">  <!-- Only once -->
+```
+
+---
+
+## 4. Composables
+
+### Creating Composables
+
+```typescript
+// ✅ GOOD - Reusable data fetching
+export function useUser(id: Ref<string>) {
+  const user = ref<User | null>(null);
+  const isLoading = ref(false);
+  const error = ref<Error | null>(null);
+
+  watch(id, async (newId) => {
+    isLoading.value = true;
+    error.value = null;
+
+    try {
+      user.value = await api.getUser(newId);
+    } catch (e) {
+      error.value = e as Error;
+    } finally {
+      isLoading.value = false;
+    }
+  }, { immediate: true });
+
+  return {
+    user: readonly(user),
+    isLoading: readonly(isLoading),
+    error: readonly(error),
+  };
+}
+
+// Usage
+const userId = ref('123');
+const { user, isLoading, error } = useUser(userId);
+```
+
+### Composable Patterns
+
+```typescript
+// ✅ GOOD - Debounced search
+export function useDebouncedSearch(delay = 300) {
+  const query = ref('');
+  const debouncedQuery = ref('');
+
+  let timeout: NodeJS.Timeout;
+
+  watch(query, (value) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      debouncedQuery.value = value;
+    }, delay);
+  });
+
+  onUnmounted(() => clearTimeout(timeout));
+
+  return { query, debouncedQuery };
+}
+
+// ✅ GOOD - Local storage sync
+export function useLocalStorage<T>(key: string, defaultValue: T) {
+  const stored = localStorage.getItem(key);
+  const data = ref<T>(stored ? JSON.parse(stored) : defaultValue);
+
+  watch(data, (value) => {
+    localStorage.setItem(key, JSON.stringify(value));
+  }, { deep: true });
+
+  return data;
+}
+```
+
+---
+
+## 5. Pinia State Management
+
+### Store Definition
+
+```typescript
+import { defineStore } from 'pinia';
+
+// ✅ GOOD - Composition API style (recommended)
+export const useUserStore = defineStore('user', () => {
+  // State
+  const user = ref<User | null>(null);
+  const isLoading = ref(false);
+
+  // Getters (computed)
+  const isLoggedIn = computed(() => user.value != null);
+  const displayName = computed(() =>
+    user.value?.nickname ?? user.value?.name ?? 'Guest'
+  );
+
+  // Actions
+  async function login(credentials: Credentials) {
+    isLoading.value = true;
+    try {
+      user.value = await authApi.login(credentials);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  function logout() {
+    user.value = null;
+  }
+
+  return {
+    // State (readonly for external use)
+    user: readonly(user),
+    isLoading: readonly(isLoading),
+    // Getters
+    isLoggedIn,
+    displayName,
+    // Actions
+    login,
+    logout,
+  };
+});
+```
+
+### Using Stores
+
+```typescript
+// ✅ GOOD - storeToRefs for reactive destructuring
+import { storeToRefs } from 'pinia';
+
+const store = useUserStore();
+const { user, isLoggedIn } = storeToRefs(store);  // Reactive!
+const { login, logout } = store;  // Actions don't need storeToRefs
+
+// ❌ BAD - Direct destructuring loses reactivity
+const { user } = useUserStore();  // Not reactive!
+```
+
+---
+
+## 6. Performance Optimization
+
+### v-memo
+
+```vue
+<!-- ✅ GOOD - Memoize list items -->
+<div v-for="item in items" :key="item.id" v-memo="[item.id, item.selected]">
+  <ExpensiveComponent :item="item" />
+</div>
+```
+
+### Async Components
+
+```typescript
+// ✅ GOOD - Lazy load heavy components
+const HeavyChart = defineAsyncComponent(() =>
+  import('./HeavyChart.vue')
+);
+
+const HeavyChartWithLoading = defineAsyncComponent({
+  loader: () => import('./HeavyChart.vue'),
+  loadingComponent: LoadingSpinner,
+  delay: 200,
+  errorComponent: ErrorDisplay,
+  timeout: 10000,
+});
+```
+
+### KeepAlive
+
+```vue
+<!-- ✅ GOOD - Cache component state -->
+<KeepAlive :max="10">
+  <component :is="currentView" />
+</KeepAlive>
+
+<!-- ✅ GOOD - Include/exclude specific components -->
+<KeepAlive :include="['UserProfile', 'Settings']">
+  <router-view />
+</KeepAlive>
+```
+
+### Teleport
+
+```vue
+<!-- ✅ GOOD - Render modals at body level -->
+<Teleport to="body">
+  <div v-if="showModal" class="modal">
+    <ModalContent @close="showModal = false" />
+  </div>
+</Teleport>
+```
+
+---
+
+## 7. TypeScript Integration
+
+### Typed Props & Emits
+
+```typescript
+// ✅ GOOD - Generic components
+interface Props<T> {
+  items: T[];
+  selected: T | null;
+}
+
+const props = defineProps<Props<User>>();
+
+// ✅ GOOD - Complex emit types
+const emit = defineEmits<{
+  (e: 'update', value: number): void;
+  (e: 'select', item: User): void;
+  (e: 'error', error: Error): void;
+}>();
+
+// ✅ GOOD - Expose for parent access
+defineExpose({
+  focus: () => inputRef.value?.focus(),
+  reset: () => { /* ... */ },
+});
+```
+
+### Typed Slots
+
+```typescript
+defineSlots<{
+  default(props: { item: User }): any;
+  header(): any;
+  footer(props: { count: number }): any;
+}>();
+```
+
+---
+
+## 8. Code Review Checklist
+
+- [ ] Using `<script setup>` with TypeScript
+- [ ] Props typed with `defineProps<T>()`
+- [ ] Emits typed with `defineEmits<T>()`
+- [ ] No reactive object destructuring (use `storeToRefs`)
+- [ ] Explicit null checks in templates (not truthy/falsy)
+- [ ] Keys on v-for directives
+- [ ] Composables return `readonly()` for state
+- [ ] Watch has cleanup when needed
+- [ ] v-memo for expensive list items
+- [ ] Async components for heavy components
+
+---
+
+## Quick Reference
+
+```toon
+patterns[10]{scenario,solution}:
+ Primitive state,ref()
+ Object you reassign,ref()
+ Large immutable object,shallowRef()
+ Derived state,computed()
+ Side effects,watch/watchEffect
+ Reusable logic,composable
+ Global state,Pinia store
+ Reactive destructure,storeToRefs()
+ Heavy component,defineAsyncComponent
+ List optimization,v-memo
+```
+
+---
+
+## Related Skills
+
+- `typescript-expert.mdc` - TypeScript patterns (required)
+- `testing-expert.mdc` - Testing patterns
+
+---
+
+**Version:** 1.1.5
+**Last Updated:** 2025-12-15

@@ -10,6 +10,17 @@ alwaysApply: false
 
 # Web Vue.js Expert
 
+## Load Expert Skills
+
+**BEFORE coding, load these expert skills for comprehensive patterns:**
+
+```
+.cursor/rules/skills/experts/typescript-expert.mdc  # TS/JS patterns
+.cursor/rules/skills/experts/vue-expert.mdc         # Vue patterns
+.cursor/rules/skills/experts/testing-expert.mdc     # Testing patterns
+.cursor/rules/skills/experts/security-expert.mdc    # Security patterns
+```
+
 ## Role & Expertise
 
 You are a Vue.js 3 expert specializing in modern Vue development with Composition API, Pinia state management, and TypeScript. You build performant, scalable, and maintainable web applications.

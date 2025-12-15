@@ -1,0 +1,523 @@
+---
+description: API/Backend expert - REST design, validation, error handling, security, database patterns
+globs:
+  - "**/api/**/*.ts"
+  - "**/routes/**/*.ts"
+  - "**/controllers/**/*.ts"
+  - "**/services/**/*.ts"
+alwaysApply: false
+---
+
+# API Expert Skill
+
+**Version:** 1.1.5
+**Type:** Expert Skill (Bundled Best Practices)
+
+---
+
+## Overview
+
+This skill bundles all API/Backend best practices. Load this skill for backend development.
+
+**Applies to:**
+- Node.js (Express, Fastify, Hono)
+- Next.js API routes
+- Python (FastAPI, Django)
+- Go
+
+**Bundles:**
+- `api-design.mdc` - REST conventions
+- `sast-security.mdc` - Security patterns
+- `error-handling.mdc` - Error handling
+
+---
+
+## 1. REST API Design
+
+### Resource Naming
+
+```
+✅ GOOD - Plural nouns, hierarchical
+GET    /users              # List users
+GET    /users/:id          # Get user
+POST   /users              # Create user
+PUT    /users/:id          # Update user (full)
+PATCH  /users/:id          # Update user (partial)
+DELETE /users/:id          # Delete user
+
+GET    /users/:id/posts    # User's posts (nested resource)
+GET    /posts?userId=123   # Filter posts by user (query param)
+
+❌ BAD
+GET    /getUsers
+POST   /createUser
+GET    /user/123           # Singular
+```
+
+### HTTP Status Codes
+
+```typescript
+// Success
+200 OK              // GET success, PUT/PATCH success
+201 Created         // POST success (include Location header)
+204 No Content      // DELETE success
+
+// Client Errors
+400 Bad Request     // Validation error, malformed request
+401 Unauthorized    // Authentication required
+403 Forbidden       // Authenticated but not authorized
+404 Not Found       // Resource doesn't exist
+409 Conflict        // Duplicate, state conflict
+422 Unprocessable   // Semantic error (valid syntax, invalid data)
+429 Too Many Reqs   // Rate limited
+
+// Server Errors
+500 Internal Error  // Unexpected server error
+502 Bad Gateway     // Upstream service error
+503 Unavailable     // Service temporarily unavailable
+```
+
+### Response Format
+
+```typescript
+// ✅ GOOD - Consistent structure
+// Success response
+{
+  "data": { /* resource or array */ },
+  "meta": {
+    "page": 1,
+    "limit": 20,
+    "total": 100
+  }
+}
+
+// Error response
+{
+  "error": {
+    "code": "VALIDATION_ERROR",
+    "message": "Validation failed",
+    "details": [
+      { "field": "email", "message": "Invalid email format" }
+    ]
+  }
+}
+
+// ❌ BAD - Inconsistent
+{ "users": [...] }      // Different key per resource
+{ "error": "Failed" }   // String instead of object
+```
+
+---
+
+## 2. Input Validation
+
+### Zod Schema Validation
+
+```typescript
+import { z } from 'zod';
+
+// ✅ GOOD - Comprehensive validation
+const CreateUserSchema = z.object({
+  name: z.string().min(2).max(100),
+  email: z.string().email().toLowerCase(),
+  age: z.number().int().min(0).max(150).optional(),
+  role: z.enum(['user', 'admin']).default('user'),
+  tags: z.array(z.string()).max(10).optional(),
+});
+
+type CreateUserInput = z.infer<typeof CreateUserSchema>;
+
+// Usage in route handler
+app.post('/users', async (req, res) => {
+  const result = CreateUserSchema.safeParse(req.body);
+
+  if (!result.success) {
+    return res.status(400).json({
+      error: {
+        code: 'VALIDATION_ERROR',
+        message: 'Validation failed',
+        details: result.error.flatten().fieldErrors,
+      },
+    });
+  }
+
+  const user = await createUser(result.data);
+  res.status(201).json({ data: user });
+});
+```
+
+### Path & Query Validation
+
+```typescript
+const GetUserSchema = z.object({
+  params: z.object({
+    id: z.string().uuid(),
+  }),
+});
+
+const ListUsersSchema = z.object({
+  query: z.object({
+    page: z.coerce.number().int().min(1).default(1),
+    limit: z.coerce.number().int().min(1).max(100).default(20),
+    search: z.string().optional(),
+    status: z.enum(['active', 'inactive']).optional(),
+  }),
+});
+```
+
+---
+
+## 3. Error Handling
+
+### Custom Error Classes
+
+```typescript
+// ✅ GOOD - Typed error classes
+export class AppError extends Error {
+  constructor(
+    public code: string,
+    public message: string,
+    public statusCode: number = 500,
+    public details?: unknown
+  ) {
+    super(message);
+    this.name = 'AppError';
+  }
+}
+
+export class ValidationError extends AppError {
+  constructor(details: Record<string, string[]>) {
+    super('VALIDATION_ERROR', 'Validation failed', 400, details);
+  }
+}
+
+export class NotFoundError extends AppError {
+  constructor(resource: string, id: string) {
+    super('NOT_FOUND', `${resource} with id ${id} not found`, 404);
+  }
+}
+
+export class UnauthorizedError extends AppError {
+  constructor(message = 'Authentication required') {
+    super('UNAUTHORIZED', message, 401);
+  }
+}
+
+export class ForbiddenError extends AppError {
+  constructor(message = 'Access denied') {
+    super('FORBIDDEN', message, 403);
+  }
+}
+```
+
+### Global Error Handler
+
+```typescript
+// Express error handler
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  // Log error (sanitized)
+  logger.error('Request failed', {
+    error: err.message,
+    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
+    path: req.path,
+    method: req.method,
+  });
+
+  // Handle known errors
+  if (err instanceof AppError) {
+    return res.status(err.statusCode).json({
+      error: {
+        code: err.code,
+        message: err.message,
+        details: err.details,
+      },
+    });
+  }
+
+  // Handle unknown errors
+  res.status(500).json({
+    error: {
+      code: 'INTERNAL_ERROR',
+      message: 'An unexpected error occurred',
+    },
+  });
+});
+```
+
+---
+
+## 4. Security Best Practices
+
+### SQL Injection Prevention
+
+```typescript
+// ❌ VULNERABLE - String concatenation
+const query = `SELECT * FROM users WHERE email = '${email}'`;
+db.query(query);
+
+// ✅ SECURE - Parameterized query
+const query = 'SELECT * FROM users WHERE email = $1';
+db.query(query, [email]);
+
+// ✅ SECURE - ORM (safe by default)
+const user = await prisma.user.findUnique({
+  where: { email },
+});
+```
+
+### Authentication & Authorization
+
+```typescript
+// ✅ GOOD - Middleware for auth
+const authenticate = async (req: Request, res: Response, next: NextFunction) => {
+  const token = req.headers.authorization?.replace('Bearer ', '');
+
+  if (!token) {
+    throw new UnauthorizedError('No token provided');
+  }
+
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET!);
+    req.user = payload as User;
+    next();
+  } catch {
+    throw new UnauthorizedError('Invalid token');
+  }
+};
+
+// ✅ GOOD - Authorization check
+const authorize = (...roles: string[]) => {
+  return (req: Request, res: Response, next: NextFunction) => {
+    if (!roles.includes(req.user.role)) {
+      throw new ForbiddenError('Insufficient permissions');
+    }
+    next();
+  };
+};
+
+// Usage
+app.delete('/users/:id', authenticate, authorize('admin'), deleteUser);
+```
+
+### Rate Limiting
+
+```typescript
+import rateLimit from 'express-rate-limit';
+
+// General rate limit
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100,
+  message: { error: { code: 'RATE_LIMITED', message: 'Too many requests' } },
+});
+
+// Strict limit for auth endpoints
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  skipSuccessfulRequests: true,
+});
+
+app.use('/api', generalLimiter);
+app.use('/api/auth', authLimiter);
+```
+
+### Security Headers
+
+```typescript
+import helmet from 'helmet';
+
+app.use(helmet());
+
+// Or manual headers
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  next();
+});
+```
+
+---
+
+## 5. Database Patterns
+
+### Repository Pattern
+
+```typescript
+// ✅ GOOD - Abstract database operations
+interface UserRepository {
+  findById(id: string): Promise<User | null>;
+  findByEmail(email: string): Promise<User | null>;
+  create(data: CreateUserInput): Promise<User>;
+  update(id: string, data: UpdateUserInput): Promise<User>;
+  delete(id: string): Promise<void>;
+}
+
+class PrismaUserRepository implements UserRepository {
+  constructor(private prisma: PrismaClient) {}
+
+  async findById(id: string): Promise<User | null> {
+    return this.prisma.user.findUnique({ where: { id } });
+  }
+
+  async create(data: CreateUserInput): Promise<User> {
+    return this.prisma.user.create({ data });
+  }
+  // ... other methods
+}
+```
+
+### Transaction Pattern
+
+```typescript
+// ✅ GOOD - Atomic operations
+async function transferFunds(fromId: string, toId: string, amount: number) {
+  return prisma.$transaction(async (tx) => {
+    const from = await tx.account.update({
+      where: { id: fromId },
+      data: { balance: { decrement: amount } },
+    });
+
+    if (from.balance < 0) {
+      throw new AppError('INSUFFICIENT_FUNDS', 'Insufficient balance', 400);
+    }
+
+    await tx.account.update({
+      where: { id: toId },
+      data: { balance: { increment: amount } },
+    });
+
+    return { success: true };
+  });
+}
+```
+
+### Pagination Pattern
+
+```typescript
+// ✅ GOOD - Cursor-based pagination (better for large datasets)
+async function getUsers(cursor?: string, limit = 20) {
+  const users = await prisma.user.findMany({
+    take: limit + 1,  // Fetch one extra to check if more exist
+    cursor: cursor ? { id: cursor } : undefined,
+    orderBy: { createdAt: 'desc' },
+  });
+
+  const hasMore = users.length > limit;
+  const data = hasMore ? users.slice(0, -1) : users;
+  const nextCursor = hasMore ? data[data.length - 1].id : null;
+
+  return { data, nextCursor, hasMore };
+}
+
+// ✅ GOOD - Offset pagination (simpler, good for small datasets)
+async function getUsers(page = 1, limit = 20) {
+  const [data, total] = await Promise.all([
+    prisma.user.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: { createdAt: 'desc' },
+    }),
+    prisma.user.count(),
+  ]);
+
+  return {
+    data,
+    meta: { page, limit, total, pages: Math.ceil(total / limit) },
+  };
+}
+```
+
+---
+
+## 6. Logging
+
+### Structured Logging
+
+```typescript
+import pino from 'pino';
+
+const logger = pino({
+  level: process.env.LOG_LEVEL || 'info',
+  redact: ['password', 'token', 'authorization', 'cookie'],
+});
+
+// ✅ GOOD - Structured with context
+logger.info({ userId, action: 'login' }, 'User logged in');
+logger.error({ error: err.message, stack: err.stack, requestId }, 'Request failed');
+
+// ❌ BAD - Logging sensitive data
+logger.info(`User ${email} logged in with password ${password}`);
+```
+
+### Request Logging Middleware
+
+```typescript
+app.use((req, res, next) => {
+  const requestId = crypto.randomUUID();
+  req.requestId = requestId;
+
+  const start = Date.now();
+
+  res.on('finish', () => {
+    logger.info({
+      requestId,
+      method: req.method,
+      path: req.path,
+      status: res.statusCode,
+      duration: Date.now() - start,
+      userAgent: req.headers['user-agent'],
+    }, 'Request completed');
+  });
+
+  next();
+});
+```
+
+---
+
+## 7. Code Review Checklist
+
+- [ ] Input validation on all endpoints (Zod/Joi)
+- [ ] Parameterized queries (no string concatenation)
+- [ ] Authentication on protected routes
+- [ ] Authorization checks (user owns resource)
+- [ ] Rate limiting on sensitive endpoints
+- [ ] Proper HTTP status codes
+- [ ] Consistent error response format
+- [ ] Sensitive data not logged
+- [ ] Security headers configured
+- [ ] Transactions for multi-step operations
+
+---
+
+## Quick Reference
+
+```toon
+patterns[10]{scenario,solution}:
+ Input validation,Zod schema + safeParse
+ SQL injection,Parameterized queries or ORM
+ Auth check,Middleware + JWT
+ Authorization,Role-based middleware
+ Rate limiting,express-rate-limit
+ Error handling,Custom AppError classes
+ Pagination,Cursor-based or offset
+ Transactions,prisma.$transaction
+ Logging,Structured pino with redaction
+ Security headers,helmet middleware
+```
+
+---
+
+## Related Rules
+
+- `api-design.mdc` - REST conventions
+- `sast-security.mdc` - OWASP Top 10
+- `error-handling.mdc` - Error patterns
+
+---
+
+**Version:** 1.1.5
+**Last Updated:** 2025-12-15

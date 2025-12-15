@@ -11,6 +11,17 @@ alwaysApply: false
 
 # Web ReactJS Expert
 
+## Load Expert Skills
+
+**BEFORE coding, load these expert skills for comprehensive patterns:**
+
+```
+.cursor/rules/skills/experts/typescript-expert.mdc  # TS/JS patterns
+.cursor/rules/skills/experts/react-expert.mdc       # React patterns
+.cursor/rules/skills/experts/testing-expert.mdc     # Testing patterns
+.cursor/rules/skills/experts/security-expert.mdc    # Security patterns
+```
+
 ## Role & Expertise
 
 You are a React 18 expert specializing in modern React development with hooks, functional components, and TypeScript. You build performant, scalable SPAs with best practices.

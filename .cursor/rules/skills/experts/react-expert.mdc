@@ -1,0 +1,541 @@
+---
+description: React expert - hooks, performance, state management, patterns for React/RN/Next.js
+globs:
+  - "**/*.tsx"
+  - "**/*.jsx"
+  - "**/package.json"
+alwaysApply: false
+---
+
+# React Expert Skill
+
+**Version:** 1.1.5
+**Type:** Expert Skill (Bundled Best Practices)
+
+---
+
+## Overview
+
+This skill bundles all React/React Native/Next.js best practices. Load this skill for any React-based development.
+
+**Applies to:**
+- React 18+
+- React Native + Expo
+- Next.js 14+
+
+**Bundles:**
+- `typescript-expert.mdc` - TypeScript patterns
+- `performance.mdc` - Performance optimization
+- `accessibility.mdc` - A11y standards
+
+---
+
+## 1. Hooks Best Practices
+
+### useState
+
+```typescript
+// ✅ GOOD - Functional updates for derived state
+setCount(prev => prev + 1);
+
+// ✅ GOOD - Lazy initialization for expensive values
+const [data] = useState(() => computeExpensiveValue());
+
+// ✅ GOOD - Batch related state
+const [form, setForm] = useState({ name: '', email: '' });
+setForm(prev => ({ ...prev, name: 'John' }));
+
+// ❌ BAD - Multiple related states
+const [name, setName] = useState('');
+const [email, setEmail] = useState('');
+```
+
+### useCallback
+
+```typescript
+// ✅ GOOD - Memoize callbacks passed to children
+const handleClick = useCallback(() => {
+  setCount(prev => prev + 1);
+}, []);
+
+// ✅ GOOD - Include changing dependencies
+const handleUpdate = useCallback((value: string) => {
+  onUpdate(id, value);
+}, [id, onUpdate]);
+
+// ❌ BAD - Inline function creates new reference every render
+<Button onClick={() => setCount(count + 1)} />
+
+// ✅ GOOD - Stable reference
+<Button onClick={handleClick} />
+```
+
+### useMemo
+
+```typescript
+// ✅ GOOD - Expensive computations
+const sortedItems = useMemo(() => {
+  return items.slice().sort((a, b) => a.name.localeCompare(b.name));
+}, [items]);
+
+// ✅ GOOD - Derived/filtered data
+const activeUsers = useMemo(() => {
+  return users.filter(u => u.status === 'active');
+}, [users]);
+
+// ❌ BAD - Don't memoize simple values
+const doubled = useMemo(() => count * 2, [count]);  // Overkill
+```
+
+### useEffect
+
+```typescript
+// ✅ GOOD - Cleanup subscriptions
+useEffect(() => {
+  const subscription = eventEmitter.subscribe(handler);
+  return () => subscription.unsubscribe();
+}, [handler]);
+
+// ✅ GOOD - AbortController for fetch
+useEffect(() => {
+  const controller = new AbortController();
+
+  fetch('/api/data', { signal: controller.signal })
+    .then(res => res.json())
+    .then(setData)
+    .catch(err => {
+      if (err.name !== 'AbortError') throw err;
+    });
+
+  return () => controller.abort();
+}, []);
+
+// ❌ BAD - Missing cleanup
+useEffect(() => {
+  const interval = setInterval(tick, 1000);
+  // Missing: return () => clearInterval(interval);
+}, []);
+```
+
+### useRef
+
+```typescript
+// ✅ GOOD - DOM references
+const inputRef = useRef<HTMLInputElement>(null);
+const focus = () => inputRef.current?.focus();
+
+// ✅ GOOD - Mutable values that don't trigger re-render
+const renderCount = useRef(0);
+renderCount.current += 1;
+
+// ✅ GOOD - Previous value pattern
+const prevValue = useRef(value);
+useEffect(() => {
+  prevValue.current = value;
+}, [value]);
+```
+
+### Custom Hooks
+
+```typescript
+// ✅ GOOD - Extract reusable logic
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedValue(value), delay);
+    return () => clearTimeout(timer);
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+
+// ✅ GOOD - Data fetching hook
+function useUser(id: string) {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+
+    fetchUser(id)
+      .then(data => { if (!cancelled) setUser(data); })
+      .catch(err => { if (!cancelled) setError(err); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+
+    return () => { cancelled = true; };
+  }, [id]);
+
+  return { user, loading, error };
+}
+```
+
+---
+
+## 2. JSX Conditional Rendering
+
+**CRITICAL: Avoid truthy/falsy pitfalls in JSX.**
+
+```tsx
+// ❌ BAD - 0 renders as "0" in JSX
+{count && <Badge count={count} />}
+
+// ❌ BAD - Empty string renders nothing but confusing
+{title && <Header title={title} />}
+
+// ✅ GOOD - Explicit boolean
+{count > 0 && <Badge count={count} />}
+{count !== 0 && <Badge count={count} />}
+
+// ✅ GOOD - Nullish check
+{title != null && <Header title={title} />}
+{user?.name != null && <Greeting name={user.name} />}
+
+// ✅ GOOD - Boolean cast when intentional
+{Boolean(items?.length) && <List items={items} />}
+
+// ✅ GOOD - Ternary for clarity
+{isLoading ? <Spinner /> : <Content />}
+{error != null ? <Error error={error} /> : <Success />}
+```
+
+---
+
+## 3. Component Patterns
+
+### Component Structure
+
+```typescript
+import { FC, useState, useCallback, useMemo } from 'react';
+
+interface Props {
+  title: string;
+  items: Item[];
+  onSelect: (item: Item) => void;
+}
+
+export const MyComponent: FC<Props> = ({ title, items, onSelect }) => {
+  // 1. Hooks
+  const [selected, setSelected] = useState<string | null>(null);
+
+  // 2. Derived state (useMemo)
+  const sortedItems = useMemo(() =>
+    items.slice().sort((a, b) => a.name.localeCompare(b.name)),
+    [items]
+  );
+
+  // 3. Callbacks (useCallback)
+  const handleSelect = useCallback((item: Item) => {
+    setSelected(item.id);
+    onSelect(item);
+  }, [onSelect]);
+
+  // 4. Render
+  return (
+    <div>
+      <h1>{title}</h1>
+      {sortedItems.map(item => (
+        <ItemCard
+          key={item.id}
+          item={item}
+          isSelected={item.id === selected}
+          onSelect={handleSelect}
+        />
+      ))}
+    </div>
+  );
+};
+```
+
+### React.memo
+
+```typescript
+// ✅ GOOD - Memoize expensive/frequently rendered components
+const UserCard = React.memo(({ user, onSelect }: Props) => {
+  return (
+    <div onClick={() => onSelect(user.id)}>
+      <Avatar src={user.avatar} />
+      <span>{user.name}</span>
+    </div>
+  );
+});
+
+// ✅ GOOD - Custom comparison
+const UserCard = React.memo(
+  ({ user, onSelect }: Props) => { /* ... */ },
+  (prev, next) => prev.user.id === next.user.id
+);
+```
+
+### Compound Components
+
+```typescript
+// ✅ GOOD - Flexible component composition
+const Card = ({ children }: { children: React.ReactNode }) => (
+  <div className="card">{children}</div>
+);
+
+Card.Header = ({ children }: { children: React.ReactNode }) => (
+  <div className="card-header">{children}</div>
+);
+
+Card.Body = ({ children }: { children: React.ReactNode }) => (
+  <div className="card-body">{children}</div>
+);
+
+// Usage
+<Card>
+  <Card.Header>Title</Card.Header>
+  <Card.Body>Content</Card.Body>
+</Card>
+```
+
+---
+
+## 4. Performance Optimization
+
+### Code Splitting
+
+```typescript
+// ✅ GOOD - Lazy load routes/heavy components
+const Dashboard = React.lazy(() => import('./Dashboard'));
+const Settings = React.lazy(() => import('./Settings'));
+
+function App() {
+  return (
+    <Suspense fallback={<Spinner />}>
+      <Routes>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/settings" element={<Settings />} />
+      </Routes>
+    </Suspense>
+  );
+}
+```
+
+### Virtualization
+
+```typescript
+// ✅ GOOD - Virtual scrolling for long lists
+import { FixedSizeList } from 'react-window';
+
+const VirtualList = ({ items }: { items: Item[] }) => (
+  <FixedSizeList
+    height={400}
+    width="100%"
+    itemCount={items.length}
+    itemSize={50}
+  >
+    {({ index, style }) => (
+      <div style={style}>
+        <ItemRow item={items[index]} />
+      </div>
+    )}
+  </FixedSizeList>
+);
+```
+
+### Avoid Re-renders
+
+```typescript
+// ❌ BAD - New object every render
+<Component style={{ color: 'red' }} />
+<Component data={{ id: 1 }} />
+
+// ✅ GOOD - Stable references
+const style = useMemo(() => ({ color: 'red' }), []);
+const data = useMemo(() => ({ id: 1 }), []);
+<Component style={style} data={data} />
+
+// ✅ GOOD - Or define outside component
+const STYLE = { color: 'red' };
+```
+
+---
+
+## 5. State Management
+
+### Context + useReducer
+
+```typescript
+// ✅ GOOD - Predictable state updates
+type State = { count: number; loading: boolean };
+type Action =
+  | { type: 'increment' }
+  | { type: 'decrement' }
+  | { type: 'setLoading'; payload: boolean };
+
+function reducer(state: State, action: Action): State {
+  switch (action.type) {
+    case 'increment': return { ...state, count: state.count + 1 };
+    case 'decrement': return { ...state, count: state.count - 1 };
+    case 'setLoading': return { ...state, loading: action.payload };
+    default: return state;
+  }
+}
+
+const CounterContext = createContext<{
+  state: State;
+  dispatch: React.Dispatch<Action>;
+} | null>(null);
+
+export const useCounter = () => {
+  const context = useContext(CounterContext);
+  if (context == null) throw new Error('useCounter must be within Provider');
+  return context;
+};
+```
+
+### Zustand (Recommended)
+
+```typescript
+import { create } from 'zustand';
+
+interface UserStore {
+  user: User | null;
+  loading: boolean;
+  login: (credentials: Credentials) => Promise<void>;
+  logout: () => void;
+}
+
+export const useUserStore = create<UserStore>((set) => ({
+  user: null,
+  loading: false,
+  login: async (credentials) => {
+    set({ loading: true });
+    const user = await authApi.login(credentials);
+    set({ user, loading: false });
+  },
+  logout: () => set({ user: null }),
+}));
+
+// Usage - only subscribes to what it uses
+const user = useUserStore(state => state.user);
+const login = useUserStore(state => state.login);
+```
+
+---
+
+## 6. React Native Specific
+
+### Platform-Specific Code
+
+```typescript
+import { Platform, StyleSheet } from 'react-native';
+
+const styles = StyleSheet.create({
+  container: {
+    paddingTop: Platform.OS === 'ios' ? 20 : 0,
+    ...Platform.select({
+      ios: { shadowColor: 'black' },
+      android: { elevation: 4 },
+    }),
+  },
+});
+```
+
+### FlatList Optimization
+
+```typescript
+<FlatList
+  data={items}
+  keyExtractor={item => item.id}
+  renderItem={({ item }) => <ItemRow item={item} />}
+  // Performance optimizations
+  removeClippedSubviews={true}
+  maxToRenderPerBatch={10}
+  windowSize={5}
+  initialNumToRender={10}
+  getItemLayout={(data, index) => ({
+    length: ITEM_HEIGHT,
+    offset: ITEM_HEIGHT * index,
+    index,
+  })}
+/>
+```
+
+---
+
+## 7. Next.js Specific
+
+### Server vs Client Components
+
+```typescript
+// Server Component (default) - data fetching
+// app/users/page.tsx
+export default async function UsersPage() {
+  const users = await prisma.user.findMany();  // Direct DB access
+  return <UserList users={users} />;
+}
+
+// Client Component - interactivity
+'use client';
+import { useState } from 'react';
+
+export function Counter() {
+  const [count, setCount] = useState(0);
+  return <button onClick={() => setCount(c => c + 1)}>{count}</button>;
+}
+```
+
+### Server Actions
+
+```typescript
+'use server';
+
+import { revalidatePath } from 'next/cache';
+
+export async function createUser(formData: FormData) {
+  const name = formData.get('name') as string;
+  await prisma.user.create({ data: { name } });
+  revalidatePath('/users');
+}
+```
+
+---
+
+## 8. Code Review Checklist
+
+- [ ] Hooks follow Rules of Hooks
+- [ ] useCallback for callbacks passed to children
+- [ ] useMemo for expensive computations
+- [ ] useEffect has proper cleanup
+- [ ] No inline functions in JSX (use useCallback)
+- [ ] No inline objects in JSX (use useMemo or constant)
+- [ ] JSX conditionals use explicit boolean expressions
+- [ ] Keys are stable and unique (not array index for dynamic lists)
+- [ ] React.memo for frequently re-rendered components
+- [ ] Lazy loading for heavy components/routes
+- [ ] Custom hooks extract reusable logic
+
+---
+
+## Quick Reference
+
+```toon
+patterns[10]{scenario,solution}:
+ Callback to child,useCallback
+ Expensive computation,useMemo
+ Side effect,useEffect with cleanup
+ DOM reference,useRef
+ Complex state,useReducer
+ Global state,Zustand/Context
+ List rendering,key + React.memo
+ Long lists,react-window virtualization
+ Code splitting,React.lazy + Suspense
+ Conditional render,Explicit boolean check
+```
+
+---
+
+## Related Skills
+
+- `typescript-expert.mdc` - TypeScript patterns (required)
+- `testing-expert.mdc` - Testing patterns
+
+---
+
+**Version:** 1.1.5
+**Last Updated:** 2025-12-15

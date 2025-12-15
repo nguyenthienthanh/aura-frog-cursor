@@ -8,21 +8,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- **TypeScript Strict Nulls Rule** (`typescript-strict-nulls.mdc`) - Explicit null/undefined handling
-  - Avoid truthy/falsy pitfalls (empty string, zero are valid!)
+- **Expert Skills System** - Domain-specific bundled best practices
+  - `typescript-expert.mdc` - TS/JS patterns, strict typing, null handling
+  - `react-expert.mdc` - Hooks, performance, state management
+  - `vue-expert.mdc` - Composition API, Pinia, reactivity
+  - `angular-expert.mdc` - Signals, RxJS, NgRx, standalone components
+  - `api-expert.mdc` - REST design, validation, error handling, DB
+  - `testing-expert.mdc` - TDD, unit/integration/e2e, mocking
+  - `security-expert.mdc` - OWASP Top 10, secure coding, auth
+- **TypeScript Strict Nulls Rule** (`typescript-strict-nulls.mdc`)
+  - Avoid truthy/falsy pitfalls
   - Use `??` instead of `||` for defaults
   - Explicit JSX conditional rendering patterns
-  - ESLint rules configuration
-  - React, Vue, Angular specific examples
 
 ### Changed
-- Updated frontend agents with strict null handling section:
-  - `mobile-react-native.mdc` - JSX conditional patterns
-  - `web-reactjs.mdc` - React-specific null handling
-  - `web-vuejs.mdc` - Vue v-if and computed patterns
-  - `web-nextjs.mdc` - Next.js patterns
-  - `web-angular.mdc` - Signals and @if patterns
-- All updated agents now reference `typescript-strict-nulls.mdc`
+- All frontend agents now load expert skills:
+  - `mobile-react-native.mdc` → typescript + react + testing + security
+  - `web-reactjs.mdc` → typescript + react + testing + security
+  - `web-vuejs.mdc` → typescript + vue + testing + security
+  - `web-angular.mdc` → typescript + angular + testing + security
+  - `web-nextjs.mdc` → typescript + react + api + testing + security
+- All backend agents now load expert skills:
+  - `backend-nodejs.mdc` → typescript + api + testing + security
+  - `backend-python.mdc` → api + testing + security
+  - `backend-go.mdc` → api + testing + security
+  - `backend-laravel.mdc` → api + testing + security
 
 ## [1.1.5] - 2025-12-15
 

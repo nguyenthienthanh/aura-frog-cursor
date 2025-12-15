@@ -1,0 +1,551 @@
+---
+description: Angular expert - Signals, standalone components, RxJS, NgRx, performance patterns
+globs:
+  - "**/*.component.ts"
+  - "**/*.service.ts"
+  - "**/angular.json"
+alwaysApply: false
+---
+
+# Angular Expert Skill
+
+**Version:** 1.1.5
+**Type:** Expert Skill (Bundled Best Practices)
+
+---
+
+## Overview
+
+This skill bundles all Angular 17+ best practices. Load this skill for Angular development.
+
+**Applies to:**
+- Angular 17+
+- Standalone components
+- Signals
+- NgRx
+
+**Bundles:**
+- `typescript-expert.mdc` - TypeScript patterns
+- `performance.mdc` - Performance optimization
+
+---
+
+## 1. Standalone Components
+
+### Basic Structure
+
+```typescript
+import { Component, ChangeDetectionStrategy, signal, computed } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'app-user-profile',
+  standalone: true,
+  imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    @if (loading()) {
+      <app-spinner />
+    } @else if (user()) {
+      <h2>{{ user()?.name }}</h2>
+      <p>{{ displayName() }}</p>
+    }
+  `,
+})
+export class UserProfileComponent {
+  // Signals
+  user = signal<User | null>(null);
+  loading = signal(false);
+
+  // Computed
+  displayName = computed(() => this.user()?.name ?? 'Guest');
+}
+```
+
+### Dependency Injection
+
+```typescript
+// ✅ GOOD - inject() function (preferred)
+@Component({ /* ... */ })
+export class MyComponent {
+  private userService = inject(UserService);
+  private router = inject(Router);
+  private destroyRef = inject(DestroyRef);
+}
+
+// ❌ OLD - Constructor injection
+constructor(
+  private userService: UserService,
+  private router: Router
+) {}
+```
+
+---
+
+## 2. Signals (Angular 16+)
+
+### Basic Signals
+
+```typescript
+// Create signals
+const count = signal(0);
+const name = signal('');
+const user = signal<User | null>(null);
+
+// Read value
+console.log(count());  // 0
+
+// Update value
+count.set(5);
+count.update(v => v + 1);
+name.update(n => n.toUpperCase());
+
+// Computed (derived signals)
+const fullName = computed(() => `${firstName()} ${lastName()}`);
+const isLoggedIn = computed(() => user() != null);
+```
+
+### Signal Inputs (Angular 17.1+)
+
+```typescript
+@Component({ /* ... */ })
+export class UserCardComponent {
+  // Required input
+  userId = input.required<string>();
+
+  // Optional input with default
+  showAvatar = input(true);
+  size = input<'sm' | 'md' | 'lg'>('md');
+
+  // Transform input
+  count = input(0, { transform: numberAttribute });
+
+  // Computed from input
+  avatarSize = computed(() => {
+    switch (this.size()) {
+      case 'sm': return 24;
+      case 'md': return 48;
+      case 'lg': return 96;
+    }
+  });
+}
+```
+
+### Signal Outputs (Angular 17.3+)
+
+```typescript
+@Component({ /* ... */ })
+export class ButtonComponent {
+  // Output signal
+  clicked = output<void>();
+  valueChanged = output<number>();
+
+  handleClick() {
+    this.clicked.emit();
+    this.valueChanged.emit(42);
+  }
+}
+```
+
+### Effects
+
+```typescript
+// ✅ GOOD - Side effects based on signals
+effect(() => {
+  console.log('User changed:', this.user());
+  localStorage.setItem('user', JSON.stringify(this.user()));
+});
+
+// ✅ GOOD - Cleanup in effects
+effect((onCleanup) => {
+  const subscription = this.dataService.stream$.subscribe();
+  onCleanup(() => subscription.unsubscribe());
+});
+```
+
+### toSignal & toObservable
+
+```typescript
+import { toSignal, toObservable } from '@angular/core/rxjs-interop';
+
+// Convert Observable to Signal
+users = toSignal(this.userService.getUsers(), { initialValue: [] });
+user = toSignal(this.userService.getUser(this.userId()));
+
+// Convert Signal to Observable
+userId$ = toObservable(this.userId);
+```
+
+---
+
+## 3. Control Flow (Angular 17+)
+
+### @if
+
+```vue
+<!-- ✅ GOOD - New control flow -->
+@if (loading()) {
+  <app-spinner />
+} @else if (error()) {
+  <app-error [message]="error()!.message" />
+} @else {
+  <app-content [data]="data()" />
+}
+
+<!-- ❌ BAD - Truthy check with potential falsy values -->
+@if (user().score) {
+  <span>{{ user().score }}</span>
+}
+
+<!-- ✅ GOOD - Explicit null check -->
+@if (user().score != null) {
+  <span>{{ user().score }}</span>
+}
+@if (user().score !== undefined) {
+  <span>{{ user().score }}</span>
+}
+```
+
+### @for
+
+```vue
+<!-- ✅ GOOD - track is required -->
+@for (user of users(); track user.id) {
+  <app-user-card [user]="user" />
+} @empty {
+  <p>No users found</p>
+}
+
+<!-- ✅ GOOD - With index -->
+@for (item of items(); track item.id; let i = $index, first = $first, last = $last) {
+  <div [class.first]="first" [class.last]="last">
+    {{ i + 1 }}. {{ item.name }}
+  </div>
+}
+```
+
+### @switch
+
+```vue
+@switch (status()) {
+  @case ('loading') {
+    <app-spinner />
+  }
+  @case ('success') {
+    <app-content />
+  }
+  @case ('error') {
+    <app-error />
+  }
+  @default {
+    <p>Unknown status</p>
+  }
+}
+```
+
+### @defer
+
+```vue
+<!-- Lazy load on viewport -->
+@defer (on viewport) {
+  <app-heavy-chart />
+} @placeholder {
+  <div class="placeholder">Chart will load here</div>
+} @loading (minimum 500ms) {
+  <app-spinner />
+} @error {
+  <p>Failed to load chart</p>
+}
+
+<!-- Lazy load on interaction with prefetch -->
+@defer (on interaction; prefetch on hover) {
+  <app-modal-content />
+}
+
+<!-- Lazy load when condition is true -->
+@defer (when isAdmin()) {
+  <app-admin-panel />
+}
+```
+
+---
+
+## 4. RxJS Best Practices
+
+### takeUntilDestroyed
+
+```typescript
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+@Component({ /* ... */ })
+export class MyComponent {
+  private destroyRef = inject(DestroyRef);
+
+  ngOnInit() {
+    // ✅ GOOD - Auto-unsubscribe on destroy
+    this.dataService.getData()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(data => this.processData(data));
+  }
+}
+```
+
+### Async Pipe
+
+```typescript
+@Component({
+  template: `
+    @if (users$ | async; as users) {
+      @for (user of users; track user.id) {
+        <app-user-card [user]="user" />
+      }
+    }
+  `
+})
+export class UsersComponent {
+  users$ = this.userService.getUsers();
+}
+```
+
+### Common Operators
+
+```typescript
+// ✅ GOOD - switchMap for latest only
+this.searchQuery$.pipe(
+  debounceTime(300),
+  distinctUntilChanged(),
+  switchMap(query => this.searchService.search(query))
+);
+
+// ✅ GOOD - exhaustMap to ignore while processing
+this.submitClick$.pipe(
+  exhaustMap(() => this.formService.submit(this.form.value))
+);
+
+// ✅ GOOD - concatMap for sequential processing
+this.items$.pipe(
+  concatMap(item => this.processItem(item))
+);
+
+// ✅ GOOD - mergeMap for parallel processing
+this.ids$.pipe(
+  mergeMap(id => this.fetchItem(id), 3)  // Max 3 concurrent
+);
+```
+
+---
+
+## 5. NgRx Best Practices
+
+### createFeature (NgRx 15+)
+
+```typescript
+import { createFeature, createReducer, on } from '@ngrx/store';
+
+export const usersFeature = createFeature({
+  name: 'users',
+  reducer: createReducer(
+    initialState,
+    on(UsersActions.loadSuccess, (state, { users }) => ({
+      ...state,
+      users,
+      loading: false,
+    })),
+    on(UsersActions.loadFailure, (state, { error }) => ({
+      ...state,
+      error,
+      loading: false,
+    }))
+  ),
+});
+
+// Auto-generated selectors
+export const {
+  selectUsersState,
+  selectUsers,
+  selectLoading,
+} = usersFeature;
+```
+
+### createActionGroup
+
+```typescript
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
+
+export const UsersActions = createActionGroup({
+  source: 'Users',
+  events: {
+    'Load': emptyProps(),
+    'Load Success': props<{ users: User[] }>(),
+    'Load Failure': props<{ error: Error }>(),
+    'Select': props<{ userId: string }>(),
+  },
+});
+
+// Usage: UsersActions.load(), UsersActions.loadSuccess({ users })
+```
+
+### Functional Effects
+
+```typescript
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+
+export const loadUsers = createEffect(
+  (
+    actions$ = inject(Actions),
+    userService = inject(UserService)
+  ) => {
+    return actions$.pipe(
+      ofType(UsersActions.load),
+      exhaustMap(() =>
+        userService.getUsers().pipe(
+          map(users => UsersActions.loadSuccess({ users })),
+          catchError(error => of(UsersActions.loadFailure({ error })))
+        )
+      )
+    );
+  },
+  { functional: true }
+);
+```
+
+### Signal Store (NgRx 17+)
+
+```typescript
+import { signalStore, withState, withComputed, withMethods } from '@ngrx/signals';
+
+export const UserStore = signalStore(
+  withState<UserState>({ user: null, loading: false }),
+  withComputed(({ user }) => ({
+    isLoggedIn: computed(() => user() != null),
+    displayName: computed(() => user()?.name ?? 'Guest'),
+  })),
+  withMethods((store, userService = inject(UserService)) => ({
+    async login(credentials: Credentials) {
+      patchState(store, { loading: true });
+      const user = await userService.login(credentials);
+      patchState(store, { user, loading: false });
+    },
+    logout() {
+      patchState(store, { user: null });
+    },
+  }))
+);
+```
+
+---
+
+## 6. HTTP & Interceptors
+
+### Functional Interceptors
+
+```typescript
+import { HttpInterceptorFn } from '@angular/common/http';
+
+export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const token = inject(AuthService).getToken();
+
+  if (token) {
+    req = req.clone({
+      setHeaders: { Authorization: `Bearer ${token}` },
+    });
+  }
+
+  return next(req);
+};
+
+export const errorInterceptor: HttpInterceptorFn = (req, next) => {
+  return next(req).pipe(
+    catchError((error: HttpErrorResponse) => {
+      if (error.status === 401) {
+        inject(AuthService).logout();
+        inject(Router).navigate(['/login']);
+      }
+      return throwError(() => error);
+    })
+  );
+};
+
+// Register in app.config.ts
+provideHttpClient(
+  withInterceptors([authInterceptor, errorInterceptor])
+)
+```
+
+---
+
+## 7. Forms
+
+### Reactive Forms with Signals
+
+```typescript
+@Component({ /* ... */ })
+export class UserFormComponent {
+  private fb = inject(NonNullableFormBuilder);
+
+  form = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(2)]],
+    email: ['', [Validators.required, Validators.email]],
+    age: [0, [Validators.min(0), Validators.max(150)]],
+  });
+
+  // Convert form value to signal
+  formValue = toSignal(this.form.valueChanges, {
+    initialValue: this.form.getRawValue(),
+  });
+
+  isValid = computed(() => this.form.valid);
+
+  onSubmit() {
+    if (this.form.valid) {
+      const data = this.form.getRawValue();
+      // Submit data
+    }
+  }
+}
+```
+
+---
+
+## 8. Code Review Checklist
+
+- [ ] Using standalone components
+- [ ] OnPush change detection strategy
+- [ ] Signals for reactive state (not BehaviorSubject)
+- [ ] Signal inputs/outputs where applicable
+- [ ] inject() instead of constructor injection
+- [ ] takeUntilDestroyed for subscriptions
+- [ ] Explicit null checks in templates (not truthy/falsy)
+- [ ] track expression in @for
+- [ ] @defer for heavy components
+- [ ] Functional interceptors
+
+---
+
+## Quick Reference
+
+```toon
+patterns[10]{scenario,solution}:
+ Reactive state,signal()
+ Derived state,computed()
+ Side effects,effect()
+ Observable to Signal,toSignal()
+ Auto-unsubscribe,takeUntilDestroyed()
+ Latest value only,switchMap
+ Ignore while busy,exhaustMap
+ Sequential,concatMap
+ Parallel,mergeMap
+ Lazy load UI,@defer
+```
+
+---
+
+## Related Skills
+
+- `typescript-expert.mdc` - TypeScript patterns (required)
+- `testing-expert.mdc` - Testing patterns
+
+---
+
+**Version:** 1.1.5
+**Last Updated:** 2025-12-15

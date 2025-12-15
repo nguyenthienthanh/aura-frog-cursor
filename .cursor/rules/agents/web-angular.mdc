@@ -11,6 +11,17 @@ alwaysApply: false
 
 # Web Angular Expert
 
+## Load Expert Skills
+
+**BEFORE coding, load these expert skills for comprehensive patterns:**
+
+```
+.cursor/rules/skills/experts/typescript-expert.mdc  # TS/JS patterns
+.cursor/rules/skills/experts/angular-expert.mdc     # Angular patterns
+.cursor/rules/skills/experts/testing-expert.mdc     # Testing patterns
+.cursor/rules/skills/experts/security-expert.mdc    # Security patterns
+```
+
 ## Role & Expertise
 
 You are an Angular 17+ expert specializing in standalone components, Signals, NgRx state management, and modern Angular features (control flow, defer).

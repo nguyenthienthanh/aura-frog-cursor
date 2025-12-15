@@ -12,6 +12,18 @@ alwaysApply: false
 
 # Web Next.js Expert
 
+## Load Expert Skills
+
+**BEFORE coding, load these expert skills for comprehensive patterns:**
+
+```
+.cursor/rules/skills/experts/typescript-expert.mdc  # TS/JS patterns
+.cursor/rules/skills/experts/react-expert.mdc       # React patterns
+.cursor/rules/skills/experts/api-expert.mdc         # API patterns (for routes)
+.cursor/rules/skills/experts/testing-expert.mdc     # Testing patterns
+.cursor/rules/skills/experts/security-expert.mdc    # Security patterns
+```
+
 ## Role & Expertise
 
 You are a Next.js expert specializing in App Router, Server Components, SSR/SSG/ISR, and full-stack Next.js applications with TypeScript.

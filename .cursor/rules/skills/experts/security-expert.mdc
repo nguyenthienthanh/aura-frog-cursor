@@ -1,0 +1,446 @@
+---
+description: Security expert - OWASP Top 10, secure coding, vulnerability prevention, authentication
+globs:
+  - "**/*.ts"
+  - "**/*.js"
+  - "**/*.py"
+  - "**/*.go"
+alwaysApply: false
+---
+
+# Security Expert Skill
+
+**Version:** 1.1.5
+**Type:** Expert Skill (Bundled Best Practices)
+
+---
+
+## Overview
+
+This skill bundles all security best practices. Load this skill for security-conscious development.
+
+**Bundles:**
+- `sast-security.mdc` - OWASP Top 10, CWE patterns
+- `api-design.mdc` - Secure API design
+
+---
+
+## 1. OWASP Top 10 Quick Reference
+
+### A01: Broken Access Control
+
+```typescript
+// ❌ VULNERABLE - No authorization check
+app.get('/api/users/:id', async (req, res) => {
+  const user = await User.findById(req.params.id);
+  res.json(user);
+});
+
+// ✅ SECURE - Check ownership
+app.get('/api/users/:id', authenticate, async (req, res) => {
+  const userId = req.params.id;
+
+  if (req.user.id !== userId && !req.user.isAdmin) {
+    return res.status(403).json({ error: 'Forbidden' });
+  }
+
+  const user = await User.findById(userId);
+  res.json(user);
+});
+```
+
+### A02: Cryptographic Failures
+
+```typescript
+// ❌ VULNERABLE - Weak hashing
+const hash = crypto.createHash('md5').update(password).digest('hex');
+
+// ✅ SECURE - bcrypt with proper cost
+import bcrypt from 'bcrypt';
+const SALT_ROUNDS = 12;
+const hash = await bcrypt.hash(password, SALT_ROUNDS);
+const valid = await bcrypt.compare(password, hash);
+```
+
+### A03: Injection
+
+```typescript
+// ❌ VULNERABLE - SQL injection
+const query = `SELECT * FROM users WHERE email = '${email}'`;
+
+// ✅ SECURE - Parameterized query
+const query = 'SELECT * FROM users WHERE email = $1';
+db.query(query, [email]);
+
+// ✅ SECURE - ORM
+const user = await prisma.user.findUnique({ where: { email } });
+```
+
+### A04: Insecure Design
+
+```typescript
+// ✅ SECURE - Rate limiting
+import rateLimit from 'express-rate-limit';
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  message: 'Too many login attempts',
+});
+
+app.post('/login', authLimiter, loginHandler);
+```
+
+### A05: Security Misconfiguration
+
+```typescript
+// ✅ SECURE - Security headers with Helmet
+import helmet from 'helmet';
+app.use(helmet());
+
+// ✅ SECURE - Hide error details in production
+app.use((err, req, res, next) => {
+  const message = process.env.NODE_ENV === 'production'
+    ? 'Internal server error'
+    : err.message;
+  res.status(500).json({ error: message });
+});
+```
+
+### A06: Vulnerable Components
+
+```bash
+# Check for vulnerabilities
+npm audit
+npx snyk test
+
+# Fix vulnerabilities
+npm audit fix
+```
+
+### A07: Authentication Failures
+
+```typescript
+// ✅ SECURE - Session configuration
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 24 * 60 * 60 * 1000,
+  },
+}));
+
+// ✅ SECURE - Regenerate session on login
+req.session.regenerate((err) => {
+  req.session.userId = user.id;
+  res.redirect('/dashboard');
+});
+```
+
+### A08: Software Integrity
+
+```typescript
+// ✅ SECURE - Validate serialized data
+import { z } from 'zod';
+
+const UserSchema = z.object({
+  id: z.string().uuid(),
+  email: z.string().email(),
+  role: z.enum(['user', 'admin']),
+});
+
+const user = UserSchema.parse(JSON.parse(serializedData));
+```
+
+### A09: Logging Failures
+
+```typescript
+// ❌ VULNERABLE - Logging sensitive data
+logger.info(`Login: ${email}, password: ${password}`);
+
+// ✅ SECURE - Sanitized logging
+logger.info('Login attempt', {
+  email: maskEmail(email),
+  ip: req.ip,
+  timestamp: new Date().toISOString(),
+});
+```
+
+### A10: SSRF
+
+```typescript
+// ❌ VULNERABLE - Unvalidated URL
+const response = await fetch(req.query.url);
+
+// ✅ SECURE - Whitelist domains
+const ALLOWED_DOMAINS = ['api.example.com'];
+const url = new URL(req.query.url);
+
+if (!ALLOWED_DOMAINS.includes(url.hostname)) {
+  return res.status(400).json({ error: 'Domain not allowed' });
+}
+```
+
+---
+
+## 2. Input Validation
+
+### Always Validate Server-Side
+
+```typescript
+import { z } from 'zod';
+
+const CreateUserSchema = z.object({
+  email: z.string().email().max(255),
+  password: z.string().min(8).max(100),
+  name: z.string().min(2).max(100).regex(/^[a-zA-Z\s]+$/),
+});
+
+// Validate and sanitize
+const result = CreateUserSchema.safeParse(req.body);
+if (!result.success) {
+  return res.status(400).json({ errors: result.error.flatten() });
+}
+```
+
+### File Upload Validation
+
+```typescript
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/gif'];
+const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+
+function validateUpload(file: Express.Multer.File) {
+  if (!ALLOWED_TYPES.includes(file.mimetype)) {
+    throw new Error('Invalid file type');
+  }
+  if (file.size > MAX_SIZE) {
+    throw new Error('File too large');
+  }
+  // Check magic bytes, not just extension
+  const buffer = fs.readFileSync(file.path);
+  const type = fileType.fromBuffer(buffer);
+  if (!type || !ALLOWED_TYPES.includes(type.mime)) {
+    throw new Error('Invalid file content');
+  }
+}
+```
+
+---
+
+## 3. XSS Prevention
+
+### React (Safe by Default)
+
+```tsx
+// ✅ SAFE - React escapes by default
+<div>{userInput}</div>
+
+// ❌ DANGEROUS - Only use with trusted content
+<div dangerouslySetInnerHTML={{ __html: userInput }} />
+
+// ✅ SAFE - Sanitize if HTML needed
+import DOMPurify from 'dompurify';
+<div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(userInput) }} />
+```
+
+### Server-Side Rendering
+
+```typescript
+// ✅ SAFE - Use templating with auto-escape
+res.render('page', { username }); // EJS, Handlebars auto-escape
+
+// ❌ DANGEROUS - String concatenation
+res.send(`<h1>Hello ${username}</h1>`);
+```
+
+---
+
+## 4. CSRF Protection
+
+```typescript
+import csrf from 'csurf';
+
+app.use(csrf({ cookie: true }));
+
+// Include token in forms
+app.get('/form', (req, res) => {
+  res.render('form', { csrfToken: req.csrfToken() });
+});
+
+// Token validated automatically on POST
+app.post('/submit', (req, res) => {
+  // CSRF token validated
+});
+```
+
+---
+
+## 5. Secrets Management
+
+```typescript
+// ❌ BAD - Hardcoded secrets
+const API_KEY = 'sk_live_1234567890';
+
+// ✅ GOOD - Environment variables
+const API_KEY = process.env.API_KEY;
+if (!API_KEY) throw new Error('API_KEY not configured');
+
+// ✅ BETTER - Secrets manager
+import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
+const secret = await client.accessSecretVersion({ name: 'projects/x/secrets/api-key' });
+```
+
+### .env Best Practices
+
+```bash
+# .env (NEVER commit this file)
+DATABASE_URL=postgresql://user:pass@localhost/db
+JWT_SECRET=your-256-bit-secret
+API_KEY=sk_live_xxxxx
+
+# .env.example (commit this)
+DATABASE_URL=postgresql://user:pass@localhost/db
+JWT_SECRET=generate-a-secure-secret
+API_KEY=your-api-key
+```
+
+---
+
+## 6. Authentication Best Practices
+
+### Password Requirements
+
+```typescript
+const PasswordSchema = z.string()
+  .min(8, 'Password must be at least 8 characters')
+  .max(100, 'Password must be less than 100 characters')
+  .regex(/[A-Z]/, 'Password must contain uppercase letter')
+  .regex(/[a-z]/, 'Password must contain lowercase letter')
+  .regex(/[0-9]/, 'Password must contain number')
+  .regex(/[^A-Za-z0-9]/, 'Password must contain special character');
+```
+
+### JWT Best Practices
+
+```typescript
+// ✅ SECURE - Short-lived access token
+const accessToken = jwt.sign(
+  { userId: user.id, role: user.role },
+  process.env.JWT_SECRET,
+  { expiresIn: '15m', algorithm: 'HS256' }
+);
+
+// ✅ SECURE - Long-lived refresh token (stored securely)
+const refreshToken = jwt.sign(
+  { userId: user.id, tokenVersion: user.tokenVersion },
+  process.env.REFRESH_SECRET,
+  { expiresIn: '7d' }
+);
+
+// Store refresh token in httpOnly cookie
+res.cookie('refreshToken', refreshToken, {
+  httpOnly: true,
+  secure: true,
+  sameSite: 'strict',
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
+```
+
+### Account Lockout
+
+```typescript
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_DURATION = 15 * 60 * 1000; // 15 minutes
+
+async function handleLogin(email: string, password: string) {
+  const attempts = await getLoginAttempts(email);
+
+  if (attempts.count >= MAX_ATTEMPTS && Date.now() < attempts.lockedUntil) {
+    throw new Error('Account temporarily locked');
+  }
+
+  const user = await validateCredentials(email, password);
+
+  if (!user) {
+    await incrementLoginAttempts(email);
+    throw new Error('Invalid credentials');
+  }
+
+  await clearLoginAttempts(email);
+  return user;
+}
+```
+
+---
+
+## 7. Dangerous Functions
+
+```toon
+avoid[10]{function,language,risk}:
+ eval(),JavaScript,Code injection
+ innerHTML,JavaScript,XSS
+ exec()/system(),Python/Node,Command injection
+ pickle.loads(),Python,Code execution
+ yaml.load(),Python,Code execution
+ deserialize(),PHP,Object injection
+ dangerouslySetInnerHTML,React,XSS
+ v-html,Vue,XSS
+ [innerHTML],Angular,XSS
+ Runtime.exec(),Java,Command injection
+```
+
+---
+
+## 8. Security Checklist
+
+### Before Every Commit
+
+- [ ] No hardcoded secrets
+- [ ] Input validation on all user inputs
+- [ ] Parameterized queries (no string concat)
+- [ ] Output encoding for user data
+- [ ] Authorization checks on protected resources
+
+### Before Every Release
+
+- [ ] npm audit clean
+- [ ] Security headers configured
+- [ ] HTTPS enforced
+- [ ] Rate limiting on auth endpoints
+- [ ] Error messages don't leak info
+- [ ] Logging doesn't include sensitive data
+- [ ] Dependencies updated
+
+---
+
+## Quick Reference
+
+```toon
+patterns[10]{vulnerability,fix}:
+ SQL injection,Parameterized queries/ORM
+ XSS,Output encoding/DOMPurify
+ CSRF,CSRF tokens
+ Weak passwords,bcrypt with cost 12+
+ Session fixation,Regenerate on login
+ IDOR,Authorization checks
+ SSRF,URL whitelist
+ Secrets in code,Environment variables
+ Missing auth,Middleware checks
+ Rate limiting,express-rate-limit
+```
+
+---
+
+## Related Rules
+
+- `sast-security.mdc` - Detailed OWASP/CWE patterns
+- `api-design.mdc` - Secure API design
+
+---
+
+**Version:** 1.1.5
+**Last Updated:** 2025-12-15

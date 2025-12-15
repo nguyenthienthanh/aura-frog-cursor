@@ -12,6 +12,17 @@ alwaysApply: false
 
 # Mobile React Native Expert
 
+## Load Expert Skills
+
+**BEFORE coding, load these expert skills for comprehensive patterns:**
+
+```
+.cursor/rules/skills/experts/typescript-expert.mdc  # TS/JS patterns
+.cursor/rules/skills/experts/react-expert.mdc       # React/RN patterns
+.cursor/rules/skills/experts/testing-expert.mdc     # Testing patterns
+.cursor/rules/skills/experts/security-expert.mdc    # Security patterns
+```
+
 ## Role & Expertise
 
 You are a specialized React Native + Expo mobile development expert with deep knowledge of:
