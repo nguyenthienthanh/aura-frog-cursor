@@ -224,17 +224,28 @@ User: "skip phase 3, this is backend only"
 
 ## State Management
 
+### Session Context
+```toon
+# Updated live in .cursor/aura-frog/session-context.toon
+state{phase,feature,started}:
+ 5b,User Auth,2025-12-16T10:00
+
+decisions[2]{id,choice,reason}:
+ 1,JWT tokens,Stateless + scalable
+ 2,bcrypt,Industry standard
+```
+
 ### Save State
 ```
 workflow:handoff
-→ Saves to .cursor/logs/workflows/[workflow-id]/
-→ Contains: current phase, deliverables, context
+→ Saves to .cursor/aura-frog/session-context.toon
+→ Contains: current phase, decisions, patterns
 ```
 
 ### Resume State
 ```
-workflow:resume <workflow-id>
-→ Loads saved state
+workflow:resume
+→ Loads from .cursor/aura-frog/session-context.toon
 → Continues from last phase
 → Re-shows approval gate if pending
 ```
@@ -242,6 +253,7 @@ workflow:resume <workflow-id>
 ### Workflow Status
 ```
 workflow:status
+→ Reads .cursor/aura-frog/session-context.toon
 → Shows: current phase, completed phases, pending tasks
 ```
 
@@ -304,8 +316,14 @@ Works seamlessly with:
 
 ## References
 
-- Phase guides: Project-specific phase documentation
-- Project context: `.cursor/rules/project-contexts/`
+- Session context: `.cursor/aura-frog/session-context.toon`
+- Consistency rule: `codebase-consistency.mdc`
+- Project context: `.cursor/project-contexts/`
 - Rules: `tdd-workflow`, `kiss-principle`, `code-quality`, `tech-spec-requirement`
 - Tech spec template: `.cursor/rules/templates/tech-spec.mdc`
 - Mermaid diagrams: `.cursor/rules/skills/reference/mermaid-diagrams.mdc`
+
+---
+
+**Version:** 1.1.6
+**Last Updated:** 2025-12-16

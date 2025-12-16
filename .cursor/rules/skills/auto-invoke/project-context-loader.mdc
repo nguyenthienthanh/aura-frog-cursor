@@ -153,77 +153,89 @@ Continue with Aura Frog defaults? [yes/no]
 
 ## Context Files Structure
 
-### project-config.yaml
-```yaml
-project:
-  name: "my-app"
-  type: "react-native"
+### project-config.toon
+```toon
+project{name,type}:
+ my-app,react-native
 
-tech_stack:
-  framework: "react-native"
-  language: "typescript"
-  styling: "nativewind"
-  state: "zustand"
-  testing: "jest"
+stack[5]{key,value}:
+ framework,react-native
+ language,typescript
+ styling,nativewind
+ state,zustand
+ testing,jest
 
-agents:
-  primary: "mobile-react-native"
-  secondary: ["qa-automation", "ui-designer"]
+agents{primary,secondary}:
+ mobile-react-native,qa-automation|ui-designer
 
-integrations:
-  jira: true
-  figma: true
-  slack: true
+integrations[3]{name,enabled}:
+ jira,true
+ figma,true
+ slack,true
 ```
 
-### conventions.md
-```markdown
-# File Naming
-- Components: PascalCase (Button.tsx)
-- Utilities: camelCase (formatDate.ts)
-- Tests: *.test.ts
+### conventions.toon
+```toon
+naming[3]{type,pattern,example}:
+ components,PascalCase,Button.tsx
+ utilities,camelCase,formatDate.ts
+ tests,*.test.ts,Button.test.ts
 
-# Import Aliases
-- @/components → src/components
-- @/utils → src/utils
+aliases[2]{alias,path}:
+ @/components,src/components
+ @/utils,src/utils
 
-# Directory Structure
-src/
-  components/
-    ui/         # Reusable UI components
-    features/   # Feature-specific components
-  utils/
-  hooks/
+structure{base,dirs}:
+ src/,components/ui|components/features|utils|hooks
 ```
 
-### rules.md
-```markdown
-# Quality Rules
-- Coverage: 85% minimum
-- No console.log in production
-- All components must have testId
-- TypeScript strict mode
+### rules.toon
+```toon
+quality[4]{rule,value}:
+ coverage,85%
+ console,no-production
+ testid,required
+ typescript,strict
 
-# Git Workflow
-- Feature branches from main
-- PR requires 1 approval
-- All tests must pass
+git{branch_from,pr_approvals,tests}:
+ main,1,required
 ```
 
-### examples.md
-```markdown
-# Component Pattern
-\`\`\`typescript
-// Standard component structure
-export const Button = ({ onPress, children }: ButtonProps) => {
-  return (
-    <Pressable testID="button" onPress={onPress}>
-      <Text>{children}</Text>
-    </Pressable>
-  );
-};
-\`\`\`
+### examples.toon
+```toon
+patterns[1]{type,file}:
+ component,examples/Button.tsx
 ```
+
+---
+
+## Session Context Generation
+
+**Output:** `.cursor/aura-frog/session-context.toon`
+
+This skill generates a session context file that tracks:
+- Current workflow state
+- Architectural decisions made
+- Established patterns
+
+### Generated Format
+```toon
+state{phase,feature,started}:
+ implementation,User Auth,2025-12-16T10:00
+
+decisions[N]{id,choice,reason}:
+ 1,JWT tokens,Stateless + scalable
+ 2,bcrypt,Industry standard
+
+patterns[N]{type,convention,example}:
+ naming,camelCase functions,getUserById
+ naming,PascalCase components,UserProfile
+ imports,absolute paths,@/components/Button
+ structure,feature folders,src/features/auth/
+```
+
+### Linked Rule
+See **`codebase-consistency.mdc`** - Ensures Claude reads session-context.toon before code generation.
 
 ## Loading Indicators
 
@@ -232,7 +244,7 @@ When context is loaded:
 ✅ Project context loaded: my-app
    - Tech: React Native + TypeScript + NativeWind
    - Coverage target: 85%
-   - Import aliases: @/ configured
+   - Session context: .cursor/aura-frog/session-context.toon
 ```
 
 When context not found:
@@ -245,9 +257,10 @@ When context not found:
 
 Works seamlessly with:
 - `workflow-orchestrator` - Loads context before Phase 2 (Design)
-- `agent-detector` - Uses project-config.yaml for agent priorities
+- `agent-detector` - Uses project-config.toon for agent priorities
 - `test-writer` - Uses coverage targets and test patterns
 - `code-reviewer` - Uses quality rules for review criteria
+- `codebase-consistency` - Ensures patterns are followed
 - All code generation skills - Ensures correct patterns
 
 ## Benefits
@@ -257,9 +270,16 @@ Works seamlessly with:
 3. **Speed** - No need to explain conventions each time
 4. **Standards** - Maintains codebase standards automatically
 5. **Onboarding** - New developers get instant context
+6. **Token Efficiency** - TOON format reduces tokens by ~73%
 
 ## References
 
-- Project contexts: `.cursor/rules/project-contexts/`
-- Rules combination guide: Project documentation
+- Project contexts: `.cursor/project-contexts/`
+- Session context: `.cursor/aura-frog/session-context.toon`
+- Consistency rule: `codebase-consistency.mdc`
 - Context initialization: `project:init` command
+
+---
+
+**Version:** 1.1.6
+**Last Updated:** 2025-12-16
