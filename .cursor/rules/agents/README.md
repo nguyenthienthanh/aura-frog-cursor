@@ -2,11 +2,11 @@
 
 ## Overview
 
-This directory contains **24 specialized Aura Frog agents** converted to Cursor IDE MDC format.
+This directory contains **23 specialized Aura Frog agents** converted to Cursor IDE MDC format.
 
 ## Conversion Status
 
-**Completed:** 24/24 agents (100%)
+**Completed:** 23/23 agents (100%)
 
 ---
 
@@ -46,15 +46,16 @@ This directory contains **24 specialized Aura Frog agents** converted to Cursor 
 | slack-operations | `slack-operations.mdc` | Team notifications |
 | voice-operations | `voice-operations.mdc` | TTS/audio notifications |
 
-### Infrastructure (5)
+### Infrastructure (4)
 
 | Agent | File | Description |
 |-------|------|-------------|
-| smart-agent-detector | `smart-agent-detector.mdc` | Auto agent selection |
 | project-detector | `project-detector.mdc` | Auto project type detection |
 | project-config-loader | `project-config-loader.mdc` | Load project configurations |
 | project-context-manager | `project-context-manager.mdc` | Session state persistence |
 | pm-operations-orchestrator | `pm-operations-orchestrator.mdc` | 9-phase workflow coordinator |
+
+> **Note:** `agent-detector` is now a skill at `skills/auto-invoke/agent-detector.mdc`
 
 ---
 
@@ -87,11 +88,12 @@ alwaysApply: false
 
 The following agents have `alwaysApply: true`:
 
-1. **smart-agent-detector** - Analyzes context and selects appropriate agents
-2. **project-detector** - Auto-detects project type from files
-3. **project-config-loader** - Loads project configurations
-4. **project-context-manager** - Manages session state
-5. **pm-operations-orchestrator** - Coordinates workflow
+1. **project-detector** - Auto-detects project type from files
+2. **project-config-loader** - Loads project configurations
+3. **project-context-manager** - Manages session state
+4. **pm-operations-orchestrator** - Coordinates workflow
+
+> **Note:** `agent-detector` skill (at `skills/auto-invoke/`) also has `alwaysApply: true`
 
 ---
 

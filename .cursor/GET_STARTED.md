@@ -175,11 +175,11 @@ Aura Frog has 24 specialized agents that auto-activate based on context:
 - slack-operations, voice-operations
 
 **Infrastructure (5):**
-- smart-agent-detector (ALWAYS active - selects other agents)
+- agent-detector (ALWAYS active - selects other agents)
 - pm-operations-orchestrator, project-detector
 - project-config-loader, project-context-manager
 
-**Auto-Selection:** The `smart-agent-detector` analyzes your message and files to pick the best agent automatically.
+**Auto-Selection:** The `agent-detector` analyzes your message and files to pick the best agent automatically.
 
 ---
 

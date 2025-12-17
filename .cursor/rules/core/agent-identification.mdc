@@ -90,7 +90,7 @@ agent_selection[16]{context,agent}:
  DevOps,devops-cicd
 ```
 
-**Full logic:** See `.cursor/agents/smart-agent-detector.md`
+**Full logic:** See `.cursor/skills/auto-invoke/agent-detector.mdc`
 
 ---
 

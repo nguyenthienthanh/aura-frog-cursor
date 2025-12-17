@@ -195,7 +195,7 @@ Writing implementation code for UserProfile component...
 ## Related Documentation
 
 - **Agent List:** `rules/agents/README.md` - All available agents
-- **Agent Selection:** `rules/agents/smart-agent-detector.mdc` - How agents are chosen
+- **Agent Selection:** `rules/skills/auto-invoke/agent-detector.mdc` - How agents are chosen
 - **Banner Rule:** `rules/core/agent-identification.mdc` - Display format
 
 ---

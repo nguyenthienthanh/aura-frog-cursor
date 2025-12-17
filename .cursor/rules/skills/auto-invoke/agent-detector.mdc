@@ -206,7 +206,7 @@ ui-designer:
 - devops-cicd, jira-operations, confluence-operations, slack-operations, voice-operations
 
 **Infrastructure (5):**
-- smart-agent-detector, pm-operations-orchestrator, project-detector, project-config-loader, project-context-manager
+- agent-detector, pm-operations-orchestrator, project-detector, project-config-loader, project-context-manager
 
 ## After Detection
 

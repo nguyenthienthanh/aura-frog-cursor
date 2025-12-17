@@ -229,9 +229,9 @@ Project Context > Aura Frog Rules > Generic Defaults
 - **Development (11):** mobile-react-native, mobile-flutter, web-angular, web-vuejs, web-reactjs, web-nextjs, backend-nodejs, backend-python, backend-go, backend-laravel, database-specialist
 - **Quality & Security (3):** security-expert, qa-automation, ui-designer
 - **DevOps & Operations (5):** devops-cicd, jira-operations, confluence-operations, slack-operations, voice-operations
-- **Infrastructure (5):** smart-agent-detector, pm-operations-orchestrator, project-detector, project-config-loader, project-context-manager
+- **Infrastructure (5):** agent-detector, pm-operations-orchestrator, project-detector, project-config-loader, project-context-manager
 
-**📚 Full Agent Catalog:** See `.cursor/README.md` | **🧠 Selection Logic:** See `.cursor/agents/smart-agent-detector.md`
+**📚 Full Agent Catalog:** See `.cursor/README.md` | **🧠 Selection Logic:** See `.cursor/skills/auto-invoke/agent-detector.mdc`
 
 ---
 

@@ -95,7 +95,7 @@ That's it! Aura Frog will guide you through all 9 phases.
 - slack-operations, voice-operations
 
 **Infrastructure (5):**
-- smart-agent-detector, pm-operations-orchestrator
+- agent-detector, pm-operations-orchestrator
 - project-detector, project-config-loader, project-context-manager
 
 ### 📋 9-Phase TDD Workflow
