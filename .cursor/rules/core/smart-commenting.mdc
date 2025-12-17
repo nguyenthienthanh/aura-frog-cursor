@@ -60,6 +60,63 @@ const UserProfile = () => {
 // Use git history for old code
 ```
 
+### 4. Meaningless Test/Branch Comments
+```typescript
+// ❌ BAD - Obvious from the code itself
+// New test
+it('should return user', () => {});
+
+// New branch to test edge case
+if (user.age < 0) {}
+
+// Test to increase coverage
+it('handles empty array', () => {});
+
+// Added new describe block
+describe('UserService', () => {});
+
+// ✅ GOOD - No comment needed, code is self-explanatory
+it('should return user when ID exists', () => {});
+
+if (user.age < 0) {
+  throw new ValidationError('Age cannot be negative');
+}
+
+describe('UserService', () => {
+  it('handles empty array by returning default user', () => {});
+});
+```
+
+### 5. JSDoc for Obvious Functions
+```typescript
+// ❌ BAD - JSDoc that adds no value
+/**
+ * Gets the user by ID
+ * @param id - The user ID
+ * @returns The user
+ */
+function getUserById(id: string): User {}
+
+/**
+ * Adds two numbers
+ * @param a - First number
+ * @param b - Second number
+ * @returns Sum of a and b
+ */
+function add(a: number, b: number): number {}
+
+// ✅ GOOD - Only document when it adds value
+function getUserById(id: string): User {}
+function add(a: number, b: number): number {}
+
+// ✅ GOOD - JSDoc when there's non-obvious behavior
+/**
+ * Gets user by ID with automatic cache refresh after 5 minutes.
+ * Returns stale data if API fails (stale-while-revalidate pattern).
+ */
+function getUserById(id: string): User {}
+```
+
 ## When TO Comment
 
 ### 1. Complex Business Logic
@@ -392,7 +449,7 @@ During code review, check:
 | Comment Type | When to Use |
 |--------------|-------------|
 | **Inline (WHY)** | Business logic, workarounds, constraints |
-| **JSDoc** | Public APIs, complex functions, reusable code |
+| **JSDoc** | Public APIs, complex functions with non-obvious behavior |
 | **TODO/FIXME** | Technical debt, future improvements |
 
 | What to AVOID | Why |
@@ -400,6 +457,8 @@ During code review, check:
 | **Dividers** | Add noise; split files instead |
 | **WHAT comments** | Code should be self-documenting |
 | **Commented code** | Use git history |
+| **"New test/branch"** | Meaningless - obvious from code |
+| **Obvious JSDoc** | Adds no value, just noise |
 
 ---
 
@@ -410,5 +469,5 @@ During code review, check:
 
 ---
 
-**Version:** 1.1.4
-**Last Updated:** 2025-12-09
+**Version:** 1.1.7
+**Last Updated:** 2025-12-17
