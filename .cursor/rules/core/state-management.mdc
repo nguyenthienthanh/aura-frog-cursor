@@ -106,3 +106,8 @@ const total = useMemo(() =>
 ## References
 - Project state patterns: `project-contexts/[project]/conventions.md`
 - Performance rules: `performance.mdc`
+
+---
+
+**Version:** 1.1.7
+**Last Updated:** 2025-12-17

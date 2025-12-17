@@ -569,3 +569,8 @@ Works seamlessly with:
 - TDD methodology: Core TDD rules
 - Framework docs: Jest, PyTest, PHPUnit, Go testing
 - Project conventions: Test patterns from project-context-loader
+
+---
+
+**Version:** 1.1.7
+**Last Updated:** 2025-12-17

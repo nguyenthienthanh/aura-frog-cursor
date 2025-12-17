@@ -174,3 +174,8 @@ margin: 0
 ## References
 - Project theme: `project-contexts/[project]/theme.ts`
 - Project conventions: `project-contexts/[project]/conventions.md`
+
+---
+
+**Version:** 1.1.7
+**Last Updated:** 2025-12-17

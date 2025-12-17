@@ -404,3 +404,8 @@ npm run migrate:rollback
 - PostgreSQL documentation on ALTER TABLE
 - Zero-downtime deployments: Blue-green, canary
 - Feature flags: LaunchDarkly, Unleash
+
+---
+
+**Version:** 1.1.7
+**Last Updated:** 2025-12-17

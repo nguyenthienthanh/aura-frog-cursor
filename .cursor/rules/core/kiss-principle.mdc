@@ -123,3 +123,8 @@ If 3+ answers are "No" → It's probably over-engineering
 ## References
 - Project conventions: `project-contexts/[project]/conventions.md`
 - Project architecture decisions: `project-contexts/[project]/rules.md`
+
+---
+
+**Version:** 1.1.7
+**Last Updated:** 2025-12-17

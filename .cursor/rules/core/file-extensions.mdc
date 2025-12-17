@@ -126,3 +126,8 @@ export const useLogic = () => {
 ## References
 - Project file structure: `project-contexts/[project]/conventions.md`
 - Code quality: `code-quality.mdc`
+
+---
+
+**Version:** 1.1.7
+**Last Updated:** 2025-12-17

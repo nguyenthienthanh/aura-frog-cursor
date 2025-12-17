@@ -352,3 +352,8 @@ bash scripts/jira-update.sh PROJ-1234 worklog "3h 30m" "Implemented authenticati
 ## Note
 
 **JIRA integration is optional.** The workflow works perfectly fine without it. It's a convenience feature for teams already using JIRA for project management.
+
+---
+
+**Version:** 1.1.7
+**Last Updated:** 2025-12-17

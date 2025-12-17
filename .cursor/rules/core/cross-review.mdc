@@ -97,3 +97,8 @@ timeline_impact[3]{phase,without_review,with_review,time_added}:
 ## References
 - Project team structure: `project-contexts/[project]/team.md`
 - TDD workflow: `tdd-workflow.mdc`
+
+---
+
+**Version:** 1.1.7
+**Last Updated:** 2025-12-17
