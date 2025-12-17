@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Approval Gates - Phase Transition Control
 
-**Version:** 1.1.4
+**Version:** 1.1.7
 **Purpose:** Enforce mandatory user approval at each workflow phase
 **Priority:** CRITICAL - Core workflow mechanism
 
@@ -427,7 +427,7 @@ Approval gates are working correctly if:
 
 ---
 
-**Version:** 1.1.4
+**Version:** 1.1.7
 **Status:** ✅ PRODUCTION READY
 **Last Updated:** 2025-11-30
 

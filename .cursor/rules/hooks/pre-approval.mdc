@@ -315,7 +315,7 @@ Your response:
 
 ---
 
-**Version:** 1.1.4
+**Version:** 1.1.7
 **Trigger:** After post-phase hook, before processing user response
 **Critical:** YES - Core of approval gate mechanism
 **Adapted for Cursor:** 2025-11-30

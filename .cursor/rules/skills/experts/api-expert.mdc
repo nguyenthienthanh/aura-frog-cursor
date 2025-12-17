@@ -10,7 +10,7 @@ alwaysApply: false
 
 # API Expert Skill
 
-**Version:** 1.1.5
+**Version:** 1.1.7
 **Type:** Expert Skill (Bundled Best Practices)
 
 ---
@@ -519,5 +519,5 @@ patterns[10]{scenario,solution}:
 
 ---
 
-**Version:** 1.1.5
-**Last Updated:** 2025-12-15
+**Version:** 1.1.7
+**Last Updated:** 2025-12-17

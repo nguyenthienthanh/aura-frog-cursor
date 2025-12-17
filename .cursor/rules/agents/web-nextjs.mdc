@@ -77,5 +77,5 @@ export async function createUser(formData: FormData) {
 ---
 
 **Agent ID:** web-nextjs
-**Version:** 1.1.6
+**Version:** 1.1.7
 **Status:** Active

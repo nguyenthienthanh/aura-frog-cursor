@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Priority Hierarchy
 
-**Version:** 1.1.4
+**Version:** 1.1.7
 **Priority:** HIGH - Determines how instructions are loaded and merged
 **Type:** Rule (Structural Standard)
 
@@ -273,5 +273,5 @@ alwaysApply: true  # Core rules always apply, project-specific rules set to fals
 
 ---
 
-**Version:** 1.1.4
+**Version:** 1.1.7
 **Last Updated:** 2025-11-30

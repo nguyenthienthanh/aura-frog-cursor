@@ -366,7 +366,7 @@ Adapt sections based on your organization's needs:
 
 ---
 
-**Version:** 1.1.4
+**Version:** 1.1.7
 **Phase:** 8 (Documentation) and 9 (Notification)
 **Agent:** Typically pm-operations-orchestrator or implementation agent
 **Adapted for Cursor:** 2025-11-30
