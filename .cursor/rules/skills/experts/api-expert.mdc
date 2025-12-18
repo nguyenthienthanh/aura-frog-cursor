@@ -511,11 +511,24 @@ patterns[10]{scenario,solution}:
 
 ---
 
+## Context7 Integration
+
+For up-to-date framework APIs, use Context7:
+```
+use context7 for express documentation
+use context7 for prisma documentation
+```
+
+Context7 provides current framework APIs while this skill provides patterns.
+
+---
+
 ## Related Rules
 
 - `api-design.mdc` - REST conventions
 - `sast-security.mdc` - OWASP Top 10
 - `error-handling.mdc` - Error patterns
+- `context7-integration.mdc` - Real-time documentation
 
 ---
 

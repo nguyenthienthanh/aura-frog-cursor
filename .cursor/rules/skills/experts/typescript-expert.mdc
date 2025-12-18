@@ -387,12 +387,24 @@ patterns[10]{bad,good,reason}:
 
 ---
 
+## Context7 Integration
+
+For up-to-date TypeScript/library APIs, use Context7:
+```
+use context7 for [library-name] documentation
+```
+
+Context7 provides current API signatures while this skill provides patterns.
+
+---
+
 ## Related Rules
 
 - `typescript-strict-nulls.mdc` - Detailed null handling
 - `code-quality.mdc` - General quality standards
 - `naming-conventions.mdc` - Naming patterns
 - `use-existing-libraries.mdc` - Library preferences
+- `context7-integration.mdc` - Real-time documentation
 
 ---
 

@@ -530,10 +530,23 @@ patterns[10]{scenario,solution}:
 
 ---
 
+## Context7 Integration
+
+For up-to-date React/library APIs, use Context7:
+```
+use context7 for react documentation
+use context7 for react-hook-form documentation
+```
+
+Context7 provides current React 19 APIs while this skill provides patterns.
+
+---
+
 ## Related Skills
 
 - `typescript-expert.mdc` - TypeScript patterns (required)
 - `testing-expert.mdc` - Testing patterns
+- `context7-integration.mdc` - Real-time documentation
 
 ---
 

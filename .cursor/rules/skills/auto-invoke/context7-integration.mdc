@@ -1,0 +1,132 @@
+---
+description: "Auto-invoke Context7 MCP for up-to-date library documentation. Prevents hallucinated APIs by fetching real-time docs."
+globs: []
+alwaysApply: true
+---
+
+# Context7 Integration
+
+**Type:** Auto-Invoke
+**Trigger:** Code generation, library usage, API implementation
+
+## Purpose
+
+Automatically fetches up-to-date, version-specific documentation for libraries to prevent hallucinated APIs and outdated patterns.
+
+## When to Use Context7
+
+```toon
+use_context7[6]{scenario,action}:
+ Using external library,resolve-library-id then get-library-docs
+ Implementing API,Fetch latest API documentation
+ Checking method signature,Verify against current docs
+ Upgrading dependencies,Get migration guides
+ Learning new library,Fetch examples and guides
+ Debugging library issues,Check current behavior
+```
+
+## How to Invoke
+
+### In Prompts
+Add to your prompt:
+```
+use context7
+```
+
+### Auto-Detection
+This skill auto-activates when:
+- Importing from npm packages
+- Using library methods
+- Asking about library features
+- Implementing integrations
+
+## MCP Tools Available
+
+```toon
+context7_tools[2]{tool,description,params}:
+ resolve-library-id,Find Context7 ID for a library,libraryName (required)
+ get-library-docs,Fetch documentation,context7CompatibleLibraryID + topic (optional)
+```
+
+## Usage Pattern
+
+### Step 1: Resolve Library
+```
+Tool: resolve-library-id
+Input: { "libraryName": "react-hook-form" }
+Output: Library ID for Context7
+```
+
+### Step 2: Get Documentation
+```
+Tool: get-library-docs
+Input: {
+  "context7CompatibleLibraryID": "/npm/react-hook-form",
+  "topic": "useForm validation"
+}
+Output: Up-to-date documentation and examples
+```
+
+## Benefits
+
+```toon
+benefits[4]{benefit,without_context7,with_context7}:
+ API accuracy,May hallucinate old/wrong APIs,Real current APIs
+ Version specificity,Generic patterns,Version-matched code
+ Code examples,Outdated examples,Current working examples
+ Migration,Guesswork,Official migration guides
+```
+
+## Integration with Expert Skills
+
+Context7 complements expert skills:
+- **Expert skills** → Architectural patterns, best practices
+- **Context7** → Exact API signatures, current examples
+
+```toon
+skill_integration[4]{expert_skill,context7_provides}:
+ react-expert,Latest hooks API/React 19 features
+ typescript-expert,Current TS 5.x features/syntax
+ api-expert,Latest framework endpoints/middleware
+ testing-expert,Current Jest/Vitest APIs
+```
+
+## Common Libraries
+
+```toon
+popular_libs[10]{library,context7_id}:
+ React,/npm/react
+ Next.js,/npm/next
+ Vue,/npm/vue
+ Angular,/npm/@angular/core
+ Express,/npm/express
+ NestJS,/npm/@nestjs/core
+ Prisma,/npm/prisma
+ Tailwind,/npm/tailwindcss
+ React Hook Form,/npm/react-hook-form
+ Zod,/npm/zod
+```
+
+## Best Practices
+
+1. **Always verify** - Use context7 before implementing unfamiliar APIs
+2. **Specify topics** - Narrow down docs with topic parameter
+3. **Check versions** - Ensure docs match your package version
+4. **Combine with rules** - Context7 docs + project conventions
+
+## Fallback
+
+If Context7 unavailable:
+1. Check official documentation manually
+2. Use `package.json` to verify installed version
+3. Check library's GitHub for examples
+
+## References
+
+- MCP Config: `.cursor/mcp.json`
+- Context7 GitHub: https://github.com/upstash/context7
+
+---
+
+**Version:** 1.1.7
+**Last Updated:** 2025-12-17

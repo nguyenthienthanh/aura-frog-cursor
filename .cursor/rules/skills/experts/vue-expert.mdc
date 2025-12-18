@@ -489,10 +489,23 @@ patterns[10]{scenario,solution}:
 
 ---
 
+## Context7 Integration
+
+For up-to-date Vue/library APIs, use Context7:
+```
+use context7 for vue documentation
+use context7 for pinia documentation
+```
+
+Context7 provides current Vue 3.x APIs while this skill provides patterns.
+
+---
+
 ## Related Skills
 
 - `typescript-expert.mdc` - TypeScript patterns (required)
 - `testing-expert.mdc` - Testing patterns
+- `context7-integration.mdc` - Real-time documentation
 
 ---
 
