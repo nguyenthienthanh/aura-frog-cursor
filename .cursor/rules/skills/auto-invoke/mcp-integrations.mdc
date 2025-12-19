@@ -1,0 +1,184 @@
+---
+description: "Auto-invoke MCP tools AND trigger appropriate agents/workflows/skills. Zero-config integrations with intelligent routing."
+globs: []
+alwaysApply: true
+---
+
+# MCP Integrations Auto-Invoke
+
+**Type:** Auto-Invoke (Always Active)
+**Trigger:** Pattern detection → MCP Tool → Agent/Workflow/Skill
+
+## MCP Server Overview
+
+| MCP | Purpose | Default |
+|-----|---------|---------|
+| context7 | Library docs lookup | Enabled |
+| playwright | E2E/browser testing | Enabled |
+| filesystem | File operations | Enabled |
+| memory | Persistent context | Enabled |
+| github | Git/GitHub operations | Disabled* |
+| vitest | Unit testing | Disabled* |
+| atlassian | JIRA/Confluence | Disabled* |
+| figma | Design tokens | Disabled* |
+| slack | Team notifications | Disabled* |
+
+*Requires credentials in `.envrc`
+
+---
+
+## Core MCP Tools (Always Available)
+
+### Filesystem
+**Use for:** File read/write, directory operations, search
+
+**Tools:**
+- `read_file` - Read file contents
+- `write_file` - Write/create files
+- `list_directory` - List directory contents
+- `search_files` - Search file contents
+- `get_file_info` - Get file metadata
+
+### Memory
+**Use for:** Persistent context across sessions
+
+**Tools:**
+- `store` - Save key-value data
+- `retrieve` - Get stored data
+- `list_keys` - List stored keys
+
+### Playwright (E2E Testing)
+**Trigger:** "e2e test", "playwright", "browser test"
+
+**Chain:**
+1. **MCP:** playwright tools
+2. **Agent:** `qa-automation`
+3. **Skill:** `test-writer`
+
+---
+
+## Credential-Based MCP Tools
+
+### GitHub
+**Trigger:** Git operations, PR creation, issue management
+**Requires:** `GITHUB_TOKEN` in `.envrc`
+
+**Tools:**
+- `create_pull_request` - Create PR
+- `list_issues` - List issues
+- `create_issue` - Create issue
+- `search_code` - Search GitHub code
+
+### Vitest (Unit Testing)
+**Trigger:** "unit test", "vitest", "coverage"
+
+**Chain:**
+1. **MCP:** vitest tools (run_tests, get_coverage)
+2. **Agent:** `qa-automation`
+3. **Skill:** `test-writer`
+
+### Figma
+**Trigger:** `figma.com/file/` URL detected
+
+**Chain:**
+1. **MCP:** figma tools
+2. **Agent:** `ui-designer`
+3. **Skill:** framework-specific expert
+
+### Atlassian (JIRA/Confluence)
+**Trigger:** `[A-Z]{2,10}-\d+` ticket pattern
+
+**Chain:**
+1. **MCP:** atlassian tools
+2. **Skill:** `workflow-orchestrator`
+3. **Agent:** auto-detected by labels
+
+### Slack
+**Trigger:** `#channel`, "notify team"
+
+**Tools:**
+- `slack_list_channels`
+- `slack_post_message`
+- `slack_get_channel_history`
+
+---
+
+## Agent Selection Matrix
+
+| MCP Tool | Primary Agent | Skills Loaded |
+|----------|--------------|---------------|
+| playwright | qa-automation | test-writer, testing-expert |
+| vitest | qa-automation | test-writer, testing-expert |
+| figma | ui-designer | react/vue/angular-expert |
+| atlassian | (auto-detect) | workflow-orchestrator |
+| github | (current) | git-workflow |
+| filesystem | (current) | - |
+| memory | (current) | session-continuation |
+
+---
+
+## Workflow Auto-Population
+
+| MCP Source | Workflow Phase | Auto-Fill |
+|------------|----------------|-----------|
+| JIRA ticket | Phase 1 | Requirements, acceptance criteria |
+| Figma design | Phase 3 | Design tokens, components |
+| Confluence doc | Phase 2 | Technical specs |
+| Playwright snapshot | Phase 5c | Element selectors |
+
+---
+
+## Chaining Examples
+
+### Full Feature (JIRA + Figma)
+```
+User: "Implement PROJ-456 using figma.com/file/XYZ"
+
+Chain:
+1. atlassian → fetch JIRA requirements
+2. figma → fetch design tokens
+3. workflow-orchestrator → start workflow
+4. Phase 1 + Phase 3 auto-populated
+```
+
+### TDD Flow
+```
+User: "Add auth feature with TDD"
+
+Chain:
+1. qa-automation agent
+2. vitest → unit tests
+3. playwright → E2E tests
+4. Workflow: 5a → 5b → 5c
+```
+
+### GitHub PR
+```
+User: "Create PR for this feature"
+
+Chain:
+1. github → create_pull_request
+2. filesystem → read changed files
+3. Generate PR description
+```
+
+---
+
+## Quick Enable
+
+```bash
+# 1. Add credentials to .envrc
+export GITHUB_TOKEN="ghp_xxx"
+export ATLASSIAN_API_TOKEN="xxx"
+export FIGMA_API_KEY="figd_xxx"
+
+# 2. Edit .cursor/mcp.json
+# Set "disabled": false for services you want
+
+# 3. Restart Cursor
+```
+
+---
+
+**Version:** 1.1.9
+**Last Updated:** 2025-12-19

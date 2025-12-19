@@ -5,6 +5,74 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.9] - 2025-12-19
+
+### Changed
+- **Aggressive Minimization** - MCP-first architecture
+  - Most functionality now via MCP servers
+  - Scripts reduced to workflow management only
+  - Agents consolidated from 20 to 16
+- **Documentation Overhaul**
+  - README.md: 311 → 196 lines (37% smaller), MCP-focused
+  - GET_STARTED.md: 735 → 257 lines (65% smaller), simplified
+  - setup.sh: 441 → 189 lines (57% smaller), no interactive prompts
+
+### Added
+- **MCP Documentation** (`docs/MCP.md`) - Complete guide for custom MCP servers
+  - TypeScript and Python examples
+  - Publishing to npm or local usage
+  - Integration with auto-invoke system
+- New MCP servers (enabled by default):
+  - `@modelcontextprotocol/server-filesystem` - File operations
+  - `@modelcontextprotocol/server-memory` - Persistent context
+  - `@modelcontextprotocol/server-github` - Git/GitHub operations (disabled*)
+- Auto-chaining: MCP tools → Agents → Skills → Workflows
+
+### Removed
+- **Scripts** (~1500 lines):
+  - `test/run-tests.sh`, `test/coverage-report.sh` → Vitest MCP
+  - `detect-design-system.sh` → AI detects directly
+  - `discover-agents.sh`, `validate-config.sh`, `generate-report.sh` → Not needed
+- **Agents** (4 redundant):
+  - `voice-operations.mdc` - ElevenLabs removed
+  - `pm-operations-orchestrator.mdc` - Slack MCP handles
+  - `project-context-manager.mdc` - Merged into project-detector
+  - `project-config-loader.mdc` - Merged into project-detector
+
+## [1.1.8] - 2025-12-19
+
+### Changed
+- **MCP-First Integrations** - Replaced custom bash scripts with MCP servers
+  - JIRA, Confluence, Figma, Slack now use standard MCP protocol
+  - Auto-install via `npx` - no manual package installation needed
+  - Pre-configured in `.cursor/mcp.json` (disabled by default)
+  - Users just add credentials to `.envrc` and enable in mcp.json
+
+### Added
+- **MCP Integrations Rule** (`mcp-integrations.mdc`) - Auto-invoke MCP tools on pattern detection
+- Pre-configured MCP servers:
+  - `@playwright/mcp` - E2E testing, browser automation (enabled by default)
+  - `@madrus/vitest-mcp-server` - Unit testing, coverage analysis
+  - `mcp-atlassian` - JIRA + Confluence
+  - `figma-developer-mcp` - Figma designs (optimized for Cursor)
+  - `@modelcontextprotocol/server-slack` - Slack integration
+
+### Removed
+- Custom integration scripts (replaced by MCP):
+  - `figma-fetch.sh`, `jira-fetch.sh`
+  - `integrations/jira-sync.sh`, `integrations/confluence-publish.sh`, `integrations/slack-notify.sh`
+  - `confluence-operations.sh`, `setup-integrations.sh`, `test-integrations.sh`, `voice-notify.sh`
+- Integration agents (now handled by MCP):
+  - `jira-operations.mdc`, `confluence-operations.mdc`, `slack-operations.mdc`
+- Auto-invoke skills (replaced by `mcp-integrations.mdc`):
+  - `figma-integration.mdc`, `jira-integration.mdc`, `confluence-integration.mdc`
+
+### Benefits
+- **Zero-config**: Users copy `.cursor/`, add credentials, done
+- **Standard protocol**: MCP servers are community-maintained
+- **Auto-install**: `npx -y` downloads servers on first use
+- **Minimal footprint**: Removed ~2000 lines of custom integration code
+
 ## [1.1.6] - 2025-12-15
 
 ### Added
@@ -130,6 +198,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.1.9 | 2025-12-19 | Aggressive minimization, filesystem/memory/github MCP |
+| 1.1.8 | 2025-12-19 | MCP-first integrations, removed custom scripts |
 | 1.1.6 | 2025-12-15 | Expert skills system, agent optimization (~70% reduction) |
 | 1.1.5 | 2025-12-15 | SAST security, Mermaid diagrams, library usage rule |
 | 1.1.4 | 2025-12-11 | TOON format, project-contexts, linting standards |

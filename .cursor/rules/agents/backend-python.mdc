@@ -70,5 +70,5 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
 ---
 
 **Agent ID:** backend-python
-**Version:** 1.1.7
+**Version:** 1.1.9
 **Status:** Active

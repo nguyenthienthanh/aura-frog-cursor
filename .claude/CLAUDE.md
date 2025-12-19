@@ -1,17 +1,17 @@
 # Aura Frog Cursor - Project Instructions
 
 **Project:** aura-frog-cursor
-**Type:** Cursor IDE Plugin/Configuration
-**Version:** 1.1.5
+**Type:** Cursor IDE Plugin/Configuration (MCP-first)
+**Version:** 1.1.9
 
 ---
 
 ## Project Overview
 
-This is the **Aura Frog** plugin converted for Cursor IDE. It contains:
-- 24 specialized agents in `.cursor/rules/agents/`
-- 37+ core quality rules in `.cursor/rules/core/`
-- 29 skills in `.cursor/rules/skills/`
+This is the **Aura Frog** plugin converted for Cursor IDE with MCP-first architecture:
+- 9 MCP servers in `.cursor/mcp.json`
+- 16 specialized agents in `.cursor/rules/agents/`
+- 37 core quality rules in `.cursor/rules/core/`
 - 70+ slash commands in `.cursor/commands/`
 - 9-phase TDD workflow in `.cursor/workflows/`
 
@@ -49,34 +49,17 @@ Update `CHANGELOG.md` at project root with:
 
 When version changes, update ALL files containing version:
 ```bash
-# Files that contain version numbers:
-README.md                              # **Version:** X.Y.Z
-.cursor/README.md                      # **Version:** X.Y.Z
-.cursor/GET_STARTED.md                 # **Version:** X.Y.Z
-.cursor/rules/**/*.mdc                 # **Version:** X.Y.Z (in footer)
-```
-
-**Quick update command:**
-```bash
-find . -type f \( -name "*.md" -o -name "*.mdc" \) -exec sed -i '' 's/OLD_VERSION/NEW_VERSION/g' {} \;
+# Quick update command:
+find . -type f \( -name "*.md" -o -name "*.mdc" -o -name "*.sh" \) -exec sed -i '' 's/OLD_VERSION/NEW_VERSION/g' {} \;
 ```
 
 ### 3. README Updates (When applicable)
 
 Update README.md when:
+- Adding new MCP servers → Update server count and list
 - Adding new agents → Update agent count and list
-- Adding new rules → Update rules count and list
+- Adding new rules → Update rules count
 - Adding new commands → Update command count
-- Adding new skills → Update skills count
-
-### 4. Related Documentation
-
-| Change Type | Update These Files |
-|-------------|-------------------|
-| New agent | `.cursor/rules/agents/`, `.cursor/rules/core/README.md` |
-| New rule | `.cursor/rules/core/README.md`, main README |
-| New skill | main README |
-| New command | `.cursor/commands/QUICK_REFERENCE.md` |
 
 ---
 
@@ -102,5 +85,5 @@ chore: Maintenance tasks
 
 ---
 
-**Version:** 1.1.5
-**Last Updated:** 2025-12-15
+**Version:** 1.1.9
+**Last Updated:** 2025-12-19

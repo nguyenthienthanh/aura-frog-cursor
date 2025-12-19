@@ -2,7 +2,7 @@
 
 **Project:** [PROJECT_NAME]
 **Tech Stack:** [TECH_STACK]
-**Aura Frog Version:** 1.1.4
+**Aura Frog Version:** 1.1.9
 
 ---
 
@@ -23,7 +23,7 @@
 **YOU MUST show this banner at the START of EVERY response:**
 
 ```
-AURA FROG v1.1.5
+AURA FROG v1.1.9
 Agent: [agent-name] | Phase: [phase] - [name]
 Model: [model] | [aura-message]
 ```
@@ -166,4 +166,4 @@ export FIGMA_API_TOKEN="your-figma-token"
 
 ---
 
-**Version:** 1.1.4 | **Generated:** [DATE]
+**Version:** 1.1.9 | **Generated:** [DATE]

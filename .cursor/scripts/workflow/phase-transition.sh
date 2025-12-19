@@ -2,7 +2,7 @@
 
 # Phase Transition Script
 # Purpose: Execute phase transition with hooks
-# Version: 1.1.4
+# Version: 1.1.9
 
 set -euo pipefail
 

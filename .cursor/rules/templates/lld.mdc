@@ -423,7 +423,7 @@ Reference project conventions:
 
 ---
 
-**Version:** 1.1.7
+**Version:** 1.1.9
 **Phase:** 2 - Technical Planning
 **Agent:** Typically tech stack-specific (mobile-react-native, web-reactjs, etc.)
 **Adapted for Cursor:** 2025-11-30

@@ -2,7 +2,7 @@
 
 # Workflow Manager
 # Purpose: Manage multiple workflow states
-# Version: 1.1.4 (Adapted for Cursor IDE)
+# Version: 1.1.9 (Adapted for Cursor IDE)
 
 set -euo pipefail
 

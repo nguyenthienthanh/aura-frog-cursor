@@ -3,6 +3,58 @@
     "context7": {
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp@latest"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      },
+      "disabled": true
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."]
+    },
+    "memory": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-memory"]
+    },
+    "vitest": {
+      "command": "npx",
+      "args": ["-y", "@madrus/vitest-mcp-server@latest"],
+      "disabled": true
+    },
+    "atlassian": {
+      "command": "npx",
+      "args": ["-y", "mcp-atlassian@latest"],
+      "env": {
+        "ATLASSIAN_SITE_URL": "${ATLASSIAN_SITE_URL}",
+        "ATLASSIAN_USER_EMAIL": "${ATLASSIAN_USER_EMAIL}",
+        "ATLASSIAN_API_TOKEN": "${ATLASSIAN_API_TOKEN}"
+      },
+      "disabled": true
+    },
+    "figma": {
+      "command": "npx",
+      "args": ["-y", "figma-developer-mcp@latest", "--stdio"],
+      "env": {
+        "FIGMA_API_KEY": "${FIGMA_API_KEY}"
+      },
+      "disabled": true
+    },
+    "slack": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-slack@latest"],
+      "env": {
+        "SLACK_BOT_TOKEN": "${SLACK_BOT_TOKEN}",
+        "SLACK_TEAM_ID": "${SLACK_TEAM_ID}"
+      },
+      "disabled": true
     }
   }
 }

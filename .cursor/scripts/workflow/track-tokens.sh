@@ -2,7 +2,7 @@
 
 # Token Tracking Script
 # Purpose: Track and display token usage for workflows
-# Version: 1.1.4
+# Version: 1.1.9
 
 set -euo pipefail
 

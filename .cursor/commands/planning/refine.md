@@ -171,5 +171,5 @@ execute [plan-id]            # Execute (possibly refined) plan
 ---
 
 **Command:** planning:refine
-**Version:** 1.1.4
+**Version:** 1.1.9
 **Added:** Aura Frog v1.3

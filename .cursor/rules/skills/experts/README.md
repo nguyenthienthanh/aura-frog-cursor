@@ -78,5 +78,5 @@ alwaysApply: false
 
 ---
 
-**Version:** 1.1.6
+**Version:** 1.1.9
 **Last Updated:** 2025-12-15

@@ -62,5 +62,5 @@ trivy image myimage:latest
 ---
 
 **Agent ID:** security-expert
-**Version:** 1.1.7
+**Version:** 1.1.9
 **Status:** Active

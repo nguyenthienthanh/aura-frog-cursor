@@ -95,5 +95,5 @@ If you haven't initialized Aura Frog for your project yet, run `/project:init` f
 
 ---
 
-**Source:** Aura Frog v1.1.5
+**Source:** Aura Frog v1.1.9
 **Converted:** 2025-11-30

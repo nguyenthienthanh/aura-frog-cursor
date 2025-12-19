@@ -13,7 +13,7 @@
 # Instructions for Cursor AI
 
 **System:** Aura Frog — Plugin for Cursor IDE
-**Version:** 1.1.4
+**Version:** 1.1.9
 **Platform:** Cursor IDE (AI-powered code editor)
 **Purpose:** Guide Cursor AI to operate as specialized agents in structured workflows with auto-invoking Skills
 **Last Updated:** 2025-12-04
@@ -88,7 +88,7 @@ Auto-invokes:
 Include this agent signature at the very beginning of ALL your responses:
 
 ```
-⚡ 🐸 AURA FROG v1.1.5 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: [agent-name] │ Phase: [phase] - [name]          ┃
 ┃ Model: [model] │ 🔥 [aura-message]                      ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -550,4 +550,4 @@ Wait for User Response
 
 ---
 
-**Version:** 1.1.4 | **Last Updated:** 2025-12-04
+**Version:** 1.1.9 | **Last Updated:** 2025-12-04

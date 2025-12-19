@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Agent Identification Banner
 
-**Version:** 1.1.7
+**Version:** 1.1.9
 **Priority:** CRITICAL - Must be shown at START of EVERY response
 **Type:** Rule (Mandatory Format)
 
@@ -18,7 +18,7 @@ alwaysApply: true
 
 ### Single Agent Format:
 ```
-⚡ 🐸 AURA FROG v1.1.5 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: [primary-agent] │ Phase: [phase] - [name]       ┃
 ┃ 🔥 [aura-message]                                       ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -26,7 +26,7 @@ alwaysApply: true
 
 ### Multiple Agents Format (use when collaborating):
 ```
-⚡ 🐸 AURA FROG v1.1.5 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: [primary] (+[secondary], +[tertiary])           ┃
 ┃ Phase: [phase] - [name] │ 🔥 [aura-message]             ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -39,7 +39,7 @@ alwaysApply: true
 ## Banner Components
 
 ### Line 1: Header
-- Version indicator: `AURA FROG v1.1.5`
+- Version indicator: `AURA FROG v1.1.9`
 - Visual separator with lightning bolt
 
 ### Line 2: Agent(s) and Context
@@ -148,7 +148,7 @@ aura_messages[10]{context,examples}:
 ### Single Agent - During Workflow
 
 ```
-⚡ 🐸 AURA FROG v1.1.5 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: mobile-react-native │ Phase: 2 - Design         ┃
 ┃ 🔥 Architecting greatness                               ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -157,7 +157,7 @@ aura_messages[10]{context,examples}:
 ### Single Agent - General Conversation
 
 ```
-⚡ 🐸 AURA FROG v1.1.5 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: pm-operations-orchestrator │ Phase: -           ┃
 ┃ 🔥 Ready to rock                                        ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -166,7 +166,7 @@ aura_messages[10]{context,examples}:
 ### Multi-Agent - Implementation with Tests
 
 ```
-⚡ 🐸 AURA FROG v1.1.5 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: mobile-react-native (+qa-automation)            ┃
 ┃ Phase: 5b - TDD GREEN │ 🔥 Building with tests          ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -175,7 +175,7 @@ aura_messages[10]{context,examples}:
 ### Multi-Agent - Design with Development
 
 ```
-⚡ 🐸 AURA FROG v1.1.5 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: ui-designer (+web-reactjs)                      ┃
 ┃ Phase: 3 - UI Breakdown │ 🔥 Pixel perfect              ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -184,7 +184,7 @@ aura_messages[10]{context,examples}:
 ### Multi-Agent - Security Review
 
 ```
-⚡ 🐸 AURA FROG v1.1.5 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: security-expert (+backend-nodejs, +qa-automation)┃
 ┃ Phase: 6 - Review │ 🔥 Locking it down                  ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -193,7 +193,7 @@ aura_messages[10]{context,examples}:
 ### Multi-Agent - Cross-Review
 
 ```
-⚡ 🐸 AURA FROG v1.1.5 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: qa-automation (+mobile-react-native)            ┃
 ┃ Phase: 7 - Verify │ 🔥 Trust but verify                 ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -223,5 +223,5 @@ enforcement[5]{scenario,show_banner}:
 
 ---
 
-**Version:** 1.1.7
+**Version:** 1.1.9
 **Last Updated:** 2025-12-17

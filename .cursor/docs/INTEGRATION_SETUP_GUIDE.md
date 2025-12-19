@@ -1,6 +1,6 @@
 # Integration Setup Guide
 
-**Version:** 1.1.4
+**Version:** 1.1.9
 **Last Updated:** 2025-12-04
 
 ---
@@ -487,5 +487,5 @@ Ensure these are in your `.gitignore`:
 
 ---
 
-**Version:** 1.1.4
+**Version:** 1.1.9
 **Last Updated:** 2025-12-04

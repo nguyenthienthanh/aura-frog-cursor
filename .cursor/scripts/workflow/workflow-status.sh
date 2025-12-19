@@ -2,7 +2,7 @@
 
 # Workflow Status Script
 # Purpose: Display current workflow status
-# Version: 1.1.4
+# Version: 1.1.9
 
 set -euo pipefail
 

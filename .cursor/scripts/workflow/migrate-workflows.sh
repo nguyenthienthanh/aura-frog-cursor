@@ -2,7 +2,7 @@
 
 # Migrate Existing Workflows Script
 # Purpose: Move workflows from old structure to new organized structure
-# Version: 1.1.4
+# Version: 1.1.9
 
 set -euo pipefail
 

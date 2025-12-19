@@ -40,5 +40,5 @@ All functionality from the original command is preserved.
 
 ---
 
-**Source:** Aura Frog v1.1.5
+**Source:** Aura Frog v1.1.9
 **Converted:** 2025-11-30

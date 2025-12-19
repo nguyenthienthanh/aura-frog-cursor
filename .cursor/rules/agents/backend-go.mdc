@@ -88,5 +88,5 @@ func TestGetUser(t *testing.T) {
 ---
 
 **Agent ID:** backend-go
-**Version:** 1.1.7
+**Version:** 1.1.9
 **Status:** Active

@@ -136,5 +136,5 @@ if (hasDep('express') || hasDep('@nestjs/core') || hasDep('fastify')) {
 ---
 
 **Agent ID:** project-detector
-**Version:** 1.1.7
+**Version:** 1.1.9
 **Status:** Active
