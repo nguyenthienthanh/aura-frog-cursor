@@ -480,30 +480,32 @@ Wait for User Response
 
 ---
 
-## ⚠️ JIRA & Figma Integration (Cache-First)
+## 🔌 MCP Integrations
 
-**⚠️ IMPORTANT: Always check for cached log data before fetching!**
+**All integrations use MCP servers (configured in `.cursor/mcp.json`).**
+
+### Available MCP Servers
+
+| Server | Purpose | Enabled |
+|--------|---------|---------|
+| `context7` | Library documentation | ✅ Yes |
+| `playwright` | Browser automation | ✅ Yes |
+| `filesystem` | File operations | ✅ Yes |
+| `memory` | Persistent context | ✅ Yes |
+| `atlassian` | JIRA + Confluence | ❌ Needs credentials |
+| `figma` | Design extraction | ❌ Needs credentials |
+| `slack` | Team notifications | ❌ Needs credentials |
+| `github` | Git operations | ❌ Needs credentials |
 
 ### When JIRA ticket detected (e.g., `PROJ-1234`):
-1. **CHECK CACHE FIRST:** Look for `.cursor/logs/jira/PROJ-1234-readable.txt` or `.json`
-2. **IF exists:** Read from cache → Show with "📋 Using cached data from {date}"
-3. **IF not exists OR user says "fetch/refresh/update":** Run `bash .cursor/scripts/jira-fetch.sh PROJ-1234`
+1. Use `atlassian` MCP server → `jira_get_issue` tool
+2. MCP handles caching automatically
 
 ### When Figma link detected (e.g., `figma.com/file/ABC123/...`):
-1. **CHECK CACHE FIRST:** Look for `.cursor/logs/figma/ABC123-readable.txt` or `.json`
-2. **IF exists:** Read from cache → Show with "📋 Using cached Figma data from {date}"
-3. **IF not exists OR user says "fetch/refresh/update":** Run `bash .cursor/scripts/figma-fetch.sh ABC123`
-
-### Fetch Keywords (triggers fresh fetch):
-`fetch`, `refresh`, `update`, `get latest`, `fetch again`
+1. Use `figma` MCP server → `get_file` tool
+2. MCP handles API calls
 
 **📚 Setup:** `.cursor/docs/INTEGRATION_SETUP_GUIDE.md`
-
----
-
-## 🆕 Key Integrations
-
-**Available (Bash Scripts):** JIRA, Figma, Slack, Confluence
 
 **Usage:** `/workflow:start PROJ-1234` or `/workflow:start "Implement https://figma.com/file/ABC123"`
 

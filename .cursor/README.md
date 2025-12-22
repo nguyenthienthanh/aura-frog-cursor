@@ -56,11 +56,8 @@ cat .cursor/GET_STARTED.md
 │   ├── QUICK_REFERENCE.md
 │   └── STATE_MANAGEMENT.md
 │
-├── 📂 scripts/                       # Integration scripts
-│   ├── jira-fetch.sh
-│   ├── figma-fetch.sh
-│   ├── confluence-operations.sh
-│   └── ...
+├── 📂 scripts/                       # Workflow management only
+│   └── workflow-manager.sh           # Session handoff/resume
 │
 ├── 📂 templates/                     # Document templates
 │   ├── tech-spec.md

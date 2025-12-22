@@ -243,31 +243,29 @@ Workflow ends here. User can:
 - Not archiving workflow
 - Forgetting to celebrate! 🎉
 
-## Integration Scripts
+## MCP Integrations
+
+All integrations use MCP servers (configured in `.cursor/mcp.json`).
 
 ### JIRA Update
-```bash
-bash scripts/jira/update-ticket.sh \
-  --ticket PROJ-1234 \
-  --status Done \
-  --comment "Implementation complete. Coverage: 89%"
-```
+
+Use `atlassian` MCP server:
+- Tool: `jira_update_issue`
+- Updates ticket status and adds comment
 
 ### Slack Notification
-```bash
-bash scripts/slack/notify.sh \
-  --channel #eng-mobile \
-  --message "Feature complete: Social Sharing" \
-  --workflow-id social-sharing-20251124
-```
+
+Use `slack` MCP server:
+- Tool: `slack_post_message`
+- Sends completion notification to channel
 
 ### Confluence Update
-```bash
-bash scripts/confluence/create-page.sh \
-  --space ENG \
-  --title "Social Media Sharing Implementation" \
-  --content "IMPLEMENTATION_SUMMARY.md"
-```
+
+Use `atlassian` MCP server:
+- Tool: `confluence_create_page`
+- Creates documentation page in specified space
+
+**Note:** Enable MCP servers in `.cursor/mcp.json` and add credentials to `.envrc`.
 
 ## Workflow Archive Structure
 ```

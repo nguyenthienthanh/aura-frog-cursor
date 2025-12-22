@@ -22,6 +22,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Keeps unique content: Input Validation, XSS, CSRF, Secrets, Auth patterns
   - `workflow-system.mdc`: Fixed reference to non-existent `tdd-workflow.mdc`
     - Now references `testing-expert.mdc` for TDD patterns
+- **Documentation Update for MCP**
+  - Removed all bash script references (jira-fetch.sh, figma-fetch.sh, etc.)
+  - `INTEGRATION_SETUP_GUIDE.md`: 492 → 206 lines (58% smaller), MCP-focused
+  - `AGENTS.md`: Updated integration section to use MCP servers
+  - `README.md`: Updated directory structure (scripts now workflow-only)
+  - `phase-9-share.md`: Updated to use MCP tools instead of scripts
 
 ### Added
 - **MCP Startup Check Rule** (`mcp-startup-check.mdc`) - Verify MCP servers at session start
