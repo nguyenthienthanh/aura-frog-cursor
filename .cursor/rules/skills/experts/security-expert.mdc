@@ -1,5 +1,5 @@
 ---
-description: Security expert - OWASP Top 10, secure coding, vulnerability prevention, authentication
+description: Security expert - practical secure coding patterns for web applications
 globs:
   - "**/*.ts"
   - "**/*.js"
@@ -17,177 +17,23 @@ alwaysApply: false
 
 ## Overview
 
-This skill bundles all security best practices. Load this skill for security-conscious development.
+This skill provides practical security implementation patterns. For comprehensive OWASP Top 10 coverage with CWE codes, see **`sast-security.mdc`** (always applied).
 
-**Bundles:**
-- `sast-security.mdc` - OWASP Top 10, CWE patterns
+**This skill adds:**
+- Practical input validation with Zod
+- XSS prevention for React/Vue/Angular
+- CSRF protection patterns
+- Secrets management
+- Authentication implementation
+- Framework-specific security
+
+**References:**
+- `sast-security.mdc` - OWASP Top 10, CWE patterns (alwaysApply: true)
 - `api-design.mdc` - Secure API design
 
 ---
 
-## 1. OWASP Top 10 Quick Reference
-
-### A01: Broken Access Control
-
-```typescript
-// ❌ VULNERABLE - No authorization check
-app.get('/api/users/:id', async (req, res) => {
-  const user = await User.findById(req.params.id);
-  res.json(user);
-});
-
-// ✅ SECURE - Check ownership
-app.get('/api/users/:id', authenticate, async (req, res) => {
-  const userId = req.params.id;
-
-  if (req.user.id !== userId && !req.user.isAdmin) {
-    return res.status(403).json({ error: 'Forbidden' });
-  }
-
-  const user = await User.findById(userId);
-  res.json(user);
-});
-```
-
-### A02: Cryptographic Failures
-
-```typescript
-// ❌ VULNERABLE - Weak hashing
-const hash = crypto.createHash('md5').update(password).digest('hex');
-
-// ✅ SECURE - bcrypt with proper cost
-import bcrypt from 'bcrypt';
-const SALT_ROUNDS = 12;
-const hash = await bcrypt.hash(password, SALT_ROUNDS);
-const valid = await bcrypt.compare(password, hash);
-```
-
-### A03: Injection
-
-```typescript
-// ❌ VULNERABLE - SQL injection
-const query = `SELECT * FROM users WHERE email = '${email}'`;
-
-// ✅ SECURE - Parameterized query
-const query = 'SELECT * FROM users WHERE email = $1';
-db.query(query, [email]);
-
-// ✅ SECURE - ORM
-const user = await prisma.user.findUnique({ where: { email } });
-```
-
-### A04: Insecure Design
-
-```typescript
-// ✅ SECURE - Rate limiting
-import rateLimit from 'express-rate-limit';
-
-const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 5,
-  message: 'Too many login attempts',
-});
-
-app.post('/login', authLimiter, loginHandler);
-```
-
-### A05: Security Misconfiguration
-
-```typescript
-// ✅ SECURE - Security headers with Helmet
-import helmet from 'helmet';
-app.use(helmet());
-
-// ✅ SECURE - Hide error details in production
-app.use((err, req, res, next) => {
-  const message = process.env.NODE_ENV === 'production'
-    ? 'Internal server error'
-    : err.message;
-  res.status(500).json({ error: message });
-});
-```
-
-### A06: Vulnerable Components
-
-```bash
-# Check for vulnerabilities
-npm audit
-npx snyk test
-
-# Fix vulnerabilities
-npm audit fix
-```
-
-### A07: Authentication Failures
-
-```typescript
-// ✅ SECURE - Session configuration
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
-    maxAge: 24 * 60 * 60 * 1000,
-  },
-}));
-
-// ✅ SECURE - Regenerate session on login
-req.session.regenerate((err) => {
-  req.session.userId = user.id;
-  res.redirect('/dashboard');
-});
-```
-
-### A08: Software Integrity
-
-```typescript
-// ✅ SECURE - Validate serialized data
-import { z } from 'zod';
-
-const UserSchema = z.object({
-  id: z.string().uuid(),
-  email: z.string().email(),
-  role: z.enum(['user', 'admin']),
-});
-
-const user = UserSchema.parse(JSON.parse(serializedData));
-```
-
-### A09: Logging Failures
-
-```typescript
-// ❌ VULNERABLE - Logging sensitive data
-logger.info(`Login: ${email}, password: ${password}`);
-
-// ✅ SECURE - Sanitized logging
-logger.info('Login attempt', {
-  email: maskEmail(email),
-  ip: req.ip,
-  timestamp: new Date().toISOString(),
-});
-```
-
-### A10: SSRF
-
-```typescript
-// ❌ VULNERABLE - Unvalidated URL
-const response = await fetch(req.query.url);
-
-// ✅ SECURE - Whitelist domains
-const ALLOWED_DOMAINS = ['api.example.com'];
-const url = new URL(req.query.url);
-
-if (!ALLOWED_DOMAINS.includes(url.hostname)) {
-  return res.status(400).json({ error: 'Domain not allowed' });
-}
-```
-
----
-
-## 2. Input Validation
+## Input Validation
 
 ### Always Validate Server-Side
 
@@ -231,7 +77,7 @@ function validateUpload(file: Express.Multer.File) {
 
 ---
 
-## 3. XSS Prevention
+## XSS Prevention
 
 ### React (Safe by Default)
 
@@ -259,7 +105,7 @@ res.send(`<h1>Hello ${username}</h1>`);
 
 ---
 
-## 4. CSRF Protection
+## CSRF Protection
 
 ```typescript
 import csrf from 'csurf';
@@ -279,7 +125,7 @@ app.post('/submit', (req, res) => {
 
 ---
 
-## 5. Secrets Management
+## Secrets Management
 
 ```typescript
 // ❌ BAD - Hardcoded secrets
@@ -310,7 +156,7 @@ API_KEY=your-api-key
 
 ---
 
-## 6. Authentication Best Practices
+## Authentication Best Practices
 
 ### Password Requirements
 
@@ -377,7 +223,7 @@ async function handleLogin(email: string, password: string) {
 
 ---
 
-## 7. Dangerous Functions
+## Dangerous Functions
 
 ```toon
 avoid[10]{function,language,risk}:
@@ -395,7 +241,7 @@ avoid[10]{function,language,risk}:
 
 ---
 
-## 8. Security Checklist
+## Security Checklist
 
 ### Before Every Commit
 
@@ -437,10 +283,10 @@ patterns[10]{vulnerability,fix}:
 
 ## Related Rules
 
-- `sast-security.mdc` - Detailed OWASP/CWE patterns
-- `api-design.mdc` - Secure API design
+- `sast-security.mdc` - OWASP Top 10, CWE patterns, language-specific vulnerabilities (alwaysApply: true)
+- `api-design.mdc` - Secure API design patterns
 
 ---
 
 **Version:** 1.1.9
-**Last Updated:** 2025-12-17
+**Last Updated:** 2025-12-22

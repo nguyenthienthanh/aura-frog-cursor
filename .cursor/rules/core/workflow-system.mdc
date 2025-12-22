@@ -376,9 +376,9 @@ Contains current workflow ID.
 ### Core Rules
 - `.cursor/rules/core/deliverable-persistence.mdc` - **CRITICAL**: All deliverables MUST be saved to files
 - `.cursor/rules/core/kiss-principle.mdc`
-- `.cursor/rules/core/tdd-workflow.mdc`
 - `.cursor/rules/core/dry-with-caution.mdc`
 - `.cursor/rules/core/cross-review.mdc`
+- `.cursor/rules/skills/experts/testing-expert.mdc` - TDD workflow patterns
 
 ## Usage Example
 

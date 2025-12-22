@@ -16,6 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - README.md: 311 → 196 lines (37% smaller), MCP-focused
   - GET_STARTED.md: 735 → 257 lines (65% smaller), simplified
   - setup.sh: 441 → 189 lines (57% smaller), no interactive prompts
+- **Duplicate Rule Cleanup**
+  - `security-expert.mdc`: 446 → 293 lines (34% smaller)
+    - Now references `sast-security.mdc` instead of duplicating OWASP Top 10
+    - Keeps unique content: Input Validation, XSS, CSRF, Secrets, Auth patterns
+  - `workflow-system.mdc`: Fixed reference to non-existent `tdd-workflow.mdc`
+    - Now references `testing-expert.mdc` for TDD patterns
 
 ### Added
 - **MCP Visibility in Banner** - Agent banner now shows which MCP servers are being used
