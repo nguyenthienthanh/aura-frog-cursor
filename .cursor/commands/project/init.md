@@ -10,7 +10,7 @@ Initializes Aura Frog system for a project by analyzing the codebase, extracting
 3. Creates `.cursor/project-contexts/[project]/` with rules and examples
 4. Generates project-specific configuration files
 5. Sets up environment variable templates
-6. Creates CLAUDE.md with agent banner instructions
+6. Creates CLAUDE.md with marker-based sections (for smart regen support)
 
 **Original command:** `project:init`
 
@@ -52,12 +52,17 @@ Output: Detects Laravel + Vue, activates backend-laravel and web-vuejs agents
 
 ## Notes
 
-**Critical:** `.cursor/CLAUDE.md` MUST exist for Aura Frog to work. It contains the agent identification banner format and points to plugin instructions.
+**Critical:** `.claude/CLAUDE.md` MUST exist for Aura Frog to work. It references:
+- Banner format from `.cursor/rules/core/agent-identification.mdc`
+- MCP integrations from `.cursor/rules/skills/auto-invoke/mcp-integrations.mdc`
+
+**Marker System:** CLAUDE.md uses `<!-- AURA-FROG-AUTO-START -->` and `<!-- AURA-FROG-AUTO-END -->` markers to separate auto-managed content from user content. This allows `/project:regen` to update Aura Frog sections without losing user customizations.
 
 **Next Steps:**
 1. Review generated files
-2. Configure integrations (optional): `/setup:integrations`
-3. Start first workflow: `/workflow:start "your task"`
+2. Add custom rules/integrations to CLAUDE.md (below the AUTO-END marker)
+3. Configure MCP credentials (optional): Edit `.envrc`
+4. Start first workflow: `/workflow:start "your task"`
 
 ---
 

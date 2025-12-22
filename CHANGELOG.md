@@ -22,6 +22,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - New `🔌 MCP:` line displays active MCP servers
   - Examples: `🔌 MCP: context7`, `🔌 MCP: atlassian, figma`
   - Shows `-` when no MCP servers are in use
+- **Smart CLAUDE.md Regeneration** - `/project:regen` preserves user content
+  - Marker-based sections: `<!-- AURA-FROG-AUTO-START/END -->`
+  - Auto-managed content updates without losing user customizations
+  - Banner format now references `agent-identification.mdc` (single source of truth)
 - **MCP Documentation** (`docs/MCP.md`) - Complete guide for custom MCP servers
   - TypeScript and Python examples
   - Publishing to npm or local usage

@@ -6,80 +6,33 @@
 
 ---
 
-## CRITICAL: Session Start Checklist
-
-**Do these at EVERY session start:**
-
-| # | Action | How |
-|---|--------|-----|
-| 1 | Show agent banner | See format below |
-| 2 | Load `.envrc` if exists | Check `.envrc` or `.cursor/.envrc` |
-| 3 | Detect appropriate agent | Based on task context |
-
----
+<!-- AURA-FROG-AUTO-START -->
+<!-- DO NOT EDIT THIS SECTION - It will be overwritten on regen -->
+<!-- Banner format is defined in: .cursor/rules/core/agent-identification.mdc -->
 
 ## CRITICAL: Agent Identification Banner
 
-**YOU MUST show this banner at the START of EVERY response:**
+**YOU MUST show the Aura Frog banner at the START of EVERY response.**
 
-```
-AURA FROG v1.1.9
-Agent: [agent-name] | Phase: [phase] - [name]
-Model: [model] | [aura-message]
-```
+**Banner format is defined in:** `.cursor/rules/core/agent-identification.mdc`
 
-**Model options:** Sonnet 4.5, Opus 4.5, Gemini 2.0 Flash, GPT-4o, DeepSeek V3
+Read that file for the latest banner format, including:
+- Agent selection
+- Phase display
+- MCP server visibility (🔌 MCP: [servers])
+- Aura messages
 
 **This is NOT optional. Do it EVERY time.**
 
-### Agent Selection
-
-| Context | Agent |
-|---------|-------|
-| Default for this project | `[PRIMARY_AGENT]` |
-| General/Unknown | `pm-operations-orchestrator` |
-| React Native | `mobile-react-native` |
-| Flutter | `mobile-flutter` |
-| Vue.js | `web-vuejs` |
-| React | `web-reactjs` |
-| Next.js | `web-nextjs` |
-| Angular | `web-angular` |
-| Node.js | `backend-nodejs` |
-| Python | `backend-python` |
-| Laravel | `backend-laravel` |
-| Go | `backend-go` |
-| Database | `database-specialist` |
-| Security | `security-expert` |
-| QA/Testing | `qa-automation` |
-| UI/Design | `ui-designer` |
-| DevOps | `devops-cicd` |
-
-### Phase Display
-
-- No workflow: `Phase: -`
-- Phase 1-9: `Phase: [N] - [Name]` (Understand, Design, UI Breakdown, Test Plan, TDD RED/GREEN/REFACTOR, Review, Verify, Document, Share)
-
-### Aura Message
-
-Short (2-4 words), fun, contextual phrase. Examples:
-- Starting: "Let's cook", "Locked in"
-- Coding: "Code go brrrr", "Shipping heat"
-- Debugging: "Bug hunter mode", "On the case"
-- Success: "Nailed it", "GG", "Ez clap"
-
 ---
 
-## Token & Time Awareness
+## Session Start Checklist
 
-**Show token status at:**
-- End of each workflow phase
-- At 75% usage (~150K tokens) - Warning
-- At 87% usage (~175K tokens) - Critical, suggest handoff
-
-**Format:**
-```
-Token Usage: ~[X]K / 200K ([Y]%)
-```
+| # | Action | How |
+|---|--------|-----|
+| 1 | Show agent banner | See `.cursor/rules/core/agent-identification.mdc` |
+| 2 | Load `.envrc` if exists | Check `.envrc` or `.cursor/.envrc` |
+| 3 | Detect appropriate agent | Based on task context |
 
 ---
 
@@ -96,59 +49,19 @@ Token Usage: ~[X]K / 200K ([Y]%)
 
 ---
 
-## Project-Specific Settings
+## MCP Servers
 
-- **Primary Agent:** `[PRIMARY_AGENT]`
-- **Tech Stack:** [TECH_STACK]
-- **Type:** [PROJECT_TYPE]
+MCP tools are auto-invoked based on patterns. See `.cursor/rules/skills/auto-invoke/mcp-integrations.mdc`
 
----
-
-## Integrations
-
-### JIRA Integration
-
-When ticket ID detected (e.g., `PROJ-1234`):
-
-```bash
-bash .cursor/scripts/jira-fetch.sh PROJ-1234
-```
-
-**Required env vars:**
-```bash
-export JIRA_URL="https://company.atlassian.net"
-export JIRA_EMAIL="your-email"
-export JIRA_API_TOKEN="your-token"
-```
-
-### Confluence Integration
-
-When Confluence URL or documentation request detected:
-
-```bash
-# Fetch page
-bash .cursor/scripts/integrations/confluence-publish.sh fetch PAGE_ID
-```
-
-**Required env vars:**
-```bash
-export CONFLUENCE_URL="https://company.atlassian.net/wiki"
-export CONFLUENCE_EMAIL="your-email"
-export CONFLUENCE_API_TOKEN="your-token"
-```
-
-### Figma Integration
-
-When Figma URL detected:
-
-```bash
-bash .cursor/scripts/figma-fetch.sh "FIGMA_URL"
-```
-
-**Required env vars:**
-```bash
-export FIGMA_API_TOKEN="your-figma-token"
-```
+| Server | Trigger | Purpose |
+|--------|---------|---------|
+| context7 | Library questions | Documentation lookup |
+| playwright | "e2e test", "browser test" | Browser automation |
+| atlassian | `PROJ-1234` patterns | JIRA/Confluence |
+| figma | `figma.com/file/...` URLs | Design tokens |
+| github | "create PR" | Git operations |
+| vitest | "unit test" | Test runner |
+| slack | `#channel`, "notify team" | Notifications |
 
 ---
 
@@ -163,6 +76,26 @@ export FIGMA_API_TOKEN="your-figma-token"
 - Skip agent banner
 - Auto-approve without user confirmation
 - Implement without showing banner first
+
+<!-- AURA-FROG-AUTO-END -->
+
+---
+
+## Project-Specific Settings
+
+<!-- USER SECTION - Your custom settings below will be preserved on regen -->
+
+- **Primary Agent:** `[PRIMARY_AGENT]`
+- **Tech Stack:** [TECH_STACK]
+- **Type:** [PROJECT_TYPE]
+
+### Custom Rules
+
+<!-- Add your project-specific rules here -->
+
+### Custom Integrations
+
+<!-- Add your project-specific integrations here -->
 
 ---
 
