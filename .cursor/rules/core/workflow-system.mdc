@@ -374,6 +374,7 @@ Contains current workflow ID.
 - `figma-integration` - Design extraction
 
 ### Core Rules
+- `.cursor/rules/core/deliverable-persistence.mdc` - **CRITICAL**: All deliverables MUST be saved to files
 - `.cursor/rules/core/kiss-principle.mdc`
 - `.cursor/rules/core/tdd-workflow.mdc`
 - `.cursor/rules/core/dry-with-caution.mdc`
@@ -403,16 +404,17 @@ workflow:resume add-user-authentication-20251124-120000
 
 ## Best Practices
 
-1. **Load project context FIRST** - Before any phase
-2. **Show approval gates** - After every phase (except 9)
-3. **Track tokens** - Display at every approval gate
-4. **Auto-continue** - After approval, proceed immediately
-5. **Cross-review** - Multi-agent validation
-6. **TDD strictly** - RED → GREEN → REFACTOR
-7. **KISS always** - Simplest solution wins
-8. **Handoff proactively** - At 150K tokens, not 190K
-9. **Archive workflows** - For future reference
-10. **Celebrate completion** - Phase 9 is a win! 🎉
+1. **Save deliverables to files** - NEVER just display in chat (see `deliverable-persistence.mdc`)
+2. **Load project context FIRST** - Before any phase
+3. **Show approval gates** - After every phase (except 9)
+4. **Track tokens** - Display at every approval gate
+5. **Auto-continue** - After approval, proceed immediately
+6. **Cross-review** - Multi-agent validation
+7. **TDD strictly** - RED → GREEN → REFACTOR
+8. **KISS always** - Simplest solution wins
+9. **Handoff proactively** - At 150K tokens, not 190K
+10. **Archive workflows** - For future reference
+11. **Celebrate completion** - Phase 9 is a win! 🎉
 
 ---
 

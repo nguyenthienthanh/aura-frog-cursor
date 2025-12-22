@@ -25,6 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Single Source of Truth for Banner** - `.cursorrules` now references `agent-identification.mdc`
   - No more duplicated banner format
   - Update banner in one place, applies everywhere
+- **Deliverable Persistence Rule** (`deliverable-persistence.mdc`)
+  - All workflow phase deliverables MUST be saved to files
+  - Location: `.cursor/documents/workflows/[workflow-id]/`
+  - Prevents loss of work when session ends
 - **MCP Documentation** (`docs/MCP.md`) - Complete guide for custom MCP servers
   - TypeScript and Python examples
   - Publishing to npm or local usage

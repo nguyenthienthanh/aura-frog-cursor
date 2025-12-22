@@ -1,0 +1,208 @@
+---
+description: MANDATORY - All workflow phase deliverables MUST be saved to files, never just displayed
+globs: []
+alwaysApply: true
+---
+
+# Deliverable Persistence Rule
+
+**Priority:** CRITICAL
+**Type:** Mandatory (alwaysApply: true)
+
+---
+
+## Core Rule
+
+**Every workflow phase deliverable MUST be saved to a file, not just displayed in chat.**
+
+This is NON-NEGOTIABLE. Deliverables that exist only in chat are LOST when the session ends.
+
+---
+
+## Deliverable Locations
+
+### Standard Location
+
+```
+.cursor/documents/workflows/[workflow-id]/
+├── PHASE_1_REQUIREMENTS.md
+├── PHASE_2_TECHNICAL_DESIGN.md
+├── PHASE_3_UI_BREAKDOWN.md
+├── PHASE_4_TEST_PLAN.md
+├── PHASE_5_IMPLEMENTATION_SUMMARY.md
+├── PHASE_6_REVIEW_REPORT.md
+├── PHASE_7_QA_VALIDATION.md
+├── PHASE_8_DOCUMENTATION.md
+└── PHASE_9_COMPLETION.md
+```
+
+### Required Deliverables by Phase
+
+```toon
+deliverables[9]{phase,filename,description}:
+ 1,PHASE_1_REQUIREMENTS.md,Requirements analysis with user stories and acceptance criteria
+ 2,PHASE_2_TECHNICAL_DESIGN.md,Technical spec with architecture and component design
+ 3,PHASE_3_UI_BREAKDOWN.md,UI component hierarchy and design tokens
+ 4,PHASE_4_TEST_PLAN.md,Test strategy with test cases
+ 5,PHASE_5_IMPLEMENTATION_SUMMARY.md,Implementation notes and decisions
+ 6,PHASE_6_REVIEW_REPORT.md,Code review findings and quality metrics
+ 7,PHASE_7_QA_VALIDATION.md,QA results and acceptance validation
+ 8,PHASE_8_DOCUMENTATION.md,User docs and deployment guide
+ 9,PHASE_9_COMPLETION.md,Workflow completion summary
+```
+
+---
+
+## Enforcement
+
+### At Phase Start
+
+1. Create deliverable file if not exists
+2. Log: "📄 Creating deliverable: [filename]"
+
+### During Phase
+
+1. Write content to file progressively
+2. Update file as work progresses
+3. Don't just compose in memory
+
+### At Phase End
+
+1. **VERIFY** file exists on disk
+2. **VERIFY** file has content (not empty)
+3. **LOG** deliverable in workflow state
+4. **SHOW** path to user in approval gate
+
+### Approval Gate Format
+
+```markdown
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🏗️ Phase [N]: [Name] - Approval Needed
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+## Deliverables ✅
+
+| File | Status |
+|------|--------|
+| `.cursor/documents/workflows/[id]/PHASE_N_*.md` | ✅ Saved |
+
+**View:** `cat .cursor/documents/workflows/[id]/PHASE_N_*.md`
+```
+
+---
+
+## Why This Matters
+
+### Without File Persistence
+
+❌ Session ends → Deliverable LOST
+❌ Token limit → Cannot resume context
+❌ Handoff → New session has no info
+❌ Review → Cannot verify work done
+
+### With File Persistence
+
+✅ Session ends → Deliverable preserved
+✅ Token limit → Resume from files
+✅ Handoff → New session reads files
+✅ Review → Full audit trail
+
+---
+
+## Implementation Checklist
+
+At each phase, YOU MUST:
+
+- [ ] Create deliverable file at phase start
+- [ ] Write content to file (not just chat)
+- [ ] Update file as work progresses
+- [ ] Verify file exists before approval gate
+- [ ] Show file path in approval gate
+- [ ] Log file in workflow state
+
+---
+
+## Examples
+
+### ✅ CORRECT - Save to file
+
+```markdown
+📄 Creating: .cursor/documents/workflows/auth-20251222/PHASE_1_REQUIREMENTS.md
+
+[Write requirements analysis to file]
+
+✅ Saved: .cursor/documents/workflows/auth-20251222/PHASE_1_REQUIREMENTS.md (152 lines)
+```
+
+### ❌ WRONG - Display only
+
+```markdown
+## Requirements Analysis
+
+[Long requirements document displayed in chat only]
+
+---
+Approval needed...
+```
+
+This is WRONG because the deliverable only exists in chat and will be lost.
+
+---
+
+## Special Cases
+
+### TECH_SPEC_AI.md
+
+Phase 2 MUST also create `TECH_SPEC_AI.md` in project root:
+```
+./TECH_SPEC_AI.md  ← Required by tech-spec-requirement.mdc
+```
+
+### Test Files
+
+Phase 5a creates actual test files in source:
+```
+./src/__tests__/*.test.ts  ← Actual test files
+```
+
+### Documentation
+
+Phase 8 may create docs in standard locations:
+```
+./docs/FEATURE_NAME.md
+./README.md (updates)
+./CHANGELOG.md (updates)
+```
+
+---
+
+## Workflow State Integration
+
+Deliverables are logged in workflow state:
+
+```json
+{
+  "phases": {
+    "1": {
+      "deliverables": [
+        ".cursor/documents/workflows/auth-20251222/PHASE_1_REQUIREMENTS.md"
+      ]
+    }
+  }
+}
+```
+
+---
+
+## Recovery
+
+If session ends unexpectedly:
+1. Check `.cursor/documents/workflows/[id]/` for saved deliverables
+2. Resume from last saved phase
+3. Read existing deliverables for context
+
+---
+
+**Version:** 1.1.9
+**Last Updated:** 2025-12-22
+**Priority:** CRITICAL - Must be followed for every workflow phase
