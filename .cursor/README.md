@@ -1,6 +1,6 @@
 # Aura Frog for Cursor IDE
 
-**Version:** 1.1.9
+**Version:** 1.2.0
 **Converted from:** [nguyenthienthanh/aura-frog](https://github.com/nguyenthienthanh/aura-frog) (Aura Frog Plugin for Claude Code)
 **Adapted for:** Cursor IDE
 **Last Updated:** 2025-12-11
@@ -119,7 +119,7 @@ Every response shows (single or multi-agent):
 
 **Single Agent:**
 ```
-⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: mobile-react-native │ Phase: 2 - Design         ┃
 ┃ 🔥 Code go brrrr                                        ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -127,7 +127,7 @@ Every response shows (single or multi-agent):
 
 **Multiple Agents (collaboration):**
 ```
-⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: mobile-react-native (+qa-automation)            ┃
 ┃ Phase: 5b - TDD GREEN │ 🔥 Building with tests          ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -222,6 +222,6 @@ See all commands: `cat .cursor/commands/QUICK_REFERENCE.md`
 
 **Code with main character energy!** 🐸✨
 
-**Version:** 1.1.9
+**Version:** 1.2.0
 **Last Updated:** 2025-12-11
 **Original:** [nguyenthienthanh/aura-frog](https://github.com/nguyenthienthanh/aura-frog)

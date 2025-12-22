@@ -9,7 +9,7 @@ alwaysApply: false
 
 # React Expert Skill
 
-**Version:** 1.1.9
+**Version:** 1.2.0
 **Type:** Expert Skill (Bundled Best Practices)
 
 ---
@@ -550,5 +550,5 @@ Context7 provides current React 19 APIs while this skill provides patterns.
 
 ---
 
-**Version:** 1.1.9
+**Version:** 1.2.0
 **Last Updated:** 2025-12-17

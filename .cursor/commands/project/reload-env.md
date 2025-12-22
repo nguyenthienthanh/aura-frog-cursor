@@ -236,5 +236,5 @@ Variables are loaded for the current Cursor IDE session only. They persist until
 
 ---
 
-**Source:** Aura Frog v1.1.9
+**Source:** Aura Frog v1.2.0
 **Last Updated:** 2025-12-04

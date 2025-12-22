@@ -164,6 +164,88 @@ Chain:
 
 ---
 
+## Data Persistence (MANDATORY)
+
+**All fetched data MUST be saved to logs in TOON format.**
+
+### JIRA Ticket Data
+
+**Location:** `.cursor/logs/jira/`
+
+**When JIRA ticket is fetched:**
+1. Fetch ticket via `atlassian` MCP
+2. **IMMEDIATELY** save to `.cursor/logs/jira/{TICKET_ID}.toon`
+3. Create readable summary at `.cursor/logs/jira/{TICKET_ID}-readable.txt`
+
+**TOON Format:**
+```toon
+jira_ticket{key,summary,status,type,priority,assignee,reporter,created,updated}:
+ PROJ-123,Implement user auth,In Progress,Story,High,john@example.com,jane@example.com,2025-12-20,2025-12-22
+
+description: |
+ As a user, I want to login so that I can access my account.
+
+ Acceptance Criteria:
+ - User can login with email/password
+ - User sees error on invalid credentials
+ - Session persists for 24 hours
+
+labels[3]: auth,mvp,backend
+
+subtasks[2]{key,summary,status}:
+ PROJ-124,Create login API,Done
+ PROJ-125,Add session management,In Progress
+
+comments[2]{author,date,body}:
+ john@example.com,2025-12-21,Started implementation
+ jane@example.com,2025-12-22,Please add rate limiting
+```
+
+### Figma Design Data
+
+**Location:** `.cursor/logs/figma/`
+
+**When Figma file is fetched:**
+1. Fetch design via `figma` MCP
+2. **IMMEDIATELY** save to `.cursor/logs/figma/{FILE_ID}.toon`
+3. Create readable summary at `.cursor/logs/figma/{FILE_ID}-readable.txt`
+
+**TOON Format:**
+```toon
+figma_file{id,name,lastModified,version}:
+ ABC123,Mobile App Design,2025-12-22T10:00:00Z,1234567
+
+colors[5]{name,hex,rgba}:
+ primary,#3B82F6,rgb(59 130 246)
+ secondary,#10B981,rgb(16 185 129)
+ background,#FFFFFF,rgb(255 255 255)
+ text,#1F2937,rgb(31 41 55)
+ error,#EF4444,rgb(239 68 68)
+
+typography[3]{name,family,size,weight}:
+ heading,Inter,24px,700
+ body,Inter,16px,400
+ caption,Inter,12px,400
+
+components[4]{id,name,type}:
+ btn-primary,Primary Button,COMPONENT
+ btn-secondary,Secondary Button,COMPONENT
+ input-text,Text Input,COMPONENT
+ card,Card Container,COMPONENT
+```
+
+### Cache-First Behavior
+
+```
+1. CHECK: Does `.cursor/logs/{service}/{ID}.toon` exist?
+2. IF YES: Read from cache, show "📋 Using cached data from {date}"
+3. IF NO or user says "fetch/refresh": Fetch via MCP → Save to logs
+```
+
+**Refresh Keywords:** `fetch`, `refresh`, `update`, `get latest`
+
+---
+
 ## Quick Enable
 
 ```bash
@@ -180,5 +262,5 @@ export FIGMA_API_KEY="figd_xxx"
 
 ---
 
-**Version:** 1.1.9
-**Last Updated:** 2025-12-19
+**Version:** 1.2.0
+**Last Updated:** 2025-12-22

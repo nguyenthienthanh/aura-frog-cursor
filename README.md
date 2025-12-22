@@ -14,7 +14,7 @@ Aura Frog provides a comprehensive AI-powered development workflow with:
 - **70+ Slash Commands** - All development tasks covered
 - **37 Quality Rules** - Always enforced
 
-## What's New in v1.1.9
+## What's New in v1.2.0
 
 **MCP-First Architecture** - All integrations now use Model Context Protocol:
 
@@ -191,5 +191,5 @@ Same as original Aura Frog plugin. Check the [original repository](https://githu
 
 **Code with main character energy!** 🐸✨
 
-**Version:** 1.1.9
+**Version:** 1.2.0
 **Last Updated:** 2025-12-19

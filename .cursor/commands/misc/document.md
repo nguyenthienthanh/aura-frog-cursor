@@ -196,5 +196,5 @@ When this command is invoked, the appropriate agent is selected based on documen
 
 ---
 
-**Source:** Aura Frog v1.1.9
+**Source:** Aura Frog v1.2.0
 **Updated:** 2025-12-08

@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Agent Identification Banner
 
-**Version:** 1.1.9
+**Version:** 1.2.0
 **Priority:** CRITICAL - Must be shown at START of EVERY response
 **Type:** Rule (Mandatory Format)
 
@@ -18,7 +18,7 @@ alwaysApply: true
 
 ### Single Agent Format:
 ```
-⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: [primary-agent] │ Phase: [phase] - [name]       ┃
 ┃ 🔌 MCP: [active-servers] │ 🔥 [aura-message]            ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -26,7 +26,7 @@ alwaysApply: true
 
 ### Multiple Agents Format (use when collaborating):
 ```
-⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: [primary] (+[secondary], +[tertiary])           ┃
 ┃ Phase: [phase] - [name] │ 🔌 MCP: [active-servers]      ┃
 ┃ 🔥 [aura-message]                                       ┃
@@ -40,7 +40,7 @@ alwaysApply: true
 ## Banner Components
 
 ### Line 1: Header
-- Version indicator: `AURA FROG v1.1.9`
+- Version indicator: `AURA FROG v1.2.0`
 - Visual separator with lightning bolt
 
 ### Line 2: Agent(s) and Context
@@ -164,7 +164,7 @@ aura_messages[10]{context,examples}:
 ### Single Agent - During Workflow (No MCP)
 
 ```
-⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: mobile-react-native │ Phase: 2 - Design         ┃
 ┃ 🔌 MCP: - │ 🔥 Architecting greatness                   ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -173,7 +173,7 @@ aura_messages[10]{context,examples}:
 ### Single Agent - Using Context7
 
 ```
-⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: web-reactjs │ Phase: 5b - TDD GREEN             ┃
 ┃ 🔌 MCP: context7 │ 🔥 Looking up the docs               ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -182,7 +182,7 @@ aura_messages[10]{context,examples}:
 ### Single Agent - E2E Testing
 
 ```
-⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: qa-automation │ Phase: 5a - TDD RED             ┃
 ┃ 🔌 MCP: playwright │ 🔥 Browser warrior mode            ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -191,7 +191,7 @@ aura_messages[10]{context,examples}:
 ### Single Agent - JIRA + Figma Workflow
 
 ```
-⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: ui-designer │ Phase: 1 - Understand             ┃
 ┃ 🔌 MCP: atlassian, figma │ 🔥 Fetching requirements     ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -200,7 +200,7 @@ aura_messages[10]{context,examples}:
 ### Multi-Agent - Implementation with Tests
 
 ```
-⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: mobile-react-native (+qa-automation)            ┃
 ┃ Phase: 5b - TDD GREEN │ 🔌 MCP: vitest                  ┃
 ┃ 🔥 Building with tests                                  ┃
@@ -210,7 +210,7 @@ aura_messages[10]{context,examples}:
 ### Multi-Agent - Design with Development
 
 ```
-⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: ui-designer (+web-reactjs)                      ┃
 ┃ Phase: 3 - UI Breakdown │ 🔌 MCP: figma                 ┃
 ┃ 🔥 Pixel perfect                                        ┃
@@ -220,7 +220,7 @@ aura_messages[10]{context,examples}:
 ### Multi-Agent - Full Stack with Multiple MCP
 
 ```
-⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: backend-nodejs (+qa-automation)                 ┃
 ┃ Phase: 5a - TDD RED │ 🔌 MCP: vitest, playwright        ┃
 ┃ 🔥 Test-first energy                                    ┃
@@ -230,7 +230,7 @@ aura_messages[10]{context,examples}:
 ### Multi-Agent - PR Creation
 
 ```
-⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: devops-cicd (+security-expert)                  ┃
 ┃ Phase: 9 - Share │ 🔌 MCP: github, slack                ┃
 ┃ 🔥 Shipping time                                        ┃
@@ -262,5 +262,5 @@ enforcement[5]{scenario,show_banner}:
 
 ---
 
-**Version:** 1.1.9
+**Version:** 1.2.0
 **Last Updated:** 2025-12-22

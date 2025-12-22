@@ -6,7 +6,7 @@ alwaysApply: true
 
 # MCP Startup Check
 
-**Version:** 1.1.9
+**Version:** 1.2.0
 **Type:** Rule (Informational)
 
 ---
@@ -41,5 +41,5 @@ If MCP fails to load:
 
 ---
 
-**Version:** 1.1.9
+**Version:** 1.2.0
 **Last Updated:** 2025-12-22

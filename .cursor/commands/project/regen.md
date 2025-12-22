@@ -57,5 +57,5 @@ Regenerates project context files while preserving user customizations. Updates 
 
 ---
 
-**Source:** Aura Frog v1.1.9
+**Source:** Aura Frog v1.2.0
 **Updated:** 2025-12-22

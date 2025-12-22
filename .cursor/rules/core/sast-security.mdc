@@ -6,7 +6,7 @@ alwaysApply: true
 
 # SAST Security Rules
 
-**Version:** 1.1.9
+**Version:** 1.2.0
 **Priority:** HIGH - Security vulnerabilities must be prevented
 **Type:** Rule (Mandatory)
 
@@ -410,5 +410,5 @@ dangerous_functions[10]{function,language,alternative}:
 
 ---
 
-**Version:** 1.1.9
+**Version:** 1.2.0
 **Last Updated:** 2025-12-17

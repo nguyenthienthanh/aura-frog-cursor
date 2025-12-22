@@ -6,7 +6,7 @@ alwaysApply: true
 
 # TOON Format Reference
 
-**Version:** 1.1.9
+**Version:** 1.2.0
 **Source:** https://github.com/toon-format/toon
 **License:** See original repository for license terms
 
@@ -144,6 +144,6 @@ All `.mdc` files in this project use TOON format for tables where applicable. Wh
 
 ---
 
-**Version:** 1.1.9
+**Version:** 1.2.0
 **Last Updated:** 2025-12-17
 **Attribution:** TOON format by https://github.com/toon-format/toon
