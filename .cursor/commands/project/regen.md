@@ -1,15 +1,14 @@
-# /project:regen - Regenerate CLAUDE.md with Smart Merge
+# /project:regen - Regenerate Project Context
 
 ## Description
 
-Regenerates the project's CLAUDE.md file while preserving user-added content. Uses marker-based sections to distinguish between auto-managed and user-managed content.
+Regenerates project context files while preserving user customizations. Updates Aura Frog system files to latest version without losing project-specific settings.
 
 **What it does:**
-1. Reads existing CLAUDE.md
-2. Extracts user content (everything after `<!-- AURA-FROG-AUTO-END -->`)
-3. Regenerates auto-managed section from latest template
-4. Merges user content back
-5. Updates version and date
+1. Re-detects project type and tech stack
+2. Updates `.cursor/project-contexts/[project]/` files
+3. Preserves user-added rules and conventions
+4. Syncs with latest Aura Frog version
 
 ## Usage
 
@@ -17,92 +16,44 @@ Regenerates the project's CLAUDE.md file while preserving user-added content. Us
 /project:regen
 ```
 
-## How It Works
+## What Gets Updated
 
-### Marker System
+| File | On Regen |
+|------|----------|
+| `.cursorrules` | **NOT touched** (copy manually if needed) |
+| `project-config.yaml` | Updated with new tech stack |
+| `conventions.md` | Merged (user additions preserved) |
+| `rules.md` | Merged (user additions preserved) |
 
-The CLAUDE.md file uses HTML comment markers:
+## What Gets Preserved
 
-```markdown
-<!-- AURA-FROG-AUTO-START -->
-... auto-managed content (banner reference, MCP servers, etc.) ...
-<!-- AURA-FROG-AUTO-END -->
-
-... user content (preserved on regen) ...
-```
-
-### What Gets Updated
-
-| Section | On Regen |
-|---------|----------|
-| Header (project name, version) | Updated |
-| `<!-- AURA-FROG-AUTO-START -->` to `<!-- AURA-FROG-AUTO-END -->` | Replaced with latest template |
-| Everything after `<!-- AURA-FROG-AUTO-END -->` | **Preserved** |
-
-### What Gets Preserved
-
-- Project-specific settings
-- Custom rules
-- Custom integrations
-- Any user-added sections
+- Project-specific conventions in `conventions.md`
+- Custom rules in `rules.md`
+- Any user-added files in `project-contexts/`
 
 ## Execution Steps
 
-1. **Read existing CLAUDE.md** - Get current content
-2. **Extract metadata** - Project name, tech stack from header
-3. **Extract user section** - Everything after `<!-- AURA-FROG-AUTO-END -->`
-4. **Load template** - From `.cursor/templates/project-claude.md`
-5. **Replace placeholders** - [PROJECT_NAME], [TECH_STACK], [DATE]
-6. **Merge** - New auto section + preserved user section
-7. **Write back** - Save to `.claude/CLAUDE.md`
+1. **Re-detect project** - Scan for framework, tech stack changes
+2. **Read existing context** - Get current project-contexts files
+3. **Merge changes** - Update system parts, keep user parts
+4. **Write back** - Save merged files
 
-## Example
+## When to Use
 
-### Before Regen
-
-```markdown
-# Aura Frog - MyApp
-
-**Aura Frog Version:** 1.1.8  <!-- old version -->
-
-<!-- AURA-FROG-AUTO-START -->
-... old banner format without MCP visibility ...
-<!-- AURA-FROG-AUTO-END -->
-
-## Project-Specific Settings
-
-### Custom Rules
-- Always use NativeWind for styling
-```
-
-### After Regen
-
-```markdown
-# Aura Frog - MyApp
-
-**Aura Frog Version:** 1.1.9  <!-- updated -->
-
-<!-- AURA-FROG-AUTO-START -->
-... NEW banner format WITH MCP visibility ...
-<!-- AURA-FROG-AUTO-END -->
-
-## Project-Specific Settings
-
-### Custom Rules
-- Always use NativeWind for styling  <!-- PRESERVED -->
-```
+- After updating Aura Frog version
+- When project tech stack changes
+- To pick up new MCP server configurations
 
 ## Related Commands
 
 - `/project:init` - First-time project initialization
-- `/project:detect` - Re-detect tech stack
+- `/project:detect` - Just re-detect tech stack (no file changes)
 
 ## Notes
 
-- **Safe by default**: User content is always preserved
-- **Banner reference**: Template references `.cursor/rules/core/agent-identification.mdc`
-- **Idempotent**: Can run multiple times safely
-- **No data loss**: User sections are never overwritten
+- **Safe**: User customizations are always preserved
+- **Banner format**: Always references `.cursor/rules/core/agent-identification.mdc`
+- **MCP config**: Check `.cursor/mcp.json` for server updates
 
 ---
 

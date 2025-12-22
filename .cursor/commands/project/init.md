@@ -10,7 +10,6 @@ Initializes Aura Frog system for a project by analyzing the codebase, extracting
 3. Creates `.cursor/project-contexts/[project]/` with rules and examples
 4. Generates project-specific configuration files
 5. Sets up environment variable templates
-6. Creates CLAUDE.md with marker-based sections (for smart regen support)
 
 **Original command:** `project:init`
 
@@ -45,24 +44,23 @@ Output: Detects Laravel + Vue, activates backend-laravel and web-vuejs agents
 
 ## References
 
-- Related commands: `/project:regen`, `/workflow:start`, `/setup:integrations`
+- Related commands: `/project:regen`, `/workflow:start`
 - Created files: `.cursor/project-contexts/[project]/`
 - Configuration: `.cursor/ccpm-config.yaml`
-- Agent banner: `.cursor/CLAUDE.md`
+- Agent banner: `.cursor/rules/core/agent-identification.mdc`
+- MCP config: `.cursor/mcp.json`
 
 ## Notes
 
-**Critical:** `.claude/CLAUDE.md` MUST exist for Aura Frog to work. It references:
-- Banner format from `.cursor/rules/core/agent-identification.mdc`
-- MCP integrations from `.cursor/rules/skills/auto-invoke/mcp-integrations.mdc`
-
-**Marker System:** CLAUDE.md uses `<!-- AURA-FROG-AUTO-START -->` and `<!-- AURA-FROG-AUTO-END -->` markers to separate auto-managed content from user content. This allows `/project:regen` to update Aura Frog sections without losing user customizations.
+**Critical:** `.cursorrules` is the main entry point. It references:
+- Banner format: `.cursor/rules/core/agent-identification.mdc`
+- MCP integrations: `.cursor/rules/skills/auto-invoke/mcp-integrations.mdc`
+- All core rules: `.cursor/rules/core/` (with `alwaysApply: true`)
 
 **Next Steps:**
-1. Review generated files
-2. Add custom rules/integrations to CLAUDE.md (below the AUTO-END marker)
-3. Configure MCP credentials (optional): Edit `.envrc`
-4. Start first workflow: `/workflow:start "your task"`
+1. Review generated files in `.cursor/project-contexts/[project]/`
+2. Configure MCP credentials (optional): Edit `.envrc`
+3. Start first workflow: `/workflow:start "your task"`
 
 ---
 

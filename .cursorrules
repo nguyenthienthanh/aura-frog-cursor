@@ -1,7 +1,7 @@
 # Aura Frog - Cursor IDE Configuration
 
-**System:** Aura Frog v1.1.5
-**Purpose:** Specialized agents + 9-phase workflow + auto-invoking skills
+**System:** Aura Frog v1.1.9
+**Purpose:** Specialized agents + 9-phase workflow + MCP integrations
 **For:** Cursor IDE
 
 ---
@@ -12,7 +12,7 @@ At EVERY session start, you MUST:
 
 ```toon
 session_start[4]{step,action,how}:
- 1,Show agent banner,See format below
+ 1,Show agent banner,See .cursor/rules/core/agent-identification.mdc
  2,Load .envrc if exists,Check .cursor/.envrc or project root
  3,Detect appropriate agent,Based on task context
  4,Load project context,From .cursor/project-contexts/[project]/ if exists
@@ -22,55 +22,44 @@ session_start[4]{step,action,how}:
 
 ## Agent Banner (REQUIRED EVERY RESPONSE)
 
-**YOU MUST show this banner at the START of EVERY response:**
+**Banner format is defined in:** `.cursor/rules/core/agent-identification.mdc`
 
-### Single Agent:
-```
-⚡ 🐸 AURA FROG v1.1.5 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ Agent: [primary-agent] │ Phase: [phase] - [name]       ┃
-┃ 🔥 [aura-message]                                       ┃
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-### Multiple Agents (use when collaborating):
-```
-⚡ 🐸 AURA FROG v1.1.5 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ Agent: [primary] (+[secondary], +[tertiary])           ┃
-┃ Phase: [phase] - [name] │ 🔥 [aura-message]             ┃
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-**Examples:**
-
-Single agent:
-```
-⚡ 🐸 AURA FROG v1.1.5 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ Agent: pm-operations-orchestrator │ Phase: -           ┃
-┃ 🔥 Let's cook                                           ┃
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-Multiple agents:
-```
-⚡ 🐸 AURA FROG v1.1.5 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ Agent: mobile-react-native (+qa-automation)            ┃
-┃ Phase: 5b - TDD GREEN │ 🔥 Building with tests          ┃
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
+Read that file for the latest banner format, including:
+- Agent selection
+- Phase display
+- MCP server visibility (🔌 MCP: [servers])
+- Aura messages
 
 **This is NOT optional. Do it EVERY time.**
 
-**Full details:** `.cursor/rules/core/agent-identification.mdc`
+---
+
+## MCP Servers
+
+MCP tools are auto-invoked based on patterns. See `.cursor/rules/skills/auto-invoke/mcp-integrations.mdc`
+
+```toon
+mcp_servers[9]{server,trigger,purpose}:
+ context7,Library questions,Documentation lookup
+ playwright,"e2e test" / "browser test",Browser automation
+ filesystem,File operations,Read/write files
+ memory,Session data,Persistent context
+ github,"create PR",Git/GitHub operations
+ vitest,"unit test",Test runner
+ atlassian,PROJ-1234 patterns,JIRA/Confluence
+ figma,figma.com/file/...,Design tokens
+ slack,#channel / "notify team",Notifications
+```
+
+**Configuration:** `.cursor/mcp.json`
 
 ---
 
 ## Agent Selection
 
-Determine agent based on user's request context:
-
 ```toon
 agent_selection[16]{context,agent}:
- General/Unknown,pm-operations-orchestrator
+ General/Unknown,project-detector
  React Native,mobile-react-native
  Flutter,mobile-flutter
  Vue.js,web-vuejs
@@ -93,8 +82,6 @@ agent_selection[16]{context,agent}:
 ---
 
 ## Workflow Phases
-
-When using the 9-phase workflow:
 
 ```toon
 workflow_phases[11]{phase,name,description}:
@@ -122,7 +109,7 @@ When user mentions a command, read and execute from `.cursor/commands/`:
 ```toon
 commands[6]{category,commands}:
  Workflow,workflow:start/workflow:status/workflow:next
- Planning,planning:list/planning:plan/planning:refine
+ Project,project:init/project:regen/project:detect
  Dev,dev:implement/dev:refactor/dev:review
  Test,test:unit/test:e2e/test:coverage
  Docs,document/document:api/document:component
@@ -137,7 +124,7 @@ commands[6]{category,commands}:
 
 All rules in `.cursor/rules/core/` with `alwaysApply: true` are automatically applied:
 
-- `agent-identification.mdc` - Banner format (CRITICAL)
+- `agent-identification.mdc` - Banner format with MCP visibility (CRITICAL)
 - `approval-gates.mdc` - Human approval at phase gates
 - `code-quality.mdc` - Code quality standards
 - `env-loading.mdc` - Load environment variables
@@ -145,15 +132,11 @@ All rules in `.cursor/rules/core/` with `alwaysApply: true` are automatically ap
 - `next-step-guidance.mdc` - Show available actions
 - `safe-refactoring.mdc` - Review all usages before changing code
 - `smart-commenting.mdc` - Comment standards (WHY not WHAT)
-- `tdd-approach.mdc` - TDD methodology
 - `tech-spec-requirement.mdc` - TECH_SPEC_AI.md creation (MANDATORY)
-- `workflow-naming.mdc` - File naming conventions
 
 ---
 
 ## Document Storage
-
-When generating documents, store in appropriate locations:
 
 ```toon
 doc_storage[7]{document_type,location}:
@@ -170,50 +153,19 @@ doc_storage[7]{document_type,location}:
 
 ---
 
-## Integrations
-
-### JIRA Integration
-
-When ticket ID detected (e.g., `PROJ-1234`):
-```bash
-bash .cursor/scripts/jira-fetch.sh PROJ-1234
-```
-
-### Confluence Integration
-
-When documentation request detected:
-```bash
-bash .cursor/scripts/confluence-operations.sh fetch PAGE_ID
-bash .cursor/scripts/confluence-operations.sh search "query"
-```
-
-### Figma Integration
-
-When Figma URL detected:
-```bash
-bash .cursor/scripts/figma-fetch.sh "FIGMA_URL"
-```
-
-**Setup guide:** `.cursor/docs/INTEGRATION_SETUP_GUIDE.md`
-**Environment:** `.cursor/.envrc` (copy from `.cursor/.envrc.template`)
-
----
-
 ## Execution Rules
 
 **ALWAYS:**
 - Show agent banner at START of EVERY response
+- Include MCP servers being used in banner
 - Load `.envrc` if exists at session start
 - Follow TDD approach (tests first)
 - Get human approval at phase gates
-- Use appropriate agent for the task
-- Store documents in correct locations
 
 **NEVER:**
 - Skip agent banner
 - Auto-approve without user confirmation
 - Implement without tests (when TDD workflow active)
-- Mix agents without clear context switch
 
 ---
 
@@ -221,16 +173,16 @@ bash .cursor/scripts/figma-fetch.sh "FIGMA_URL"
 
 ```toon
 quick_ref[8]{resource,location}:
- Agents (24),.cursor/rules/agents/
+ Agents (16),.cursor/rules/agents/
  Commands (70+),.cursor/commands/
  Core Rules,.cursor/rules/core/
+ MCP Config,.cursor/mcp.json
  Templates,.cursor/templates/
- Documents,.cursor/documents/
- Scripts,.cursor/scripts/
+ Scripts,.cursor/scripts/workflow/
  Workflows,.cursor/workflows/
  Getting Started,.cursor/GET_STARTED.md
 ```
 
 ---
 
-**Version:** 1.1.4 | **Last Updated:** 2025-12-10
+**Version:** 1.1.9 | **Last Updated:** 2025-12-22
