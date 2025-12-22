@@ -181,5 +181,5 @@ execute [plan-id]            # Execute plan
 ---
 
 **Command:** planning:list
-**Version:** 1.2.0
+**Version:** 1.3.0
 **Added:** Aura Frog v1.3

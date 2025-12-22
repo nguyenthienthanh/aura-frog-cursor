@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Token & Time Awareness
 
-**Version:** 1.2.0
+**Version:** 1.3.0
 **Priority:** HIGH - Monitor throughout every session
 **Type:** Rule (Always Enforced)
 
@@ -209,5 +209,5 @@ enforcement[5]{scenario,action}:
 
 ---
 
-**Version:** 1.2.0
-**Last Updated:** 2025-11-30
+**Version:** 1.3.0
+**Last Updated:** 2025-12-22

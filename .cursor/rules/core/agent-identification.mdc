@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Agent Identification Banner
 
-**Version:** 1.2.0
+**Version:** 1.3.0
 **Priority:** CRITICAL - Must be shown at START of EVERY response
 **Type:** Rule (Mandatory Format)
 
@@ -262,5 +262,5 @@ enforcement[5]{scenario,show_banner}:
 
 ---
 
-**Version:** 1.2.0
+**Version:** 1.3.0
 **Last Updated:** 2025-12-22

@@ -65,5 +65,5 @@ EXPLAIN ANALYZE SELECT ...
 ---
 
 **Agent ID:** database-specialist
-**Version:** 1.2.0
+**Version:** 1.3.0
 **Status:** Active

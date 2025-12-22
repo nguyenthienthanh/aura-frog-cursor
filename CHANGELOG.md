@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2025-12-22
+
+### Added
+- **Centralized Version Management** - Single source of truth for versioning
+  - `VERSION` file at project root contains the version number
+  - `scripts/sync-version.sh` syncs version to all 121 files automatically
+  - Commands: `--bump patch|minor|major`, `--with-date`, `--dry-run`
+  - No more manual updates across 121 files
+
+### Changed
+- Updated `.claude/CLAUDE.md` with new version workflow documentation
+- Simplified pre-commit checklist (one command instead of manual updates)
+
 ## [1.2.0] - 2025-12-22
 
 ### Added
@@ -232,6 +245,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.3.0 | 2025-12-22 | Centralized version management (VERSION + sync script) |
 | 1.2.0 | 2025-12-22 | JIRA/Figma data persistence in TOON format |
 | 1.1.8 | 2025-12-19 | MCP-first integrations, removed custom scripts |
 | 1.1.6 | 2025-12-15 | Expert skills system, agent optimization (~70% reduction) |

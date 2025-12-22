@@ -258,7 +258,7 @@ All hooks include error handling:
 
 ---
 
-**Version:** 1.2.0
+**Version:** 1.3.0
 **Adapted from:** Aura Frog hooks system
 **For:** Cursor IDE
 **Date:** 2025-11-30

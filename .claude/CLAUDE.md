@@ -2,7 +2,7 @@
 
 **Project:** aura-frog-cursor
 **Type:** Cursor IDE Plugin/Configuration (MCP-first)
-**Version:** 1.2.0
+**Version:** 1.3.0
 
 ---
 
@@ -47,10 +47,20 @@ Update `CHANGELOG.md` at project root with:
 
 ### 2. Version Updates (Required for feature/fix changes)
 
-When version changes, update ALL files containing version:
+**Single source of truth:** Edit the `VERSION` file at project root, then run sync:
+
 ```bash
-# Quick update command:
-find . -type f \( -name "*.md" -o -name "*.mdc" -o -name "*.sh" \) -exec sed -i '' 's/OLD_VERSION/NEW_VERSION/g' {} \;
+# Option 1: Edit VERSION file manually, then sync
+./scripts/sync-version.sh              # Sync version to all files
+./scripts/sync-version.sh --with-date  # Also update "Last Updated" dates
+
+# Option 2: Auto-bump and sync in one command
+./scripts/sync-version.sh --bump patch  # 1.2.0 -> 1.2.1
+./scripts/sync-version.sh --bump minor  # 1.2.0 -> 1.3.0
+./scripts/sync-version.sh --bump major  # 1.2.0 -> 2.0.0
+
+# Preview changes first (recommended)
+./scripts/sync-version.sh --dry-run
 ```
 
 ### 3. README Updates (When applicable)
@@ -66,9 +76,8 @@ Update README.md when:
 ## Pre-Commit Checklist
 
 - [ ] CHANGELOG.md updated with change description
-- [ ] Version incremented if needed (patch/minor/major)
+- [ ] Run `./scripts/sync-version.sh --bump <type> --with-date` if version changed
 - [ ] Related documentation updated
-- [ ] Last Updated date set to today
 
 ---
 
@@ -85,5 +94,5 @@ chore: Maintenance tasks
 
 ---
 
-**Version:** 1.2.0
-**Last Updated:** 2025-12-19
+**Version:** 1.3.0
+**Last Updated:** 2025-12-22

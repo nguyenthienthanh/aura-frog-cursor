@@ -9,7 +9,7 @@ alwaysApply: false
 
 # Angular Expert Skill
 
-**Version:** 1.2.0
+**Version:** 1.3.0
 **Type:** Expert Skill (Bundled Best Practices)
 
 ---
@@ -547,5 +547,5 @@ patterns[10]{scenario,solution}:
 
 ---
 
-**Version:** 1.2.0
-**Last Updated:** 2025-12-17
+**Version:** 1.3.0
+**Last Updated:** 2025-12-22

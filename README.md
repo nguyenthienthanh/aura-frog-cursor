@@ -191,5 +191,5 @@ Same as original Aura Frog plugin. Check the [original repository](https://githu
 
 **Code with main character energy!** 🐸✨
 
-**Version:** 1.2.0
-**Last Updated:** 2025-12-19
+**Version:** 1.3.0
+**Last Updated:** 2025-12-22
