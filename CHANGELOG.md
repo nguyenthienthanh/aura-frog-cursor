@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.1.9] - 2025-12-19
+## [1.1.9] - 2025-12-22
 
 ### Changed
 - **Aggressive Minimization** - MCP-first architecture
@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - setup.sh: 441 → 189 lines (57% smaller), no interactive prompts
 
 ### Added
+- **MCP Visibility in Banner** - Agent banner now shows which MCP servers are being used
+  - New `🔌 MCP:` line displays active MCP servers
+  - Examples: `🔌 MCP: context7`, `🔌 MCP: atlassian, figma`
+  - Shows `-` when no MCP servers are in use
 - **MCP Documentation** (`docs/MCP.md`) - Complete guide for custom MCP servers
   - TypeScript and Python examples
   - Publishing to npm or local usage

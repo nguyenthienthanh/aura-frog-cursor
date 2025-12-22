@@ -20,7 +20,7 @@ alwaysApply: true
 ```
 ⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: [primary-agent] │ Phase: [phase] - [name]       ┃
-┃ 🔥 [aura-message]                                       ┃
+┃ 🔌 MCP: [active-servers] │ 🔥 [aura-message]            ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
@@ -28,7 +28,8 @@ alwaysApply: true
 ```
 ⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: [primary] (+[secondary], +[tertiary])           ┃
-┃ Phase: [phase] - [name] │ 🔥 [aura-message]             ┃
+┃ Phase: [phase] - [name] │ 🔌 MCP: [active-servers]      ┃
+┃ 🔥 [aura-message]                                       ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
@@ -49,9 +50,24 @@ alwaysApply: true
   - Secondary agents in parentheses with `+` prefix
   - Examples: `(+qa-automation)`, `(+qa-automation, +ui-designer)`
 
-### Line 3: Phase and Aura (multi-agent) OR Aura only (single)
-- **Single agent:** `🔥 [aura-message]`
-- **Multiple agents:** `Phase: [phase] │ 🔥 [aura-message]`
+### Line 3: MCP and Aura
+- **MCP display:** `🔌 MCP: [servers]` - Show which MCP servers will be used
+- **Aura message:** `🔥 [aura-message]`
+- Use `-` if no MCP servers are being used
+
+### MCP Server Names
+```toon
+mcp_display[9]{server,display_name}:
+ context7,context7
+ playwright,playwright
+ filesystem,filesystem
+ memory,memory
+ github,github
+ vitest,vitest
+ atlassian,atlassian
+ figma,figma
+ slack,slack
+```
 
 ---
 
@@ -145,21 +161,39 @@ aura_messages[10]{context,examples}:
 
 ## Examples
 
-### Single Agent - During Workflow
+### Single Agent - During Workflow (No MCP)
 
 ```
 ⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: mobile-react-native │ Phase: 2 - Design         ┃
-┃ 🔥 Architecting greatness                               ┃
+┃ 🔌 MCP: - │ 🔥 Architecting greatness                   ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-### Single Agent - General Conversation
+### Single Agent - Using Context7
 
 ```
 ⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ Agent: pm-operations-orchestrator │ Phase: -           ┃
-┃ 🔥 Ready to rock                                        ┃
+┃ Agent: web-reactjs │ Phase: 5b - TDD GREEN             ┃
+┃ 🔌 MCP: context7 │ 🔥 Looking up the docs               ┃
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### Single Agent - E2E Testing
+
+```
+⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ Agent: qa-automation │ Phase: 5a - TDD RED             ┃
+┃ 🔌 MCP: playwright │ 🔥 Browser warrior mode            ┃
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+### Single Agent - JIRA + Figma Workflow
+
+```
+⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ Agent: ui-designer │ Phase: 1 - Understand             ┃
+┃ 🔌 MCP: atlassian, figma │ 🔥 Fetching requirements     ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
@@ -168,7 +202,8 @@ aura_messages[10]{context,examples}:
 ```
 ⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: mobile-react-native (+qa-automation)            ┃
-┃ Phase: 5b - TDD GREEN │ 🔥 Building with tests          ┃
+┃ Phase: 5b - TDD GREEN │ 🔌 MCP: vitest                  ┃
+┃ 🔥 Building with tests                                  ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
@@ -177,25 +212,28 @@ aura_messages[10]{context,examples}:
 ```
 ⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: ui-designer (+web-reactjs)                      ┃
-┃ Phase: 3 - UI Breakdown │ 🔥 Pixel perfect              ┃
+┃ Phase: 3 - UI Breakdown │ 🔌 MCP: figma                 ┃
+┃ 🔥 Pixel perfect                                        ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-### Multi-Agent - Security Review
+### Multi-Agent - Full Stack with Multiple MCP
 
 ```
 ⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ Agent: security-expert (+backend-nodejs, +qa-automation)┃
-┃ Phase: 6 - Review │ 🔥 Locking it down                  ┃
+┃ Agent: backend-nodejs (+qa-automation)                 ┃
+┃ Phase: 5a - TDD RED │ 🔌 MCP: vitest, playwright        ┃
+┃ 🔥 Test-first energy                                    ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-### Multi-Agent - Cross-Review
+### Multi-Agent - PR Creation
 
 ```
 ⚡ 🐸 AURA FROG v1.1.9 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ Agent: qa-automation (+mobile-react-native)            ┃
-┃ Phase: 7 - Verify │ 🔥 Trust but verify                 ┃
+┃ Agent: devops-cicd (+security-expert)                  ┃
+┃ Phase: 9 - Share │ 🔌 MCP: github, slack                ┃
+┃ 🔥 Shipping time                                        ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
@@ -205,8 +243,9 @@ aura_messages[10]{context,examples}:
 
 1. **User Awareness** - Know which agent is responding
 2. **Workflow Context** - See current phase at a glance
-3. **Personality** - Main character energy engagement
-4. **Identity** - Confirms Aura Frog is active
+3. **MCP Transparency** - Know which external tools are being used
+4. **Personality** - Main character energy engagement
+5. **Identity** - Confirms Aura Frog is active
 
 ---
 
@@ -224,4 +263,4 @@ enforcement[5]{scenario,show_banner}:
 ---
 
 **Version:** 1.1.9
-**Last Updated:** 2025-12-17
+**Last Updated:** 2025-12-22
