@@ -1,0 +1,45 @@
+---
+description: Verify MCP servers are loaded at session start
+globs: []
+alwaysApply: true
+---
+
+# MCP Startup Check
+
+**Version:** 1.1.9
+**Type:** Rule (Informational)
+
+---
+
+## At Session Start
+
+When starting a new session, briefly verify MCP servers are available by checking:
+
+```
+Enabled MCP Servers (from .cursor/mcp.json):
+- context7: Library documentation lookup
+- playwright: Browser automation/testing
+- filesystem: File operations
+- memory: Persistent context storage
+```
+
+## Quick Verification
+
+If unsure whether MCP servers loaded:
+
+1. **Context7**: Try `resolve-library-id` for any library
+2. **Playwright**: Check if browser automation tools are available
+3. **Filesystem**: Check if file read/write tools beyond standard are available
+
+## Troubleshooting
+
+If MCP fails to load:
+1. Check Cursor Settings → Features → MCP for status
+2. Ensure `npx` is available in PATH
+3. Check for npm/network issues
+4. Restart Cursor if servers show as failed
+
+---
+
+**Version:** 1.1.9
+**Last Updated:** 2025-12-22

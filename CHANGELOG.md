@@ -24,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Now references `testing-expert.mdc` for TDD patterns
 
 ### Added
+- **MCP Startup Check Rule** (`mcp-startup-check.mdc`) - Verify MCP servers at session start
+  - Lists enabled servers and their purposes
+  - Troubleshooting guidance for failed servers
 - **MCP Visibility in Banner** - Agent banner now shows which MCP servers are being used
   - New `🔌 MCP:` line displays active MCP servers
   - Examples: `🔌 MCP: context7`, `🔌 MCP: atlassian, figma`
