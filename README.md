@@ -12,9 +12,9 @@ Aura Frog provides a comprehensive AI-powered development workflow with:
 - **16 Specialized Agents** - Auto-detect based on your tech stack
 - **9-Phase TDD Workflow** - Structured development
 - **70+ Slash Commands** - All development tasks covered
-- **37 Quality Rules** - Always enforced
+- **42 Quality Rules** - Always enforced
 
-## What's New in v1.2.0
+## What's New in v1.3.0
 
 **MCP-First Architecture** - All integrations now use Model Context Protocol:
 

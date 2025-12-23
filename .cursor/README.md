@@ -39,9 +39,9 @@ cat .cursor/GET_STARTED.md
 ├── 📄 .envrc.template                # Environment setup
 │
 ├── 📂 rules/                         # All rules (MDC format)
-│   ├── core/                         # 37 core quality rules
-│   ├── agents/                       # 24 specialized agents
-│   ├── skills/                       # 29 skills (10 auto-invoke, 19 reference)
+│   ├── core/                         # 42 core quality rules
+│   ├── agents/                       # 16 specialized agents
+│   ├── skills/                       # 29 skills (9 auto-invoke, 7 experts, 13 reference)
 │   ├── hooks/                        # 4 lifecycle hooks
 │   └── templates/                    # 8 documentation templates
 │
@@ -80,11 +80,11 @@ cat .cursor/GET_STARTED.md
 
 ## 🎯 Key Features
 
-✅ **24 Specialized Agents** - Auto-detect based on context
+✅ **16 Specialized Agents** - Auto-detect based on context
 ✅ **9-Phase TDD Workflow** - Structured development (RED-GREEN-REFACTOR)
 ✅ **70+ Slash Commands** - All development tasks covered
-✅ **37 Quality Rules** - Always enforced
-✅ **29 Skills** - 10 auto-invoke + 19 reference skills
+✅ **42 Quality Rules** - Always enforced
+✅ **29 Skills** - 9 auto-invoke + 7 experts + 13 reference
 ✅ **Mermaid Diagrams** - Sequence, ERD, Architecture, State diagrams
 ✅ **Multi-Session Support** - Workflow handoff/resume
 ✅ **Project Customization** - Generic core + project context
@@ -119,7 +119,7 @@ Every response shows (single or multi-agent):
 
 **Single Agent:**
 ```
-⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.3.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: mobile-react-native │ Phase: 2 - Design         ┃
 ┃ 🔥 Code go brrrr                                        ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -127,7 +127,7 @@ Every response shows (single or multi-agent):
 
 **Multiple Agents (collaboration):**
 ```
-⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.3.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: mobile-react-native (+qa-automation)            ┃
 ┃ Phase: 5b - TDD GREEN │ 🔥 Building with tests          ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -189,9 +189,9 @@ See all commands: `cat .cursor/commands/QUICK_REFERENCE.md`
 - **Total Size:** ~1.5 MB
 - **MDC Rules:** 103 files
 - **Commands:** 70+ slash commands
-- **Agents:** 24 specialized agents
-- **Skills:** 29 (10 auto-invoke, 19 reference)
-- **Core Rules:** 37 quality rules
+- **Agents:** 16 specialized agents
+- **Skills:** 29 (9 auto-invoke, 7 experts, 13 reference)
+- **Core Rules:** 42 quality rules
 
 ---
 

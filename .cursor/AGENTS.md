@@ -88,7 +88,7 @@ Auto-invokes:
 Include this agent signature at the very beginning of ALL your responses:
 
 ```
-⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.3.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: [agent-name] │ Phase: [phase] - [name]          ┃
 ┃ Model: [model] │ 🔥 [aura-message]                      ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -126,8 +126,6 @@ The `[aura-message]` should be a SHORT, FUN, contextual phrase (2-4 words) that:
 ---
 
 ## 🔧 System Behavior
-
-**📚 Full Details:** See `.cursor/docs/SYSTEM_CLARIFICATIONS.md` for complete explanations.
 
 **Key Points:**
 1. **Hooks** = Markdown guides (not executable scripts)
@@ -223,15 +221,15 @@ Project Context > Aura Frog Rules > Generic Defaults
 
 ---
 
-## 🤖 Available Agents
+## 🤖 Available Agents (16)
 
 **Categories:**
 - **Development (11):** mobile-react-native, mobile-flutter, web-angular, web-vuejs, web-reactjs, web-nextjs, backend-nodejs, backend-python, backend-go, backend-laravel, database-specialist
 - **Quality & Security (3):** security-expert, qa-automation, ui-designer
-- **DevOps & Operations (5):** devops-cicd, jira-operations, confluence-operations, slack-operations, voice-operations
-- **Infrastructure (5):** agent-detector, pm-operations-orchestrator, project-detector, project-config-loader, project-context-manager
+- **DevOps (1):** devops-cicd
+- **Infrastructure (1):** project-detector
 
-**📚 Full Agent Catalog:** See `.cursor/README.md` | **🧠 Selection Logic:** See `.cursor/skills/auto-invoke/agent-detector.mdc`
+**📚 Full Agent Catalog:** See `.cursor/README.md` | **🧠 Selection Logic:** See `.cursor/rules/skills/auto-invoke/agent-detector.mdc`
 
 ---
 

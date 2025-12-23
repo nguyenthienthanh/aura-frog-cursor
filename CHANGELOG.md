@@ -18,6 +18,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated `.claude/CLAUDE.md` with new version workflow documentation
 - Simplified pre-commit checklist (one command instead of manual updates)
 
+### Fixed
+- **Documentation Consistency** - Fixed incorrect counts across all docs
+  - Agent count: 24 → 16 (actual agents in `.cursor/rules/agents/`)
+  - Core rules: 37 → 42 (actual rules in `.cursor/rules/core/`)
+  - Skills breakdown: corrected to 9 auto-invoke + 7 experts + 13 reference
+  - Removed references to non-existent agents and files
+  - Updated version banners in example code blocks
+
 ## [1.2.0] - 2025-12-22
 
 ### Added
