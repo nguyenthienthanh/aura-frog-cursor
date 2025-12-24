@@ -13,8 +13,7 @@
       "args": ["-y", "@modelcontextprotocol/server-github"],
       "env": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
-      },
-      "disabled": true
+      }
     },
     "filesystem": {
       "command": "npx",
@@ -26,21 +25,18 @@
     },
     "vitest": {
       "command": "npx",
-      "args": ["-y", "@madrus/vitest-mcp-server@latest"],
-      "disabled": true
+      "args": ["-y", "@madrus/vitest-mcp-server@latest"]
     },
     "atlassian": {
       "command": "npx",
-      "args": ["-y", "mcp-remote@latest", "https://mcp.atlassian.com/v1/sse"],
-      "disabled": true
+      "args": ["-y", "mcp-remote@latest", "https://mcp.atlassian.com/v1/sse"]
     },
     "figma": {
       "command": "npx",
       "args": ["-y", "figma-developer-mcp@latest", "--stdio"],
       "env": {
         "FIGMA_API_KEY": "${FIGMA_API_KEY}"
-      },
-      "disabled": true
+      }
     },
     "slack": {
       "command": "npx",
@@ -48,8 +44,7 @@
       "env": {
         "SLACK_TOKEN": "${SLACK_TOKEN}",
         "SLACK_TEAM_ID": "${SLACK_TEAM_ID}"
-      },
-      "disabled": true
+      }
     }
   }
 }
