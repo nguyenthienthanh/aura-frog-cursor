@@ -25,6 +25,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Skills breakdown: corrected to 9 auto-invoke + 7 experts + 13 reference
   - Removed references to non-existent agents and files
   - Updated version banners in example code blocks
+- **Deprecated Slack MCP Package** - Replaced with active alternative
+  - Old: `@modelcontextprotocol/server-slack` (deprecated, no longer supported)
+  - New: `slack-mcp-server` (korotovsky) - 30K+ users, stealth & OAuth modes
+  - Updated env var: `SLACK_BOT_TOKEN` → `SLACK_TOKEN`
+- **Atlassian MCP Package** - Switched to official remote server
+  - Old: `mcp-atlassian` (Python/Docker-based)
+  - New: Official Atlassian Remote MCP via `mcp-remote`
+  - No API tokens needed - uses OAuth browser authentication
+  - Just enable and login via browser on first use
 
 ## [1.2.0] - 2025-12-22
 

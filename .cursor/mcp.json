@@ -31,12 +31,7 @@
     },
     "atlassian": {
       "command": "npx",
-      "args": ["-y", "mcp-atlassian@latest"],
-      "env": {
-        "ATLASSIAN_SITE_URL": "${ATLASSIAN_SITE_URL}",
-        "ATLASSIAN_USER_EMAIL": "${ATLASSIAN_USER_EMAIL}",
-        "ATLASSIAN_API_TOKEN": "${ATLASSIAN_API_TOKEN}"
-      },
+      "args": ["-y", "mcp-remote@latest", "https://mcp.atlassian.com/v1/sse"],
       "disabled": true
     },
     "figma": {
@@ -49,9 +44,9 @@
     },
     "slack": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-slack@latest"],
+      "args": ["-y", "slack-mcp-server@latest"],
       "env": {
-        "SLACK_BOT_TOKEN": "${SLACK_BOT_TOKEN}",
+        "SLACK_TOKEN": "${SLACK_TOKEN}",
         "SLACK_TEAM_ID": "${SLACK_TEAM_ID}"
       },
       "disabled": true

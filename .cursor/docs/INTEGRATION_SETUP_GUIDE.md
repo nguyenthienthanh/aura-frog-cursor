@@ -27,16 +27,14 @@ cp .cursor/.envrc.template .envrc
 Edit `.envrc` and fill in the credentials for integrations you want:
 
 ```bash
-# JIRA + Confluence (same token works for both)
-export ATLASSIAN_SITE_URL="https://yourcompany.atlassian.net"
-export ATLASSIAN_USER_EMAIL="your.email@company.com"
-export ATLASSIAN_API_TOKEN="your_token_here"
+# JIRA + Confluence (OAuth - no tokens needed!)
+# Just enable atlassian in mcp.json, browser opens on first use
 
 # Figma
 export FIGMA_API_KEY="your_figma_token_here"
 
-# Slack
-export SLACK_BOT_TOKEN="xoxb-your-token"
+# Slack (uses slack-mcp-server)
+export SLACK_TOKEN="xoxc-or-xoxb-your-token"
 export SLACK_TEAM_ID="T1234567890"
 
 # GitHub
@@ -71,7 +69,7 @@ MCP servers load on Cursor startup. Restart to pick up changes.
 | `playwright` | Browser automation | ✅ Enabled | No |
 | `filesystem` | File operations | ✅ Enabled | No |
 | `memory` | Persistent context | ✅ Enabled | No |
-| `atlassian` | JIRA + Confluence | ❌ Disabled | Yes |
+| `atlassian` | JIRA + Confluence | ❌ Disabled | No (OAuth) |
 | `figma` | Design extraction | ❌ Disabled | Yes |
 | `slack` | Team notifications | ❌ Disabled | Yes |
 | `github` | Git operations | ❌ Disabled | Yes |
@@ -83,10 +81,12 @@ MCP servers load on Cursor startup. Restart to pick up changes.
 
 ### Atlassian (JIRA + Confluence)
 
-1. Go to https://id.atlassian.com/manage-profile/security/api-tokens
-2. Click "Create API token"
-3. Name: `Aura Frog`
-4. Copy token to `.envrc`
+**No API token needed!** Uses Official Atlassian Remote MCP Server with OAuth:
+
+1. Enable `atlassian` in `.cursor/mcp.json` (`"disabled": false`)
+2. Restart Cursor
+3. On first use, browser opens for Atlassian login
+4. Approve permissions - done!
 
 ### Figma
 
@@ -97,12 +97,18 @@ MCP servers load on Cursor startup. Restart to pick up changes.
 
 ### Slack
 
+**Option 1: Stealth Mode** (no app/bot required)
+1. Open Slack in browser, open DevTools → Application → Cookies
+2. Copy `d` cookie value (starts with `xoxd-`)
+3. Or extract token from localStorage (starts with `xoxc-`)
+4. Get Team ID from workspace URL
+
+**Option 2: OAuth Mode**
 1. Go to https://api.slack.com/apps
 2. Create app → "From scratch"
-3. OAuth & Permissions → Add scopes: `chat:write`, `chat:write.public`
+3. OAuth & Permissions → Add scopes: `chat:write`, `channels:read`
 4. Install to workspace
-5. Copy "Bot User OAuth Token" to `.envrc`
-6. Get Team ID from workspace settings
+5. Copy "Bot User OAuth Token" (starts with `xoxb-`) to `.envrc`
 
 ### GitHub
 

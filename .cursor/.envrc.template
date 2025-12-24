@@ -14,17 +14,17 @@
 # export GITHUB_TOKEN="ghp_your-token-here"
 
 # --- Atlassian (JIRA + Confluence) ---
-# Get token: https://id.atlassian.com/manage-profile/security/api-tokens
-# export ATLASSIAN_SITE_URL="https://your-company.atlassian.net"
-# export ATLASSIAN_USER_EMAIL="your-email@company.com"
-# export ATLASSIAN_API_TOKEN="your-api-token"
+# Uses Official Atlassian Remote MCP Server (OAuth - no API token needed!)
+# On first use, browser opens for Atlassian login
+# No environment variables required - just enable in mcp.json
 
 # --- Figma ---
 # Get token: https://www.figma.com/developers/api#access-tokens
 # export FIGMA_API_KEY="figd_your-token-here"
 
 # --- Slack ---
-# Create app: https://api.slack.com/apps
-# Required scopes: channels:history, channels:read, users:read, chat:write
-# export SLACK_BOT_TOKEN="xoxb-your-bot-token"
+# Uses slack-mcp-server (korotovsky) - works in stealth mode or with OAuth
+# Option 1: Stealth mode (no bot required) - use browser cookies
+# Option 2: OAuth mode - create app at https://api.slack.com/apps
+# export SLACK_TOKEN="xoxc-your-token-or-xoxb-bot-token"
 # export SLACK_TEAM_ID="T00000000"

@@ -29,9 +29,9 @@ MCP (Model Context Protocol) is an open protocol by Anthropic that enables LLMs 
 |--------|---------|---------|
 | github | @modelcontextprotocol/server-github | Git/GitHub operations |
 | vitest | @madrus/vitest-mcp-server | Unit testing, coverage |
-| atlassian | mcp-atlassian | JIRA + Confluence |
+| atlassian | mcp-remote (Official Atlassian) | JIRA + Confluence |
 | figma | figma-developer-mcp | Design token extraction |
-| slack | @modelcontextprotocol/server-slack | Team notifications |
+| slack | slack-mcp-server | Team notifications |
 
 ## Configuration
 
