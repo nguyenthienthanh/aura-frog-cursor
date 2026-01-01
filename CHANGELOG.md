@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-01-01
+
+### Changed
+- **Streamlined Workflow with 2 Approval Gates** - Reduced approval gates from 8 to 2
+  - Only Phase 2 (Design) and Phase 5b (Implementation) require approval
+  - All other phases auto-continue unless blockers hit
+  - Auto-stop triggers: test failures, security issues, coverage < 80%
+  - Flow: `START → Phase 1 (auto) → Phase 2 ✋ → Phases 3-5a (auto) → Phase 5b ✋ → Phases 5c-9 (auto) → DONE`
+
+### Updated Files
+- `.cursor/rules/skills/auto-invoke/workflow-orchestrator.mdc`
+  - Updated phase table with new gate types (⚡ Auto vs ✋ Approval)
+  - New phase transition rules with AUTO-CONTINUE modes
+  - Simplified example workflow execution
+- `.cursor/rules/core/workflow-navigation.mdc`
+  - Added 2-gate workflow note to core rule
+
+### Why This Change
+- Faster feature delivery with fewer interruptions
+- Critical decisions (architecture, implementation) still require approval
+- Auto-stop on errors ensures quality is maintained
+- TDD still enforced throughout
+
+---
+
 ## [1.3.0] - 2025-12-22
 
 ### Added

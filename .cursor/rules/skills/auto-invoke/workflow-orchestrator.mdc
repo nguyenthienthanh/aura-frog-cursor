@@ -81,18 +81,23 @@ Cursor AI should activate this skill when:
 
 ```toon
 workflow_phases[11]{phase,name,lead_agent,deliverable,gate}:
- 1,Understand 🎯,pm-operations-orchestrator,Requirements document,✋
- 2,Design 🏗️,Dev agent,Technical design + TECH_SPEC_AI.md + Mermaid diagrams,✋
- 3,UI Breakdown 🎨,ui-designer,Component breakdown,✋
- 4,Plan Tests 🧪,qa-automation,Test strategy,✋
- 5a,Write Tests 🔴,qa-automation + Dev,Failing tests (TDD RED),✋
- 5b,Build 🟢,Dev agent,Implementation (TDD GREEN),✋
- 5c,Polish ♻️,Dev agent,Refactored code (TDD REFACTOR),✋
- 6,Review 👀,security-expert,Quality review report,✋
- 7,Verify ✅,qa-automation,All tests pass/coverage ≥80%,✋
- 8,Document 📚,pm-operations-orchestrator,Documentation,✋
- 9,Share 🔔,slack-operations,Team notification,Auto
+ 1,Understand 🎯,pm-operations-orchestrator,Requirements document,⚡ Auto
+ 2,Design 🏗️,Dev agent,Technical design + TECH_SPEC_AI.md + Mermaid diagrams,✋ Approval
+ 3,UI Breakdown 🎨,ui-designer,Component breakdown,⚡ Auto
+ 4,Plan Tests 🧪,qa-automation,Test strategy,⚡ Auto
+ 5a,Write Tests 🔴,qa-automation + Dev,Failing tests (TDD RED),⚡ Auto
+ 5b,Build 🟢,Dev agent,Implementation (TDD GREEN),✋ Approval
+ 5c,Polish ♻️,Dev agent,Refactored code (TDD REFACTOR),⚡ Auto
+ 6,Review 👀,security-expert,Quality review report,⚡ Auto*
+ 7,Verify ✅,qa-automation,All tests pass/coverage ≥80%,⚡ Auto
+ 8,Document 📚,pm-operations-orchestrator,Documentation,⚡ Auto
+ 9,Share 🔔,slack-operations,Team notification,⚡ Auto
 ```
+
+**Gate Legend:**
+- ✋ Approval = Must wait for user approval before continuing
+- ⚡ Auto = Auto-continue after showing deliverables
+- ⚡ Auto* = Auto-continue unless critical issues found
 
 ## Phase Transition Rules
 
@@ -100,46 +105,54 @@ workflow_phases[11]{phase,name,lead_agent,deliverable,gate}:
 
 ```
 Phase 1 (Understand) → Phase 2 (Design)
-  Requires: approve
-  Blocker: Unclear requirements
+  Mode: ⚡ AUTO-CONTINUE
+  Shows: Requirements summary, then continues
 
 Phase 2 (Design) → Phase 3 (UI)
-  Requires: approve
-  Blocker: No technical design
+  Mode: ✋ APPROVAL REQUIRED
+  Blocker: No technical design approved
 
 Phase 3 (UI) → Phase 4 (Plan Tests)
-  Requires: approve
+  Mode: ⚡ AUTO-CONTINUE
   Skip if: No UI component in task
 
 Phase 4 (Plan Tests) → Phase 5a (Write Tests)
-  Requires: approve + TECH_SPEC_AI.md exists
-  Blocker: No test strategy OR missing TECH_SPEC_AI.md
+  Mode: ⚡ AUTO-CONTINUE
   Pre-check: AI MUST read TECH_SPEC_AI.md before proceeding
 
 Phase 5a (RED) → Phase 5b (GREEN)
-  Requires: approve + tests MUST fail
-  Blocker: Tests pass (they should fail!)
+  Mode: ⚡ AUTO-CONTINUE (if tests fail as expected)
+  Blocker: Tests pass (they should fail!) → STOP
 
 Phase 5b (GREEN) → Phase 5c (REFACTOR)
-  Requires: approve + tests MUST pass
+  Mode: ✋ APPROVAL REQUIRED
   Blocker: Tests still failing
 
 Phase 5c (REFACTOR) → Phase 6 (Review)
-  Requires: approve + tests MUST still pass
-  Blocker: Tests broken by refactor
+  Mode: ⚡ AUTO-CONTINUE (if tests still pass)
+  Blocker: Tests broken by refactor → STOP
 
 Phase 6 (Review) → Phase 7 (Verify)
-  Requires: approve
-  Blocker: Critical security issues
+  Mode: ⚡ AUTO-CONTINUE (unless critical issues)
+  Blocker: Critical security issues → STOP for approval
 
 Phase 7 (Verify) → Phase 8 (Document)
-  Requires: approve + coverage ≥80%
-  Blocker: Coverage below target
+  Mode: ⚡ AUTO-CONTINUE (if tests pass)
+  Blocker: Tests fail or coverage <80% → STOP
 
 Phase 8 (Document) → Phase 9 (Share)
-  Requires: approve
+  Mode: ⚡ AUTO-CONTINUE
   Auto-executes Phase 9
 ```
+
+### Summary: Only 2 Approval Gates
+
+| Gate | Phase | Why |
+|------|-------|-----|
+| 1st | Phase 2 (Design) | Architecture decisions are hard to change later |
+| 2nd | Phase 5b (GREEN) | Main implementation - review before refactor |
+
+All other phases auto-continue unless a blocker is hit.
 
 ### Invalid Transitions (BLOCKED)
 
@@ -148,13 +161,15 @@ Phase 8 (Document) → Phase 9 (Share)
 - ❌ Phase 7 with failing tests
 - ❌ Any phase skip without explicit user request
 
-## Approval Gates
+## Approval Gates (Only 2)
+
+Approval is only required at **Phase 2 (Design)** and **Phase 5b (Implementation)**.
 
 ### Gate Format
 
 ```markdown
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🏗️ Phase [N]: [Name] - Approval Needed
+🏗️ Phase [N]: [Name] - Approval Needed (Gate [X] of 2)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ## [Friendly Summary] ✨
@@ -163,13 +178,19 @@ Phase 8 (Document) → Phase 9 (Share)
 
 ---
 
+⏭️ **After approval (AUTO-CONTINUE):**
+→ Phases [N+1] to [X] will auto-continue
+→ Next approval gate: Phase [Y]
+
+---
+
 **Options:**
-- `approve` / `yes` → Continue to Phase [N+1]
+- `approve` / `yes` → Continue (auto-runs until next gate)
 - `reject: <reason>` → Re-do this phase
 - `modify: <changes>` → Adjust deliverables
 - `stop` → Cancel workflow
 
-⚡ After approval, I'll AUTO-CONTINUE to Phase [N+1]!
+⚡ After approval, I'll AUTO-CONTINUE through multiple phases!
 ```
 
 ### Valid Responses
@@ -184,27 +205,46 @@ valid_responses[4]{response,action}:
 
 ## AUTO-CONTINUE Behavior
 
-**After user approves:**
-1. ✅ Immediately start next phase
-2. ✅ No waiting for additional input
-3. ✅ Continue until:
-   - Next approval gate
-   - User rejection
-   - Blocking error
-   - Token limit (150K) → suggest `workflow:handoff`
+**Streamlined workflow with only 2 approval gates:**
 
-**Example Flow:**
+### Flow Overview
 ```
-User: "approve"
-→ Claude immediately starts Phase 3
-→ Completes Phase 3 deliverables
-→ Shows Phase 3 approval gate
-→ Waits for user
+START → Phase 1 (auto) → Phase 2 ✋ APPROVAL
+      → Phase 3-5a (auto) → Phase 5b ✋ APPROVAL
+      → Phase 5c-9 (auto) → DONE
+```
+
+### Example Flow
+```
+User: "workflow:start Add JWT authentication"
+
+→ Phase 1: Understand (shows summary, auto-continues)
+→ Phase 2: Design
+  ✋ APPROVAL GATE (1 of 2) - waits for user
 
 User: "approve"
-→ Claude immediately starts Phase 4
-→ ... continues ...
+
+→ Phase 3: UI Breakdown (auto-continues)
+→ Phase 4: Test Plan (auto-continues)
+→ Phase 5a: TDD RED - write failing tests (auto-continues if tests fail)
+→ Phase 5b: TDD GREEN - implementation
+  ✋ APPROVAL GATE (2 of 2) - waits for user
+
+User: "approve"
+
+→ Phase 5c: Refactor (auto-continues if tests pass)
+→ Phase 6: Review (auto-continues unless critical issues)
+→ Phase 7: Verify (auto-continues if tests pass)
+→ Phase 8: Document (auto-continues)
+→ Phase 9: Share (auto-executes)
+→ DONE ✅
 ```
+
+**Auto-Stop Triggers:**
+- Tests fail when they shouldn't (or pass when they should fail)
+- Critical security issues in review
+- Coverage below 80%
+- Token limit reached
 
 ## Critical Rules
 
@@ -302,58 +342,55 @@ workflow:status
 ```
 User: "workflow:start Add user authentication with JWT"
 
+━━━ AUTO-CONTINUE BLOCK 1 ━━━
+
 ┌─────────────────────────────────────────────────────────────┐
 │  🤖 Agent: pm-operations-orchestrator                       │
-│  📍 Phase 1: Understand 🎯                                  │
+│  📍 Phase 1: Understand 🎯 [AUTO]                           │
 │  📦 Delivering: Requirements document                       │
 └─────────────────────────────────────────────────────────────┘
-
 ├── Analyze requirements
 ├── Define success criteria
-├── Identify risks
-├── Cross-review with dev/QA/UI
-└── Show approval gate ✋
-
-User: "approve"
+└── Shows summary, continues automatically...
 
 ┌─────────────────────────────────────────────────────────────┐
 │  🤖 Agent: backend-nodejs                                   │
 │  📍 Phase 2: Design 🏗️                                      │
 │  📦 Delivering: Technical design + TECH_SPEC_AI.md          │
 └─────────────────────────────────────────────────────────────┘
-
 ├── Design JWT architecture
-├── Define API endpoints
-├── Plan database schema
-├── Create TECH_SPEC_AI.md
-├── Create Mermaid diagrams
-├── Cross-review
-└── Show approval gate ✋
+├── Create TECH_SPEC_AI.md + Mermaid diagrams
+└── ✋ APPROVAL GATE (1 of 2)
 
 User: "approve"
 
-┌─────────────────────────────────────────────────────────────┐
-│  🤖 Agent: ui-designer                                      │
-│  📍 Phase 3: UI Breakdown 🎨                                │
-│  📦 Delivering: Component breakdown                         │
-└─────────────────────────────────────────────────────────────┘
+━━━ AUTO-CONTINUE BLOCK 2 ━━━
 
-├── Design login/register screens
-├── Extract design tokens
-├── Plan component structure
-└── Show approval gate ✋
-
-... continues through all phases ...
+Phase 3: UI Breakdown 🎨 [AUTO]
+Phase 4: Test Plan 🧪 [AUTO]
+Phase 5a: TDD RED 🔴 [AUTO] (if tests fail as expected)
 
 ┌─────────────────────────────────────────────────────────────┐
-│  🤖 Agent: slack-operations                                 │
-│  📍 Phase 9: Share 🔔                                       │
-│  📦 Delivering: Team notification                           │
+│  🤖 Agent: backend-nodejs                                   │
+│  📍 Phase 5b: Build 🟢                                      │
+│  📦 Delivering: Implementation (TDD GREEN)                  │
 └─────────────────────────────────────────────────────────────┘
+├── Implement code to pass tests
+└── ✋ APPROVAL GATE (2 of 2)
 
-├── Send Slack notification
-├── Update JIRA ticket
-└── Workflow complete ✅
+User: "approve"
+
+━━━ AUTO-CONTINUE BLOCK 3 ━━━
+
+Phase 5c: Polish ♻️ [AUTO]
+Phase 6: Review 👀 [AUTO] (unless critical issues)
+Phase 7: Verify ✅ [AUTO] (if tests pass)
+Phase 8: Document 📚 [AUTO]
+Phase 9: Share 🔔 [AUTO]
+
+→ DONE ✅
+
+TOTAL APPROVALS NEEDED: 2
 ```
 
 ## Token Awareness
@@ -382,5 +419,5 @@ Works seamlessly with:
 
 ---
 
-**Version:** 1.3.0
-**Last Updated:** 2025-12-22
+**Version:** 1.4.0
+**Last Updated:** 2026-01-01
