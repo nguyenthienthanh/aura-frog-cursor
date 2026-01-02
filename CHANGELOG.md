@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.1] - 2026-01-02
+
+### Fixed
+- **Auto-Continue Phases Being Skipped** - Fixed documentation inconsistency
+  - Auto-continue phases were being skipped entirely instead of executing and showing deliverables
+  - Updated `approval-gates.mdc` to v2.0.0 with clear 2-gate model
+  - Updated `execution.mdc` to v2.0.0 with split rules for approval vs auto-continue
+  - Updated `safety.mdc` with approval gates section
+
+### Key Clarification
+```
+Auto-continue ≠ Skip!
+
+Approval Phases (2, 5b):     Execute → Show → WAIT → User approves → Continue
+Auto-Continue Phases:        Execute → Show → Continue automatically
+Auto-Stop (on blockers):     Execute → Issue found → STOP for fix
+```
+
+---
+
 ## [1.4.0] - 2026-01-01
 
 ### Changed
