@@ -28,3 +28,14 @@
 # Option 2: OAuth mode - create app at https://api.slack.com/apps
 # export SLACK_TOKEN="xoxc-your-token-or-xoxb-bot-token"
 # export SLACK_TEAM_ID="T00000000"
+
+# ============================================
+# Learning System (Supabase)
+# ============================================
+# Enables self-improvement through pattern analysis.
+# Get keys from: Supabase Dashboard → Project Settings → Data API
+
+# export SUPABASE_URL="https://your-project.supabase.co"
+# export SUPABASE_PUBLISHABLE_KEY="eyJhbGc..."  # Public key (anon)
+# export SUPABASE_SECRET_KEY="eyJhbGc..."  # Secret key (service_role)
+# export AF_LEARNING_ENABLED="true"

@@ -5,6 +5,67 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.0] - 2026-01-07
+
+### Learning System - Self-Improvement via Supabase
+
+Cursor can now learn and improve over time by collecting feedback, tracking metrics, and applying learned patterns.
+
+#### Added
+
+- **Learning System** - Cloud-based learning with Supabase
+  - `.cursor/docs/LEARNING_SYSTEM.md` - Full setup and usage guide
+  - `scripts/supabase/schema.sql` - Database schema for learning tables
+  - Feedback collection (corrections, approvals, rejections)
+  - Workflow metrics tracking
+  - Agent performance monitoring
+  - Pattern recognition and insights
+
+- **New Skills**
+  - `.cursor/rules/skills/auto-invoke/learning-analyzer.mdc` - Analyze patterns and generate insights
+  - `.cursor/rules/skills/auto-invoke/self-improve.mdc` - Apply learned improvements
+
+- **New Commands** (4)
+  - `/learn:setup` - Automatic schema setup via API
+  - `/learn:status` - Display learning system status
+  - `/learn:analyze` - Run pattern analysis
+  - `/learn:apply` - Apply learned improvements
+
+- **Environment Variables**
+  - `SUPABASE_URL` - Supabase project URL
+  - `SUPABASE_PUBLISHABLE_KEY` - Public key (safe for client)
+  - `SUPABASE_SECRET_KEY` - Secret key (server-side only)
+  - `AF_LEARNING_ENABLED` - Enable/disable learning
+
+#### Features
+
+1. **Feedback Collection**
+   - Detects user corrections to AI output
+   - Captures approval/rejection reasons at gates
+   - Optional quality ratings
+
+2. **Metrics Tracking**
+   - Workflow success/failure rates
+   - Token usage per phase
+   - Agent performance by task type
+   - Test coverage trends
+
+3. **Pattern Analysis**
+   - Success patterns (what works)
+   - Failure patterns (common issues)
+   - Optimization opportunities
+   - Agent routing recommendations
+
+4. **Self-Improvement**
+   - Review and apply suggestions
+   - Auto-apply high-confidence improvements
+   - Rollback support with backups
+
+#### Stats
+- Commands: 74 (was 70)
+
+---
+
 ## [1.4.1] - 2026-01-02
 
 ### Fixed
@@ -307,6 +368,9 @@ Auto-Stop (on blockers):     Execute → Issue found → STOP for fix
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.5.0 | 2026-01-07 | Learning System with Supabase (self-improvement) |
+| 1.4.1 | 2026-01-02 | Auto-continue phases fix |
+| 1.4.0 | 2026-01-01 | Streamlined 2-gate workflow |
 | 1.3.0 | 2025-12-22 | Centralized version management (VERSION + sync script) |
 | 1.2.0 | 2025-12-22 | JIRA/Figma data persistence in TOON format |
 | 1.1.8 | 2025-12-19 | MCP-first integrations, removed custom scripts |
