@@ -21,6 +21,7 @@ Load or reload environment variables from the project's `.envrc` file. This comm
 ## When to Use
 
 - After modifying integration credentials (JIRA, Slack, Figma, Confluence)
+- After setting up Learning System (Supabase) credentials
 - When starting a new session and env vars aren't loaded
 - To debug environment variable issues
 
@@ -89,12 +90,25 @@ echo ""
 echo "Environment Status:"
 echo ""
 
-# Integrations
-echo "Integration Credentials:"
-[ -n "$JIRA_URL" ] && echo "   JIRA (configured)" || echo "   JIRA (not configured)"
-[ -n "$FIGMA_API_TOKEN" ] && echo "   Figma (configured)" || echo "   Figma (not configured)"
-[ -n "$SLACK_BOT_TOKEN" ] && echo "   Slack (configured)" || echo "   Slack (not configured)"
-[ -n "$CONFLUENCE_URL" ] && echo "   Confluence (configured)" || echo "   Confluence (not configured)"
+# MCP Integrations
+echo "MCP Integrations:"
+[ -n "$GITHUB_TOKEN" ] && echo "   GitHub ✓" || echo "   GitHub (not configured)"
+[ -n "$FIGMA_API_KEY" ] && echo "   Figma ✓" || echo "   Figma (not configured)"
+[ -n "$SLACK_TOKEN" ] && echo "   Slack ✓" || echo "   Slack (not configured)"
+
+# Atlassian - OAuth (MCP) or API tokens (scripts)
+if [ -n "$JIRA_URL" ] && [ -n "$JIRA_API_TOKEN" ]; then
+  echo "   Atlassian ✓ (API tokens for scripts)"
+else
+  echo "   Atlassian - Uses OAuth (or set JIRA_* for scripts)"
+fi
+
+# Learning System
+echo ""
+echo "Learning System:"
+[ -n "$SUPABASE_URL" ] && echo "   Supabase URL ✓" || echo "   Supabase URL (not configured)"
+[ -n "$SUPABASE_SECRET_KEY" ] && echo "   Supabase Key ✓" || echo "   Supabase Key (not configured)"
+[ "$AF_LEARNING_ENABLED" = "true" ] && echo "   Learning: enabled" || echo "   Learning: disabled"
 
 # Workflow Settings
 echo ""
@@ -116,11 +130,16 @@ Source: ./.envrc
 
 Environment Status:
 
-Integration Credentials:
-   JIRA (configured)
-   Figma (configured)
+MCP Integrations:
+   GitHub ✓
+   Figma ✓
    Slack (not configured)
-   Confluence (not configured)
+   Atlassian ✓ (API tokens for scripts)
+
+Learning System:
+   Supabase URL ✓
+   Supabase Key ✓
+   Learning: enabled
 
 Workflow Settings:
    Coverage: 80% (default)
@@ -144,11 +163,13 @@ Loading environment from .envrc...
 Source: ./.envrc
 
 Loaded variables:
+   GITHUB_TOKEN
+   FIGMA_API_KEY
    JIRA_URL
-   JIRA_EMAIL
    JIRA_API_TOKEN
-   FIGMA_API_TOKEN
-   CONFLUENCE_URL
+   SUPABASE_URL
+   SUPABASE_SECRET_KEY
+   AF_LEARNING_ENABLED
 
 Environment Status:
 [Full status output...]
@@ -206,6 +227,7 @@ direnv reload
 - `project:regen` - Regenerate project context
 - `setup:integrations` - Configure integration credentials
 - `workflow:start` - Start workflow (uses loaded env vars)
+- `learn:status` - Check Learning System status (requires Supabase vars)
 
 ---
 
@@ -236,5 +258,5 @@ Variables are loaded for the current Cursor IDE session only. They persist until
 
 ---
 
-**Source:** Aura Frog v1.2.0
-**Last Updated:** 2025-12-04
+**Source:** Aura Frog v1.5.0
+**Last Updated:** 2026-01-07

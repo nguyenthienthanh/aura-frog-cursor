@@ -14,9 +14,14 @@
 # export GITHUB_TOKEN="ghp_your-token-here"
 
 # --- Atlassian (JIRA + Confluence) ---
-# Uses Official Atlassian Remote MCP Server (OAuth - no API token needed!)
-# On first use, browser opens for Atlassian login
-# No environment variables required - just enable in mcp.json
+# Option 1: MCP Server (OAuth) - browser opens for login, no tokens needed
+#   Just enable in mcp.json
+#
+# Option 2: Bash scripts (API tokens) - for scripts/jira-fetch.sh
+#   Get token: https://id.atlassian.com/manage-profile/security/api-tokens
+# export JIRA_URL="https://your-company.atlassian.net"
+# export JIRA_EMAIL="your-email@company.com"
+# export JIRA_API_TOKEN="your-api-token"
 
 # --- Figma ---
 # Get token: https://www.figma.com/developers/api#access-tokens
