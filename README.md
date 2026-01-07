@@ -11,7 +11,7 @@ Aura Frog provides a comprehensive AI-powered development workflow with:
 - **9 MCP Servers** - Auto-install, zero-config integrations
 - **16 Specialized Agents** - Auto-detect based on your tech stack
 - **9-Phase TDD Workflow** - Structured development
-- **74 Slash Commands** - All development tasks covered
+- **75 Slash Commands** - All development tasks covered
 - **42 Quality Rules** - Always enforced
 - **Learning System** - Self-improvement via Supabase *(NEW)*
 
@@ -168,7 +168,7 @@ Phase 9: Share           → Deployment
 │   ├── core/                   # 37 quality rules
 │   ├── agents/                 # 16 specialized agents
 │   └── skills/auto-invoke/     # 11 auto-invoke skills
-├── commands/                   # 74 slash commands
+├── commands/                   # 75 slash commands
 │   └── learn/                  # Learning system commands
 ├── workflows/                  # 9-phase workflow system
 ├── scripts/workflow/           # Workflow management scripts
@@ -193,7 +193,7 @@ See **[.cursor/docs/MCP.md](.cursor/docs/MCP.md)** for:
 |----------|-------|
 | MCP Servers | 9 (4 enabled, 5 optional) |
 | Agents | 16 |
-| Commands | 74 |
+| Commands | 75 |
 | Rules | 37 |
 | Skills | 11 (auto-invoke) |
 | Workflow Phases | 9 |
@@ -213,5 +213,5 @@ Same as original Aura Frog plugin. Check the [original repository](https://githu
 
 **Code with main character energy!** 🐸✨
 
-**Version:** 1.5.0
+**Version:** 1.5.1
 **Last Updated:** 2026-01-07

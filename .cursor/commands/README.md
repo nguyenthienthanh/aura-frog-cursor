@@ -1,8 +1,8 @@
 # Aura Frog Commands - Cursor Slash Command Format
 
 **Last Updated:** 2026-01-07
-**Source:** Aura Frog v1.5.0
-**Total Commands:** 74
+**Source:** Aura Frog v1.5.1
+**Total Commands:** 75
 
 ---
 
@@ -48,7 +48,7 @@ This directory contains all Aura Frog commands converted to Cursor IDE slash com
 **Logs** (1): analyze
 **Review** (1): fix
 **Skill** (1): create
-**Learn** (4): setup, status, analyze, apply *(NEW)*
+**Learn** (5): setup, status, feedback, analyze, apply
 **Misc** (4): document, refactor, help, execute
 
 ---

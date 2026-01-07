@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.5.1] - 2026-01-07
+
+### Enhanced Learning System Execution
+
+#### Added
+- **Auto env check at session start** - Cursor now checks env vars FIRST before any response
+  - Shows MCP status and Learning status in first response
+  - Auto-runs `project:reload-env` if env not configured
+- **Manual feedback command** (`/learn:feedback`) - Submit feedback interactively
+- **Feedback submission script** (`scripts/learn/submit-feedback.sh`) - CLI tool for feedback
+
+#### Changed
+- **CRITICAL execution notes** added to ALL learn commands
+  - Commands MUST actually execute curl commands, not just show docs
+  - Commands MUST source .envrc first to load environment
+  - Commands MUST query/submit REAL data to Supabase
+- Updated `env-loading.mdc` rule with mandatory session check
+
+#### Stats
+- Commands: 75 (was 74)
+
+---
+
 ## [1.5.0] - 2026-01-07
 
 ### Learning System - Self-Improvement via Supabase
@@ -368,6 +391,7 @@ Auto-Stop (on blockers):     Execute → Issue found → STOP for fix
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.5.1 | 2026-01-07 | Auto env check, feedback command, CRITICAL execution notes |
 | 1.5.0 | 2026-01-07 | Learning System with Supabase (self-improvement) |
 | 1.4.1 | 2026-01-02 | Auto-continue phases fix |
 | 1.4.0 | 2026-01-01 | Streamlined 2-gate workflow |

@@ -20,6 +20,7 @@ The learning system enables Cursor to improve over time by:
 |---------|---------|-------------|
 | `/learn:setup` | Create database schema | First time setup |
 | `/learn:status` | Show status and stats | Check if working |
+| `/learn:feedback` | Submit manual feedback | Report success/issues |
 | `/learn:analyze` | Generate insights | Weekly or on-demand |
 | `/learn:apply` | Apply improvements | After analysis |
 
@@ -34,10 +35,13 @@ The learning system enables Cursor to improve over time by:
 # 2. Verify it's working
 /learn:status
 
-# 3. After using Cursor for a while...
+# 3. Submit feedback as you work
+/learn:feedback
+
+# 4. After using Cursor for a while...
 /learn:analyze
 
-# 4. Apply improvements
+# 5. Apply improvements
 /learn:apply
 ```
 
@@ -75,4 +79,4 @@ export AF_LEARNING_ENABLED="true"
 
 ---
 
-**Version:** 1.5.0
+**Version:** 1.5.1
