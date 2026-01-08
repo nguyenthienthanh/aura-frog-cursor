@@ -1,0 +1,133 @@
+---
+description: Auto-load learned patterns from Supabase memory cache at session start. Applies AI improvements based on past learning.
+globs: []
+alwaysApply: true
+---
+
+# Rule: Memory Auto-Load
+
+**Version:** 1.6.0
+**Priority:** Critical
+**Applies:** Session start, after environment loading
+
+---
+
+## Rule
+
+**At session start, read cached memory to apply learned patterns and avoid past mistakes.**
+
+If learning is enabled and memory cache exists → Load and apply insights.
+
+---
+
+## Memory Cache Location
+
+```
+.cursor/cache/memory-context.md
+```
+
+This file is populated by:
+1. **Automatic:** `./scripts/learn/memory-load.sh` (run manually or via cron)
+2. **On-demand:** `/learn:memory` command
+
+---
+
+## Session Start Behavior
+
+After loading environment variables, check for memory:
+
+```bash
+# Check if memory cache exists and is recent (< 1 hour)
+if [ -f ".cursor/cache/memory-context.md" ]; then
+  # Read and apply learned patterns
+  cat .cursor/cache/memory-context.md
+fi
+```
+
+---
+
+## What Memory Contains
+
+The cache file may include:
+
+### Learned Patterns
+High-confidence patterns from past sessions:
+- Code style preferences
+- Architectural decisions
+- Technology choices
+
+### Agent Performance
+Success rates by agent to optimize routing:
+- Which agents perform well for which tasks
+- Agents that struggle with specific patterns
+
+### Recent Corrections
+Mistakes to avoid (from user feedback):
+- Common errors in this project
+- Patterns that were rejected
+
+### Recent Insights
+Knowledge from analysis:
+- Project-specific best practices
+- Performance optimizations discovered
+
+---
+
+## Applying Memory
+
+When memory is loaded, Cursor should:
+
+1. **Check learned patterns** before making decisions
+2. **Route to high-performing agents** when applicable
+3. **Avoid patterns in corrections list**
+4. **Apply relevant insights** to current task
+
+---
+
+## Show Status in First Response
+
+If memory is loaded, include in the session status:
+
+```
+🔌 MCP: context7 ✓ | figma ✓ | playwright ✓ | vitest ✓ | slack ✗
+🧠 Learning: enabled ✓ | Memory: 15 items loaded
+```
+
+If memory cache doesn't exist or is stale:
+
+```
+🔌 MCP: context7 ✓ | figma ✓ | playwright ✓ | vitest ✓ | slack ✗
+🧠 Learning: enabled ✓ | Memory: not loaded (run /learn:memory)
+```
+
+---
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `/learn:memory` | Load/refresh memory cache |
+| `/learn:status` | Check learning system status |
+| `/learn:analyze` | Generate new insights |
+
+---
+
+## Refresh Memory
+
+Memory cache is valid for 1 hour. To refresh:
+
+```bash
+# Refresh if stale
+./scripts/learn/memory-load.sh
+
+# Force refresh
+./scripts/learn/memory-load.sh --force
+
+# Check status
+./scripts/learn/memory-load.sh --status
+```
+
+---
+
+**Version:** 1.6.0
+**Last Updated:** 2026-01-08

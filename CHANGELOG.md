@@ -5,6 +5,68 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.0] - 2026-01-08
+
+### Auto-Learn: Automatic Feedback Detection
+
+#### Added
+- **Auto-Learn Skill** (`auto-learn.mdc`) - Automatically detects corrections in user messages
+  - Correction patterns: "no", "wrong", "actually", "don't do", "stop adding"
+  - Approval patterns: "good", "great", "perfect", "thanks"
+  - Auto-categorizes: code_style, testing, security, error_handling, etc.
+  - Confidence scoring (50-90%)
+- **Auto-Learn Submit Script** (`scripts/learn/auto-learn-submit.sh`) - Submits detected feedback
+  - Deduplication: Skips identical feedback within 24 hours (MD5 hash)
+  - Pattern detection: Auto-creates patterns after 3+ similar corrections
+  - Local cache: `.cursor/cache/auto-learn-cache.json`
+  - Local patterns: `.cursor/cache/learned-patterns.md`
+
+#### How It Works
+```
+User: "stop adding jsdoc comments"
+         ↓
+Auto-Learn detects correction (90% confidence)
+         ↓
+Categorizes as code_style:minimal_comments
+         ↓
+Records to Supabase + local cache
+         ↓
+🧠 Learning: Captured correction [code_style:minimal_comments] (3x)
+```
+
+#### Stats
+- Skills: 13 auto-invoke (was 12)
+
+---
+
+## [1.6.0] - 2026-01-08
+
+### Memory Auto-Load at Session Start
+
+#### Added
+- **Memory Auto-Load Rule** (`memory-auto-load.mdc`) - Load learned patterns at session start
+  - Reads cached memory from `.cursor/cache/memory-context.md`
+  - Shows memory count in session status banner
+  - Applies learned patterns, agent performance stats, and corrections
+- **Memory Load Script** (`scripts/learn/memory-load.sh`) - CLI for memory management
+  - Fetches learned patterns from Supabase (high confidence, active)
+  - Caches agent performance metrics
+  - Loads recent corrections to avoid past mistakes
+  - 1-hour cache validity with force refresh option
+- **New Command** (`/learn:memory`) - Load or refresh memory cache
+  - CRITICAL execution: Must actually run script, not just show docs
+
+#### Changed
+- **Environment Loading Rule** updated to include memory loading step
+  - Step 3: Load memory cache after sourcing .envrc
+  - Status now shows: `🧠 Learning: enabled ✓ | Memory: 15 items loaded`
+
+#### Stats
+- Commands: 76 (was 75)
+- Core Rules: 43 (was 42)
+
+---
+
 ## [1.5.1] - 2026-01-07
 
 ### Enhanced Learning System Execution
@@ -391,6 +453,8 @@ Auto-Stop (on blockers):     Execute → Issue found → STOP for fix
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.7.0 | 2026-01-08 | Auto-learn: Automatic feedback detection |
+| 1.6.0 | 2026-01-08 | Memory auto-load at session start |
 | 1.5.1 | 2026-01-07 | Auto env check, feedback command, CRITICAL execution notes |
 | 1.5.0 | 2026-01-07 | Learning System with Supabase (self-improvement) |
 | 1.4.1 | 2026-01-02 | Auto-continue phases fix |

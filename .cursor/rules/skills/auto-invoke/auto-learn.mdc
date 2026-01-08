@@ -1,0 +1,196 @@
+---
+description: Automatically detect corrections and approvals in user messages. Records feedback to improve AI responses over time.
+globs: []
+alwaysApply: true
+---
+
+# Skill: Auto-Learn
+
+**Version:** 1.7.0
+**Trigger:** Every user message (auto-invoke)
+**Purpose:** Detect corrections/feedback and record for learning
+
+---
+
+## Overview
+
+Analyze user messages for correction or approval patterns. When detected, record feedback to Supabase to improve future responses.
+
+---
+
+## Detection Patterns
+
+### Corrections (User is correcting AI)
+
+**Strong Signals (90% confidence):**
+```
+- "no, that's wrong"
+- "incorrect, it should..."
+- "actually, use..."
+- "don't do that"
+- "stop adding comments"
+- "remove the docstrings"
+- "that's not what I wanted"
+- "change it to..."
+- "fix the..."
+```
+
+**Medium Signals (70% confidence):**
+```
+- "should be X instead of Y"
+- "prefer X over Y"
+- "too verbose"
+- "too complex"
+- "unnecessary"
+- "why did you..."
+```
+
+**Weak Signals (50% confidence):**
+```
+- Contains 2+ correction keywords: wrong, fix, change, don't, stop, remove
+```
+
+### Approvals (User likes AI response)
+
+**Strong Signals (80% confidence):**
+```
+- "good", "great", "perfect"
+- "that's what I wanted"
+- "exactly"
+- "yes, thanks"
+- "looks good"
+```
+
+---
+
+## Categorization
+
+When a correction is detected, categorize it:
+
+| Trigger Words | Category | Rule |
+|---------------|----------|------|
+| comment, jsdoc, docstring | `code_style` | `minimal_comments` |
+| type, typescript, any | `code_style` | `type_safety` |
+| test, spec, coverage | `testing` | `test_quality` |
+| import, export, module | `code_style` | `imports` |
+| naming, variable, function | `code_style` | `naming` |
+| complex, simple, refactor | `code_quality` | `complexity` |
+| error, exception, catch | `error_handling` | `error_handling` |
+| security, auth, password | `security` | `security` |
+| *(other)* | `general` | `general` |
+
+---
+
+## Behavior
+
+When you detect a correction or approval in user input:
+
+1. **Identify the type** (correction/approval) and confidence level
+2. **Categorize** the feedback using the table above
+3. **Record locally** to `.cursor/cache/auto-learn-cache.json`
+4. **Submit to Supabase** if learning is enabled
+
+### Show Notification
+
+When a correction is detected with ≥70% confidence:
+
+```
+🧠 Learning: Captured correction [code_style:minimal_comments] (3x)
+```
+
+When a pattern threshold (3x) is reached:
+
+```
+🧠 Learning: Pattern detected! "code_style:minimal_comments" (3 occurrences)
+```
+
+---
+
+## Local Cache
+
+Maintain deduplication cache at `.cursor/cache/auto-learn-cache.json`:
+
+```json
+{
+  "entries": [
+    {
+      "hash": "abc123def456",
+      "type": "correction",
+      "category": "code_style",
+      "rule": "minimal_comments",
+      "timestamp": 1704672000000
+    }
+  ],
+  "patterns": {
+    "code_style:minimal_comments": 3,
+    "testing:test_quality": 1
+  }
+}
+```
+
+**Deduplication:** Skip identical feedback within 24 hours (compare MD5 hash of normalized input).
+
+---
+
+## Learned Patterns File
+
+When pattern count reaches 3, update `.cursor/cache/learned-patterns.md`:
+
+```markdown
+# Learned Patterns
+
+Auto-generated from user corrections. Updated: 2026-01-08T12:00:00Z
+
+---
+
+## code_style: minimal_comments
+
+**Occurrences:** 3
+**Latest:** stop adding jsdoc comments to every function...
+
+---
+```
+
+---
+
+## Submission
+
+When correction/approval is detected, submit to Supabase:
+
+```bash
+# Source environment
+source .envrc 2>/dev/null || source .cursor/.envrc 2>/dev/null || true
+
+# Submit feedback
+./scripts/learn/auto-learn-submit.sh \
+  --type "correction" \
+  --category "code_style" \
+  --rule "minimal_comments" \
+  --reason "User said: stop adding docstrings" \
+  --confidence 0.9
+```
+
+---
+
+## Skip Conditions
+
+Do NOT analyze if:
+- Input is less than 5 characters
+- Input starts with `/` (slash command)
+- Learning is disabled (`AF_LEARNING_ENABLED != true`)
+
+---
+
+## CRITICAL: Actually Execute
+
+When you detect a correction pattern:
+
+1. **DO** show the learning notification
+2. **DO** update local cache
+3. **DO** submit to Supabase via script
+4. **DON'T** just acknowledge - actually record the feedback
+
+---
+
+**Version:** 1.7.0
+**Last Updated:** 2026-01-08

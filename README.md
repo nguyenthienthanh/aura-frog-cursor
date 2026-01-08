@@ -11,23 +11,23 @@ Aura Frog provides a comprehensive AI-powered development workflow with:
 - **9 MCP Servers** - Auto-install, zero-config integrations
 - **16 Specialized Agents** - Auto-detect based on your tech stack
 - **9-Phase TDD Workflow** - Structured development
-- **75 Slash Commands** - All development tasks covered
-- **42 Quality Rules** - Always enforced
-- **Learning System** - Self-improvement via Supabase *(NEW)*
+- **76 Slash Commands** - All development tasks covered
+- **43 Quality Rules** - Always enforced
+- **Learning System** - Self-improvement via Supabase with memory auto-load
 
-## What's New in v1.5.0
+## What's New in v1.7.0
 
-**Learning System** - Self-improvement through pattern analysis:
+**Auto-Learn** - Automatic feedback detection:
 
-- **Feedback Collection** - Track corrections, approvals, and rejections
-- **Metrics Tracking** - Workflow success rates, token usage, agent performance
-- **Pattern Analysis** - Identify what works and what doesn't
-- **Self-Improvement** - Apply learned optimizations to rules and agents
+- **Correction Detection** - "no", "wrong", "don't do" → auto-captured
+- **Approval Detection** - "good", "great", "perfect" → auto-captured
+- **Pattern Recognition** - After 3+ similar corrections, creates pattern
+- **Local + Cloud** - Stores in `.cursor/cache/` and Supabase
 
 ```bash
-/learn:status   # Check learning system status
-/learn:analyze  # Generate insights from usage data
-/learn:apply    # Apply learned improvements
+# No commands needed - happens automatically!
+# When you say "stop adding comments", Cursor learns:
+🧠 Learning: Captured correction [code_style:minimal_comments] (1x)
 ```
 
 **Requirements:** Supabase (free tier works). See `.cursor/docs/LEARNING_SYSTEM.md`
@@ -164,14 +164,17 @@ Phase 9: Share           → Deployment
 ```
 .cursor/
 ├── mcp.json                    # MCP server configuration
+├── cache/                      # Memory cache for learned patterns
 ├── rules/
-│   ├── core/                   # 37 quality rules
+│   ├── core/                   # 43 quality rules
 │   ├── agents/                 # 16 specialized agents
-│   └── skills/auto-invoke/     # 11 auto-invoke skills
-├── commands/                   # 75 slash commands
+│   └── skills/auto-invoke/     # 12 auto-invoke skills
+├── commands/                   # 76 slash commands
 │   └── learn/                  # Learning system commands
 ├── workflows/                  # 9-phase workflow system
-├── scripts/workflow/           # Workflow management scripts
+├── scripts/
+│   ├── workflow/               # Workflow management scripts
+│   └── learn/                  # Learning system scripts
 └── docs/                       # Documentation
     ├── MCP.md                  # MCP server guide
     └── LEARNING_SYSTEM.md      # Learning system setup
@@ -193,9 +196,9 @@ See **[.cursor/docs/MCP.md](.cursor/docs/MCP.md)** for:
 |----------|-------|
 | MCP Servers | 9 (4 enabled, 5 optional) |
 | Agents | 16 |
-| Commands | 75 |
-| Rules | 37 |
-| Skills | 11 (auto-invoke) |
+| Commands | 76 |
+| Rules | 43 |
+| Skills | 13 (auto-invoke) |
 | Workflow Phases | 9 |
 
 ## Documentation
@@ -213,5 +216,5 @@ Same as original Aura Frog plugin. Check the [original repository](https://githu
 
 **Code with main character energy!** 🐸✨
 
-**Version:** 1.5.1
-**Last Updated:** 2026-01-07
+**Version:** 1.7.0
+**Last Updated:** 2026-01-08

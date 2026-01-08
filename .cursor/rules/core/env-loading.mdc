@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Rule: Environment Loading
 
-**Version:** 1.5.1
+**Version:** 1.6.0
 **Priority:** Critical
 **Applies:** Session start, before any workflow or prompt response
 
@@ -17,6 +17,7 @@ alwaysApply: true
 **ALWAYS check environment variables FIRST before responding to any prompt.**
 
 If environment is not configured → Run `project:reload-env` automatically.
+If learning is enabled → Load memory from cache.
 
 ---
 
@@ -40,10 +41,19 @@ Before responding to the user's first message, you MUST:
    fi
    ```
 
-3. **Show env status in first response:**
+3. **Load memory cache (if learning enabled):**
+   ```bash
+   # Check for memory cache
+   if [ -f ".cursor/cache/memory-context.md" ]; then
+     # Read cached learned patterns
+     cat .cursor/cache/memory-context.md
+   fi
+   ```
+
+4. **Show env status in first response:**
    ```
    🔌 MCP: context7 ✓ | figma ✓ | playwright ✓ | vitest ✓ | slack ✗
-   🧠 Learning: enabled ✓
+   🧠 Learning: enabled ✓ | Memory: 15 items loaded
    ```
 
 **NEVER skip this check. NEVER respond without loading env first.**
@@ -105,8 +115,9 @@ Environment Variable > Project Config > Global Config > Default
 - `project:reload-env` - Reload after editing .envrc
 - `project:init` - Creates .envrc template
 - `learn:status` - Check learning system status
+- `learn:memory` - Load/refresh memory cache
 
 ---
 
-**Version:** 1.5.1
-**Last Updated:** 2026-01-07
+**Version:** 1.6.0
+**Last Updated:** 2026-01-08
