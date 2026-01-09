@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Aura Frog for Cursor IDE - Setup Script
-# Version: 1.1.9
+# Version: 1.7.0
 #
 # This script installs Aura Frog to your project by copying
-# the .cursor folder. MCP servers handle all integrations.
+# the .cursor folder and scripts. MCP servers handle all integrations.
 
 set -e
 
@@ -51,7 +51,7 @@ CURSOR_SOURCE="$SCRIPT_DIR/.cursor"
 # Banner
 echo -e "${CYAN}"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "  🐸 AURA FROG for Cursor IDE - Setup v1.1.9"
+echo "  🐸 AURA FROG for Cursor IDE - Setup v1.7.0"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo -e "${NC}"
 
@@ -97,7 +97,7 @@ fi
 
 # Step 1: Copy .cursor folder
 echo ""
-echo -e "${BLUE}[1/3] Copying .cursor folder...${NC}"
+echo -e "${BLUE}[1/4] Copying .cursor folder...${NC}"
 
 if [ -d "$TARGET_PROJECT/.cursor" ]; then
     if [ "$FORCE_OVERRIDE" = true ]; then
@@ -105,9 +105,9 @@ if [ -d "$TARGET_PROJECT/.cursor" ]; then
         cp -r "$CURSOR_SOURCE" "$TARGET_PROJECT/.cursor"
         echo -e "${GREEN}  ✓ .cursor folder replaced${NC}"
     else
-        # Merge: copy new files only
-        rsync -a --ignore-existing "$CURSOR_SOURCE/" "$TARGET_PROJECT/.cursor/"
-        echo -e "${GREEN}  ✓ .cursor folder merged${NC}"
+        # Merge: update all files (overwrite existing, add new)
+        rsync -a "$CURSOR_SOURCE/" "$TARGET_PROJECT/.cursor/"
+        echo -e "${GREEN}  ✓ .cursor folder updated${NC}"
     fi
 else
     cp -r "$CURSOR_SOURCE" "$TARGET_PROJECT/.cursor"
@@ -122,9 +122,24 @@ if [ -f "$SCRIPT_DIR/.cursorrules" ]; then
     fi
 fi
 
-# Step 2: Setup .envrc
+# Step 2: Copy scripts folder
 echo ""
-echo -e "${BLUE}[2/3] Setting up environment...${NC}"
+echo -e "${BLUE}[2/4] Copying scripts folder...${NC}"
+
+SCRIPTS_SOURCE="$SCRIPT_DIR/scripts"
+if [ -d "$SCRIPTS_SOURCE" ]; then
+    mkdir -p "$TARGET_PROJECT/scripts"
+    rsync -a "$SCRIPTS_SOURCE/" "$TARGET_PROJECT/scripts/"
+    # Make scripts executable
+    find "$TARGET_PROJECT/scripts" -name "*.sh" -exec chmod +x {} \;
+    echo -e "${GREEN}  ✓ scripts folder copied${NC}"
+else
+    echo -e "${YELLOW}  No scripts folder found, skipping${NC}"
+fi
+
+# Step 3: Setup .envrc
+echo ""
+echo -e "${BLUE}[3/4] Setting up environment...${NC}"
 
 ENVRC_TEMPLATE="$TARGET_PROJECT/.cursor/.envrc.template"
 ENVRC_TARGET="$TARGET_PROJECT/.envrc"
@@ -138,12 +153,12 @@ else
     echo -e "${YELLOW}  .envrc exists, skipping${NC}"
 fi
 
-# Step 3: Update .gitignore
+# Step 4: Update .gitignore
 echo ""
-echo -e "${BLUE}[3/3] Updating .gitignore...${NC}"
+echo -e "${BLUE}[4/4] Updating .gitignore...${NC}"
 
 GITIGNORE="$TARGET_PROJECT/.gitignore"
-ENTRIES=(".envrc" ".cursor/logs/" ".cursor/.envrc")
+ENTRIES=(".envrc" ".cursor/logs/" ".cursor/cache/" ".cursor/.envrc")
 
 for entry in "${ENTRIES[@]}"; do
     if [ -f "$GITIGNORE" ]; then
@@ -174,6 +189,13 @@ echo "  ○ vitest       - Unit testing"
 echo "  ○ atlassian    - JIRA/Confluence (needs credentials)"
 echo "  ○ figma        - Design tokens (needs FIGMA_API_KEY)"
 echo "  ○ slack        - Notifications (needs SLACK_BOT_TOKEN)"
+echo ""
+echo -e "${BOLD}Learning System (optional):${NC}"
+echo "  Enable self-improvement via Supabase:"
+echo "  1. Add SUPABASE_URL and SUPABASE_SECRET_KEY to .envrc"
+echo "  2. Set AF_LEARNING_ENABLED=true"
+echo "  3. Run /learn:setup in Cursor"
+echo "  Docs: ${CYAN}.cursor/docs/LEARNING_SYSTEM.md${NC}"
 echo ""
 echo -e "${BOLD}To enable optional MCP servers:${NC}"
 echo "  1. Edit ${CYAN}.envrc${NC} - add your API credentials"
