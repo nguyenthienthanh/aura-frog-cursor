@@ -5,6 +5,103 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.1] - 2026-01-14
+
+### Visual Regression Workflow Integration
+
+Auto-trigger visual regression during workflow - no manual commands needed.
+
+#### Added
+- **Auto-Detection Triggers** - Visual regression runs automatically when:
+  - Figma URL detected in task (`figma.com/file/...`)
+  - Design files mentioned (`*.png`, `*.jpg`, `*.fig`)
+  - Keywords detected: "match design", "pixel perfect", "per Figma"
+  - Workflow reaches Phase 5 (GREEN), Phase 6 (Review), or Phase 7 (Verify)
+
+- **Design Reference Storage** - Phase 3 now stores design references
+  - Automatically persists to `.cursor/visual/reference-path.txt`
+  - Enables automatic visual regression in later phases
+
+#### Updated
+- **Phase 3 (UI Breakdown)** - Stores design reference for later comparison
+- **Phase 7 (Verify)** - New step 6.5: Auto visual regression if reference exists
+- **visual-regression.mdc** - Enhanced with workflow triggers and auto-detection
+
+#### How Auto-Trigger Works
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    WORKFLOW INTEGRATION                      │
+├─────────────────────────────────────────────────────────────┤
+│  Phase 3 (UI) ──► Store design reference                     │
+│       │                                                      │
+│       ▼                                                      │
+│  Phase 5 (GREEN) ──► Auto-run after component implementation │
+│       │                                                      │
+│       ▼                                                      │
+│  Phase 6 (Review) ──► Auto-run during quality check          │
+│       │                                                      │
+│       ▼                                                      │
+│  Phase 7 (Verify) ──► Final auto-validation                  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## [1.9.0] - 2026-01-14
+
+### Visual Regression Testing with Auto-Fix Loop
+
+Pixel-perfect UI testing with closed-loop automated fixing.
+
+#### Added
+- **Visual Regression Skill** (`visual-regression.mdc`) - Auto-invoke skill for visual testing
+  - Compares implementation screenshots against design references
+  - Calculates pixel difference percentage
+  - Auto-fix loop: identifies issues → applies fixes → re-tests
+  - Integrates with Playwright MCP (screenshots) and Figma MCP (design refs)
+  - Max 5 iterations, configurable threshold (default 1%)
+
+- **Pixel Accuracy Rule** (`pixel-accuracy.mdc`) - Core rule enforcing UI quality
+  - Defines pixel accuracy standards (colors exact, spacing ±1px)
+  - Quality gate: ≤1% pass, 1-5% warning, >5% fail
+  - Documents common issues and fix strategies
+
+- **Visual Testing Scripts**
+  - `scripts/visual/visual-regression.sh` - Compare images, generate diff
+  - `scripts/visual/auto-fix-loop.sh` - Iterative fix loop until pass
+
+- **Visual Commands** (3 new)
+  - `/visual:test` - Run visual regression test
+  - `/visual:loop` - Run auto-fix loop
+  - `/visual:baseline` - Update baseline screenshots
+
+#### How It Works
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    VISUAL REGRESSION LOOP                    │
+├─────────────────────────────────────────────────────────────┤
+│  1. CAPTURE ──► Screenshot of implementation                 │
+│  2. COMPARE ──► Diff against design reference                │
+│  3. ANALYZE ──► Identify problems (color, spacing, font)     │
+│  4. CHECK ────► Diff < 1%?                                   │
+│       YES → ✅ PASS                                          │
+│       NO  → 5. FIX → Apply CSS fixes → Back to step 1       │
+└─────────────────────────────────────────────────────────────┘
+```
+
+#### Requirements
+```bash
+brew install imagemagick   # Image comparison
+npx playwright install     # Screenshot capture
+```
+
+#### Stats
+- Skills: 14 auto-invoke (was 13)
+- Rules: 44 (was 43)
+- Commands: 79 (was 76)
+
+---
+
 ## [1.8.0] - 2026-01-14
 
 ### Framework-Specific MCP Integrations
@@ -503,6 +600,7 @@ Auto-Stop (on blockers):     Execute → Issue found → STOP for fix
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.9.0 | 2026-01-14 | Visual regression testing with auto-fix loop |
 | 1.8.0 | 2026-01-14 | Framework MCP: Laravel Boost, Node.js Debugger |
 | 1.7.0 | 2026-01-08 | Auto-learn: Automatic feedback detection |
 | 1.6.0 | 2026-01-08 | Memory auto-load at session start |

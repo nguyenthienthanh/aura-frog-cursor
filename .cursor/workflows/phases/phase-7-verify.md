@@ -76,6 +76,33 @@ Verify:
 - Quick API responses
 - Memory usage normal
 
+### 6.5. Visual Regression Testing (AUTO)
+
+**⚡ AUTO-TRIGGERED if design reference exists**
+
+If a design reference was stored in Phase 3, visual regression runs automatically:
+
+```bash
+# Check if design reference exists
+if [ -f ".cursor/visual/reference-path.txt" ]; then
+    REFERENCE=$(cat .cursor/visual/reference-path.txt)
+    ./scripts/visual/auto-fix-loop.sh "$APP_URL" "$REFERENCE" 1 5
+fi
+```
+
+**What happens:**
+1. Screenshot current implementation via Playwright MCP
+2. Compare against stored design reference
+3. If diff > 1%, auto-fix loop runs (max 5 iterations)
+4. Report final diff percentage
+
+**Expected results:**
+- ✅ Pixel diff ≤ 1%
+- ✅ All visual issues auto-fixed
+- ✅ Design reference matched
+
+**If no design reference:** This step is skipped automatically.
+
 ### 7. Accessibility Testing (15 min)
 Verify:
 - Screen reader compatible
@@ -94,6 +121,7 @@ Document all testing results.
 - Edge case testing results
 - Exploratory testing findings
 - Performance test results
+- **Visual regression results (if design reference exists)**
 - Accessibility test results
 - Bug list (if any found)
 
@@ -146,6 +174,15 @@ Tested scenarios:
 - Image upload: <2s on 4G ✅
 - API response: <500ms ✅
 - No memory leaks ✅
+
+## Visual Regression: ✅ Pixel Perfect (if design reference exists)
+
+- Pixel diff: 0.4% (threshold: 1%) ✅
+- Auto-fix iterations: 2
+- Fixes applied:
+  - .header background-color
+  - .card padding
+  - .title font-size
 
 ## Accessibility: ✅ Compliant
 

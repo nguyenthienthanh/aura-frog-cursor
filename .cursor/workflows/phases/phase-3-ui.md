@@ -26,6 +26,24 @@ Analyze UI/UX requirements, extract design tokens, break down components, and cr
 - Note interactions and animations
 - Document responsive behavior
 
+**⚡ AUTO: Store Design Reference**
+
+If design reference is provided (Figma URL, PNG, etc.), store it for Phase 7 visual regression:
+
+```bash
+# Create visual directory if needed
+mkdir -p .cursor/visual/reference
+
+# Store Figma reference
+echo "figma://FILE_ID/NODE_ID" > .cursor/visual/reference-path.txt
+
+# Or store image reference
+cp design.png .cursor/visual/reference/main.png
+echo ".cursor/visual/reference/main.png" > .cursor/visual/reference-path.txt
+```
+
+This enables automatic visual regression testing in Phase 7.
+
 ### 2. Design Token Extraction (20 min)
 Extract and document:
 - **Colors**: Primary, secondary, semantic colors
@@ -84,6 +102,7 @@ Document:
 - Accessibility checklist
 - Asset list
 - Implementation order plan
+- **Design reference stored** (`.cursor/visual/reference-path.txt`) - enables auto visual regression in Phase 7
 
 ## Approval Gate
 Present summary to user including:

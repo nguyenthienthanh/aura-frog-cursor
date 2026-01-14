@@ -1,0 +1,183 @@
+---
+description: Enforce pixel-perfect UI implementation. All UI components must match design references within acceptable threshold.
+globs:
+  - "**/*.tsx"
+  - "**/*.jsx"
+  - "**/*.vue"
+  - "**/*.css"
+  - "**/*.scss"
+alwaysApply: false
+---
+
+# Rule: Pixel Accuracy
+
+**Version:** 1.9.0
+**Priority:** High
+**Applies:** UI component implementation, design review
+
+---
+
+## Rule
+
+**All UI implementations MUST match design references within the configured pixel accuracy threshold.**
+
+Default threshold: **1% pixel difference**
+
+---
+
+## Requirements
+
+### 1. Design Reference Required
+
+Before implementing UI components, ensure you have:
+- Figma file/frame URL, OR
+- Design screenshot in `.cursor/visual/reference/`
+
+### 2. Pixel Accuracy Standards
+
+| Element | Tolerance |
+|---------|-----------|
+| Colors | Exact match (hex) |
+| Spacing | ±1px |
+| Font size | Exact match |
+| Border radius | ±1px |
+| Shadows | Visual match |
+| Layout | Exact match |
+
+### 3. Comparison Checkpoints
+
+Run visual regression at these points:
+- After each component implementation
+- Before PR submission
+- After CSS/style changes
+
+---
+
+## Acceptance Criteria
+
+```
+✅ PASS: Pixel diff ≤ 1%
+⚠️ WARNING: Pixel diff 1-5% (review required)
+❌ FAIL: Pixel diff > 5% (must fix)
+```
+
+---
+
+## Auto-Fix Loop
+
+When pixel diff exceeds threshold:
+
+1. **Identify** - Locate areas with differences
+2. **Analyze** - Determine cause (color, spacing, font, layout)
+3. **Fix** - Apply targeted CSS corrections
+4. **Verify** - Re-run visual comparison
+5. **Iterate** - Repeat until threshold met (max 5 iterations)
+
+---
+
+## Common Issues and Fixes
+
+### Color Mismatch
+```css
+/* Issue: Background color doesn't match design */
+/* Fix: Use exact color from design system */
+.component {
+  background-color: var(--color-primary); /* Not #0066cc */
+}
+```
+
+### Spacing Inconsistency
+```css
+/* Issue: Padding doesn't match 8px grid */
+/* Fix: Use spacing tokens */
+.component {
+  padding: var(--spacing-4); /* 16px, not 15px */
+  margin: var(--spacing-2); /* 8px, not 10px */
+}
+```
+
+### Font Discrepancy
+```css
+/* Issue: Font size doesn't match typography scale */
+/* Fix: Use typography tokens */
+.title {
+  font-size: var(--font-size-xl); /* 24px, not 22px */
+  line-height: var(--line-height-tight); /* 1.25, not 1.3 */
+}
+```
+
+### Layout Shift
+```css
+/* Issue: Flexbox gap doesn't match design */
+/* Fix: Match exact spacing */
+.container {
+  display: flex;
+  gap: 16px; /* Match design exactly */
+}
+```
+
+---
+
+## Design System Compliance
+
+When using a design system (MUI, Tailwind, etc.):
+
+1. **Use tokens** - Never hardcode values
+2. **Match variants** - Use correct component variants
+3. **Check responsive** - Test all breakpoints
+4. **Verify states** - Test hover, focus, active states
+
+---
+
+## Tools
+
+### MCP Servers
+- **Playwright** - Screenshot capture
+- **Figma** - Design reference fetch
+
+### Comparison Tools
+- ImageMagick `compare`
+- pixelmatch (npm)
+- SSIM comparison
+
+### Scripts
+- `./scripts/visual/visual-regression.sh`
+- `./scripts/visual/auto-fix-loop.sh`
+
+---
+
+## Quality Gate
+
+Visual regression is a **blocking quality gate**:
+
+- CI/CD pipelines should fail if pixel diff > threshold
+- PR reviews should include visual diff images
+- Baseline updates require approval
+
+---
+
+## Exceptions
+
+Acceptable exceptions (document with comment):
+- Dynamic content (dates, user data)
+- Animation frames
+- Third-party embeds
+- Browser-specific rendering
+
+```css
+/* @visual-ignore: dynamic-content */
+.timestamp { ... }
+```
+
+---
+
+## Related Rules
+
+- `design-system-usage.mdc` - Use design tokens
+- `theme-consistency.mdc` - Theme compliance
+- `accessibility.mdc` - Color contrast requirements
+
+---
+
+**Version:** 1.9.0
+**Last Updated:** 2026-01-14

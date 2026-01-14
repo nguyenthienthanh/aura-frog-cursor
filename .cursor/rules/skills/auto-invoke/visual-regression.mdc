@@ -1,0 +1,323 @@
+---
+description: Visual regression testing with closed-loop auto-fix. Compares UI implementation against design references and automatically fixes discrepancies.
+globs:
+  - "**/*.tsx"
+  - "**/*.jsx"
+  - "**/*.vue"
+  - "**/*.svelte"
+  - "**/*.css"
+  - "**/*.scss"
+alwaysApply: false
+---
+
+# Skill: Visual Regression Testing
+
+**Version:** 1.9.1
+**Trigger:** Auto-detect design references, workflow phases, UI implementation
+**Purpose:** Ensure pixel-perfect UI implementation with auto-fix loop
+
+---
+
+## Overview
+
+Visual regression testing compares the implemented UI against design references (Figma, screenshots) and automatically fixes discrepancies until pixel-perfect match is achieved.
+
+**AUTO-INVOCATION:** This skill triggers automatically - no manual commands needed.
+
+---
+
+## Auto-Detection Triggers
+
+### 🔴 CRITICAL: When to Auto-Run
+
+**1. Design Reference Detected in Task:**
+- Figma URL: `figma.com/file/...`, `figma.com/design/...`
+- Design files: `*.png`, `*.jpg`, `*.fig` mentioned as reference
+- Keywords: "based on design", "match the mockup", "per Figma", "as designed"
+
+**2. Workflow Phase Triggers:**
+- **Phase 3 (UI Breakdown):** Store design reference for later comparison
+- **Phase 5 (TDD GREEN):** After UI component implementation passes tests
+- **Phase 6 (Review):** Run visual regression as part of quality check
+- **Phase 7 (Verify):** Final visual validation before approval
+
+**3. UI Implementation Completion:**
+- After creating/modifying UI components (`.tsx`, `.jsx`, `.vue`, `.svelte`)
+- After updating styles (`.css`, `.scss`, `.tailwind`)
+- After fixing visual bugs
+
+### Auto-Detection Rules
+
+```yaml
+# Auto-run visual regression when:
+triggers:
+  patterns:
+    - "figma.com/file/*"
+    - "figma.com/design/*"
+    - "*.fig"
+    - "design/*.png"
+    - "mockup/*.png"
+    - "reference/*.png"
+  keywords:
+    - "pixel perfect"
+    - "match design"
+    - "match figma"
+    - "per design"
+    - "as designed"
+    - "visual accuracy"
+    - "UI matches"
+  workflow_phases:
+    - "phase-5b-green"  # After implementation
+    - "phase-6-review"  # Quality check
+    - "phase-7-verify"  # Final validation
+```
+
+---
+
+## Design Reference Storage
+
+When a design reference is detected, store it for the session:
+
+```bash
+# Store design reference path
+echo "$DESIGN_REFERENCE" > .cursor/visual/reference-path.txt
+
+# Or for Figma
+echo "figma://$FILE_ID/$NODE_ID" > .cursor/visual/reference-path.txt
+```
+
+This allows visual regression to run automatically at later workflow phases.
+
+---
+
+## Auto-Fix Loop Process
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    VISUAL REGRESSION LOOP                    │
+├─────────────────────────────────────────────────────────────┤
+│                                                              │
+│  1. CAPTURE ──► Take screenshot of implementation            │
+│       │                                                      │
+│       ▼                                                      │
+│  2. COMPARE ──► Diff against design reference                │
+│       │         Calculate pixel difference %                 │
+│       ▼                                                      │
+│  3. ANALYZE ──► Identify problem areas                       │
+│       │         - Color mismatches                           │
+│       │         - Spacing issues                             │
+│       │         - Font discrepancies                         │
+│       │         - Layout shifts                              │
+│       ▼                                                      │
+│  4. CHECK ────► Diff < threshold (default 1%)?               │
+│       │                                                      │
+│    YES │ NO                                                  │
+│       │  │                                                   │
+│       │  ▼                                                   │
+│       │  5. FIX ──► Apply targeted CSS/style fixes           │
+│       │       │                                              │
+│       │       ▼                                              │
+│       │  6. ITERATE ──► Back to step 1 (max 5 iterations)    │
+│       │                                                      │
+│       ▼                                                      │
+│  ✓ PASS ────► Pixel-perfect match achieved!                  │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Configuration
+
+```yaml
+# .cursor/visual-regression.yaml (optional)
+visual_regression:
+  threshold: 1              # Max allowed pixel diff % (0-100)
+  max_iterations: 5         # Max auto-fix attempts
+  screenshot_width: 1920    # Viewport width
+  screenshot_height: 1080   # Viewport height
+  ignore_regions: []        # CSS selectors to ignore
+  compare_mode: "pixel"     # pixel | structural | hybrid
+```
+
+---
+
+## MCP Integration
+
+### Using Playwright MCP for Screenshots
+
+```javascript
+// Capture implementation screenshot
+await playwright.screenshot({
+  path: '.cursor/visual/current.png',
+  fullPage: true
+});
+```
+
+### Using Figma MCP for Design Reference
+
+```javascript
+// Fetch design from Figma
+const design = await figma.getImage({
+  fileId: 'ABC123',
+  nodeId: '1:234',
+  format: 'png',
+  scale: 2
+});
+```
+
+---
+
+## Comparison Methods
+
+### 1. Pixel-by-Pixel (Default)
+
+```bash
+# Using ImageMagick compare
+compare -metric AE current.png reference.png diff.png 2>&1
+```
+
+### 2. Perceptual Diff
+
+```bash
+# Using pixelmatch (npm)
+npx pixelmatch current.png reference.png diff.png 0.1
+```
+
+### 3. Structural Similarity
+
+```bash
+# Using SSIM
+npx ssim current.png reference.png
+```
+
+---
+
+## Auto-Fix Strategies
+
+When differences are detected, apply fixes in this order:
+
+### 1. Color Fixes
+```css
+/* Detected: Color mismatch in header */
+.header {
+  background-color: #1a1a2e; /* was: #1a1a30 */
+}
+```
+
+### 2. Spacing Fixes
+```css
+/* Detected: 4px spacing difference */
+.card {
+  padding: 16px; /* was: 12px */
+  margin-bottom: 24px; /* was: 20px */
+}
+```
+
+### 3. Typography Fixes
+```css
+/* Detected: Font size mismatch */
+.title {
+  font-size: 24px; /* was: 22px */
+  line-height: 1.4; /* was: 1.5 */
+}
+```
+
+### 4. Layout Fixes
+```css
+/* Detected: Alignment issue */
+.container {
+  display: flex;
+  gap: 16px; /* was: grid with different gap */
+}
+```
+
+---
+
+## Output Format
+
+After each comparison, report:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 🎨 VISUAL REGRESSION RESULT                                  │
+├─────────────────────────────────────────────────────────────┤
+│ Reference: figma://ABC123/1:234                              │
+│ Comparison: .cursor/visual/current.png                       │
+│ Diff Image: .cursor/visual/diff.png                          │
+├─────────────────────────────────────────────────────────────┤
+│ Pixel Diff: 2.3% (threshold: 1%)                             │
+│ Status: ❌ FAILED - Auto-fix iteration 1/5                   │
+├─────────────────────────────────────────────────────────────┤
+│ Issues Found:                                                │
+│   • Color mismatch in .header (Δ #1a1a30 → #1a1a2e)         │
+│   • Spacing issue in .card (padding: 12px → 16px)           │
+│   • Font size in .title (22px → 24px)                       │
+├─────────────────────────────────────────────────────────────┤
+│ Applying fixes...                                            │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Success Output
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 🎨 VISUAL REGRESSION RESULT                                  │
+├─────────────────────────────────────────────────────────────┤
+│ Pixel Diff: 0.4% (threshold: 1%)                             │
+│ Status: ✅ PASSED after 3 iterations                         │
+├─────────────────────────────────────────────────────────────┤
+│ Fixes Applied:                                               │
+│   • .header background-color                                 │
+│   • .card padding                                            │
+│   • .title font-size                                         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Integration with Workflow
+
+### Phase 5 (TDD) - Component Implementation
+- Implement component based on design
+- Run visual regression after each component
+
+### Phase 6 (Review) - Quality Check
+- Run full visual regression suite
+- Auto-fix any discrepancies
+
+### Phase 7 (Verify) - Final Validation
+- Compare all screens against Figma
+- Generate visual diff report
+
+---
+
+## CRITICAL: Execution Requirements
+
+When performing visual regression:
+
+1. **DO** use Playwright MCP to capture screenshots
+2. **DO** use Figma MCP to fetch design references (if available)
+3. **DO** run the auto-fix loop until threshold met or max iterations
+4. **DO** show the diff image to the user
+5. **DO** report all fixes applied
+
+**DON'T** just describe what would happen - actually execute the comparison.
+
+---
+
+## Commands
+
+| Command | Description |
+|---------|-------------|
+| `/visual:test` | Run visual regression on current component |
+| `/visual:compare <figma-url>` | Compare against specific Figma frame |
+| `/visual:report` | Generate full visual regression report |
+| `/visual:baseline` | Update baseline screenshots |
+
+---
+
+**Version:** 1.9.1
+**Last Updated:** 2026-01-14

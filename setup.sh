@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Aura Frog for Cursor IDE - Setup Script
-# Version: 1.8.0
+# Version: 1.9.1
 #
 # This script installs Aura Frog to your project by copying
 # the .cursor folder and scripts. MCP servers handle all integrations.
@@ -51,7 +51,7 @@ CURSOR_SOURCE="$SCRIPT_DIR/.cursor"
 # Banner
 echo -e "${CYAN}"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "  🐸 AURA FROG for Cursor IDE - Setup v1.8.0"
+echo "  🐸 AURA FROG for Cursor IDE - Setup v1.9.1"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo -e "${NC}"
 
@@ -158,7 +158,7 @@ echo ""
 echo -e "${BLUE}[4/4] Updating .gitignore...${NC}"
 
 GITIGNORE="$TARGET_PROJECT/.gitignore"
-ENTRIES=(".envrc" ".cursor/logs/" ".cursor/cache/" ".cursor/.envrc")
+ENTRIES=(".envrc" ".cursor/logs/" ".cursor/cache/" ".cursor/visual/" ".cursor/.envrc")
 
 for entry in "${ENTRIES[@]}"; do
     if [ -f "$GITIGNORE" ]; then

@@ -15,22 +15,35 @@ Aura Frog provides a comprehensive AI-powered development workflow with:
 - **43 Quality Rules** - Always enforced
 - **Learning System** - Self-improvement via Supabase with memory auto-load
 
-## What's New in v1.7.0
+## What's New in v1.9.1
 
-**Auto-Learn** - Automatic feedback detection:
+**Visual Regression Testing** - Pixel-perfect UI with auto-fix loop:
 
-- **Correction Detection** - "no", "wrong", "don't do" → auto-captured
-- **Approval Detection** - "good", "great", "perfect" → auto-captured
-- **Pattern Recognition** - After 3+ similar corrections, creates pattern
-- **Local + Cloud** - Stores in `.cursor/cache/` and Supabase
+- **Auto-Trigger** - Runs automatically when design reference detected (Figma URL, PNG, keywords)
+- **Workflow Integration** - Auto-runs in Phase 5 (GREEN), Phase 6 (Review), Phase 7 (Verify)
+- **Screenshot Comparison** - Compare implementation against design
+- **Auto-Fix Loop** - Iterates until pixel-perfect (max 5 attempts)
+- **MCP Integration** - Playwright (capture) + Figma (reference)
 
-```bash
-# No commands needed - happens automatically!
-# When you say "stop adding comments", Cursor learns:
-🧠 Learning: Captured correction [code_style:minimal_comments] (1x)
+```
+Auto-Trigger Flow:
+┌─────────────────────────────────────────────────────────────┐
+│  User: "Implement button per figma.com/file/ABC123"         │
+│         │                                                   │
+│         ▼                                                   │
+│  Phase 3: Store design reference automatically              │
+│         │                                                   │
+│         ▼                                                   │
+│  Phase 5-7: Visual regression auto-runs                     │
+│         │                                                   │
+│         ▼                                                   │
+│  Result: ✅ Pixel-perfect match (0.4% diff)                 │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-**Requirements:** Supabase (free tier works). See `.cursor/docs/LEARNING_SYSTEM.md`
+Manual commands still available: `/visual:test`, `/visual:loop`
+
+**Requirements:** ImageMagick (`brew install imagemagick`)
 
 ---
 
@@ -198,9 +211,9 @@ See **[.cursor/docs/MCP.md](.cursor/docs/MCP.md)** for:
 |----------|-------|
 | MCP Servers | 11 (4 enabled, 7 optional) |
 | Agents | 16 |
-| Commands | 76 |
-| Rules | 43 |
-| Skills | 13 (auto-invoke) |
+| Commands | 79 |
+| Rules | 44 |
+| Skills | 14 (auto-invoke) |
 | Workflow Phases | 9 |
 
 ## Documentation
@@ -218,5 +231,5 @@ Same as original Aura Frog plugin. Check the [original repository](https://githu
 
 **Code with main character energy!** 🐸✨
 
-**Version:** 1.8.0
+**Version:** 1.9.1
 **Last Updated:** 2026-01-14
