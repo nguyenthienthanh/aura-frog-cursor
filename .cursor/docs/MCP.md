@@ -33,6 +33,73 @@ MCP (Model Context Protocol) is an open protocol by Anthropic that enables LLMs 
 | figma | figma-developer-mcp | Design token extraction |
 | slack | slack-mcp-server | Team notifications |
 
+### Framework-Specific
+
+| Server | Install | Purpose |
+|--------|---------|---------|
+| laravel-boost | `composer require laravel/boost --dev` | Laravel AI assistant (15+ tools) |
+| nodejs-debugger | npx (auto) | Node.js runtime debugging |
+
+#### Laravel Boost Setup
+
+Laravel Boost is an official MCP server from the Laravel team with 15+ specialized tools:
+
+```bash
+# 1. Install in your Laravel project
+composer require laravel/boost --dev
+
+# 2. Run the installer
+php artisan boost:install
+# Select "Cursor" when prompted
+
+# 3. Enable in .cursor/mcp.json
+# Set "disabled": false for "laravel-boost"
+```
+
+**Tools included:**
+- `app_info` - Laravel version, models, packages
+- `db_schema` - Database tables and relationships
+- `db_query` - Execute read queries
+- `routes` - List and analyze routes
+- `artisan` - Run Artisan commands
+- `tinker` - Execute PHP in Laravel context
+- `config` - Read configuration values
+- `docs` - Search Laravel documentation
+- `logs` - Application and browser logs
+
+**Note:** Laravel Boost only works in Laravel projects and requires `composer require` installation.
+
+#### Node.js Debugger Setup
+
+The Node.js Debugger MCP enables runtime debugging of Node.js applications:
+
+```bash
+# 1. Start your app with --inspect flag
+node --inspect dist/main.js
+# or for development:
+node --inspect-brk src/index.js
+
+# 2. Enable in .cursor/mcp.json
+# Set "disabled": false for "nodejs-debugger"
+```
+
+**Tools included:**
+- `set_breakpoint` - Set breakpoints in running processes
+- `step_in` / `step_out` / `continue` - Control execution flow
+- `get_location` - Fetch current execution location
+- `read_console` - Read console output
+- `eval` - Run JavaScript to inspect variables
+
+**NestJS Custom Tools:**
+
+For NestJS projects, you can build custom MCP tools using [@rekog/mcp-nest](https://github.com/rekog-labs/MCP-Nest):
+
+```bash
+npm install @rekog/mcp-nest @modelcontextprotocol/sdk zod
+```
+
+This allows you to expose NestJS services as MCP tools with dependency injection support.
+
 ## Configuration
 
 MCP servers are configured in `.cursor/mcp.json`:

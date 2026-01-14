@@ -34,7 +34,7 @@ Aura Frog provides a comprehensive AI-powered development workflow with:
 
 ---
 
-### MCP Servers (from v1.3.0)
+### MCP Servers
 
 | MCP Server | Purpose | Default |
 |------------|---------|---------|
@@ -42,13 +42,15 @@ Aura Frog provides a comprehensive AI-powered development workflow with:
 | playwright | E2E/browser testing | ✅ Enabled |
 | filesystem | File operations | ✅ Enabled |
 | memory | Persistent context | ✅ Enabled |
+| laravel-boost | Laravel AI (15+ tools) | Disabled* |
+| nodejs-debugger | Node.js runtime debugging | Disabled* |
 | github | Git/GitHub operations | Disabled* |
 | vitest | Unit testing | Disabled* |
 | atlassian | JIRA/Confluence | Disabled* |
 | figma | Design tokens | Disabled* |
 | slack | Team notifications | Disabled* |
 
-*Requires credentials in `.envrc`
+*Requires setup. Laravel Boost needs `composer require laravel/boost --dev`
 
 ## Quick Start
 
@@ -194,7 +196,7 @@ See **[.cursor/docs/MCP.md](.cursor/docs/MCP.md)** for:
 
 | Category | Count |
 |----------|-------|
-| MCP Servers | 9 (4 enabled, 5 optional) |
+| MCP Servers | 11 (4 enabled, 7 optional) |
 | Agents | 16 |
 | Commands | 76 |
 | Rules | 43 |
@@ -216,5 +218,5 @@ Same as original Aura Frog plugin. Check the [original repository](https://githu
 
 **Code with main character energy!** 🐸✨
 
-**Version:** 1.7.0
-**Last Updated:** 2026-01-08
+**Version:** 1.8.0
+**Last Updated:** 2026-01-14

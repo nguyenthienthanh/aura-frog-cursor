@@ -5,6 +5,56 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.0] - 2026-01-14
+
+### Framework-Specific MCP Integrations
+
+#### Added
+- **Laravel Boost MCP Server** - Official Laravel AI assistant with 15+ tools
+  - `app_info` - Laravel version, models, packages
+  - `db_schema` - Database tables and relationships
+  - `db_query` - Execute read queries
+  - `routes` - List and analyze routes
+  - `artisan` - Run Artisan commands
+  - `tinker` - Execute PHP in Laravel context
+  - `config` - Read configuration values
+  - `docs` - Search Laravel documentation
+  - `logs` - Application and browser logs
+
+#### Setup
+```bash
+# In your Laravel project:
+composer require laravel/boost --dev
+php artisan boost:install
+# Select "Cursor" when prompted
+# Enable in .cursor/mcp.json
+```
+
+- **Node.js Debugger MCP Server** (`@hyperdrive-eng/mcp-nodejs-debugger`) - Runtime debugging
+  - `set_breakpoint` - Set breakpoints in running processes
+  - `step_in` / `step_out` / `continue` - Control execution flow
+  - `get_location` - Fetch current execution location
+  - `read_console` - Read console output
+  - `eval` - Run JavaScript to inspect variables
+
+#### Setup
+```bash
+# Node.js Debugger - start app with --inspect:
+node --inspect dist/main.js
+# Then enable in .cursor/mcp.json
+```
+
+#### Updated
+- **backend-laravel agent** - Added Laravel Boost MCP integration section
+- **backend-nodejs agent** - Added Node.js Debugger MCP integration section
+- **MCP.md** - Added Framework-Specific section with Laravel Boost and Node.js Debugger docs
+- **README.md** - Added framework MCP servers to table
+
+#### Stats
+- MCP Servers: 11 (was 9)
+
+---
+
 ## [1.7.0] - 2026-01-08
 
 ### Auto-Learn: Automatic Feedback Detection
@@ -453,6 +503,7 @@ Auto-Stop (on blockers):     Execute → Issue found → STOP for fix
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.8.0 | 2026-01-14 | Framework MCP: Laravel Boost, Node.js Debugger |
 | 1.7.0 | 2026-01-08 | Auto-learn: Automatic feedback detection |
 | 1.6.0 | 2026-01-08 | Memory auto-load at session start |
 | 1.5.1 | 2026-01-07 | Auto env check, feedback command, CRITICAL execution notes |

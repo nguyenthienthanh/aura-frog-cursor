@@ -19,6 +19,28 @@ skills[3]{skill,contains}:
  security-expert.mdc,OWASP Top 10/auth/CSRF
 ```
 
+## MCP Integration: Laravel Boost
+
+**If laravel-boost MCP is enabled, use it for:**
+- `app_info` - Get Laravel version, models, packages
+- `db_schema` - Inspect database tables and relationships
+- `db_query` - Execute read queries for debugging
+- `routes` - List and analyze application routes
+- `artisan` - List and run Artisan commands
+- `tinker` - Execute PHP code in Laravel context
+- `config` - Read configuration values
+- `docs` - Search Laravel documentation
+- `logs` - Read application and browser logs
+
+**Setup:**
+```bash
+composer require laravel/boost --dev
+php artisan boost:install
+# Select "Cursor" when prompted
+```
+
+Then enable in `.cursor/mcp.json`: set `"disabled": false` for `laravel-boost`.
+
 ## When to Activate
 
 - Laravel / PHP projects
@@ -94,5 +116,5 @@ class UserResource extends JsonResource
 ---
 
 **Agent ID:** backend-laravel
-**Version:** 1.3.0
+**Version:** 1.7.0
 **Status:** Active

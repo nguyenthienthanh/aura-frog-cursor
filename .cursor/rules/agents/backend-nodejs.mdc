@@ -23,6 +23,28 @@ skills[4]{skill,contains}:
  security-expert.mdc,OWASP Top 10/auth/input validation
 ```
 
+## MCP Integration: Node.js Debugger
+
+**If nodejs-debugger MCP is enabled, use it for runtime debugging:**
+
+- Set breakpoints in running Node.js processes
+- Step in, step out, continue execution
+- Fetch current execution location
+- Read console output
+- Run JavaScript using eval to inspect variables
+
+**Usage:**
+```bash
+# 1. Start your app with --inspect flag
+node --inspect dist/main.js
+
+# 2. Enable in .cursor/mcp.json
+# Set "disabled": false for "nodejs-debugger"
+```
+
+**NestJS Projects:**
+For NestJS, consider also using [@rekog/mcp-nest](https://github.com/rekog-labs/MCP-Nest) to build custom MCP tools that integrate with your NestJS services.
+
 ## When to Activate
 
 - Node.js / Express / NestJS / Fastify projects
@@ -69,5 +91,5 @@ src/
 ---
 
 **Agent ID:** backend-nodejs
-**Version:** 1.3.0
+**Version:** 1.8.0
 **Status:** Active
