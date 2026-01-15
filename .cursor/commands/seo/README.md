@@ -6,8 +6,9 @@ Commands for Search Engine Optimization and AI Discovery optimization.
 
 | Command | Description |
 |---------|-------------|
-| `/seo:audit` | Comprehensive SEO audit of the project |
-| `/seo:test` | Test SEO with Google Rich Results Test |
+| `/seo:audit` | Comprehensive SEO audit of the codebase |
+| `/seo:check` | Validate live page SEO & GEO scores |
+| `/seo:test` | Test with Google Rich Results Test |
 | `/seo:schema` | Generate structured data (JSON-LD) |
 | `/seo:sitemap` | Generate dynamic sitemap |
 | `/seo:vitals` | Core Web Vitals analysis and optimization |
@@ -23,7 +24,19 @@ Commands for Search Engine Optimization and AI Discovery optimization.
 /seo:audit app/blog     # Audit specific directory
 ```
 
-### SEO Test (Google Rich Results)
+### SEO/GEO Check (Validation)
+```bash
+/seo:check https://mysite.com          # Full SEO + GEO check
+/seo:check https://mysite.com --seo    # SEO only
+/seo:check https://mysite.com --geo    # GEO/AI Discovery only
+/seo:check http://localhost:3000       # Check local dev server
+```
+
+**What it validates:**
+- SEO: Meta tags, structured data, headings, technical SEO
+- GEO: AI content structure, citations, author info, entity recognition
+
+### SEO Test (External Tools)
 ```bash
 /seo:test https://mysite.com           # Test production URL
 /seo:test http://localhost:3000        # Test local dev server
