@@ -116,5 +116,5 @@ class UserResource extends JsonResource
 ---
 
 **Agent ID:** backend-laravel
-**Version:** 1.7.0
+**Version:** 1.10.0
 **Status:** Active

@@ -1,6 +1,6 @@
 # Aura Frog Learning System
 
-**Version:** 1.5.0
+**Version:** 1.10.0
 **Status:** Experimental
 
 The Learning System enables Cursor to improve over time by collecting feedback, analyzing patterns, and generating actionable insights stored in Supabase.
@@ -186,4 +186,4 @@ Run `/learn:setup` to create the schema.
 
 ---
 
-**Version:** 1.5.0 | **Last Updated:** 2026-01-07
+**Version:** 1.10.0 | **Last Updated:** 2026-01-15

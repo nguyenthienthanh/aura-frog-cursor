@@ -2,7 +2,7 @@
 
 **Project:** aura-frog-cursor
 **Type:** Cursor IDE Plugin/Configuration (MCP-first)
-**Version:** 1.3.0
+**Version:** 1.10.0
 
 ---
 
@@ -94,5 +94,5 @@ chore: Maintenance tasks
 
 ---
 
-**Version:** 1.3.0
-**Last Updated:** 2025-12-22
+**Version:** 1.10.0
+**Last Updated:** 2026-01-15

@@ -1,0 +1,512 @@
+---
+description: "AI Discovery optimization for Perplexity, ChatGPT Search, Gemini, Claude - LLM-friendly content, citations, entity recognition"
+globs:
+  - "**/content/**/*.{md,mdx}"
+  - "**/blog/**/*.{md,mdx,tsx,jsx}"
+  - "**/docs/**/*.{md,mdx}"
+  - "**/faq*.{ts,tsx,js,jsx}"
+  - "**/schema*.{ts,tsx,js,jsx}"
+alwaysApply: false
+---
+
+# AI Discovery Optimization Skill
+
+## Overview
+
+Optimize web content for AI-powered search engines and answer engines including:
+- **Perplexity AI** - Answer engine with citations
+- **ChatGPT Search** - OpenAI's web search
+- **Google Gemini** - Google's AI assistant
+- **Claude** - Anthropic's AI assistant
+- **Bing Chat / Copilot** - Microsoft's AI search
+- **You.com** - AI search engine
+
+## How AI Discovery Differs from Traditional SEO
+
+| Traditional SEO | AI Discovery |
+|-----------------|--------------|
+| Keyword density | Semantic meaning |
+| Backlinks | Citation-worthy content |
+| Click-through rates | Direct answers |
+| SERP position | Being cited as source |
+| Crawlability | Structured, parseable content |
+
+## Core Strategies
+
+### 1. Entity-First Content Structure
+
+AI systems recognize and connect entities. Structure content around clear entities:
+
+```markdown
+# [Entity Name] - What It Is and How It Works
+
+## Definition
+[Clear, concise definition in 1-2 sentences]
+
+## Key Facts
+- Fact 1: [Specific, verifiable information]
+- Fact 2: [With numbers/dates when possible]
+- Fact 3: [Attribution to authoritative sources]
+
+## How [Entity] Works
+[Step-by-step explanation]
+
+## Comparison with Alternatives
+| Feature | [Entity] | Alternative A | Alternative B |
+|---------|----------|---------------|---------------|
+
+## Common Questions
+### What is [Entity]?
+[Direct answer]
+
+### How do I use [Entity]?
+[Step-by-step guide]
+
+## Sources & References
+- [Authoritative Source 1](url)
+- [Authoritative Source 2](url)
+```
+
+### 2. Answer-Optimized Content
+
+Structure content to directly answer questions:
+
+```tsx
+// FAQ component optimized for AI extraction
+export function FAQSection({ faqs }: { faqs: FAQ[] }) {
+  return (
+    <section itemScope itemType="https://schema.org/FAQPage">
+      <h2>Frequently Asked Questions</h2>
+      {faqs.map((faq, index) => (
+        <article
+          key={index}
+          itemScope
+          itemProp="mainEntity"
+          itemType="https://schema.org/Question"
+        >
+          <h3 itemProp="name">{faq.question}</h3>
+          <div
+            itemScope
+            itemProp="acceptedAnswer"
+            itemType="https://schema.org/Answer"
+          >
+            <div itemProp="text">
+              {/* First sentence should be the direct answer */}
+              <p><strong>{faq.directAnswer}</strong></p>
+              {/* Supporting details follow */}
+              <p>{faq.elaboration}</p>
+            </div>
+          </div>
+        </article>
+      ))}
+    </section>
+  );
+}
+```
+
+### 3. Citation-Worthy Content Patterns
+
+Make content easily citable by AI:
+
+```markdown
+## Best Practices for Citable Content
+
+### 1. Lead with the Answer
+**Good:**
+> "React 18 was released on March 29, 2022, introducing concurrent rendering and automatic batching."
+
+**Bad:**
+> "In this article, we'll explore the history of React and eventually discuss when React 18 came out..."
+
+### 2. Include Specific Data
+**Good:**
+> "According to the 2024 Stack Overflow survey, 40.6% of developers use React."
+
+**Bad:**
+> "React is very popular among developers."
+
+### 3. Use Clear Attribution
+**Good:**
+> "The React team at Meta announced that..."
+
+**Bad:**
+> "It was announced that..."
+
+### 4. Provide Definitions
+**Good:**
+> "Server Components are React components that render exclusively on the server, reducing client-side JavaScript bundle size."
+
+**Bad:**
+> "Server Components are a new feature."
+```
+
+### 4. Structured Data for AI Discovery
+
+Enhanced Schema.org for AI comprehension:
+
+```tsx
+// Enhanced Article Schema for AI Discovery
+export function AIOptimizedArticleSchema({ article }: { article: Article }) {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: article.title,
+    description: article.excerpt,
+
+    // Essential for AI discovery
+    datePublished: article.publishedAt,
+    dateModified: article.updatedAt,
+
+    // Author credibility signals
+    author: {
+      '@type': 'Person',
+      name: article.author.name,
+      url: article.author.profileUrl,
+      sameAs: [
+        article.author.twitter,
+        article.author.linkedin,
+        article.author.github,
+      ].filter(Boolean),
+      jobTitle: article.author.title,
+      worksFor: {
+        '@type': 'Organization',
+        name: article.author.company,
+      },
+    },
+
+    // Content signals
+    articleSection: article.category,
+    keywords: article.tags.join(', '),
+    wordCount: article.wordCount,
+
+    // For educational/how-to content
+    ...(article.type === 'how-to' && {
+      '@type': 'HowTo',
+      step: article.steps.map((step, index) => ({
+        '@type': 'HowToStep',
+        position: index + 1,
+        name: step.title,
+        text: step.description,
+        url: `${article.url}#step-${index + 1}`,
+      })),
+    }),
+
+    // Citations and sources
+    citation: article.sources.map(source => ({
+      '@type': 'CreativeWork',
+      name: source.title,
+      url: source.url,
+      author: source.author,
+      datePublished: source.date,
+    })),
+
+    // Speakable for voice assistants
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['.article-summary', '.key-points'],
+    },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+```
+
+### 5. Content Freshness Signals
+
+AI systems prefer up-to-date content:
+
+```tsx
+// Display freshness signals prominently
+export function ArticleHeader({ article }: { article: Article }) {
+  const daysSinceUpdate = differenceInDays(new Date(), new Date(article.updatedAt));
+
+  return (
+    <header>
+      <h1>{article.title}</h1>
+
+      {/* Freshness indicators */}
+      <div className="meta">
+        <time dateTime={article.publishedAt}>
+          Published: {formatDate(article.publishedAt)}
+        </time>
+
+        {article.updatedAt !== article.publishedAt && (
+          <time dateTime={article.updatedAt}>
+            Last updated: {formatDate(article.updatedAt)}
+            {daysSinceUpdate < 30 && (
+              <span className="badge">Recently Updated</span>
+            )}
+          </time>
+        )}
+
+        {/* Version/accuracy indicator */}
+        <span>
+          Accurate as of: {article.accuracyDate}
+          {article.framework && ` (${article.framework} ${article.frameworkVersion})`}
+        </span>
+      </div>
+    </header>
+  );
+}
+```
+
+### 6. Semantic HTML for AI Parsing
+
+```tsx
+// Semantic structure that AI can parse easily
+export function TechnicalArticle({ content }: { content: TechArticle }) {
+  return (
+    <article itemScope itemType="https://schema.org/TechArticle">
+      <header>
+        <h1 itemProp="headline">{content.title}</h1>
+        <p itemProp="description" className="lead">
+          {content.summary}
+        </p>
+      </header>
+
+      {/* Key takeaways - often extracted by AI */}
+      <aside className="key-points" aria-label="Key Takeaways">
+        <h2>Key Takeaways</h2>
+        <ul>
+          {content.keyPoints.map((point, i) => (
+            <li key={i}>{point}</li>
+          ))}
+        </ul>
+      </aside>
+
+      {/* Table of contents - helps AI understand structure */}
+      <nav aria-label="Table of Contents">
+        <h2>Contents</h2>
+        <ol>
+          {content.sections.map((section) => (
+            <li key={section.id}>
+              <a href={`#${section.id}`}>{section.title}</a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+
+      {/* Main content with clear sections */}
+      <div itemProp="articleBody">
+        {content.sections.map((section) => (
+          <section key={section.id} id={section.id}>
+            <h2>{section.title}</h2>
+            {section.content}
+
+            {/* Code examples with language specified */}
+            {section.code && (
+              <pre>
+                <code className={`language-${section.codeLanguage}`}>
+                  {section.code}
+                </code>
+              </pre>
+            )}
+          </section>
+        ))}
+      </div>
+
+      {/* Sources - critical for AI citations */}
+      <footer>
+        <section aria-label="Sources and References">
+          <h2>Sources</h2>
+          <ol className="references">
+            {content.sources.map((source, i) => (
+              <li key={i}>
+                <cite>
+                  <a href={source.url} rel="noopener">
+                    {source.title}
+                  </a>
+                </cite>
+                {source.author && ` by ${source.author}`}
+                {source.date && ` (${source.date})`}
+              </li>
+            ))}
+          </ol>
+        </section>
+      </footer>
+    </article>
+  );
+}
+```
+
+### 7. AI Crawler Management
+
+```typescript
+// robots.txt configuration for AI crawlers
+// app/robots.ts
+
+import { MetadataRoute } from 'next';
+
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: [
+      // Allow traditional search engines
+      {
+        userAgent: ['Googlebot', 'Bingbot'],
+        allow: '/',
+      },
+
+      // Allow AI answer engines (for visibility)
+      {
+        userAgent: ['PerplexityBot'],
+        allow: '/',
+        // Optionally restrict sensitive areas
+        disallow: ['/admin/', '/api/'],
+      },
+
+      // Block AI training crawlers (optional - based on your preference)
+      {
+        userAgent: [
+          'GPTBot',           // OpenAI training
+          'CCBot',            // Common Crawl (used for training)
+          'Google-Extended',  // Google AI training
+          'anthropic-ai',     // Anthropic training
+          'Bytespider',       // ByteDance/TikTok
+          'ClaudeBot',        // Anthropic web crawler
+        ],
+        disallow: ['/'],
+      },
+
+      // Block pure scrapers
+      {
+        userAgent: ['DataForSeoBot', 'AhrefsBot', 'SemrushBot'],
+        disallow: ['/'],
+      },
+    ],
+    sitemap: 'https://example.com/sitemap.xml',
+  };
+}
+```
+
+### 8. Content Optimization Checklist
+
+```markdown
+## AI Discovery Content Checklist
+
+### Structure
+- [ ] Clear, descriptive title (question format works well)
+- [ ] Summary/TL;DR in first paragraph
+- [ ] Logical heading hierarchy (H1 > H2 > H3)
+- [ ] Table of contents for long articles
+- [ ] Key takeaways section
+
+### Content Quality
+- [ ] Direct answers to questions (within first 2 sentences)
+- [ ] Specific data, numbers, dates
+- [ ] Clear definitions for key terms
+- [ ] Step-by-step instructions when applicable
+- [ ] Comparison tables for alternatives
+
+### Citations & Credibility
+- [ ] Author bio with credentials
+- [ ] Publication and update dates visible
+- [ ] Sources linked and attributed
+- [ ] Expert quotes when relevant
+- [ ] Version numbers for technical content
+
+### Technical
+- [ ] Semantic HTML structure
+- [ ] Schema.org structured data
+- [ ] Fast loading (Core Web Vitals)
+- [ ] Mobile-friendly
+- [ ] Accessible (WCAG 2.1)
+
+### Freshness
+- [ ] Regular content updates
+- [ ] "Last updated" date visible
+- [ ] Accuracy date for time-sensitive info
+- [ ] Changelog for major updates
+```
+
+## Framework Implementations
+
+### Next.js App Router
+
+```tsx
+// app/blog/[slug]/page.tsx
+import { Metadata } from 'next';
+
+export async function generateMetadata({ params }): Promise<Metadata> {
+  const post = await getPost(params.slug);
+
+  return {
+    title: post.title,
+    description: post.summary,
+
+    // AI-friendly metadata
+    other: {
+      'article:published_time': post.publishedAt,
+      'article:modified_time': post.updatedAt,
+      'article:author': post.author.name,
+      'article:section': post.category,
+      'article:tag': post.tags.join(','),
+    },
+  };
+}
+
+export default async function BlogPost({ params }) {
+  const post = await getPost(params.slug);
+
+  return (
+    <>
+      <AIOptimizedArticleSchema article={post} />
+      <TechnicalArticle content={post} />
+    </>
+  );
+}
+```
+
+## Monitoring AI Discovery
+
+### Track AI Traffic Sources
+
+```typescript
+// analytics/ai-discovery.ts
+export const AI_REFERRERS = [
+  'perplexity.ai',
+  'chat.openai.com',
+  'gemini.google.com',
+  'claude.ai',
+  'bing.com/chat',
+  'you.com',
+  'phind.com',
+];
+
+export function isAIReferrer(referrer: string): boolean {
+  return AI_REFERRERS.some(ai => referrer.includes(ai));
+}
+
+// Track in analytics
+export function trackPageView(referrer: string) {
+  const source = isAIReferrer(referrer) ? 'ai-discovery' : 'traditional';
+
+  analytics.track('page_view', {
+    source,
+    ai_referrer: isAIReferrer(referrer) ? referrer : null,
+  });
+}
+```
+
+## Key Differences: SEO vs AI Discovery
+
+| Aspect | Traditional SEO | AI Discovery |
+|--------|-----------------|--------------|
+| **Goal** | Rank in SERPs | Be cited in AI responses |
+| **Traffic** | Click to website | May not get click |
+| **Content** | Keyword-optimized | Answer-optimized |
+| **Structure** | H1, meta tags | Semantic, parseable |
+| **Links** | Build backlinks | Cite authoritative sources |
+| **Freshness** | Regular updates | Real-time accuracy |
+| **Success Metric** | Rankings, CTR | Citations, brand mentions |
+
+---
+
+**Skill ID:** ai-discovery
+**Version:** 1.10.0
+**Status:** Active
+**Triggers:** AI search, Perplexity, ChatGPT Search, Gemini, Claude, answer engine, citations, entity recognition

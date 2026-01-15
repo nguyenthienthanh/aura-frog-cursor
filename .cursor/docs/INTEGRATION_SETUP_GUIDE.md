@@ -1,7 +1,7 @@
 # Integration Setup Guide
 
-**Version:** 1.3.0
-**Last Updated:** 2025-12-22
+**Version:** 1.10.0
+**Last Updated:** 2026-01-15
 
 ---
 
@@ -207,5 +207,5 @@ direnv allow
 
 ---
 
-**Version:** 1.3.0
-**Last Updated:** 2025-12-22
+**Version:** 1.10.0
+**Last Updated:** 2026-01-15

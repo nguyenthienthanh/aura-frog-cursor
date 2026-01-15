@@ -104,4 +104,4 @@ Safe to ignore - the schema uses `CREATE TABLE IF NOT EXISTS`.
 
 ---
 
-**Version:** 1.0.0
+**Version:** 1.10.0

@@ -1,0 +1,268 @@
+---
+description: "SEO & AI Discovery specialist - activate for meta tags, structured data, sitemap, Core Web Vitals, Perplexity, ChatGPT Search optimization"
+globs:
+  - "**/seo/**/*"
+  - "**/meta*.{ts,tsx,js,jsx}"
+  - "**/sitemap*.{ts,tsx,js,jsx,xml}"
+  - "**/robots.txt"
+  - "**/manifest.json"
+  - "**/schema*.{ts,tsx,js,jsx}"
+  - "**/structured-data*.{ts,tsx,js,jsx}"
+  - "**/head.{ts,tsx,js,jsx}"
+  - "**/layout.{ts,tsx,js,jsx}"
+alwaysApply: false
+---
+
+# SEO & AI Discovery Agent
+
+## Load Expert Skills
+- **seo-expert** - Technical SEO, meta tags, structured data, Core Web Vitals
+- **ai-discovery** - AI search engine optimization (Perplexity, ChatGPT, Gemini)
+- **performance-optimizer** - Core Web Vitals, page speed optimization
+
+## When to Activate
+
+Activate this agent when working on:
+- Meta tags and metadata configuration
+- Open Graph and Twitter Card setup
+- Structured data / Schema.org / JSON-LD
+- Sitemap generation
+- robots.txt configuration
+- Core Web Vitals optimization
+- Content optimization for search/AI discovery
+- International SEO (i18n/hreflang)
+- Canonical URL management
+
+## Tech Stack Expertise
+
+### Traditional SEO Tools
+- Google Search Console
+- Google PageSpeed Insights
+- Lighthouse
+- Google Rich Results Test
+- Schema.org Validator
+- Screaming Frog
+
+### AI Discovery Platforms
+- Perplexity AI
+- ChatGPT Search (OpenAI)
+- Google Gemini
+- Bing Chat / Copilot
+- Claude (Anthropic)
+- You.com
+
+### Framework Support
+| Framework | Metadata API | Sitemap | SSR/SSG |
+|-----------|-------------|---------|---------|
+| **Next.js 13+** | `export const metadata` | `app/sitemap.ts` | App Router |
+| **Nuxt 3** | `useSeoMeta()` | `@nuxtjs/sitemap` | Nitro |
+| **Remix** | `meta` function | Route-based | Loaders |
+| **Astro** | `<SEO>` component | `@astrojs/sitemap` | Islands |
+| **SvelteKit** | `<svelte:head>` | Custom | +server.ts |
+
+## Key Patterns
+
+### 1. Metadata Configuration (Next.js)
+
+```tsx
+// app/layout.tsx - Global metadata
+import { Metadata, Viewport } from 'next';
+
+export const metadata: Metadata = {
+  metadataBase: new URL('https://example.com'),
+  title: {
+    default: 'Site Name',
+    template: '%s | Site Name',
+  },
+  description: 'Site description under 160 chars',
+  openGraph: {
+    type: 'website',
+    siteName: 'Site Name',
+    images: ['/og-default.jpg'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@handle',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#ffffff',
+};
+```
+
+### 2. Dynamic Page Metadata
+
+```tsx
+// app/blog/[slug]/page.tsx
+export async function generateMetadata({ params }): Promise<Metadata> {
+  const post = await getPost(params.slug);
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      type: 'article',
+      publishedTime: post.publishedAt,
+      modifiedTime: post.updatedAt,
+      authors: [post.author.name],
+      images: [post.coverImage],
+    },
+    alternates: {
+      canonical: `/blog/${params.slug}`,
+    },
+  };
+}
+```
+
+### 3. Structured Data Schema
+
+```tsx
+// components/schemas/ArticleSchema.tsx
+export function ArticleSchema({ article }: { article: Article }) {
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'Article',
+          headline: article.title,
+          description: article.excerpt,
+          datePublished: article.publishedAt,
+          dateModified: article.updatedAt,
+          author: {
+            '@type': 'Person',
+            name: article.author.name,
+          },
+          publisher: {
+            '@type': 'Organization',
+            name: 'Company Name',
+            logo: { '@type': 'ImageObject', url: '/logo.png' },
+          },
+        }),
+      }}
+    />
+  );
+}
+```
+
+### 4. Sitemap Generation
+
+```tsx
+// app/sitemap.ts
+import { MetadataRoute } from 'next';
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const posts = await getAllPosts();
+  const products = await getAllProducts();
+
+  return [
+    { url: 'https://example.com', lastModified: new Date(), priority: 1 },
+    { url: 'https://example.com/about', lastModified: new Date(), priority: 0.8 },
+    ...posts.map(post => ({
+      url: `https://example.com/blog/${post.slug}`,
+      lastModified: new Date(post.updatedAt),
+      changeFrequency: 'weekly' as const,
+      priority: 0.7,
+    })),
+    ...products.map(product => ({
+      url: `https://example.com/products/${product.slug}`,
+      lastModified: new Date(product.updatedAt),
+      changeFrequency: 'daily' as const,
+      priority: 0.9,
+    })),
+  ];
+}
+```
+
+### 5. Robots.txt
+
+```tsx
+// app/robots.ts
+import { MetadataRoute } from 'next';
+
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: [
+      { userAgent: '*', allow: '/', disallow: ['/admin/', '/api/'] },
+      // Optional: Block AI training crawlers
+      { userAgent: ['GPTBot', 'CCBot', 'Google-Extended'], disallow: ['/'] },
+    ],
+    sitemap: 'https://example.com/sitemap.xml',
+  };
+}
+```
+
+## Quality Checklist
+
+### Technical SEO
+- [ ] Unique title per page (50-60 chars)
+- [ ] Unique meta description (150-160 chars)
+- [ ] Canonical URLs on all pages
+- [ ] XML sitemap generated and submitted
+- [ ] robots.txt properly configured
+- [ ] HTTPS enabled
+- [ ] Mobile responsive
+
+### Structured Data
+- [ ] Organization schema on homepage
+- [ ] Article schema on blog posts
+- [ ] Product schema on products
+- [ ] BreadcrumbList on all pages
+- [ ] FAQ schema where applicable
+- [ ] Validated with Rich Results Test
+
+### Core Web Vitals
+- [ ] LCP < 2.5s
+- [ ] FID/INP < 200ms
+- [ ] CLS < 0.1
+- [ ] Images optimized (next/image)
+- [ ] Fonts with display: swap
+- [ ] Code splitting enabled
+
+### AI Discovery
+- [ ] Clear, direct answers in content
+- [ ] Semantic HTML structure
+- [ ] Sources cited and linked
+- [ ] Author credentials visible
+- [ ] Publish/update dates shown
+- [ ] FAQ sections for common questions
+
+### Content
+- [ ] Single H1 per page
+- [ ] Proper heading hierarchy
+- [ ] Alt text on images
+- [ ] Internal linking
+- [ ] External links: rel="noopener"
+
+## Common Tasks
+
+| Task | Command |
+|------|---------|
+| Audit SEO | `/seo:audit` |
+| Generate sitemap | `/seo:sitemap` |
+| Add structured data | `/seo:schema` |
+| Check Core Web Vitals | `/seo:vitals` |
+| Optimize for AI | `/seo:ai-optimize` |
+| International SEO | `/seo:i18n` |
+
+## References
+
+- **SEO Expert Skill:** `.cursor/rules/skills/experts/seo-expert.mdc`
+- **AI Discovery Skill:** `.cursor/rules/skills/reference/ai-discovery.mdc`
+- **Performance Skill:** `.cursor/rules/skills/reference/performance-optimizer.mdc`
+
+---
+
+**Agent ID:** web-seo
+**Version:** 1.10.0
+**Status:** Active

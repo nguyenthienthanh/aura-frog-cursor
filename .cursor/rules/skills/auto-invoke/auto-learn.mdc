@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Skill: Auto-Learn
 
-**Version:** 1.7.0
+**Version:** 1.10.0
 **Trigger:** Every user message (auto-invoke)
 **Purpose:** Detect corrections/feedback and record for learning
 
@@ -192,5 +192,5 @@ When you detect a correction pattern:
 
 ---
 
-**Version:** 1.7.0
-**Last Updated:** 2026-01-08
+**Version:** 1.10.0
+**Last Updated:** 2026-01-15

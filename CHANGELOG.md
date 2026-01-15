@@ -5,6 +5,65 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.10.0] - 2026-01-15
+
+### SEO & AI Discovery Optimization
+
+Comprehensive SEO and AI Discovery optimization package for web projects.
+
+#### Added
+- **SEO Expert Skill** (`seo-expert.mdc`) - Technical SEO expertise
+  - Meta tags (title, description, Open Graph, Twitter Cards)
+  - Structured data / Schema.org / JSON-LD implementation
+  - Sitemap and robots.txt generation
+  - Core Web Vitals optimization (LCP, INP, CLS)
+  - International SEO (i18n/hreflang)
+  - Framework-specific patterns (Next.js, Nuxt, Remix, Astro)
+
+- **AI Discovery Skill** (`ai-discovery.mdc`) - AI search engine optimization
+  - Perplexity, ChatGPT Search, Gemini, Claude optimization
+  - Entity-first content structure
+  - Answer-optimized content patterns
+  - Citation-worthy content strategies
+  - AI crawler management (robots.txt rules)
+  - Freshness signals and semantic HTML
+
+- **Web SEO Agent** (`web-seo.mdc`) - Combined SEO & AI Discovery specialist
+  - Auto-activates on meta tags, sitemap, schema, structured data files
+  - Loads seo-expert and ai-discovery skills
+  - Framework support: Next.js, Nuxt, Remix, Astro, SvelteKit
+
+- **SEO Standards Rule** (`seo-standards.mdc`) - Quality enforcement
+  - Required meta tags per page
+  - Structured data requirements by page type
+  - Image optimization standards
+  - Heading hierarchy enforcement
+  - URL structure conventions
+  - Core Web Vitals targets
+
+- **SEO Commands** (8 new)
+  - `/seo:audit` - Comprehensive SEO audit
+  - `/seo:test` - Test with Google Rich Results Test & validators
+  - `/seo:schema` - Generate structured data (article, product, FAQ, etc.)
+  - `/seo:sitemap` - Generate dynamic sitemap
+  - `/seo:vitals` - Core Web Vitals analysis and optimization
+  - `/seo:ai-optimize` - AI Discovery optimization
+  - `/seo:meta` - Generate meta tags (OG, Twitter Cards)
+  - `/seo:i18n` - International SEO setup
+
+- **Firebase MCP Servers** (2 options)
+  - `firebase` - Official Firebase CLI MCP (30+ tools for Firebase projects)
+  - `firebase-community` - Community MCP for Firestore, Storage, Auth
+
+#### Stats
+- Agents: 17 (was 16)
+- Skills: 16 auto-invoke, 8 experts, 14 reference
+- Rules: 45 (was 44)
+- Commands: 87 (was 79)
+- MCP Servers: 13 (was 11)
+
+---
+
 ## [1.9.1] - 2026-01-14
 
 ### Visual Regression Workflow Integration
@@ -600,6 +659,8 @@ Auto-Stop (on blockers):     Execute → Issue found → STOP for fix
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.10.0 | 2026-01-15 | SEO & AI Discovery optimization (Perplexity, ChatGPT, Gemini) |
+| 1.9.1 | 2026-01-14 | Visual regression workflow integration |
 | 1.9.0 | 2026-01-14 | Visual regression testing with auto-fix loop |
 | 1.8.0 | 2026-01-14 | Framework MCP: Laravel Boost, Node.js Debugger |
 | 1.7.0 | 2026-01-08 | Auto-learn: Automatic feedback detection |

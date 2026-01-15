@@ -1,0 +1,629 @@
+---
+description: "SEO and Web Performance expert - activate for meta tags, structured data, Core Web Vitals, sitemap, robots.txt, canonical URLs"
+globs:
+  - "**/meta*.{ts,tsx,js,jsx}"
+  - "**/seo*.{ts,tsx,js,jsx}"
+  - "**/sitemap*.{ts,tsx,js,jsx,xml}"
+  - "**/robots.txt"
+  - "**/manifest.json"
+  - "**/layout.{ts,tsx,js,jsx}"
+  - "**/head.{ts,tsx,js,jsx}"
+  - "**/app/**/page.{ts,tsx,js,jsx}"
+  - "**/pages/**/*.{ts,tsx,js,jsx}"
+alwaysApply: false
+---
+
+# SEO Expert Skill
+
+## Overview
+
+Deep expertise in Search Engine Optimization, Technical SEO, and Web Performance for modern web applications. Covers Google Search, Bing, and other search engines.
+
+## Core Competencies
+
+### 1. Technical SEO
+
+#### Meta Tags (Essential)
+```tsx
+// Next.js App Router - Metadata API
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: {
+    default: 'Site Name',
+    template: '%s | Site Name',
+  },
+  description: 'Compelling description under 160 characters',
+  keywords: ['primary keyword', 'secondary keyword'],
+  authors: [{ name: 'Author Name' }],
+  creator: 'Creator Name',
+  publisher: 'Publisher Name',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  alternates: {
+    canonical: 'https://example.com/page',
+    languages: {
+      'en-US': 'https://example.com/en-US/page',
+      'vi-VN': 'https://example.com/vi-VN/page',
+    },
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://example.com/page',
+    siteName: 'Site Name',
+    title: 'Page Title',
+    description: 'OG description for social sharing',
+    images: [
+      {
+        url: 'https://example.com/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Descriptive alt text',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@twitterhandle',
+    creator: '@creatorhandle',
+    title: 'Page Title',
+    description: 'Twitter card description',
+    images: ['https://example.com/twitter-image.jpg'],
+  },
+  verification: {
+    google: 'google-site-verification-code',
+    yandex: 'yandex-verification-code',
+    yahoo: 'yahoo-verification-code',
+  },
+};
+```
+
+#### Dynamic Metadata (Per Page)
+```tsx
+// app/blog/[slug]/page.tsx
+import { Metadata, ResolvingMetadata } from 'next';
+
+type Props = {
+  params: Promise<{ slug: string }>;
+};
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getPost(slug);
+  const previousImages = (await parent).openGraph?.images || [];
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      url: `https://example.com/blog/${slug}`,
+      images: [post.coverImage, ...previousImages],
+      type: 'article',
+      publishedTime: post.publishedAt,
+      modifiedTime: post.updatedAt,
+      authors: [post.author.name],
+      tags: post.tags,
+    },
+    alternates: {
+      canonical: `https://example.com/blog/${slug}`,
+    },
+  };
+}
+```
+
+### 2. Structured Data (JSON-LD)
+
+#### Schema.org Implementation
+```tsx
+// components/StructuredData.tsx
+export function ArticleSchema({ article }: { article: Article }) {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: article.title,
+    description: article.excerpt,
+    image: article.coverImage,
+    datePublished: article.publishedAt,
+    dateModified: article.updatedAt,
+    author: {
+      '@type': 'Person',
+      name: article.author.name,
+      url: article.author.url,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Company Name',
+      logo: {
+        '@type': 'ImageObject',
+        url: 'https://example.com/logo.png',
+      },
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': `https://example.com/blog/${article.slug}`,
+    },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+// Organization Schema
+export function OrganizationSchema() {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'Company Name',
+    url: 'https://example.com',
+    logo: 'https://example.com/logo.png',
+    sameAs: [
+      'https://twitter.com/company',
+      'https://linkedin.com/company/company',
+      'https://github.com/company',
+    ],
+    contactPoint: {
+      '@type': 'ContactPoint',
+      telephone: '+1-XXX-XXX-XXXX',
+      contactType: 'customer service',
+    },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+// Product Schema (E-commerce)
+export function ProductSchema({ product }: { product: Product }) {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: product.description,
+    image: product.images,
+    sku: product.sku,
+    brand: {
+      '@type': 'Brand',
+      name: product.brand,
+    },
+    offers: {
+      '@type': 'Offer',
+      url: `https://example.com/products/${product.slug}`,
+      priceCurrency: 'USD',
+      price: product.price,
+      availability: product.inStock
+        ? 'https://schema.org/InStock'
+        : 'https://schema.org/OutOfStock',
+      seller: {
+        '@type': 'Organization',
+        name: 'Store Name',
+      },
+    },
+    aggregateRating: product.rating && {
+      '@type': 'AggregateRating',
+      ratingValue: product.rating.average,
+      reviewCount: product.rating.count,
+    },
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+// FAQ Schema
+export function FAQSchema({ faqs }: { faqs: FAQ[] }) {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
+// BreadcrumbList Schema
+export function BreadcrumbSchema({ items }: { items: BreadcrumbItem[] }) {
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
+
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+```
+
+### 3. Sitemap Generation
+
+#### Dynamic Sitemap (Next.js)
+```tsx
+// app/sitemap.ts
+import { MetadataRoute } from 'next';
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const baseUrl = 'https://example.com';
+
+  // Static pages
+  const staticPages = [
+    { url: baseUrl, lastModified: new Date(), changeFrequency: 'daily', priority: 1 },
+    { url: `${baseUrl}/about`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${baseUrl}/contact`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
+  ] as MetadataRoute.Sitemap;
+
+  // Dynamic pages (fetch from DB/CMS)
+  const posts = await getAllPosts();
+  const postPages = posts.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: new Date(post.updatedAt),
+    changeFrequency: 'weekly' as const,
+    priority: 0.7,
+  }));
+
+  const products = await getAllProducts();
+  const productPages = products.map((product) => ({
+    url: `${baseUrl}/products/${product.slug}`,
+    lastModified: new Date(product.updatedAt),
+    changeFrequency: 'daily' as const,
+    priority: 0.9,
+  }));
+
+  return [...staticPages, ...postPages, ...productPages];
+}
+```
+
+#### Sitemap Index (Large Sites)
+```tsx
+// app/sitemap/[id]/route.ts
+import { NextRequest } from 'next/server';
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  const pageSize = 50000; // Google limit
+  const offset = parseInt(id) * pageSize;
+
+  const urls = await getUrlsWithPagination(offset, pageSize);
+
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+      ${urls.map(url => `
+        <url>
+          <loc>${url.loc}</loc>
+          <lastmod>${url.lastmod}</lastmod>
+          <changefreq>${url.changefreq}</changefreq>
+          <priority>${url.priority}</priority>
+        </url>
+      `).join('')}
+    </urlset>`;
+
+  return new Response(sitemap, {
+    headers: { 'Content-Type': 'application/xml' },
+  });
+}
+```
+
+### 4. Robots.txt
+
+```tsx
+// app/robots.ts
+import { MetadataRoute } from 'next';
+
+export default function robots(): MetadataRoute.Robots {
+  const baseUrl = 'https://example.com';
+
+  return {
+    rules: [
+      {
+        userAgent: '*',
+        allow: '/',
+        disallow: ['/admin/', '/api/', '/private/', '/*.json$'],
+      },
+      {
+        userAgent: 'Googlebot',
+        allow: '/',
+        disallow: ['/admin/', '/api/'],
+      },
+      // Block AI crawlers if needed (optional)
+      {
+        userAgent: ['GPTBot', 'ChatGPT-User', 'CCBot', 'anthropic-ai'],
+        disallow: ['/'],
+      },
+    ],
+    sitemap: `${baseUrl}/sitemap.xml`,
+    host: baseUrl,
+  };
+}
+```
+
+### 5. Core Web Vitals Optimization
+
+#### Image Optimization
+```tsx
+import Image from 'next/image';
+
+// Optimized Image Component
+export function OptimizedImage({ src, alt, priority = false }: ImageProps) {
+  return (
+    <Image
+      src={src}
+      alt={alt}                    // Required for SEO
+      width={800}
+      height={600}
+      priority={priority}          // LCP images above fold
+      loading={priority ? 'eager' : 'lazy'}
+      placeholder="blur"           // Prevents CLS
+      blurDataURL={generateBlurPlaceholder(src)}
+      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+    />
+  );
+}
+```
+
+#### Font Optimization
+```tsx
+// app/layout.tsx
+import { Inter, Roboto_Mono } from 'next/font/google';
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',           // Prevents FOIT
+  variable: '--font-inter',
+  preload: true,
+});
+
+const robotoMono = Roboto_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-roboto-mono',
+});
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" className={`${inter.variable} ${robotoMono.variable}`}>
+      <body className={inter.className}>{children}</body>
+    </html>
+  );
+}
+```
+
+#### Script Optimization
+```tsx
+import Script from 'next/script';
+
+// Analytics with proper loading strategy
+export function Analytics() {
+  return (
+    <>
+      {/* Critical scripts - load immediately */}
+      <Script
+        src="https://critical-script.js"
+        strategy="beforeInteractive"
+      />
+
+      {/* Analytics - load after page interactive */}
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=GA_ID"
+        strategy="afterInteractive"
+      />
+
+      {/* Non-critical - load when idle */}
+      <Script
+        src="https://non-critical.js"
+        strategy="lazyOnload"
+      />
+    </>
+  );
+}
+```
+
+### 6. URL Structure Best Practices
+
+```typescript
+// URL patterns for SEO
+const seoFriendlyUrls = {
+  // Good - descriptive, lowercase, hyphens
+  good: [
+    '/blog/how-to-optimize-react-performance',
+    '/products/wireless-bluetooth-headphones',
+    '/services/web-development',
+  ],
+
+  // Bad - avoid these patterns
+  bad: [
+    '/blog?id=123',           // No query strings for content
+    '/Blog/Article',          // Mixed case
+    '/products/product_123',  // Underscores
+    '/p/123',                 // Non-descriptive
+  ],
+};
+
+// Redirect old URLs to new SEO-friendly URLs
+// next.config.js
+const nextConfig = {
+  async redirects() {
+    return [
+      {
+        source: '/old-url',
+        destination: '/new-seo-friendly-url',
+        permanent: true,  // 301 redirect
+      },
+    ];
+  },
+};
+```
+
+### 7. International SEO (i18n)
+
+```tsx
+// app/[locale]/layout.tsx
+import { notFound } from 'next/navigation';
+import { locales, type Locale } from '@/i18n/config';
+
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
+
+export default async function LocaleLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+
+  if (!locales.includes(locale)) {
+    notFound();
+  }
+
+  return (
+    <html lang={locale}>
+      <head>
+        {/* hreflang tags for international SEO */}
+        {locales.map((l) => (
+          <link
+            key={l}
+            rel="alternate"
+            hrefLang={l}
+            href={`https://example.com/${l}`}
+          />
+        ))}
+        <link
+          rel="alternate"
+          hrefLang="x-default"
+          href="https://example.com"
+        />
+      </head>
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+## SEO Checklist
+
+### Technical SEO
+- [ ] Unique `<title>` for each page (50-60 characters)
+- [ ] Unique `<meta description>` (150-160 characters)
+- [ ] Canonical URLs on all pages
+- [ ] XML sitemap submitted to Google Search Console
+- [ ] robots.txt properly configured
+- [ ] HTTPS enabled site-wide
+- [ ] Mobile-responsive design
+- [ ] hreflang tags for multi-language sites
+
+### Structured Data
+- [ ] Organization schema on homepage
+- [ ] Article schema on blog posts
+- [ ] Product schema on product pages
+- [ ] BreadcrumbList on all pages
+- [ ] FAQ schema where applicable
+- [ ] Validate with Google Rich Results Test
+
+### Performance (Core Web Vitals)
+- [ ] LCP (Largest Contentful Paint) < 2.5s
+- [ ] FID (First Input Delay) < 100ms
+- [ ] CLS (Cumulative Layout Shift) < 0.1
+- [ ] Images optimized with next/image
+- [ ] Fonts optimized with display: swap
+- [ ] JavaScript properly code-split
+
+### Content
+- [ ] H1 tag on every page (only one)
+- [ ] Proper heading hierarchy (H1 > H2 > H3)
+- [ ] Alt text on all images
+- [ ] Internal linking strategy
+- [ ] External links with rel="noopener noreferrer"
+
+## Tools & Validation
+
+### Primary Testing Tools
+| Tool | URL | Purpose |
+|------|-----|---------|
+| **Google Rich Results Test** | https://search.google.com/test/rich-results | Structured data validation |
+| **Google Search Console** | https://search.google.com/search-console | Indexing & performance |
+| **PageSpeed Insights** | https://pagespeed.web.dev/ | Core Web Vitals |
+| **Schema.org Validator** | https://validator.schema.org/ | Schema markup |
+| **Lighthouse** | Chrome DevTools (F12) | Full SEO audit |
+
+### Social Media Debuggers
+| Tool | URL | Purpose |
+|------|-----|---------|
+| **Facebook Debugger** | https://developers.facebook.com/tools/debug/ | Open Graph |
+| **Twitter Card Validator** | https://cards-dev.twitter.com/validator | Twitter Cards |
+| **LinkedIn Inspector** | https://www.linkedin.com/post-inspector/ | LinkedIn sharing |
+
+### Validation Workflow
+```
+1. Build production → npm run build
+2. Deploy or use ngrok → npx ngrok http 3000
+3. Test Rich Results → https://search.google.com/test/rich-results?url=YOUR_URL
+4. Test Social Cards → Facebook/Twitter debuggers
+5. Check Performance → PageSpeed Insights
+```
+
+## Framework-Specific Implementations
+
+| Framework | Metadata API | Sitemap | Robots |
+|-----------|-------------|---------|--------|
+| **Next.js 13+** | `export const metadata` | `app/sitemap.ts` | `app/robots.ts` |
+| **Nuxt 3** | `useSeoMeta()` | `server/routes/sitemap.xml.ts` | `public/robots.txt` |
+| **Remix** | `meta` function | Route-based | `public/robots.txt` |
+| **Astro** | `<SEO>` component | `@astrojs/sitemap` | `public/robots.txt` |
+
+---
+
+**Skill ID:** seo-expert
+**Version:** 1.10.0
+**Status:** Active
+**Triggers:** meta tags, SEO, sitemap, robots.txt, structured data, schema.org, Open Graph, Twitter Cards, Core Web Vitals

@@ -13,10 +13,10 @@
 # Instructions for Cursor AI
 
 **System:** Aura Frog — Plugin for Cursor IDE
-**Version:** 1.3.0
+**Version:** 1.10.0
 **Platform:** Cursor IDE (AI-powered code editor)
 **Purpose:** Guide Cursor AI to operate as specialized agents in structured workflows with auto-invoking Skills
-**Last Updated:** 2025-12-22
+**Last Updated:** 2026-01-15
 
 ---
 
@@ -550,4 +550,4 @@ Wait for User Response
 
 ---
 
-**Version:** 1.3.0 | **Last Updated:** 2025-12-22
+**Version:** 1.10.0 | **Last Updated:** 2026-01-15

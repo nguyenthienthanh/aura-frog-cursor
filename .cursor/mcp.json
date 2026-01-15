@@ -55,6 +55,20 @@
         "SLACK_TOKEN": "${SLACK_TOKEN}",
         "SLACK_TEAM_ID": "${SLACK_TEAM_ID}"
       }
+    },
+    "firebase": {
+      "command": "npx",
+      "args": ["-y", "firebase-tools@latest", "mcp"],
+      "disabled": true
+    },
+    "firebase-community": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/firebase-mcp"],
+      "env": {
+        "SERVICE_ACCOUNT_KEY_PATH": "${FIREBASE_SERVICE_ACCOUNT_KEY_PATH}",
+        "FIREBASE_STORAGE_BUCKET": "${FIREBASE_STORAGE_BUCKET}"
+      },
+      "disabled": true
     }
   }
 }

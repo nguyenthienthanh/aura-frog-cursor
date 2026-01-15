@@ -1,0 +1,216 @@
+---
+description: "SEO and AI Discovery quality standards - enforce best practices for search engine and AI visibility"
+globs: []
+alwaysApply: true
+---
+
+# SEO & AI Discovery Standards
+
+## Overview
+
+These standards ensure all web implementations follow SEO best practices and are optimized for AI discovery engines.
+
+## Required Standards
+
+### 1. Meta Tags (Mandatory for Web Pages)
+
+Every public page MUST have:
+
+```tsx
+// Required metadata
+export const metadata: Metadata = {
+  title: 'Descriptive Page Title',        // 50-60 characters
+  description: 'Compelling description',  // 150-160 characters
+  openGraph: { /* ... */ },               // For social sharing
+};
+```
+
+**Validation Rules:**
+- Title: 50-60 characters, unique per page
+- Description: 150-160 characters, unique per page
+- Canonical URL: Always specified
+- Open Graph: title, description, image, url
+- Twitter Card: card type, title, description, image
+
+### 2. Structured Data (Required for Content Pages)
+
+| Page Type | Required Schema |
+|-----------|-----------------|
+| Homepage | Organization, WebSite |
+| Blog Post | Article |
+| Product | Product, Offer |
+| FAQ | FAQPage |
+| How-to | HowTo |
+| Event | Event |
+| Recipe | Recipe |
+| Review | Review |
+
+```tsx
+// Example: Article pages MUST include
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "...",
+  "datePublished": "...",
+  "author": { "@type": "Person", "name": "..." }
+}
+</script>
+```
+
+### 3. Image Optimization (Mandatory)
+
+All images MUST:
+- Use `next/image` or equivalent optimized component
+- Include descriptive `alt` text
+- Specify width and height (prevent CLS)
+- Use modern formats (WebP, AVIF)
+- Be lazy-loaded (except above-fold LCP images)
+
+```tsx
+// Required pattern
+<Image
+  src="/image.jpg"
+  alt="Descriptive alt text"  // Required
+  width={800}
+  height={600}
+  loading="lazy"              // Or priority for LCP
+/>
+```
+
+### 4. Heading Hierarchy (Strict)
+
+- **One H1 per page** - No exceptions
+- **Sequential hierarchy** - H1 → H2 → H3 (no skipping levels)
+- **Descriptive headings** - Include keywords naturally
+
+```tsx
+// Correct
+<h1>Main Page Title</h1>
+<h2>Section Title</h2>
+<h3>Subsection Title</h3>
+
+// Wrong - skips H2
+<h1>Main Title</h1>
+<h3>Section</h3>  // ❌ Skipped H2
+```
+
+### 5. URL Structure (Enforced)
+
+URLs MUST be:
+- Lowercase only
+- Hyphen-separated (no underscores)
+- Descriptive and readable
+- Without query parameters for content pages
+- Under 75 characters
+
+```tsx
+// Good URLs
+/blog/how-to-optimize-react-performance
+/products/wireless-headphones
+
+// Bad URLs - REJECTED
+/Blog/Article                    // ❌ Mixed case
+/products/product_123            // ❌ Underscores
+/p?id=123                        // ❌ Query params
+```
+
+### 6. Core Web Vitals Targets
+
+| Metric | Good | Needs Improvement | Poor |
+|--------|------|-------------------|------|
+| **LCP** | ≤2.5s | 2.5s-4s | >4s |
+| **INP** | ≤200ms | 200ms-500ms | >500ms |
+| **CLS** | ≤0.1 | 0.1-0.25 | >0.25 |
+
+**Required optimizations:**
+- Images: Use `next/image` with blur placeholder
+- Fonts: Use `next/font` with `display: swap`
+- Scripts: Use `next/script` with appropriate strategy
+- CSS: Minimize render-blocking stylesheets
+
+### 7. Accessibility for SEO
+
+SEO and accessibility overlap significantly:
+
+- **Alt text**: All images MUST have descriptive alt text
+- **Link text**: No "click here" - use descriptive text
+- **Color contrast**: Minimum 4.5:1 ratio
+- **Form labels**: All inputs MUST have associated labels
+- **Language**: `<html lang="...">` MUST be set
+
+### 8. Mobile-First (Required)
+
+- Responsive design is mandatory
+- No horizontal scroll on mobile
+- Touch targets minimum 44x44 pixels
+- Viewport meta tag required
+
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+```
+
+## AI Discovery Standards
+
+### Content Structure for AI
+
+Content MUST be structured for AI extraction:
+
+1. **Lead with the answer** - First 1-2 sentences should directly answer the main question
+2. **Use semantic HTML** - `<article>`, `<section>`, `<aside>`, `<nav>`
+3. **Include key facts** - Specific data, numbers, dates
+4. **Cite sources** - Link to authoritative references
+5. **Show freshness** - Display publish and update dates
+
+### Required Content Elements
+
+For informational pages:
+- [ ] Summary/TL;DR in first paragraph
+- [ ] Key takeaways section
+- [ ] Proper heading structure
+- [ ] FAQ section for common questions
+- [ ] Sources and references section
+
+## Pre-Commit Checklist
+
+Before committing web pages:
+
+- [ ] Title unique and 50-60 characters
+- [ ] Meta description unique and 150-160 characters
+- [ ] Canonical URL set
+- [ ] Open Graph tags complete
+- [ ] Structured data valid (test with Google Rich Results)
+- [ ] Images have alt text
+- [ ] Only one H1 on page
+- [ ] Heading hierarchy correct
+- [ ] URL follows naming conventions
+- [ ] Mobile responsive verified
+
+## Automated Validation
+
+Run these checks in CI/CD:
+
+```bash
+# Lighthouse CI
+npx lighthouse-ci https://example.com --preset=desktop
+
+# Schema validation
+npx schema-dts-validator ./schemas
+
+# HTML validation
+npx html-validate ./dist
+```
+
+## References
+
+- **SEO Expert:** `.cursor/rules/skills/experts/seo-expert.mdc`
+- **AI Discovery:** `.cursor/rules/skills/reference/ai-discovery.mdc`
+- **Web SEO Agent:** `.cursor/rules/agents/web-seo.mdc`
+- **Google Search Central**: https://developers.google.com/search
+- **Schema.org**: https://schema.org
+
+---
+
+**Rule ID:** seo-standards
+**Version:** 1.10.0
+**Status:** Active

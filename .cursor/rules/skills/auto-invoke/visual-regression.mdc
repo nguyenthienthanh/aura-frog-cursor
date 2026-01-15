@@ -12,7 +12,7 @@ alwaysApply: false
 
 # Skill: Visual Regression Testing
 
-**Version:** 1.9.1
+**Version:** 1.10.0
 **Trigger:** Auto-detect design references, workflow phases, UI implementation
 **Purpose:** Ensure pixel-perfect UI implementation with auto-fix loop
 
@@ -319,5 +319,5 @@ When performing visual regression:
 
 ---
 
-**Version:** 1.9.1
-**Last Updated:** 2026-01-14
+**Version:** 1.10.0
+**Last Updated:** 2026-01-15
