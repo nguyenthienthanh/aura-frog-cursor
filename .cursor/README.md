@@ -39,17 +39,17 @@ cat .cursor/GET_STARTED.md
 ├── 📄 .envrc.template                # Environment setup
 │
 ├── 📂 rules/                         # All rules (MDC format)
-│   ├── core/                         # 42 core quality rules
-│   ├── agents/                       # 16 specialized agents
-│   ├── skills/                       # 29 skills (9 auto-invoke, 7 experts, 13 reference)
+│   ├── core/                         # 50 core quality rules
+│   ├── agents/                       # 20 specialized agents
+│   ├── skills/                       # 46 skills (20 auto-invoke, 10 experts, 16 reference)
 │   ├── hooks/                        # 4 lifecycle hooks
-│   └── templates/                    # 8 documentation templates
+│   └── templates/                    # 7 documentation templates
 │
-├── 📂 commands/                      # 70 slash commands
+├── 📂 commands/                      # 94 slash commands
 │   ├── workflow/                     # Workflow orchestration
 │   ├── bugfix/                       # Bug fixes
 │   ├── test/                         # Testing
-│   └── ... (19 categories)
+│   └── ... (23 categories)
 │
 ├── 📂 workflows/                     # 9-phase workflow system
 │   ├── phases/                       # Phase guides
@@ -80,11 +80,11 @@ cat .cursor/GET_STARTED.md
 
 ## 🎯 Key Features
 
-✅ **16 Specialized Agents** - Auto-detect based on context
+✅ **20 Specialized Agents** - Auto-detect based on context
 ✅ **9-Phase TDD Workflow** - Structured development (RED-GREEN-REFACTOR)
-✅ **70+ Slash Commands** - All development tasks covered
-✅ **42 Quality Rules** - Always enforced
-✅ **29 Skills** - 9 auto-invoke + 7 experts + 13 reference
+✅ **94 Slash Commands** - All development tasks covered (23 categories)
+✅ **50 Quality Rules** - Always enforced
+✅ **46 Skills** - 20 auto-invoke + 10 experts + 16 reference
 ✅ **Mermaid Diagrams** - Sequence, ERD, Architecture, State diagrams
 ✅ **Multi-Session Support** - Workflow handoff/resume
 ✅ **Project Customization** - Generic core + project context
@@ -119,7 +119,7 @@ Every response shows (single or multi-agent):
 
 **Single Agent:**
 ```
-⚡ 🐸 AURA FROG v1.3.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.11.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: mobile-react-native │ Phase: 2 - Design         ┃
 ┃ 🔥 Code go brrrr                                        ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -127,7 +127,7 @@ Every response shows (single or multi-agent):
 
 **Multiple Agents (collaboration):**
 ```
-⚡ 🐸 AURA FROG v1.3.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.11.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: mobile-react-native (+qa-automation)            ┃
 ┃ Phase: 5b - TDD GREEN │ 🔥 Building with tests          ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -187,11 +187,11 @@ See all commands: `cat .cursor/commands/QUICK_REFERENCE.md`
 
 - **Total Files:** 250+
 - **Total Size:** ~1.5 MB
-- **MDC Rules:** 103 files
-- **Commands:** 70+ slash commands
-- **Agents:** 16 specialized agents
-- **Skills:** 29 (9 auto-invoke, 7 experts, 13 reference)
-- **Core Rules:** 42 quality rules
+- **MDC Rules:** 142 files
+- **Commands:** 94 slash commands (23 categories)
+- **Agents:** 20 specialized agents
+- **Skills:** 46 (20 auto-invoke, 10 experts, 16 reference)
+- **Core Rules:** 50 quality rules
 
 ---
 

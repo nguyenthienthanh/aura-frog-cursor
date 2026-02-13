@@ -41,24 +41,33 @@ Cursor IDE loads instructions in this order:
 2. **Match user intent** to appropriate skill(s)
 3. **Auto-invoke skills** when context matches (no manual invocation needed)
 
-**Auto-Invoking Skills (9):**
-- **agent-detector** (`.cursor/rules/skills/auto-invoke/agent-detector/agent-selection.md`) - ALWAYS runs FIRST for every message
-- **workflow-orchestrator** (`.cursor/rules/skills/auto-invoke/workflow-orchestrator/workflow-execution.md`) - Complex features
-- **project-context-loader** (`.cursor/rules/skills/auto-invoke/project-context-loader/context-loading.md`) - Before code generation
-- **bugfix-quick** (`.cursor/rules/skills/auto-invoke/bugfix-quick/quick-fix.md`) - Bug fixes
-- **test-writer** (`.cursor/rules/skills/auto-invoke/test-writer/test-generation.md`) - Test creation
-- **code-reviewer** (`.cursor/rules/skills/auto-invoke/code-reviewer/quality-review.md`) - Code quality review
-- **jira-integration** (`.cursor/rules/skills/auto-invoke/jira-integration/ticket-management.md`) - JIRA ticket detection
-- **figma-integration** (`.cursor/rules/skills/auto-invoke/figma-integration/design-extraction.md`) - Figma URL detection
-- **refactor-expert** (`.cursor/rules/skills/auto-invoke/refactor-expert/refactoring.md`) - Safe refactoring patterns
+**Auto-Invoking Skills (20):**
+- **agent-detector** (`.cursor/rules/skills/auto-invoke/agent-detector.mdc`) - ALWAYS runs FIRST for every message
+- **model-router** (`.cursor/rules/skills/auto-invoke/model-router.mdc`) - Auto-select Haiku/Sonnet/Opus
+- **workflow-orchestrator** (`.cursor/rules/skills/auto-invoke/workflow-orchestrator.mdc`) - Complex features
+- **workflow-fasttrack** (`.cursor/rules/skills/auto-invoke/workflow-fasttrack.mdc`) - Skip phases for pre-approved specs
+- **project-context-loader** (`.cursor/rules/skills/auto-invoke/project-context-loader.mdc`) - Before code generation
+- **framework-expert** (`.cursor/rules/skills/auto-invoke/framework-expert.mdc`) - Lazy-load framework patterns
+- **testing-patterns** (`.cursor/rules/skills/auto-invoke/testing-patterns.mdc`) - Universal testing patterns
+- **seo-bundle** (`.cursor/rules/skills/auto-invoke/seo-bundle.mdc`) - Consolidated SEO/GEO skills
+- **bugfix-quick** (`.cursor/rules/skills/auto-invoke/bugfix-quick.mdc`) - Bug fixes
+- **test-writer** (`.cursor/rules/skills/auto-invoke/test-writer.mdc`) - Test creation
+- **code-reviewer** (`.cursor/rules/skills/auto-invoke/code-reviewer.mdc`) - Code quality review
+- **code-simplifier** (`.cursor/rules/skills/auto-invoke/code-simplifier.mdc`) - KISS enforcement
+- **git-workflow** (`.cursor/rules/skills/auto-invoke/git-workflow.mdc`) - Token-efficient git operations
+- **session-continuation** (`.cursor/rules/skills/auto-invoke/session-continuation.mdc`) - Handoff/resume
+- **context7-integration** (`.cursor/rules/skills/auto-invoke/context7-integration.mdc`) - Library docs integration
+- **mcp-integrations** (`.cursor/rules/skills/auto-invoke/mcp-integrations.mdc`) - MCP server orchestration
+- **auto-learn** (`.cursor/rules/skills/auto-invoke/auto-learn.mdc`) - Pattern detection
+- **learning-analyzer** (`.cursor/rules/skills/auto-invoke/learning-analyzer.mdc`) - Learning analysis
+- **self-improve** (`.cursor/rules/skills/auto-invoke/self-improve.mdc`) - Self-improvement
+- **visual-regression** (`.cursor/rules/skills/auto-invoke/visual-regression.mdc`) - Visual testing
 
-**Reference Skills (11):** Use these during implementation
-- **api-designer** (`.cursor/rules/skills/auto-invoke/api-designer/api-design.md`) - RESTful API design
-- **performance-optimizer** (`.cursor/rules/skills/auto-invoke/performance-optimizer/optimization.md`) - Performance tuning
-- **migration-helper** (`.cursor/rules/skills/auto-invoke/migration-helper/migration.md`) - Database/code migrations
-- **phase-skipping** (`.cursor/rules/skills/auto-invoke/workflow-orchestrator/phase-skipping.md`) - Smart phase skip rules
-- **estimation** (`.cursor/rules/skills/auto-invoke/pm-expert/estimation.md`) - Effort estimation
-- **documentation** (`.cursor/rules/skills/auto-invoke/documentation/adr-runbook.md`) - ADR & Runbook templates
+**Expert Skills (10):** Use these during implementation
+- Located in `.cursor/rules/skills/experts/` — react, vue, angular, nextjs, nodejs, typescript, seo, security, testing, api design
+
+**Reference Skills (16):** Loaded on-demand by bundles
+- Located in `.cursor/rules/skills/reference/` — design system, performance, migration, documentation, estimation, etc.
 
 **How Skills Work:**
 - Skills use **LLM reasoning** to match context
@@ -88,7 +97,7 @@ Auto-invokes:
 Include this agent signature at the very beginning of ALL your responses:
 
 ```
-⚡ 🐸 AURA FROG v1.3.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.11.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ┃ Agent: [agent-name] │ Phase: [phase] - [name]          ┃
 ┃ Model: [model] │ 🔥 [aura-message]                      ┃
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -145,7 +154,7 @@ You are Cursor AI operating within **Aura Frog**, a structured system with:
 
 - **Specialized agents** for mobile, backend, QA, UI, security, DevOps, etc.
 - **9-phase workflow** (Understand → Design → UI → Plan Tests → TDD → Review → Verify → Document → Share)
-- **70 commands** for various development tasks
+- **94 commands** for various development tasks
 - **Project context system** for customization
 - **Quality-first approach** with TDD, KISS principle, cross-review
 
@@ -221,13 +230,15 @@ Project Context > Aura Frog Rules > Generic Defaults
 
 ---
 
-## 🤖 Available Agents (16)
+## 🤖 Available Agents (20)
 
 **Categories:**
 - **Development (11):** mobile-react-native, mobile-flutter, web-angular, web-vuejs, web-reactjs, web-nextjs, backend-nodejs, backend-python, backend-go, backend-laravel, database-specialist
 - **Quality & Security (3):** security-expert, qa-automation, ui-designer
 - **DevOps (1):** devops-cicd
-- **Infrastructure (1):** project-detector
+- **System (2):** project-detector, pm-operations-orchestrator
+- **Emerging (2):** game-developer, voice-operations
+- **SEO (1):** web-seo
 
 **📚 Full Agent Catalog:** See `.cursor/README.md` | **🧠 Selection Logic:** See `.cursor/rules/skills/auto-invoke/agent-detector.mdc`
 
@@ -482,18 +493,23 @@ Wait for User Response
 
 **All integrations use MCP servers (configured in `.cursor/mcp.json`).**
 
-### Available MCP Servers
+### Available MCP Servers (13 total: 9 enabled, 4 optional)
 
-| Server | Purpose | Enabled |
-|--------|---------|---------|
-| `context7` | Library documentation | ✅ Yes |
-| `playwright` | Browser automation | ✅ Yes |
-| `filesystem` | File operations | ✅ Yes |
-| `memory` | Persistent context | ✅ Yes |
-| `atlassian` | JIRA + Confluence | ❌ Needs credentials |
-| `figma` | Design extraction | ❌ Needs credentials |
-| `slack` | Team notifications | ❌ Needs credentials |
-| `github` | Git operations | ❌ Needs credentials |
+| Server | Purpose | Status |
+|--------|---------|--------|
+| `context7` | Library documentation | ✅ Enabled |
+| `playwright` | Browser automation | ✅ Enabled |
+| `github` | Git operations | ✅ Needs `GITHUB_TOKEN` |
+| `filesystem` | File operations | ✅ Enabled |
+| `memory` | Persistent context | ✅ Enabled |
+| `vitest` | Test execution + coverage | ✅ Enabled |
+| `atlassian` | JIRA + Confluence | ✅ Needs Atlassian login |
+| `figma` | Design extraction | ✅ Needs `FIGMA_API_KEY` |
+| `slack` | Team notifications | ✅ Needs `SLACK_TOKEN` |
+| `laravel-boost` | Laravel MCP | ⚫ Disabled (optional) |
+| `nodejs-debugger` | Node.js debugging | ⚫ Disabled (optional) |
+| `firebase` | Firebase tools | ⚫ Disabled (optional) |
+| `firebase-community` | Firebase community | ⚫ Disabled (optional) |
 
 ### When JIRA ticket detected (e.g., `PROJ-1234`):
 1. Use `atlassian` MCP server → `jira_get_issue` tool
