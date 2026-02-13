@@ -1,0 +1,100 @@
+---
+description: "Detect and simplify overly complex code. Apply KISS principle - less is more. Triggers: simplify, too complex, make simpler, reduce complexity, over-engineered."
+globs: []
+alwaysApply: false
+---
+
+# Code Simplifier
+
+**Type:** Auto-Invoke Skill
+**Rule Reference:** `rules/core/kiss-avoid-over-engineering.mdc`
+
+---
+
+## Overview
+
+Detect and simplify overly complex code. Apply KISS principle (Keep It Simple, Stupid).
+
+**Philosophy:** The best code is code you don't have to write. Less is more.
+
+---
+
+## Complexity Targets
+
+```toon
+targets[5]{metric,target}:
+ Cyclomatic complexity,<=10
+ Nesting depth,<=3
+ Function length,<=30 lines
+ File length,<=300 lines
+ Parameters,<=3
+```
+
+---
+
+## Quick Reference
+
+```toon
+signals[5]{signal,action}:
+ Deep nesting (>3 levels),Flatten with early returns
+ Long function (>30 lines),Extract smaller functions
+ Complex conditionals,Use lookup tables
+ Over-abstraction,Inline single-use code
+ Premature optimization,Remove unless profiled
+```
+
+---
+
+## Simplification Checklist
+
+Before writing or reviewing code, ask:
+
+1. **Can I delete this?** - Unused code, dead branches
+2. **Can I inline this?** - Single-use abstractions
+3. **Can I flatten this?** - Nested conditions, callbacks
+4. **Can I use built-ins?** - Array methods, standard library
+5. **Is this needed now?** - YAGNI (You Ain't Gonna Need It)
+6. **Would a junior understand?** - If not, simplify
+
+---
+
+## Example Session
+
+```
+User: This function is too complex, simplify it
+
+Claude: Let me analyze the complexity...
+
+Complexity Analysis:
+- Cyclomatic complexity: 15 (target: <=10)
+- Nesting depth: 5 (target: <=3)
+- Lines: 87 (target: <=30)
+
+Simplification Plan:
+1. Convert nested ifs to early returns (-3 nesting)
+2. Extract validation logic to separate function (-20 lines)
+3. Replace switch with lookup table (-15 lines, -5 complexity)
+4. Remove unused error handling branch
+
+Result:
+- Cyclomatic complexity: 6
+- Nesting depth: 2
+- Lines: 28
+```
+
+---
+
+## Related
+
+- **KISS Rule:** `rules/core/kiss-avoid-over-engineering.mdc`
+- **Code Reviewer:** `skills/auto-invoke/code-reviewer.mdc`
+- **Refactor Expert:** `skills/reference/refactor-expert.mdc`
+
+---
+
+**Remember:** Simple code is not dumb code. It takes skill to write simple code.
+
+---
+
+**Version:** 1.11.0
+**Last Updated:** 2026-02-13

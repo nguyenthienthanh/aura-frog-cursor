@@ -1,0 +1,105 @@
+{
+  "project": {
+    "name": "aura-frog-cursor",
+    "type": "single-repo",
+    "subtype": "cursor-ide-plugin",
+    "description": "Aura Frog plugin for Cursor IDE with MCP-first architecture"
+  },
+  "detection": {
+    "timestamp": "2026-02-13T17:15:00Z",
+    "fromCache": false,
+    "method": "full-scan"
+  },
+  "framework": null,
+  "packageManager": null,
+  "languages": {
+    "primary": "markdown",
+    "secondary": ["yaml", "json", "bash"]
+  },
+  "filePatterns": {
+    "rules": ".cursor/rules/**/*.mdc",
+    "commands": ".cursor/commands/**/*.md",
+    "workflows": ".cursor/workflows/phases/*.md",
+    "templates": ".cursor/templates/*.md",
+    "scripts": "scripts/**/*.sh",
+    "config": ".cursor/*.json"
+  },
+  "testInfrastructure": {
+    "framework": null,
+    "configFile": null,
+    "testPattern": null,
+    "note": "No test infrastructure - this is a configuration/plugin project"
+  },
+  "agents": {
+    "primary": "project-detector",
+    "secondary": [],
+    "all": [
+      "backend-go",
+      "backend-laravel",
+      "backend-nodejs",
+      "backend-python",
+      "database-specialist",
+      "devops-cicd",
+      "mobile-flutter",
+      "mobile-react-native",
+      "project-detector",
+      "qa-automation",
+      "security-expert",
+      "ui-designer",
+      "web-angular",
+      "web-nextjs",
+      "web-reactjs",
+      "web-seo",
+      "web-vuejs"
+    ],
+    "count": 17
+  },
+  "mcpServers": {
+    "total": 13,
+    "enabled": [
+      "context7",
+      "playwright",
+      "github",
+      "filesystem",
+      "memory",
+      "vitest",
+      "atlassian",
+      "figma",
+      "slack"
+    ],
+    "disabled": [
+      "laravel-boost",
+      "nodejs-debugger",
+      "firebase",
+      "firebase-community"
+    ]
+  },
+  "counts": {
+    "mcpServers": 13,
+    "agents": 17,
+    "commands": 87,
+    "coreRules": 44,
+    "skillRules": 35,
+    "hookRules": 4,
+    "templateRules": 7,
+    "workflowPhases": 9,
+    "documentTemplates": 9,
+    "scripts": 8,
+    "docs": 4
+  },
+  "structure": {
+    "hasPackageJson": false,
+    "hasComposerJson": false,
+    "hasDockerfile": false,
+    "hasCIConfig": false,
+    "hasTestConfig": false,
+    "hasEnvTemplate": true,
+    "hasSetupScript": true,
+    "hasVersionFile": true,
+    "hasChangelog": true
+  },
+  "git": {
+    "mainBranch": "main",
+    "remote": "origin"
+  }
+}

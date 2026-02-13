@@ -41,7 +41,7 @@ This is the **FULL** tech spec for Confluence. For the simplified AI version, se
 **JIRA:** [JIRA-XXXX]
 **Author:** [Agent Name]
 **Date:** [YYYY-MM-DD]
-**Version:** 1.10.0
+**Version:** 1.11.0
 
 ---
 
@@ -320,7 +320,7 @@ For each endpoint, document:
 
 **Document Status:** ✅ Ready for Review
 **Last Updated:** [Date]
-**Version:** 1.10.0
+**Version:** 1.11.0
 ```
 
 ## Sections Explained
@@ -403,7 +403,7 @@ Reference project-specific conventions:
 
 ---
 
-**Version:** 1.10.0
+**Version:** 1.11.0
 **Phase:** 2 - Technical Planning
 **Agent:** Typically mobile-react-native, web-reactjs, backend-nodejs, etc.
 **Adapted for Cursor:** 2025-12-11

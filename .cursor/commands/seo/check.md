@@ -272,5 +272,5 @@ npm run dev
 ---
 
 **Command ID:** seo:check
-**Version:** 1.10.0
+**Version:** 1.11.0
 **Status:** Active

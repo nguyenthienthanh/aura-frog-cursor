@@ -106,4 +106,4 @@ export AF_LEARNING_ENABLED="true"
 
 ---
 
-**Version:** 1.10.0
+**Version:** 1.11.0

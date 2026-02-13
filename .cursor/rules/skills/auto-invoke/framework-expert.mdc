@@ -1,0 +1,110 @@
+---
+description: "Unified framework expert. Lazy-loads only relevant framework patterns (React, Vue, Angular, Next.js, Node.js, Python, Laravel, Go, Flutter, RN, Godot). Reduces tokens ~80% vs loading all individual skills."
+globs:
+  - "**/*.tsx"
+  - "**/*.jsx"
+  - "**/*.vue"
+  - "**/*.dart"
+  - "**/*.php"
+  - "**/*.gd"
+  - "**/go.mod"
+alwaysApply: false
+---
+
+# Framework Expert (Bundle)
+
+**Type:** Auto-Invoke
+**Priority:** 50
+
+## Purpose
+
+Unified entry point for all framework-specific expertise. Lazy-loads only the relevant framework patterns based on detected tech stack, reducing token usage by ~80% compared to loading all 12 individual framework skills.
+
+## Bundles
+
+```toon
+framework_bundles[5]{bundle,frameworks,detect_by}:
+  web-frontend,"react,vue,angular,nextjs,svelte","package.json deps + file extensions"
+  web-backend,"nodejs,python,laravel,go","package.json/requirements.txt/composer.json/go.mod"
+  mobile,"react-native,flutter","app.json (expo) or pubspec.yaml"
+  game,"godot","project.godot or *.gd files"
+  typescript,"typescript","tsconfig.json or .ts files"
+```
+
+## Lazy Loading Strategy
+
+```toon
+load_order[4]{priority,load,when}:
+  1,Core patterns (all frameworks),Always (~200 tokens)
+  2,Detected framework patterns,Framework detected (~300 tokens)
+  3,Secondary framework patterns,Full-stack project (~200 tokens)
+  4,Advanced patterns,Complex task (~200 tokens)
+```
+
+**Total:** ~500-900 tokens vs ~6000 tokens (loading all 12 skills)
+
+## Core Patterns (Always Loaded)
+
+```toon
+core_patterns[8]{pattern,description}:
+  File organization,Group by feature not type
+  Naming conventions,PascalCase components camelCase functions
+  Error handling,Graceful degradation + user feedback
+  State management,Minimize global state
+  API design,RESTful or GraphQL conventions
+  Testing,Unit + integration + e2e coverage
+  Performance,Lazy loading + code splitting
+  Security,Input validation + sanitization
+```
+
+## Framework-Specific Patterns
+
+### Web Frontend
+
+**React:** Functional with hooks, useState/useReducer, useMemo/useCallback, Error boundaries
+**Vue:** Composition API, Composables, Pinia stores, Named slots
+**Angular:** Standalone components, Injectable services, RxJS + Signals, Reactive forms
+**Next.js:** App Router, Server components, Route handlers, revalidate + cache tags
+
+### Web Backend
+
+**Node.js:** Controllers + services + repos, async/await, Zod/Joi, Prisma/TypeORM
+**Python:** Type hints, asyncio, Pydantic, pytest fixtures
+**Laravel:** Single responsibility controllers, Eloquent scopes, Form requests, Events
+**Go:** cmd/internal/pkg structure, Explicit errors, Interfaces, Table-driven tests
+
+### Mobile
+
+**React Native:** React Navigation v6+, NativeWind/StyleSheet, Zustand, Detox
+**Flutter:** Widget composition, Riverpod/BLoC, go_router, Platform channels
+
+### Game
+
+**Godot:** Scene composition, GDScript with static typing, Custom signals, Multi-platform export
+
+## Detection to Pattern Mapping
+
+```toon
+detection_map[12]{detection,load_patterns,tokens}:
+  react,core + react_patterns,~500
+  vue,core + vue_patterns,~500
+  angular,core + angular_patterns,~500
+  nextjs,core + nextjs_patterns + react_patterns,~700
+  nodejs,core + nodejs_patterns,~500
+  python,core + python_patterns,~500
+  laravel,core + laravel_patterns,~500
+  go,core + go_patterns,~500
+  react-native,core + rn_patterns + react_patterns,~700
+  flutter,core + flutter_patterns,~500
+  godot,core + godot_patterns,~500
+  typescript,core + ts_patterns,~400
+```
+
+## Migration Note
+
+This bundle skill is an **optimization layer** on top of existing framework skills. Individual expert skills remain available for direct invocation when detailed reference is needed.
+
+---
+
+**Version:** 1.11.0
+**Last Updated:** 2026-02-13

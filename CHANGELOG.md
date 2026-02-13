@@ -5,6 +5,49 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.11.0] - 2026-02-13
+
+### Feature Sync from Aura Frog v1.18.0
+
+Comprehensive sync of missing features from the Claude Code plugin (aura-frog v1.18.0) converted to Cursor-compatible `.mdc` format.
+
+#### Added
+
+- **11 New Skill Rules** converted from aura-frog source
+  - Auto-invoke (7): `model-router.mdc` (auto-select Haiku/Sonnet/Opus), `framework-expert.mdc` (lazy-load 12 framework patterns), `testing-patterns.mdc` (universal AAA testing), `seo-bundle.mdc` (consolidated SEO/GEO), `code-simplifier.mdc` (KISS enforcement), `workflow-fasttrack.mdc` (skip phases 1-3 for pre-approved specs), `git-workflow.mdc` (token-efficient git ops with security scanning)
+  - Experts (2): `godot-expert.mdc` (Godot 4.x/GDScript), `qa-expert.mdc` (QA testing strategies)
+  - Reference (2): `problem-solving.mdc` (5 techniques), `sequential-thinking.mdc` (structured analysis with revision)
+
+- **6 New Core Rules** converted from aura-frog source
+  - `estimation.mdc` - Story points (Fibonacci), time estimates, risk assessment
+  - `verification.mdc` - Iron law: run, read, claim verification protocol
+  - `workflow-deliverables.mdc` - Phase-by-phase deliverables checklist
+  - `frontend-excellence.mdc` - Core Web Vitals, responsive design, accessibility
+  - `impact-analysis.mdc` - Change impact assessment before modifications
+  - `context-management.mdc` - Token budget management and context optimization
+
+- **3 New Agent Rules** converted from aura-frog source
+  - `game-developer.mdc` - Godot 4.x game development (globs: `*.gd`, `*.tscn`, `*.tres`)
+  - `voice-operations.mdc` - ElevenLabs voice streaming integration
+  - `pm-operations-orchestrator.mdc` - Central workflow coordinator
+
+- **7 New Commands** (3 new categories)
+  - `project/status.md` - Display project detection status
+  - `project/config.md` - View/update project configuration
+  - `project/sync-settings.md` - Sync Cursor IDE settings
+  - `design/stitch.md` - Generate UI with Google Stitch AI
+  - `design/stitch-review.md` - Review Stitch-generated designs
+  - `logs/analyze.md` - Analyze workflow logs
+  - `mcp/status.md` - MCP server status display
+
+#### Stats
+- Agents: 20 (was 17)
+- Skills: 46 total - 20 auto-invoke, 10 experts, 16 reference (was 35)
+- Core Rules: 50 (was 44)
+- Commands: 94 in 23 categories (was 87 in 20 categories)
+
+---
+
 ## [1.10.0] - 2026-01-15
 
 ### SEO & AI Discovery Optimization
@@ -659,6 +702,7 @@ Auto-Stop (on blockers):     Execute → Issue found → STOP for fix
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 1.11.0 | 2026-02-13 | Feature sync from aura-frog v1.18.0 (11 skills, 6 rules, 3 agents, 7 commands) |
 | 1.10.0 | 2026-01-15 | SEO & AI Discovery optimization (Perplexity, ChatGPT, Gemini) |
 | 1.9.1 | 2026-01-14 | Visual regression workflow integration |
 | 1.9.0 | 2026-01-14 | Visual regression testing with auto-fix loop |

@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Rule: Workflow Navigation
 
-**Version:** 1.10.0
+**Version:** 1.11.0
 **Priority:** HIGH
 **Applies:** All workflow phases and approval gates
 
@@ -272,5 +272,5 @@ Warning: Token usage high. Consider `workflow:handoff` after Phase 6.
 
 ---
 
-**Version:** 1.10.0
-**Last Updated:** 2026-01-15
+**Version:** 1.11.0
+**Last Updated:** 2026-02-13

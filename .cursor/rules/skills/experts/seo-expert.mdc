@@ -624,6 +624,6 @@ export default async function LocaleLayout({
 ---
 
 **Skill ID:** seo-expert
-**Version:** 1.10.0
+**Version:** 1.11.0
 **Status:** Active
 **Triggers:** meta tags, SEO, sitemap, robots.txt, structured data, schema.org, Open Graph, Twitter Cards, Core Web Vitals

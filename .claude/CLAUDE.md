@@ -2,17 +2,18 @@
 
 **Project:** aura-frog-cursor
 **Type:** Cursor IDE Plugin/Configuration (MCP-first)
-**Version:** 1.10.0
+**Version:** 1.11.0
 
 ---
 
 ## Project Overview
 
 This is the **Aura Frog** plugin converted for Cursor IDE with MCP-first architecture:
-- 9 MCP servers in `.cursor/mcp.json`
-- 16 specialized agents in `.cursor/rules/agents/`
-- 37 core quality rules in `.cursor/rules/core/`
-- 70+ slash commands in `.cursor/commands/`
+- 13 MCP servers in `.cursor/mcp.json` (9 enabled, 4 disabled)
+- 20 specialized agents in `.cursor/rules/agents/`
+- 50 core quality rules in `.cursor/rules/core/`
+- 94 slash commands in `.cursor/commands/` (23 categories)
+- 46 skill rules in `.cursor/rules/skills/` (20 auto-invoke, 10 expert, 16 reference)
 - 9-phase TDD workflow in `.cursor/workflows/`
 
 ---
@@ -94,5 +95,5 @@ chore: Maintenance tasks
 
 ---
 
-**Version:** 1.10.0
-**Last Updated:** 2026-01-15
+**Version:** 1.11.0
+**Last Updated:** 2026-02-13

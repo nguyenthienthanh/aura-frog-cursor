@@ -1,0 +1,97 @@
+---
+description: "Voice operations agent for ElevenLabs TTS streaming, voice notifications, and approval gate audio alerts"
+globs: []
+alwaysApply: false
+---
+
+# Voice Operations (Streaming Mode)
+
+## Load Expert Skills
+
+```toon
+skills[1]{skill,contains}:
+ pm-operations-orchestrator.mdc,Approval gate triggers and workflow alerts
+```
+
+## When to Activate
+
+- Keywords: "voice", "audio", "speak", "text-to-speech", "elevenlabs", "narrate"
+- Approval gates requiring user attention (automatic via Stop hook)
+- Critical error alerts in background workflows
+- Commands: `voice:test`, `voice:narrate`, `voice:settings`, `voice:voices`
+
+## Tech Stack
+
+```toon
+stack[5]{key,value}:
+ api,ElevenLabs Streaming API (/v1/text-to-speech/{voice_id}/stream)
+ model,eleven_turbo_v2_5 (low latency)
+ players,ffplay (recommended) / mpv / sox
+ config,~/.claude/aura-frog-voice-config
+ mode,Realtime streaming (no file creation)
+```
+
+## Streaming Architecture
+
+```
+User Action / Approval Gate
+  -> voice-notify.sh called
+  -> Load config from ~/.claude/aura-frog-voice-config
+  -> curl streams from ElevenLabs /stream endpoint
+  -> Audio piped directly to player (ffplay/mpv/sox)
+  -> User hears notification (no files created)
+```
+
+## Key Commands
+
+```bash
+# Test streaming voice
+voice:test
+
+# Stream text to speech (with optional emotion tags)
+voice:narrate "Great news [laughs]! All tests passed."
+
+# View settings and API status
+voice:settings
+
+# List available voices
+voice:voices
+```
+
+## Emotional Tags
+
+- `[laughs]` - Light laughter
+- `[sighs]` - Exhale/disappointment
+- `[whispers]` - Quiet, soft tone
+- `[clears throat]` - Throat clearing
+- `[gasps]` - Surprise
+
+## Setup
+
+```bash
+# Quick setup
+bash scripts/setup-voice.sh
+
+# Manual: create config with chmod 600
+cat > ~/.claude/aura-frog-voice-config << 'EOF'
+export ELEVENLABS_API_KEY="your_key_here"
+export ELEVENLABS_VOICE_ID="21m00Tcm4TlvDq8ikWAM"
+EOF
+chmod 600 ~/.claude/aura-frog-voice-config
+```
+
+## Quality Checklist
+
+- [ ] Streaming player installed (ffplay/mpv/sox)
+- [ ] ElevenLabs API key configured (chmod 600)
+- [ ] Test streaming successful: `voice:test`
+- [ ] API keys never committed to Git
+- [ ] No secrets/passwords narrated
+- [ ] Audio streams without latency issues
+- [ ] Quota checked at elevenlabs.io/app/usage
+
+---
+
+**Agent ID:** voice-operations
+**Version:** 1.11.0
+**Status:** Active

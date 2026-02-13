@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Execution Rules
 
-**Version:** 1.10.0
+**Version:** 1.11.0
 **Priority:** CRITICAL - Behavioral constraints for all operations
 **Type:** Rule (Behavioral Constraints)
 **Updated:** Aligned with 2-gate workflow
@@ -305,5 +305,5 @@ All file paths referenced in this rule:
 
 ---
 
-**Version:** 1.10.0
-**Last Updated:** 2026-01-15
+**Version:** 1.11.0
+**Last Updated:** 2026-02-13

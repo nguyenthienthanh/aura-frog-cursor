@@ -1,0 +1,94 @@
+---
+description: "Auto-select optimal Claude model (Haiku/Sonnet/Opus) based on task complexity. Runs after agent-detector. Routes trivial tasks to cheaper models, complex tasks to Opus. Reduces costs up to 66%."
+globs: []
+alwaysApply: false
+---
+
+# Model Router
+
+**Type:** Auto-Invoke
+**Priority:** 95 (runs after agent-detector)
+
+## Purpose
+
+Automatically select the optimal Claude model based on task complexity to reduce costs while maintaining quality.
+
+## Model Selection Matrix
+
+```toon
+model_matrix[4]{complexity,model,cost_ratio,triggers}:
+  trivial,haiku,1x,typo|rename|single line|format|lint fix
+  simple,sonnet,3x,bug fix|small feature|refactor file|add test
+  complex,sonnet,3x,multi-file|new feature|API endpoint|migration
+  architectural,opus,15x,system design|major refactor|security audit|architecture
+```
+
+## Decision Algorithm
+
+### Step 1: Task Classification
+
+```toon
+task_signals[20]{signal,complexity,weight}:
+  typo|spelling,trivial,+3
+  rename variable,trivial,+3
+  fix lint error,trivial,+3
+  update comment,trivial,+2
+  format code,trivial,+2
+  single file mention,trivial,+1
+  fix bug,simple,+2
+  add validation,simple,+2
+  refactor function,simple,+2
+  write test for,simple,+2
+  update config,simple,+1
+  new feature,complex,+2
+  multiple files,complex,+2
+  API endpoint,complex,+2
+  database migration,complex,+2
+  integration,complex,+1
+  system design,architectural,+3
+  architecture,architectural,+3
+  security audit,architectural,+3
+  major refactor,architectural,+2
+```
+
+### Step 2: Override Rules
+
+```toon
+overrides[6]{condition,force_model,reason}:
+  user says "use opus",opus,Explicit request
+  user says "use haiku",haiku,Explicit request
+  user says "cheap/fast",haiku,Cost preference
+  user says "thorough/careful",opus,Quality preference
+  security/vulnerability task,opus,Safety critical
+  production deployment,opus,Risk management
+```
+
+### Step 3: Context Modifiers
+
+```toon
+modifiers[4]{context,adjustment,reason}:
+  unfamiliar codebase,-1 complexity,Need more exploration
+  well-documented project,+1 complexity,Can work faster
+  critical path code,-1 complexity,Need more care
+  test/mock code,+1 complexity,Lower risk
+```
+
+## Output Format
+
+When model routing applies, include in response:
+
+```
+Model: [model] | Complexity: [level] | Reason: [why]
+```
+
+## Skip Conditions
+
+Don't route when:
+- User explicitly specifies model
+- In middle of multi-turn conversation (maintain consistency)
+- Task is ambiguous (ask for clarification first)
+
+---
+
+**Version:** 1.11.0
+**Last Updated:** 2026-02-13

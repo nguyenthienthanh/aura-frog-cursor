@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Approval Gates - Phase Transition Control
 
-**Version:** 1.10.0
+**Version:** 1.11.0
 **Purpose:** Streamlined 2-gate approval workflow
 **Priority:** CRITICAL - Core workflow mechanism
 
@@ -436,9 +436,9 @@ Workflow gates are working correctly if:
 
 ---
 
-**Version:** 1.10.0
+**Version:** 1.11.0
 **Status:** ✅ PRODUCTION READY
-**Last Updated:** 2026-01-15
+**Last Updated:** 2026-02-13
 
 ---
 

@@ -193,5 +193,5 @@ open "https://search.google.com/test/rich-results?url=https://abc123.ngrok.io"
 ---
 
 **Command ID:** seo:test
-**Version:** 1.10.0
+**Version:** 1.11.0
 **Status:** Active

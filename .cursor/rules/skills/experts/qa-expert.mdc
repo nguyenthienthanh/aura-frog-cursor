@@ -1,0 +1,157 @@
+---
+description: "QA expertise - unit testing, e2e testing, accessibility testing, performance testing, test strategies. Triggers: testing strategy, test plan, unit test, e2e test, accessibility."
+globs:
+  - "**/*.test.*"
+  - "**/*.spec.*"
+  - "**/__tests__/**"
+alwaysApply: false
+---
+
+# QA Expert
+
+**Type:** Expert Skill
+**Used By:** qa-automation agent
+
+---
+
+## Overview
+
+Comprehensive QA testing knowledge covering test strategies, unit testing, end-to-end testing, accessibility testing, and performance testing.
+
+---
+
+## Testing Pyramid
+
+```
+      E2E (10%)
+     /        \
+   Integration (20%)
+  /              \
+ Unit Tests (70%)
+```
+
+---
+
+## Coverage Targets
+
+```toon
+coverage[3]{metric,target}:
+ Statements,80%
+ Branches,75%
+ Functions,80%
+```
+
+---
+
+## When to Use
+
+- Phase 4 (Test Planning) - Test strategy
+- Phase 5a (TDD Red) - Writing tests first
+- Phase 7 (Verify) - QA validation
+- Accessibility audits
+
+---
+
+## Sub-Skills
+
+```toon
+sub_skills[5]{skill,purpose}:
+ Test Strategies,Testing pyramid and coverage goals
+ Unit Testing,Jest/Vitest/PHPUnit patterns
+ E2E Testing,Cypress/Playwright/Detox patterns
+ Accessibility Testing,WCAG compliance and a11y testing
+ Performance Testing,Load testing and benchmarks
+```
+
+---
+
+## Unit Testing Patterns
+
+### Arrange-Act-Assert
+
+```typescript
+describe('UserService', () => {
+  it('should create a user with valid data', () => {
+    // Arrange
+    const userData = { name: 'John', email: 'john@test.com' };
+
+    // Act
+    const user = userService.create(userData);
+
+    // Assert
+    expect(user.name).toBe('John');
+    expect(user.id).toBeDefined();
+  });
+});
+```
+
+### Test Naming
+
+```typescript
+// Pattern: should [expected] when [condition]
+it('should throw error when email is invalid');
+it('should return empty array when no users found');
+it('should update timestamp when record modified');
+```
+
+---
+
+## E2E Testing Patterns
+
+### Page Object Model
+
+```typescript
+class LoginPage {
+  readonly emailInput = page.getByLabel('Email');
+  readonly passwordInput = page.getByLabel('Password');
+  readonly submitButton = page.getByRole('button', { name: 'Login' });
+
+  async login(email: string, password: string) {
+    await this.emailInput.fill(email);
+    await this.passwordInput.fill(password);
+    await this.submitButton.click();
+  }
+}
+```
+
+---
+
+## Accessibility Quick Checks
+
+```toon
+a11y_checks[5]{check,tool}:
+ Color contrast ratio >= 4.5:1,axe-core
+ All images have alt text,eslint-plugin-jsx-a11y
+ Keyboard navigation works,Manual testing
+ Screen reader compatible,VoiceOver/NVDA
+ Focus indicators visible,Manual testing
+```
+
+---
+
+## Performance Testing
+
+```toon
+metrics[4]{metric,good,needs_work,poor}:
+ LCP (Largest Contentful Paint),<2.5s,2.5-4s,>4s
+ FID (First Input Delay),<100ms,100-300ms,>300ms
+ CLS (Cumulative Layout Shift),<0.1,0.1-0.25,>0.25
+ TTFB (Time to First Byte),<800ms,800ms-1.8s,>1.8s
+```
+
+---
+
+## Related Skills
+
+- `test-writer.mdc` - Auto-invoke test generation
+- `testing-expert.mdc` - Framework-specific testing
+- `testing-patterns.mdc` - Pattern-based test writing
+
+---
+
+**Load sub-skills for detailed testing guidance.**
+
+---
+
+**Version:** 1.11.0
+**Last Updated:** 2026-02-13

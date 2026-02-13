@@ -507,6 +507,6 @@ export function trackPageView(referrer: string) {
 ---
 
 **Skill ID:** ai-discovery
-**Version:** 1.10.0
+**Version:** 1.11.0
 **Status:** Active
 **Triggers:** AI search, Perplexity, ChatGPT Search, Gemini, Claude, answer engine, citations, entity recognition

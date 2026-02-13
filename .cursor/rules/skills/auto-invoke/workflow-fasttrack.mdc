@@ -1,0 +1,139 @@
+---
+description: "Fast-track workflow for pre-approved specs. Skips phases 1-3, auto-executes 4-9 without approvals. Triggers: fasttrack, fast-track, specs ready, just build it."
+globs: []
+alwaysApply: false
+---
+
+# Workflow Fast-Track
+
+**Type:** Auto-Invoke Skill
+**Priority:** HIGH - Use when design/specs are already complete
+
+---
+
+## When to Use
+
+**USE when user provides:**
+- Complete design document
+- Detailed tech specs
+- API specifications
+- Component breakdown
+- Any pre-approved requirements
+
+**DON'T use when:**
+- Requirements are vague
+- Design needs clarification
+- User wants to discuss approach
+
+---
+
+## How to Invoke
+
+```
+fasttrack: [paste specs or path to specs file]
+workflow:fasttrack <path-to-specs.md>
+```
+
+---
+
+## Fast-Track Phases (4-9 Only)
+
+```toon
+phases[8]{phase,name,action,stop_condition}:
+ 4,Plan Tests,Auto-generate test strategy,Never
+ 5a,Write Tests (RED),Write failing tests,Tests pass (error!)
+ 5b,Build (GREEN),Implement to pass tests,Tests fail after 3 attempts
+ 5c,Polish (REFACTOR),Clean code,Tests break
+ 6,Review,Security + quality scan,Critical security issue
+ 7,Verify,Run all tests,Coverage <80%
+ 8,Document,Update docs,Never
+ 9,Share,Notify team,Never
+```
+
+---
+
+## Spec Validation
+
+Before starting, validate specs contain:
+
+```toon
+required_sections[6]{section,purpose}:
+ Overview,What we're building
+ Requirements,Functional requirements
+ Technical Design,Architecture/approach
+ API/Interfaces,Endpoints or component APIs
+ Data Model,Database/state structure
+ Acceptance Criteria,Definition of done
+```
+
+**If missing sections:** Ask user to provide them, don't start without.
+
+---
+
+## Execution Mode
+
+```
+STANDARD WORKFLOW:
+Phase 4 -> Wait -> Phase 5a -> Wait -> Phase 5b -> ...
+
+FAST-TRACK WORKFLOW:
+Phase 4 -> Phase 5a -> Phase 5b -> Phase 5c -> Phase 6 -> Phase 7 -> Phase 8 -> Phase 9
+(No stops unless error)
+```
+
+### Only Stop On
+
+1. **Tests unexpectedly pass in Phase 5a** (RED phase)
+2. **Tests fail after 3 implementation attempts** (GREEN phase)
+3. **Critical security vulnerability found** (Phase 6)
+4. **Coverage below 80%** (Phase 7)
+
+---
+
+## Critical Rules
+
+- **TDD Still Applies:** RED -> GREEN -> REFACTOR
+- **KISS Still Applies:** No over-engineering, follow specs exactly
+- **Quality Still Applies:** 80% coverage minimum, no critical security issues
+
+---
+
+## Comparison to Standard Workflow
+
+```toon
+workflow_modes[2]{mode,phases,approvals}:
+ standard,1-9,8 gates (all phases)
+ fasttrack,4-9,0 gates (errors only)
+```
+
+---
+
+## Progress Reporting
+
+Show condensed progress after each phase:
+
+```markdown
+FAST-TRACK Progress
+Phase 4: Test Strategy (12 tests planned)
+Phase 5a: Tests Written (12 failing)
+Phase 5b: Implementing... (8/12 passing)
+Phase 5c: Refactor
+Phase 6: Review
+Phase 7: Verify
+Phase 8: Document
+Phase 9: Notify
+```
+
+---
+
+## Related Skills
+
+- `workflow-orchestrator.mdc` - Full 9-phase with approvals
+- `bugfix-quick.mdc` - Lightweight bug fix workflow
+- `test-writer.mdc` - Just write tests
+- `code-reviewer.mdc` - Just review code
+
+---
+
+**Version:** 1.11.0
+**Last Updated:** 2026-02-13

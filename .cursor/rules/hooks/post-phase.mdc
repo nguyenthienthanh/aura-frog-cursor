@@ -313,7 +313,7 @@ Please fix the issues and re-run the phase.
 
 ---
 
-**Version:** 1.10.0
+**Version:** 1.11.0
 **Trigger:** After each phase execution
 **Critical:** YES - Must complete successfully before approval prompt
 **Adapted for Cursor:** 2025-11-30

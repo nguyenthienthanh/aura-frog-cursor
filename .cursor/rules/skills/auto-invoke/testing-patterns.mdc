@@ -1,0 +1,163 @@
+---
+description: "Universal testing patterns across all frameworks. Provides consistent test structure, naming, mocking for Jest, Vitest, Pytest, PHPUnit, Go testing, Cypress, Detox. TDD enforcement."
+globs:
+  - "**/*.test.*"
+  - "**/*.spec.*"
+  - "**/*_test.go"
+  - "**/test_*.py"
+  - "**/*Test.php"
+alwaysApply: false
+---
+
+# Testing Patterns
+
+**Type:** Auto-Invoke
+**Priority:** 50
+
+## Purpose
+
+Unified testing patterns across all frameworks. Provides consistent test structure, naming, and best practices regardless of the testing framework.
+
+## Universal Test Principles
+
+```toon
+test_principles[8]{principle,description}:
+  AAA Pattern,Arrange -> Act -> Assert (every test)
+  Single Assertion,One logical assertion per test
+  Descriptive Names,"should [action] when [condition]"
+  No Test Logic,No conditionals in tests
+  Isolated Tests,Each test independent - no shared state
+  Fast Execution,Unit tests <100ms each
+  Deterministic,Same result every run - no flaky tests
+  Test Behavior,Test what not how - avoid implementation details
+```
+
+## Test Types
+
+```toon
+test_types[4]{type,scope,speed,when}:
+  Unit,Single function/class,<100ms,Always - 80% of tests
+  Integration,Multiple units together,<1s,API endpoints + DB queries
+  E2E,Full user flow,<30s,Critical paths only
+  Snapshot,UI output comparison,<500ms,Component rendering
+```
+
+## Framework Detection
+
+```toon
+test_frameworks[8]{framework,detect_by,runner,assertion}:
+  Jest,jest.config.js OR package.json jest,npx jest,expect()
+  Vitest,vitest.config.ts,npx vitest,expect()
+  Pytest,pytest.ini OR conftest.py,pytest,assert
+  PHPUnit,phpunit.xml,./vendor/bin/phpunit,$this->assert*
+  Go,*_test.go files,go test,t.Error/t.Fatal
+  RSpec,spec/ directory + Gemfile,bundle exec rspec,expect().to
+  Cypress,cypress.config.ts,npx cypress,cy.*
+  Detox,.detoxrc.js,detox test,expect(element)
+```
+
+## Test File Structure
+
+### JavaScript/TypeScript (Jest/Vitest)
+
+```typescript
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { UserService } from './user.service';
+
+describe('UserService', () => {
+  let service: UserService;
+  beforeEach(() => { service = new UserService(); });
+
+  describe('createUser', () => {
+    it('should create user with valid data', async () => {
+      const userData = { email: 'test@example.com', name: 'Test' };
+      const result = await service.createUser(userData);
+      expect(result.id).toBeDefined();
+      expect(result.email).toBe(userData.email);
+    });
+
+    it('should throw error when email is invalid', async () => {
+      const userData = { email: 'invalid', name: 'Test' };
+      await expect(service.createUser(userData)).rejects.toThrow('Invalid email');
+    });
+  });
+});
+```
+
+### Python (Pytest)
+
+```python
+class TestUserService:
+    @pytest.fixture
+    def service(self):
+        return UserService()
+
+    def test_create_user_with_valid_data(self, service):
+        user_data = {"email": "test@example.com", "name": "Test"}
+        result = service.create_user(user_data)
+        assert result.id is not None
+
+    def test_create_user_raises_on_invalid_email(self, service):
+        with pytest.raises(ValueError, match="Invalid email"):
+            service.create_user({"email": "invalid", "name": "Test"})
+```
+
+### Go
+
+```go
+func TestUserService_CreateUser(t *testing.T) {
+    t.Run("should create user with valid data", func(t *testing.T) {
+        service := NewUserService()
+        result, err := service.CreateUser(UserData{Email: "test@example.com"})
+        if err != nil { t.Fatalf("unexpected error: %v", err) }
+        if result.ID == "" { t.Error("expected ID to be set") }
+    })
+}
+```
+
+## Mocking Patterns
+
+```toon
+mock_patterns[5]{pattern,when,example}:
+  Spy,Track calls without changing behavior,vi.spyOn(obj 'method')
+  Stub,Replace with fixed return value,vi.fn().mockReturnValue(x)
+  Mock,Replace with custom implementation,vi.fn().mockImplementation(fn)
+  Fake,In-memory implementation,new FakeUserRepository()
+  Fixture,Predefined test data,fixtures/users.json
+```
+
+## Coverage Targets
+
+```toon
+coverage_targets[4]{metric,minimum,good,excellent}:
+  Line coverage,70%,80%,90%
+  Branch coverage,60%,70%,80%
+  Function coverage,80%,90%,95%
+  Statement coverage,70%,80%,90%
+```
+
+## TDD Workflow
+
+```
+1. RED: Write failing test first
+2. GREEN: Write minimum code to pass
+3. REFACTOR: Improve code quality
+4. REPEAT for next requirement
+```
+
+## Anti-Patterns
+
+```toon
+antipatterns[6]{pattern,problem,solution}:
+  Test implementation,Brittle tests break on refactor,Test behavior/output only
+  Shared state,Tests affect each other,Reset state in beforeEach
+  Sleep/delays,Slow flaky tests,Use waitFor/polling
+  Too many mocks,Tests don't reflect reality,Use fakes for complex deps
+  Giant tests,Hard to debug failures,One assertion per test
+  No assertions,Test always passes,Assert expected outcomes
+```
+
+---
+
+**Version:** 1.11.0
+**Last Updated:** 2026-02-13

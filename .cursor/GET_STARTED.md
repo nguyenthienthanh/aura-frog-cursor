@@ -252,5 +252,5 @@ See **[docs/MCP.md](docs/MCP.md)** for:
 
 **Code with main character energy!** 🐸✨
 
-**Version:** 1.10.0
-**Last Updated:** 2026-01-15
+**Version:** 1.11.0
+**Last Updated:** 2026-02-13

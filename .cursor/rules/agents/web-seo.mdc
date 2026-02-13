@@ -264,5 +264,5 @@ export default function robots(): MetadataRoute.Robots {
 ---
 
 **Agent ID:** web-seo
-**Version:** 1.10.0
+**Version:** 1.11.0
 **Status:** Active

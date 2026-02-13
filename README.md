@@ -8,12 +8,29 @@
 
 Aura Frog provides a comprehensive AI-powered development workflow with:
 
-- **9 MCP Servers** - Auto-install, zero-config integrations
-- **16 Specialized Agents** - Auto-detect based on your tech stack
+- **13 MCP Servers** - Auto-install, zero-config integrations (9 enabled, 4 optional)
+- **20 Specialized Agents** - Auto-detect based on your tech stack
 - **9-Phase TDD Workflow** - Structured development
-- **76 Slash Commands** - All development tasks covered
-- **43 Quality Rules** - Always enforced
+- **94 Slash Commands** - All development tasks covered (23 categories)
+- **50 Quality Rules** - Always enforced
+- **46 Skill Rules** - Auto-invoke, expert & reference skills
 - **Learning System** - Self-improvement via Supabase with memory auto-load
+
+## What's New in v1.11.0
+
+**Feature Sync from Aura Frog v1.18.0** - 27 new files converted to Cursor format:
+- 11 new skills: model-router, framework-expert, testing-patterns, seo-bundle, code-simplifier, workflow-fasttrack, git-workflow, godot-expert, qa-expert, problem-solving, sequential-thinking
+- 6 new core rules: estimation, verification, workflow-deliverables, frontend-excellence, impact-analysis, context-management
+- 3 new agents: game-developer, voice-operations, pm-operations-orchestrator
+- 7 new commands in 3 new categories: design/, logs/, mcp/
+
+## What's New in v1.10.0
+
+**SEO & AI Discovery** - Comprehensive optimization package:
+- `/seo:check` command for full SEO/GEO audits
+- AI Discovery optimization for Perplexity, ChatGPT Search, Gemini, Claude
+- `web-seo.mdc` specialized agent
+- `seo-expert.mdc` and `ai-discovery.mdc` skill rules
 
 ## What's New in v1.9.1
 
@@ -53,17 +70,19 @@ Manual commands still available: `/visual:test`, `/visual:loop`
 |------------|---------|---------|
 | context7 | Library docs lookup | ✅ Enabled |
 | playwright | E2E/browser testing | ✅ Enabled |
+| github | Git/GitHub operations | ✅ Enabled |
 | filesystem | File operations | ✅ Enabled |
 | memory | Persistent context | ✅ Enabled |
+| vitest | Unit testing | ✅ Enabled |
+| atlassian | JIRA/Confluence | ✅ Enabled |
+| figma | Design tokens | ✅ Enabled |
+| slack | Team notifications | ✅ Enabled |
 | laravel-boost | Laravel AI (15+ tools) | Disabled* |
 | nodejs-debugger | Node.js runtime debugging | Disabled* |
-| github | Git/GitHub operations | Disabled* |
-| vitest | Unit testing | Disabled* |
-| atlassian | JIRA/Confluence | Disabled* |
-| figma | Design tokens | Disabled* |
-| slack | Team notifications | Disabled* |
+| firebase | Firebase official MCP | Disabled* |
+| firebase-community | Firebase community MCP | Disabled* |
 
-*Requires setup. Laravel Boost needs `composer require laravel/boost --dev`
+*Requires setup and credentials. Enable in `.cursor/mcp.json`
 
 ## Quick Start
 
@@ -138,17 +157,20 @@ Auto-chain:
 
 ## Key Features
 
-### 🤖 16 Specialized Agents
+### 🤖 20 Specialized Agents
 
 **Development:**
 - mobile-react-native, mobile-flutter
 - web-angular, web-vuejs, web-reactjs, web-nextjs
 - backend-nodejs, backend-python, backend-go, backend-laravel
-- database-specialist
+- database-specialist, game-developer
 
 **Quality & Operations:**
 - security-expert, qa-automation, ui-designer
-- devops-cicd, project-detector
+- devops-cicd, project-detector, web-seo
+
+**Operations:**
+- pm-operations-orchestrator, voice-operations
 
 ### 📋 9-Phase TDD Workflow
 
@@ -178,18 +200,21 @@ Phase 9: Share           → Deployment
 
 ```
 .cursor/
-├── mcp.json                    # MCP server configuration
-├── cache/                      # Memory cache for learned patterns
+├── mcp.json                    # MCP server configuration (13 servers)
 ├── rules/
-│   ├── core/                   # 43 quality rules
-│   ├── agents/                 # 16 specialized agents
-│   └── skills/auto-invoke/     # 12 auto-invoke skills
-├── commands/                   # 76 slash commands
+│   ├── core/                   # 50 quality rules
+│   ├── agents/                 # 20 specialized agents
+│   ├── skills/                 # 46 skill rules
+│   │   ├── auto-invoke/        # 20 auto-invoke skills
+│   │   ├── experts/            # 10 expert skills
+│   │   └── reference/          # 16 reference skills
+│   ├── hooks/                  # 4 lifecycle hooks
+│   └── templates/              # 7 template rules
+├── commands/                   # 94 slash commands (23 categories)
 │   └── learn/                  # Learning system commands
 ├── workflows/                  # 9-phase workflow system
-├── scripts/
-│   ├── workflow/               # Workflow management scripts
-│   └── learn/                  # Learning system scripts
+├── templates/                  # 9 document templates
+├── scripts/                    # Utility scripts
 └── docs/                       # Documentation
     ├── MCP.md                  # MCP server guide
     └── LEARNING_SYSTEM.md      # Learning system setup
@@ -209,11 +234,14 @@ See **[.cursor/docs/MCP.md](.cursor/docs/MCP.md)** for:
 
 | Category | Count |
 |----------|-------|
-| MCP Servers | 11 (4 enabled, 7 optional) |
-| Agents | 16 |
-| Commands | 79 |
-| Rules | 44 |
-| Skills | 14 (auto-invoke) |
+| MCP Servers | 13 (9 enabled, 4 optional) |
+| Agents | 20 |
+| Commands | 94 (23 categories) |
+| Core Rules | 50 |
+| Skill Rules | 46 (20 auto-invoke, 10 expert, 16 reference) |
+| Hook Rules | 4 |
+| Template Rules | 7 |
+| Document Templates | 9 |
 | Workflow Phases | 9 |
 
 ## Documentation
@@ -231,5 +259,5 @@ Same as original Aura Frog plugin. Check the [original repository](https://githu
 
 **Code with main character energy!** 🐸✨
 
-**Version:** 1.10.0
-**Last Updated:** 2026-01-15
+**Version:** 1.11.0
+**Last Updated:** 2026-02-13

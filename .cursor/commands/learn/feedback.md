@@ -188,4 +188,4 @@ For fast feedback submission:
 
 ---
 
-**Version:** 1.10.0
+**Version:** 1.11.0

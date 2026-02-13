@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Linting Standards
 
-**Version:** 1.10.0
+**Version:** 1.11.0
 **Priority:** HIGH - All generated code must pass project linter
 **Type:** Rule (Mandatory)
 
@@ -302,5 +302,5 @@ Read the "Linting Rules" section for:
 
 ---
 
-**Version:** 1.10.0
-**Last Updated:** 2026-01-15
+**Version:** 1.11.0
+**Last Updated:** 2026-02-13

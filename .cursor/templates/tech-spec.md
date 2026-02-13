@@ -4,7 +4,7 @@
 **JIRA:** [JIRA-XXXX]
 **Author:** [Agent Name]
 **Date:** [YYYY-MM-DD]
-**Version:** 1.10.0
+**Version:** 1.11.0
 
 ---
 
@@ -234,4 +234,4 @@ interface CreateFeatureRequest {
 
 **Document Status:** Ready for Review
 **Last Updated:** [Date]
-**Version:** 1.10.0
+**Version:** 1.11.0

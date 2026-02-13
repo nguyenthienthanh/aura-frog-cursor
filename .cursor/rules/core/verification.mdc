@@ -1,0 +1,82 @@
+---
+description: Verification rule - Run verification commands and confirm output before claiming success or completion
+globs: []
+alwaysApply: false
+---
+
+# Verification Rule
+
+**Purpose:** Ensure all completion claims are backed by fresh verification evidence. No guessing.
+
+## Iron Law
+
+**NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE**
+
+1. Run the command
+2. Read the output
+3. THEN claim the result
+
+---
+
+## Wrong vs Right
+
+### Wrong
+
+```
+"I've fixed the bug. It should work now."
+"Tests should be passing."
+"That should resolve the issue."
+```
+
+### Right
+
+```
+"Tests pass:
+
+  PASS src/auth/login.test.ts
+  - validates email (5ms)
+  - rejects invalid password (3ms)
+
+  Tests: 2 passed, 2 total"
+```
+
+---
+
+## Verification Commands
+
+| Stack | Command |
+|-------|---------|
+| JavaScript | npm test / yarn test |
+| TypeScript | npx tsc --noEmit |
+| Python | pytest |
+| Go | go test ./... |
+| PHP | php artisan test |
+| Build | npm run build |
+
+---
+
+## When to Verify
+
+- After applying fix
+- Before claiming "done"
+- After refactoring
+- Before commit
+- After merge
+
+---
+
+## Red Flags
+
+Stop and verify if about to say:
+
+- "Should work now"
+- "Seems fixed"
+- "I think that's it"
+- "Probably passing"
+
+All require: **Run -> Read -> Report**
+
+---
+
+**Version:** 1.11.0
+**Last Updated:** 2026-02-13

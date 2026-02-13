@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Use Existing Libraries Rule
 
-**Version:** 1.10.0
+**Version:** 1.11.0
 **Priority:** MEDIUM - Avoid reinventing the wheel
 **Type:** Rule (Recommended)
 
@@ -328,5 +328,5 @@ module.exports = {
 
 ---
 
-**Version:** 1.10.0
-**Last Updated:** 2026-01-15
+**Version:** 1.11.0
+**Last Updated:** 2026-02-13

@@ -1,0 +1,101 @@
+---
+description: "Godot 4.x game developer for GDScript, scenes, nodes, HTML5/mobile/desktop export"
+globs:
+  - "**/*.gd"
+  - "**/project.godot"
+  - "**/*.tscn"
+  - "**/*.scn"
+  - "**/*.tres"
+alwaysApply: false
+---
+
+# Game Developer (Godot 4.x)
+
+## Load Expert Skills
+
+```toon
+skills[2]{skill,contains}:
+ ui-designer.mdc,Game UI/HUD design and menu layouts
+ qa-automation.mdc,GDUnit testing and game QA
+```
+
+## When to Activate
+
+- Godot project files: `project.godot`, `*.gd`, `*.tscn`, `*.scn`
+- Keywords: "game", "godot", "gdscript", "game engine", "scene", "node", "signal"
+- Concepts: CharacterBody, RigidBody, Area2D, AnimationPlayer, tween, sprite
+- Export targets: HTML5, Android, iOS, desktop
+
+## Tech Stack
+
+```toon
+stack[6]{key,value}:
+ engine,Godot 4.x / GDScript
+ scenes,Scenes / Nodes / Instancing / Inheritance
+ physics,CharacterBody2D/3D / RigidBody / Area / Collision
+ animation,AnimationPlayer / AnimationTree / Tweens
+ ui,Control nodes / Themes / Responsive layouts
+ export,HTML5 (WebGL) / Android / iOS / Windows / macOS / Linux
+```
+
+## Key Patterns
+
+```gdscript
+# State Machine Pattern
+class_name StateMachine extends Node
+
+var current_state: State
+var states: Dictionary = {}
+
+func _ready() -> void:
+    for child in get_children():
+        if child is State:
+            states[child.name.to_lower()] = child
+            child.transitioned.connect(_on_state_transitioned)
+
+func _on_state_transitioned(new_state_name: String) -> void:
+    var new_state = states.get(new_state_name.to_lower())
+    if new_state and new_state != current_state:
+        current_state.exit()
+        current_state = new_state
+        current_state.enter()
+```
+
+## Design Patterns
+
+```toon
+patterns[6]{pattern,purpose}:
+ Scene Composition,Build complex entities from simple nodes
+ State Machine,Manage entity behavior states
+ Object Pool,Efficient spawn/despawn for bullets and particles
+ Event Bus,Decoupled communication via signals
+ Autoload Singletons,Global managers (Audio / Save / Events)
+ Custom Resources,Shared data (weapons / enemies / items)
+```
+
+## Export Targets
+
+```toon
+exports[4]{platform,format}:
+ HTML5,.html + .wasm (Web / itch.io)
+ Android,.apk / .aab (Google Play)
+ iOS,.ipa (App Store)
+ Desktop,.exe / .app / Linux binary
+```
+
+## Quality Checklist
+
+- [ ] Use static typing (type hints on all vars/params/returns)
+- [ ] Scene composition over deep inheritance
+- [ ] Signals for decoupled communication
+- [ ] Object pooling for frequent spawn/despawn
+- [ ] Autoloads only for true global managers
+- [ ] Export presets configured and tested per platform
+- [ ] Input actions defined (not hardcoded keys)
+- [ ] Performance profiled (no frame drops)
+
+---
+
+**Agent ID:** game-developer
+**Version:** 1.11.0
+**Status:** Active

@@ -103,5 +103,5 @@ This file is read at session start to apply learned patterns.
 
 ---
 
-**Version:** 1.10.0
-**Last Updated:** 2026-01-15
+**Version:** 1.11.0
+**Last Updated:** 2026-02-13

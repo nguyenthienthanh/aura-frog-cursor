@@ -6,7 +6,7 @@ alwaysApply: true
 
 # Rule: Environment Loading
 
-**Version:** 1.10.0
+**Version:** 1.11.0
 **Priority:** Critical
 **Applies:** Session start, before any workflow or prompt response
 
@@ -119,5 +119,5 @@ Environment Variable > Project Config > Global Config > Default
 
 ---
 
-**Version:** 1.10.0
-**Last Updated:** 2026-01-15
+**Version:** 1.11.0
+**Last Updated:** 2026-02-13

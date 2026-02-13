@@ -102,5 +102,5 @@ Commands for Search Engine Optimization and AI Discovery optimization.
 
 ---
 
-**Version:** 1.10.0
-**Last Updated:** 2026-01-15
+**Version:** 1.11.0
+**Last Updated:** 2026-02-13

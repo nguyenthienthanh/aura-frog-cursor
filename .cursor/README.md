@@ -1,9 +1,9 @@
 # Aura Frog for Cursor IDE
 
-**Version:** 1.10.0
+**Version:** 1.11.0
 **Converted from:** [nguyenthienthanh/aura-frog](https://github.com/nguyenthienthanh/aura-frog) (Aura Frog Plugin for Claude Code)
 **Adapted for:** Cursor IDE
-**Last Updated:** 2026-01-15
+**Last Updated:** 2026-02-13
 
 ---
 
@@ -222,6 +222,6 @@ See all commands: `cat .cursor/commands/QUICK_REFERENCE.md`
 
 **Code with main character energy!** 🐸✨
 
-**Version:** 1.10.0
-**Last Updated:** 2026-01-15
+**Version:** 1.11.0
+**Last Updated:** 2026-02-13
 **Original:** [nguyenthienthanh/aura-frog](https://github.com/nguyenthienthanh/aura-frog)
