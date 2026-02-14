@@ -1,7 +1,11 @@
 ---
 description: Structured error handling with typed error classes and consistent response formats
-globs: []
-alwaysApply: true
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
+alwaysApply: false
 ---
 
 # Error Handling Standard

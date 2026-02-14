@@ -1,7 +1,7 @@
 ---
 description: "Auto-invoke MCP tools AND trigger appropriate agents/workflows/skills. Zero-config integrations with intelligent routing."
 globs: []
-alwaysApply: true
+alwaysApply: false
 ---
 
 # MCP Integrations Auto-Invoke

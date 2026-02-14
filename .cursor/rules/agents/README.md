@@ -86,14 +86,14 @@ alwaysApply: false
 
 ## Always-Active Agents
 
-The following agents have `alwaysApply: true`:
+The following agents have `alwaysApply: false`:
 
 1. **project-detector** - Auto-detects project type from files
 2. **project-config-loader** - Loads project configurations
 3. **project-context-manager** - Manages session state
 4. **pm-operations-orchestrator** - Coordinates workflow
 
-> **Note:** `agent-detector` skill (at `skills/auto-invoke/`) also has `alwaysApply: true`
+> **Note:** `agent-detector` skill (at `skills/auto-invoke/`) also has `alwaysApply: false`
 
 ---
 

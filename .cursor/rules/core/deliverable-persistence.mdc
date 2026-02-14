@@ -1,13 +1,13 @@
 ---
 description: MANDATORY - All workflow phase deliverables MUST be saved to files, never just displayed
 globs: []
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Deliverable Persistence Rule
 
 **Priority:** CRITICAL
-**Type:** Mandatory (alwaysApply: true)
+**Type:** Mandatory (alwaysApply: false)
 
 ---
 

@@ -1,7 +1,7 @@
 ---
 description: Cross-review workflow for quality assurance across different phases
 globs: []
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Cross-Review Workflow Rules

@@ -1,7 +1,7 @@
 ---
 description: Safe dependency management with version pinning and security audits
 globs: []
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Dependency Management Rules

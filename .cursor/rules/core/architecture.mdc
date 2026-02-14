@@ -1,7 +1,11 @@
 ---
 description: Dual-file architecture pattern separating plugin and project-specific files
-globs: []
-alwaysApply: true
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.py"
+  - "**/*.go"
+alwaysApply: false
 ---
 
 # Dual-File Architecture

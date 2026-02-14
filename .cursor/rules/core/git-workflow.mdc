@@ -1,7 +1,7 @@
 ---
 description: Git workflow conventions for branching, commits, and pull requests
 globs: []
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Git Workflow Rules

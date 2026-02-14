@@ -1,7 +1,12 @@
 ---
 description: Smart commenting rules - explain WHY not WHAT, avoid redundant comments
-globs: []
-alwaysApply: true
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
+  - "**/*.py"
+alwaysApply: false
 ---
 
 # Smart Commenting - Avoid Redundant Comments

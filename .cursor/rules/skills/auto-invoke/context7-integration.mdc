@@ -1,7 +1,7 @@
 ---
 description: "Auto-invoke Context7 MCP for up-to-date library documentation. Prevents hallucinated APIs by fetching real-time docs."
 globs: []
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Context7 Integration

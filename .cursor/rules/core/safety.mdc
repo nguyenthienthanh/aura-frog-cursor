@@ -4,147 +4,31 @@ globs: []
 alwaysApply: true
 ---
 
-# Safety Rules - External System Interactions
+# Safety Rules
 
-**Purpose:** Prevent accidental writes to external systems
+## Core: NEVER write to external systems without user confirmation
 
-## Core Safety Principles
+**Requires confirmation:** Git commits/pushes, JIRA updates, Confluence writes, Slack notifications, database modifications.
 
-### 1. Always Confirm Before Writing
+**No confirmation needed (read-only):** Fetch JIRA tickets, read Confluence, git status/log/diff, read APIs.
 
-**Rule:** NEVER write to external systems without explicit user confirmation
+**Forbidden (NEVER auto-execute):** Delete JIRA tickets, force push, delete branches, modify production data, run production migrations.
 
-**Applies to:**
-- JIRA (status updates, comments, subtasks)
-- Confluence (page creation, updates)
-- Slack (notifications)
-- Git (commits, pushes)
+## Security
 
-## Confirmation Required
-
-### Git Operations
-```markdown
-⚠️ **CONFIRMATION REQUIRED: Git Commit**
-
-**Files to commit:** 5 files
-- src/features/sharing/ShareModal.tsx
-- src/features/sharing/ShareModal.test.tsx
-
-**Commit message:**
-feat(sharing): implement social media sharing
-
-**Type "confirm" to proceed**
-```
-
-## No Confirmation Needed (Read-Only)
-
-Safe operations that don't modify data:
-- ✅ Fetch JIRA tickets
-- ✅ Read Confluence pages
-- ✅ Git status, log, diff
-- ✅ Send informational notifications
-
-## Forbidden Operations
-
-### Never Auto-Execute:
-- ❌ Delete JIRA tickets
-- ❌ Force push to Git
-- ❌ Delete Git branches
-- ❌ Modify production data
-- ❌ Run database migrations in production
-
-## Security Rules
-
-### API Keys & Tokens
-```yaml
-Storage:
-  ✅ Environment variables
-  ✅ .envrc (with direnv)
-  ❌ Never in code
-  ❌ Never in git
-
-Access:
-  ✅ Read from process.env
-  ✅ Masked in logs
-  ❌ Never log full tokens
-```
-
-### Sensitive Data
-```yaml
-Never log or expose:
-  - API tokens
-  - Passwords
-  - Private keys
-  - User PII
-  - Database credentials
-```
-
-## Error Handling
-
-### Failed Operations
-```typescript
-try {
-  await externalApi.update(data);
-} catch (error) {
-  logger.error('External API update failed', {
-    // Don't log token or sensitive data
-  });
-
-  showError('Operation failed. Please try again or update manually.');
-}
-```
-
-## Checklist Before External Write
-
-- [ ] User explicitly requested this action
-- [ ] Confirmation prompt shown
-- [ ] User confirmed (typed "confirm")
-- [ ] Operation is safe (no destructive action)
-- [ ] Sensitive data redacted from logs
-- [ ] Audit log entry created
-- [ ] Error handling in place
-- [ ] User notified of result
+- Store secrets in environment variables / `.envrc` only
+- NEVER commit secrets to git
+- NEVER log API tokens, passwords, private keys, PII
+- Mask sensitive data in all output
 
 ## Emergency Stop
 
-User Can Always Stop:
-```
-User types: "stop", "cancel", "abort"
-→ Immediately halt all operations
-→ Rollback pending changes
-→ Return to safe state
-```
+User types "stop", "cancel", "abort" → Immediately halt all operations, rollback pending changes.
 
-## ⏸️ Approval Gates (Streamlined)
+## Approval Gates
 
-### Phase Approval Gates
-```markdown
-Only 2 approval gates (Phase 2 & 5b):
-
-Phase 1: Requirements    → ⚡ Auto-continue (shows deliverables)
-Phase 2: Technical Plan  → ✋ APPROVAL REQUIRED
-Phase 3: Design Review   → ⚡ Auto-continue (or skip if no UI)
-Phase 4: Test Planning   → ⚡ Auto-continue
-Phase 5a: Write Tests    → ⚡ Auto-continue (auto-stop if tests pass)
-Phase 5b: Implement      → ✋ APPROVAL REQUIRED
-Phase 5c: Refactor       → ⚡ Auto-continue (auto-stop if tests fail)
-Phase 6: Code Review     → ⚡ Auto-continue (auto-stop on security issues)
-Phase 7: QA Validation   → ⚡ Auto-continue (auto-stop if tests fail)
-Phase 8: Documentation   → ⚡ Auto-continue
-Phase 9: Notification    → ⚡ Auto (read-only)
-
-Auto-continue = Execute phase, show deliverables, continue (no wait)
-Auto-stop = Stop if issues found (tests fail, security issues, etc.)
-```
+Only 2 gates: Phase 2 (Design) and Phase 5b (Implementation). All other phases auto-continue with deliverable display.
 
 ---
 
-## References
-- Error handling: `error-handling.mdc`
-- Logging standards: `logging.mdc`
-- Approval gates: `approval-gates.mdc`
-
----
-
-**Version:** 1.11.0
-**Last Updated:** 2026-02-13
+**Version:** 1.12.0

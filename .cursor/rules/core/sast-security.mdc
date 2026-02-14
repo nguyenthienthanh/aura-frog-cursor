@@ -1,7 +1,12 @@
 ---
 description: Static Application Security Testing (SAST) rules - OWASP Top 10, CWE patterns, secure coding practices
-globs: []
-alwaysApply: true
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.py"
+  - "**/*.go"
+alwaysApply: false
 ---
 
 # SAST Security Rules

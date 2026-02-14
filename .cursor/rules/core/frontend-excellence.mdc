@@ -1,6 +1,11 @@
 ---
 description: Frontend excellence standards - UX laws, accessibility (WCAG 2.1 AA), mobile patterns, performance metrics, and form UX
-globs: []
+globs:
+  - "**/*.tsx"
+  - "**/*.jsx"
+  - "**/*.vue"
+  - "**/*.css"
+  - "**/*.scss"
 alwaysApply: false
 ---
 

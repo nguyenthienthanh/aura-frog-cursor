@@ -8,59 +8,31 @@
 
 Aura Frog provides a comprehensive AI-powered development workflow with:
 
-- **13 MCP Servers** - Auto-install, zero-config integrations (9 enabled, 4 optional)
+- **11 MCP Servers** - 3 core (always enabled) + 8 optional (enable per-project)
 - **20 Specialized Agents** - Auto-detect based on your tech stack
 - **9-Phase TDD Workflow** - Structured development
 - **94 Slash Commands** - All development tasks covered (23 categories)
-- **50 Quality Rules** - Always enforced
-- **46 Skill Rules** - Auto-invoke, expert & reference skills
-- **Learning System** - Self-improvement via Supabase with memory auto-load
+- **39 Quality Rules** - 7 always-applied, rest auto-attached by file type
+- **43 Skill Rules** - Auto-invoke, expert & reference skills
+- **Learning System** - Pattern capture and self-improvement
 
-## What's New in v1.11.0
+## What's New in v1.12.0
 
-**Feature Sync from Aura Frog v1.18.0** - 27 new files converted to Cursor format:
-- 11 new skills: model-router, framework-expert, testing-patterns, seo-bundle, code-simplifier, workflow-fasttrack, git-workflow, godot-expert, qa-expert, problem-solving, sequential-thinking
-- 6 new core rules: estimation, verification, workflow-deliverables, frontend-excellence, impact-analysis, context-management
-- 3 new agents: game-developer, voice-operations, pm-operations-orchestrator
-- 7 new commands in 3 new categories: design/, logs/, mcp/
+**Performance Optimization — Context Window Recovery**
 
-## What's New in v1.10.0
+Major optimization to recover ~60-70% of wasted context window tokens:
 
-**SEO & AI Discovery** - Comprehensive optimization package:
-- `/seo:check` command for full SEO/GEO audits
-- AI Discovery optimization for Perplexity, ChatGPT Search, Gemini, Claude
-- `web-seo.mdc` specialized agent
-- `seo-expert.mdc` and `ai-discovery.mdc` skill rules
+- **alwaysApply rules: 50+ → 7** — Only essential rules always loaded. Rest auto-attach by file type or agent selection
+- **Always-applied rules compressed to <60 lines each** — Down from 150-470 lines
+- **MCP servers: 9 enabled → 3 core** — Reduced tool token overhead by ~60%
+- **Deleted 9 redundant rules** — LLMs already know modern JS, YAGNI, DRY, etc.
+- **Deleted deprecated `.cursorrules`** — Was causing double context loading
+- **Removed `filesystem` & `memory` MCP servers** — Redundant with Cursor built-ins
+- **Merged overlapping rules** — Reduced duplication across security, testing, quality
+- **Learning system consolidated** — 3 skills → 1
+- **Added CI validation script** — `scripts/validate-rules.sh`
 
-## What's New in v1.9.1
-
-**Visual Regression Testing** - Pixel-perfect UI with auto-fix loop:
-
-- **Auto-Trigger** - Runs automatically when design reference detected (Figma URL, PNG, keywords)
-- **Workflow Integration** - Auto-runs in Phase 5 (GREEN), Phase 6 (Review), Phase 7 (Verify)
-- **Screenshot Comparison** - Compare implementation against design
-- **Auto-Fix Loop** - Iterates until pixel-perfect (max 5 attempts)
-- **MCP Integration** - Playwright (capture) + Figma (reference)
-
-```
-Auto-Trigger Flow:
-┌─────────────────────────────────────────────────────────────┐
-│  User: "Implement button per figma.com/file/ABC123"         │
-│         │                                                   │
-│         ▼                                                   │
-│  Phase 3: Store design reference automatically              │
-│         │                                                   │
-│         ▼                                                   │
-│  Phase 5-7: Visual regression auto-runs                     │
-│         │                                                   │
-│         ▼                                                   │
-│  Result: ✅ Pixel-perfect match (0.4% diff)                 │
-└─────────────────────────────────────────────────────────────┘
-```
-
-Manual commands still available: `/visual:test`, `/visual:loop`
-
-**Requirements:** ImageMagick (`brew install imagemagick`)
+**Estimated impact:** ~75-85% context window now available for actual code (was ~40-50%)
 
 ---
 
@@ -71,18 +43,16 @@ Manual commands still available: `/visual:test`, `/visual:loop`
 | context7 | Library docs lookup | ✅ Enabled |
 | playwright | E2E/browser testing | ✅ Enabled |
 | github | Git/GitHub operations | ✅ Enabled |
-| filesystem | File operations | ✅ Enabled |
-| memory | Persistent context | ✅ Enabled |
-| vitest | Unit testing | ✅ Enabled |
-| atlassian | JIRA/Confluence | ✅ Enabled |
-| figma | Design tokens | ✅ Enabled |
-| slack | Team notifications | ✅ Enabled |
+| vitest | Unit testing | Disabled* |
+| atlassian | JIRA/Confluence | Disabled* |
+| figma | Design tokens | Disabled* |
+| slack | Team notifications | Disabled* |
 | laravel-boost | Laravel AI (15+ tools) | Disabled* |
 | nodejs-debugger | Node.js runtime debugging | Disabled* |
 | firebase | Firebase official MCP | Disabled* |
 | firebase-community | Firebase community MCP | Disabled* |
 
-*Requires setup and credentials. Enable in `.cursor/mcp.json`
+*Enable per-project in `.cursor/mcp.json` by setting `"disabled": false`
 
 ## Quick Start
 
@@ -176,10 +146,10 @@ Auto-chain:
 
 ```
 Phase 1: Understand      → Requirements analysis
-Phase 2: Design          → Technical planning
+Phase 2: Design          → Technical planning (APPROVAL GATE)
 Phase 3: UI Breakdown    → Component structure
 Phase 4: Test Planning   → Test strategy
-Phase 5: TDD             → RED → GREEN → REFACTOR
+Phase 5: TDD             → RED → GREEN (APPROVAL GATE) → REFACTOR
 Phase 6: Review          → Code quality check
 Phase 7: Verify          → QA validation
 Phase 8: Document        → Documentation
@@ -200,49 +170,42 @@ Phase 9: Share           → Deployment
 
 ```
 .cursor/
-├── mcp.json                    # MCP server configuration (13 servers)
+├── mcp.json                    # MCP server configuration (11 servers)
 ├── rules/
-│   ├── core/                   # 50 quality rules
+│   ├── core/                   # 39 quality rules (7 always-applied)
 │   ├── agents/                 # 20 specialized agents
-│   ├── skills/                 # 46 skill rules
-│   │   ├── auto-invoke/        # 20 auto-invoke skills
+│   ├── skills/                 # 43 skill rules
+│   │   ├── auto-invoke/        # 17 auto-invoke skills
 │   │   ├── experts/            # 10 expert skills
 │   │   └── reference/          # 16 reference skills
 │   ├── hooks/                  # 4 lifecycle hooks
 │   └── templates/              # 7 template rules
 ├── commands/                   # 94 slash commands (23 categories)
-│   └── learn/                  # Learning system commands
 ├── workflows/                  # 9-phase workflow system
 ├── templates/                  # 9 document templates
 ├── scripts/                    # Utility scripts
 └── docs/                       # Documentation
-    ├── MCP.md                  # MCP server guide
-    └── LEARNING_SYSTEM.md      # Learning system setup
 ```
-
-## Creating Custom MCP Servers
-
-Want to build your own MCP server instead of using open-source ones?
-
-See **[.cursor/docs/MCP.md](.cursor/docs/MCP.md)** for:
-- MCP architecture overview
-- Creating a custom MCP server
-- Registering your server in `mcp.json`
-- Auto-invoke integration
 
 ## Statistics
 
 | Category | Count |
 |----------|-------|
-| MCP Servers | 13 (9 enabled, 4 optional) |
+| MCP Servers | 11 (3 core + 8 optional) |
 | Agents | 20 |
 | Commands | 94 (23 categories) |
-| Core Rules | 50 |
-| Skill Rules | 46 (20 auto-invoke, 10 expert, 16 reference) |
+| Core Rules | 39 (7 always-applied, 32 auto-attached/agent-selected) |
+| Skill Rules | 43 (17 auto-invoke, 10 expert, 16 reference) |
 | Hook Rules | 4 |
 | Template Rules | 7 |
-| Document Templates | 9 |
 | Workflow Phases | 9 |
+
+## CI Validation
+
+```bash
+# Validate all MDC rules, version consistency, and alwaysApply limits
+./scripts/validate-rules.sh
+```
 
 ## Documentation
 
@@ -259,5 +222,5 @@ Same as original Aura Frog plugin. Check the [original repository](https://githu
 
 **Code with main character energy!** 🐸✨
 
-**Version:** 1.11.0
-**Last Updated:** 2026-02-13
+**Version:** 1.12.0
+**Last Updated:** 2026-02-14

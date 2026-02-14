@@ -1,7 +1,7 @@
 ---
 description: Token and time awareness - monitor usage throughout every session
 globs: []
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Token & Time Awareness

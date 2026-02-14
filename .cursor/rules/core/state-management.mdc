@@ -1,7 +1,10 @@
 ---
 description: Predictable state management patterns for React and Vue applications
-globs: []
-alwaysApply: true
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.vue"
+alwaysApply: false
 ---
 
 # State Management Rules
