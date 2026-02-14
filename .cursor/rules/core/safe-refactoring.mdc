@@ -1,7 +1,11 @@
 ---
 description: Ensure safe refactoring by reviewing all usages before making changes to existing code
-globs: []
-alwaysApply: true
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.py"
+alwaysApply: false
 ---
 
 # Safe Refactoring Rule

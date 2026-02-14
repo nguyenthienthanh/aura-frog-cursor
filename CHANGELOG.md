@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.12.0] - 2026-02-14
+
+### Performance Optimization — Context Window Recovery
+
+Major optimization pass to recover ~60-70% of wasted context window tokens. Based on community research (Cursor Dynamic Context Discovery, MCP Context Overload studies, Token Tax analysis).
+
+#### Changed
+
+- **alwaysApply rules: 50+ → 7** — Biggest performance win. Only 6 core rules + 1 agent-detector remain always-applied. All others reclassified to Auto Attached (glob-based) or Agent Selected (description-based)
+- **Always-applied rules compressed to <60 lines each** — Down from 150-470 lines. Removes verbose examples while keeping essential guidance
+- **MCP servers: 9 enabled → 3 core** — context7, playwright, github always enabled. vitest, atlassian, figma, slack disabled by default (enable per-project)
+- **Merged overlapping rules** — linting-standards + lint-after-implementation → single file; workflow-navigation + workflow-deliverables + workflow-system → single file; KISS now includes YAGNI/DRY references
+- **Learning system: 3 skills → 1** — auto-learn, learning-analyzer, self-improve consolidated into single auto-learn.mdc
+
+#### Removed
+
+- **Deleted `.cursorrules`** — Deprecated legacy format causing double context loading
+- **Deleted 9 redundant core rules** — modern-javascript, yagni, dry-caution, naming-conventions, file-extensions, codebase-consistency, toon-format, mcp-startup-check, memory-auto-load (LLMs already know these patterns)
+- **Removed `filesystem` MCP server** — Redundant with Cursor's built-in filesystem access
+- **Removed `memory` MCP server** — Limited reliability, replaced by file-based persistence
+
+#### Added
+
+- **CI validation script** (`scripts/validate-rules.sh`) — Validates MDC frontmatter, alwaysApply count threshold, version consistency, and always-applied file line limits
+- **Glob-based auto-attach** — 16 rules now auto-attach based on file type patterns (e.g., accessibility.mdc triggers on `*.tsx`, `*.jsx`, `*.vue`)
+
+#### Stats
+
+- Core Rules: 39 (was 50, deleted 9, merged 2)
+- alwaysApply rules: 7 (was 50+)
+- MCP Servers: 11 total, 3 enabled by default (was 13 total, 9 enabled)
+- Skills: 43 (was 46, consolidated 3→1)
+- Estimated context token savings: ~50,000-70,000 tokens per conversation
+
+---
+
 ## [1.11.0] - 2026-02-13
 
 ### Feature Sync from Aura Frog v1.18.0

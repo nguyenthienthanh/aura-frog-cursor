@@ -6,7 +6,7 @@ globs:
   - "**/go.mod"
   - "**/composer.json"
   - "**/requirements.txt"
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Project Detector

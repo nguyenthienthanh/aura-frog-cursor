@@ -1,7 +1,7 @@
 ---
 description: Priority hierarchy - determines how instructions are loaded and merged
 globs: []
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Priority Hierarchy
@@ -83,7 +83,7 @@ Read: .cursor/project-contexts/[project-name]/
 
 **How MDC Files Work:**
 - Cursor automatically loads all `.mdc` files from `.cursor/rules/`
-- Files with `alwaysApply: true` apply to all file types
+- Files with `alwaysApply: false` apply to all file types
 - Files with `globs` array apply only to matching files
 - Cursor uses `description` field to understand when to apply each rule
 
@@ -235,7 +235,7 @@ test_coverage: 90
 ### Rules Not Loading?
 
 1. Check .cursor/rules/*.mdc files have proper frontmatter
-2. Verify `alwaysApply: true` for core rules
+2. Verify `alwaysApply: false` for core rules
 3. Check `description` field is clear
 4. Restart Cursor IDE
 
@@ -263,7 +263,7 @@ All rule files in `.cursor/rules/` must follow this format:
 ---
 description: Brief description for Cursor to understand when to apply
 globs: []  # Empty for core rules (always apply), or ["**/*.ts", "**/*.tsx"] for specific files
-alwaysApply: true  # Core rules always apply, project-specific rules set to false
+alwaysApply: false  # Core rules always apply, project-specific rules set to false
 ---
 
 # Rule Title

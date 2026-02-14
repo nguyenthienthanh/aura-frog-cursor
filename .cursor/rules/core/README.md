@@ -53,7 +53,7 @@ All rules use the Cursor MDC format:
 ---
 description: Brief 1-sentence description for Cursor AI
 globs: []
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Rule Title
@@ -76,7 +76,7 @@ These rules are automatically loaded by Cursor AI when you work in this codebase
 
 ## Key Features
 
-1. **Always Apply**: All rules use `alwaysApply: true`
+1. **Always Apply**: All rules use `alwaysApply: false`
 2. **Generic Content**: Rules are framework-agnostic where possible
 3. **Project References**: Point to `project-contexts/[project]/` for specifics
 4. **Clear Examples**: Include good/bad code examples

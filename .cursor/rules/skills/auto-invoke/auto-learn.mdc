@@ -1,196 +1,76 @@
 ---
-description: Automatically detect corrections and approvals in user messages. Records feedback to improve AI responses over time.
+description: "Detect user corrections and approvals, capture learning patterns, and apply them to improve future responses."
 globs: []
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Skill: Auto-Learn
 
-**Version:** 1.11.0
-**Trigger:** Every user message (auto-invoke)
-**Purpose:** Detect corrections/feedback and record for learning
-
----
-
-## Overview
-
-Analyze user messages for correction or approval patterns. When detected, record feedback to Supabase to improve future responses.
-
----
+**Version:** 1.12.0
+**Trigger:** Activates when user provides corrections, feedback, or approvals
 
 ## Detection Patterns
 
-### Corrections (User is correcting AI)
+**Corrections:** "no, that's wrong", "incorrect", "actually, use...", "don't do that",
+"stop adding...", "remove the...", "that's not what I wanted",
+"should be X instead of Y", "prefer X over Y", "too verbose/complex"
 
-**Strong Signals (90% confidence):**
-```
-- "no, that's wrong"
-- "incorrect, it should..."
-- "actually, use..."
-- "don't do that"
-- "stop adding comments"
-- "remove the docstrings"
-- "that's not what I wanted"
-- "change it to..."
-- "fix the..."
-```
+**Approvals:** "good", "great", "perfect", "exactly", "looks good", "thanks"
 
-**Medium Signals (70% confidence):**
-```
-- "should be X instead of Y"
-- "prefer X over Y"
-- "too verbose"
-- "too complex"
-- "unnecessary"
-- "why did you..."
-```
-
-**Weak Signals (50% confidence):**
-```
-- Contains 2+ correction keywords: wrong, fix, change, don't, stop, remove
-```
-
-### Approvals (User likes AI response)
-
-**Strong Signals (80% confidence):**
-```
-- "good", "great", "perfect"
-- "that's what I wanted"
-- "exactly"
-- "yes, thanks"
-- "looks good"
-```
-
----
-
-## Categorization
-
-When a correction is detected, categorize it:
+## Categories
 
 | Trigger Words | Category | Rule |
-|---------------|----------|------|
+|---|---|---|
 | comment, jsdoc, docstring | `code_style` | `minimal_comments` |
 | type, typescript, any | `code_style` | `type_safety` |
 | test, spec, coverage | `testing` | `test_quality` |
-| import, export, module | `code_style` | `imports` |
 | naming, variable, function | `code_style` | `naming` |
 | complex, simple, refactor | `code_quality` | `complexity` |
 | error, exception, catch | `error_handling` | `error_handling` |
 | security, auth, password | `security` | `security` |
 | *(other)* | `general` | `general` |
 
----
+## Learning Loop
 
-## Behavior
+### 1. Capture
+When a correction or approval is detected:
+- Identify type (correction/approval) and category from table above
+- Record to `.cursor/cache/auto-learn-cache.json`
 
-When you detect a correction or approval in user input:
+### 2. Track Patterns
+- Deduplicate identical feedback within 24 hours
+- Increment pattern counter per category:rule pair
+- When count reaches 3, promote to `.cursor/cache/learned-patterns.md`
 
-1. **Identify the type** (correction/approval) and confidence level
-2. **Categorize** the feedback using the table above
-3. **Record locally** to `.cursor/cache/auto-learn-cache.json`
-4. **Submit to Supabase** if learning is enabled
+### 3. Apply
+- At session start, read `learned-patterns.md` for active patterns
+- Apply learned preferences to all responses
+- When analysis is requested, summarize patterns and suggest rule updates
 
-### Show Notification
+## Cache Format
 
-When a correction is detected with ≥70% confidence:
-
-```
-🧠 Learning: Captured correction [code_style:minimal_comments] (3x)
-```
-
-When a pattern threshold (3x) is reached:
-
-```
-🧠 Learning: Pattern detected! "code_style:minimal_comments" (3 occurrences)
-```
-
----
-
-## Local Cache
-
-Maintain deduplication cache at `.cursor/cache/auto-learn-cache.json`:
-
+`.cursor/cache/auto-learn-cache.json`:
 ```json
 {
   "entries": [
-    {
-      "hash": "abc123def456",
-      "type": "correction",
-      "category": "code_style",
-      "rule": "minimal_comments",
-      "timestamp": 1704672000000
-    }
+    { "type": "correction", "category": "code_style", "rule": "minimal_comments", "timestamp": 1704672000000 }
   ],
-  "patterns": {
-    "code_style:minimal_comments": 3,
-    "testing:test_quality": 1
-  }
+  "patterns": { "code_style:minimal_comments": 3 }
 }
 ```
 
-**Deduplication:** Skip identical feedback within 24 hours (compare MD5 hash of normalized input).
-
----
-
-## Learned Patterns File
-
-When pattern count reaches 3, update `.cursor/cache/learned-patterns.md`:
-
-```markdown
-# Learned Patterns
-
-Auto-generated from user corrections. Updated: 2026-01-08T12:00:00Z
-
----
-
-## code_style: minimal_comments
-
-**Occurrences:** 3
-**Latest:** stop adding jsdoc comments to every function...
-
----
-```
-
----
-
-## Submission
-
-When correction/approval is detected, submit to Supabase:
-
-```bash
-# Source environment
-source .envrc 2>/dev/null || source .cursor/.envrc 2>/dev/null || true
-
-# Submit feedback
-./scripts/learn/auto-learn-submit.sh \
-  --type "correction" \
-  --category "code_style" \
-  --rule "minimal_comments" \
-  --reason "User said: stop adding docstrings" \
-  --confidence 0.9
-```
-
----
-
 ## Skip Conditions
 
-Do NOT analyze if:
-- Input is less than 5 characters
-- Input starts with `/` (slash command)
-- Learning is disabled (`AF_LEARNING_ENABLED != true`)
+- Input < 5 characters or starts with `/` (slash command)
+
+## Notification
+
+When captured (show inline, do not interrupt):
+```
+Learning: Captured [code_style:minimal_comments] (3x)
+```
 
 ---
 
-## CRITICAL: Actually Execute
-
-When you detect a correction pattern:
-
-1. **DO** show the learning notification
-2. **DO** update local cache
-3. **DO** submit to Supabase via script
-4. **DON'T** just acknowledge - actually record the feedback
-
----
-
-**Version:** 1.11.0
-**Last Updated:** 2026-02-13
+**Version:** 1.12.0
+**Last Updated:** 2026-02-14

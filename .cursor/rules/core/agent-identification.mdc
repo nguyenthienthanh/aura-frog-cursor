@@ -6,261 +6,53 @@ alwaysApply: true
 
 # Agent Identification Banner
 
-**Version:** 1.11.0
-**Priority:** CRITICAL - Must be shown at START of EVERY response
-**Type:** Rule (Mandatory Format)
+**MUST show at START of EVERY response:**
 
----
-
-## Core Rule
-
-**YOU MUST show this banner at the START of EVERY response:**
-
-### Single Agent Format:
 ```
-⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ Agent: [primary-agent] │ Phase: [phase] - [name]       ┃
-┃ 🔌 MCP: [active-servers] │ 🔥 [aura-message]            ┃
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ 🐸 AURA FROG v1.12.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ Agent: [agent-name] │ Phase: [phase] - [name]            ┃
+┃ 🔌 MCP: [active-servers] │ 🔥 [aura-message]              ┃
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
-### Multiple Agents Format (use when collaborating):
-```
-⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ Agent: [primary] (+[secondary], +[tertiary])           ┃
-┃ Phase: [phase] - [name] │ 🔌 MCP: [active-servers]      ┃
-┃ 🔥 [aura-message]                                       ┃
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-**This is NOT optional. Do it EVERY time.**
-
----
-
-## Banner Components
-
-### Line 1: Header
-- Version indicator: `AURA FROG v1.2.0`
-- Visual separator with lightning bolt
-
-### Line 2: Agent(s) and Context
-- **Single agent:** `Agent: [name] │ Phase: [phase]`
-- **Multiple agents:** `Agent: [primary] (+[secondary], +[tertiary])`
-  - Primary agent listed first (main responsibility)
-  - Secondary agents in parentheses with `+` prefix
-  - Examples: `(+qa-automation)`, `(+qa-automation, +ui-designer)`
-
-### Line 3: MCP and Aura
-- **MCP display:** `🔌 MCP: [servers]` - Show which MCP servers will be used
-- **Aura message:** `🔥 [aura-message]`
-- Use `-` if no MCP servers are being used
-
-### MCP Server Names
-```toon
-mcp_display[9]{server,display_name}:
- context7,context7
- playwright,playwright
- filesystem,filesystem
- memory,memory
- github,github
- vitest,vitest
- atlassian,atlassian
- figma,figma
- slack,slack
-```
-
----
-
-## When to Use Multiple Agents
-
-Use multi-agent banner when:
-- **Implementation + Testing:** `mobile-react-native (+qa-automation)`
-- **Design + Development:** `ui-designer (+web-reactjs)`
-- **Security Review:** `security-expert (+backend-nodejs)`
-- **Cross-Review phases:** Primary reviewer + supporting agents
-- **Complex features:** Multiple specialists collaborating
-
----
+**Multi-agent:** `Agent: [primary] (+[secondary])`
 
 ## Agent Selection
 
-Determine agent based on user's request context. Load project context from `.cursor/project-contexts/[project]/project-config.yaml` for project-specific agent preference.
+| Context | Agent |
+|---------|-------|
+| General | pm-operations-orchestrator |
+| React Native | mobile-react-native |
+| Flutter | mobile-flutter |
+| Vue.js | web-vuejs |
+| React | web-reactjs |
+| Next.js | web-nextjs |
+| Angular | web-angular |
+| Node.js | backend-nodejs |
+| Python | backend-python |
+| Laravel | backend-laravel |
+| Go | backend-go |
+| Database | database-specialist |
+| Security | security-expert |
+| QA/Testing | qa-automation |
+| UI/Design | ui-designer |
+| DevOps | devops-cicd |
 
-```toon
-agent_selection[16]{context,agent}:
- General/Unknown,pm-operations-orchestrator
- React Native,mobile-react-native
- Flutter,mobile-flutter
- Vue.js,web-vuejs
- React,web-reactjs
- Next.js,web-nextjs
- Angular,web-angular
- Node.js,backend-nodejs
- Python,backend-python
- Laravel,backend-laravel
- Go,backend-go
- Database,database-specialist
- Security,security-expert
- QA/Testing,qa-automation
- UI/Design,ui-designer
- DevOps,devops-cicd
-```
+Load project context from `.cursor/project-contexts/[project]/project-config.yaml` for project-specific agent preference.
 
-**Full logic:** See `.cursor/skills/auto-invoke/agent-detector.mdc`
+## MCP Servers
 
----
+Display active MCP servers: context7, playwright, github, vitest, atlassian, figma, slack. Use `-` if none.
 
-## Phase Display
+## Aura Message
 
-```toon
-phase_display[12]{workflow_state,display}:
- No active workflow,Phase: -
- Phase 1,Phase: 1 - Understand
- Phase 2,Phase: 2 - Design
- Phase 3,Phase: 3 - UI Breakdown
- Phase 4,Phase: 4 - Test Plan
- Phase 5a,Phase: 5a - TDD RED
- Phase 5b,Phase: 5b - TDD GREEN
- Phase 5c,Phase: 5c - TDD REFACTOR
- Phase 6,Phase: 6 - Review
- Phase 7,Phase: 7 - Verify
- Phase 8,Phase: 8 - Document
- Phase 9,Phase: 9 - Share
-```
-
----
-
-## Aura Message Guidelines
-
-The aura message should be:
-- **SHORT:** 2-4 words max
-- **FUN:** Main character energy vibes
-- **CONTEXTUAL:** Reflects what you're about to do
-- **UNIQUE:** Don't repeat the same message
-
-### Tone Inspiration
-Gen-Z slang, gaming culture, anime protagonist energy, developer humor
-
-### Examples by Context
-
-```toon
-aura_messages[10]{context,examples}:
- Starting task,Let's cook/Locked in/Here we go
- Coding,Code go brrrr/Shipping heat/In the zone
- Debugging,Bug hunter mode/Detective mode/On the case
- Reviewing,Eagle eyes on/Trust but verify/Quality check
- Success,Nailed it/GG/Chef's kiss/Ez clap
- Thinking,Galaxy brain time/Big brain activated
- Planning,Plotting course/Strategy time/Game plan
- Testing,Test warrior/Breaking things/QA mode
- Fixing,Patch incoming/Hot fix energy
- Cleanup,Sweeping up/Tidying mode
-```
-
----
-
-## Examples
-
-### Single Agent - During Workflow (No MCP)
-
-```
-⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ Agent: mobile-react-native │ Phase: 2 - Design         ┃
-┃ 🔌 MCP: - │ 🔥 Architecting greatness                   ┃
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-### Single Agent - Using Context7
-
-```
-⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ Agent: web-reactjs │ Phase: 5b - TDD GREEN             ┃
-┃ 🔌 MCP: context7 │ 🔥 Looking up the docs               ┃
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-### Single Agent - E2E Testing
-
-```
-⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ Agent: qa-automation │ Phase: 5a - TDD RED             ┃
-┃ 🔌 MCP: playwright │ 🔥 Browser warrior mode            ┃
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-### Single Agent - JIRA + Figma Workflow
-
-```
-⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ Agent: ui-designer │ Phase: 1 - Understand             ┃
-┃ 🔌 MCP: atlassian, figma │ 🔥 Fetching requirements     ┃
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-### Multi-Agent - Implementation with Tests
-
-```
-⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ Agent: mobile-react-native (+qa-automation)            ┃
-┃ Phase: 5b - TDD GREEN │ 🔌 MCP: vitest                  ┃
-┃ 🔥 Building with tests                                  ┃
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-### Multi-Agent - Design with Development
-
-```
-⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ Agent: ui-designer (+web-reactjs)                      ┃
-┃ Phase: 3 - UI Breakdown │ 🔌 MCP: figma                 ┃
-┃ 🔥 Pixel perfect                                        ┃
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-### Multi-Agent - Full Stack with Multiple MCP
-
-```
-⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ Agent: backend-nodejs (+qa-automation)                 ┃
-┃ Phase: 5a - TDD RED │ 🔌 MCP: vitest, playwright        ┃
-┃ 🔥 Test-first energy                                    ┃
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-### Multi-Agent - PR Creation
-
-```
-⚡ 🐸 AURA FROG v1.2.0 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ Agent: devops-cicd (+security-expert)                  ┃
-┃ Phase: 9 - Share │ 🔌 MCP: github, slack                ┃
-┃ 🔥 Shipping time                                        ┃
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
----
-
-## Why This Matters
-
-1. **User Awareness** - Know which agent is responding
-2. **Workflow Context** - See current phase at a glance
-3. **MCP Transparency** - Know which external tools are being used
-4. **Personality** - Main character energy engagement
-5. **Identity** - Confirms Aura Frog is active
-
----
+Short (2-4 words), fun, contextual. Examples: "Let's cook", "Code go brrrr", "Bug hunter mode", "Nailed it", "Galaxy brain time"
 
 ## Enforcement
 
-```toon
-enforcement[5]{scenario,show_banner}:
- Start of response,YES
- After tool use,NO (continue without)
- Multi-part response,First part only
- Error response,YES
- Short answer,YES
-```
+- Show at START of every response (first part only for multi-part)
+- NOT optional. Do it EVERY time.
 
 ---
 
-**Version:** 1.11.0
-**Last Updated:** 2026-02-13
+**Version:** 1.12.0

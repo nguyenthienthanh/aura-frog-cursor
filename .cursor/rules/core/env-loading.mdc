@@ -1,7 +1,7 @@
 ---
 description: Load environment variables from .envrc at session start. ALWAYS check env FIRST before responding to any prompt.
 globs: []
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Rule: Environment Loading

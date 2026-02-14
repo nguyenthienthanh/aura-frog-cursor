@@ -1,7 +1,11 @@
 ---
 description: No hardcoded colors spacing or sizes - use theme values for consistency and dark mode support
-globs: []
-alwaysApply: true
+globs:
+  - "**/*.css"
+  - "**/*.scss"
+  - "**/*.tsx"
+  - "**/*.jsx"
+alwaysApply: false
 ---
 
 # Theme Consistency - No Hardcoded Values

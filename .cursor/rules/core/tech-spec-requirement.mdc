@@ -1,7 +1,7 @@
 ---
 description: Mandatory technical specification creation - TECH_SPEC_AI.md for AI consumption and full spec in Confluence single page format
 globs: []
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Tech Spec Requirement Rule

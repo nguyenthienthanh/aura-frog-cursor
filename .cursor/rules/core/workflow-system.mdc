@@ -1,422 +1,125 @@
 ---
-description: 9-phase workflow orchestration and phase management for structured development
+description: 9-phase workflow orchestration, navigation, deliverables, and phase management
 globs: []
 alwaysApply: false
 ---
 
 # Workflow System
 
-This rule is activated when using workflow-orchestrator skill or workflow commands.
+**Version:** 1.12.0
+**Type:** Rule (Mandatory)
 
-## 9-Phase Workflow Structure
+Activated when using workflow-orchestrator skill or workflow commands.
 
-The Aura Frog workflow consists of 9 phases organized into 4 groups:
+---
 
-### Planning & Preparation (Phases 1-4)
-**Duration**: 2-3 hours | **Tokens**: ~135K
+## 9-Phase Structure
 
-1. **Phase 1: Understand** (Requirements Analysis)
-   - Purpose: Thoroughly understand business requirement
-   - Duration: 30-60 min | Tokens: ~25K
-   - Deliverables: Requirements doc, user stories, acceptance criteria
-   - Agent: `pm-operations-orchestrator`
+| Group | Phase | Name | Agent | Skippable |
+|-------|-------|------|-------|-----------|
+| Planning | 1 | Understand | pm-operations-orchestrator | No |
+| Planning | 2 | Design | Development agent | No |
+| Planning | 3 | UI Breakdown | ui-designer | Yes (no UI) |
+| Planning | 4 | Plan Tests | qa-automation | No |
+| Building | 5a | TDD RED | Dev agent | No |
+| Building | 5b | TDD GREEN | Dev agent | No |
+| Building | 5c | TDD REFACTOR | Dev agent | No |
+| Quality | 6 | Review | code-reviewer | No |
+| Quality | 7 | Verify | qa-automation | No |
+| Shipping | 8 | Document | Dev agent | No |
+| Shipping | 9 | Share | Auto-executes | N/A |
 
-2. **Phase 2: Design** (Technical Planning)
-   - Purpose: Create comprehensive technical design
-   - Duration: 1-2 hours | Tokens: ~45K
-   - Deliverables: Technical design doc, architecture diagrams
-   - Agent: Development agent (e.g., `mobile-react-native`)
-
-3. **Phase 3: UI Breakdown** (Design Analysis)
-   - Purpose: Analyze UI/UX, extract design tokens
-   - Duration: 30-60 min | Tokens: ~30K
-   - Deliverables: UI breakdown, design tokens, component hierarchy
-   - Agent: `ui-designer`
-   - **Skippable**: If no UI changes
-
-4. **Phase 4: Plan Tests** (Test Strategy)
-   - Purpose: Create comprehensive test strategy
-   - Duration: 30-60 min | Tokens: ~35K
-   - Deliverables: Test plan, test cases, coverage goals
-   - Agent: `qa-automation`
-
-### Build & Polish (Phase 5)
-**Duration**: 5-9 hours | Tokens: ~130K
-
-5. **Phase 5: TDD Implementation** (3 sub-phases)
-
-   **5a: TDD RED** (Write Failing Tests)
-   - Purpose: Write ALL tests BEFORE implementation
-   - Duration: 2-4 hours | Tokens: ~40K
-   - Success Criteria: ALL tests FAIL with "not found" errors
-   - **BLOCKING**: Cannot proceed if any test passes
-
-   **5b: TDD GREEN** (Implementation)
-   - Purpose: Write MINIMAL code to make tests pass
-   - Duration: 3-6 hours | Tokens: ~55K
-   - Success Criteria: ALL tests PASS, coverage ≥80%
-   - **BLOCKING**: Cannot proceed if any test fails
-
-   **5c: TDD REFACTOR** (Code Polish)
-   - Purpose: Improve code quality while tests stay green
-   - Duration: 1-2 hours | Tokens: ~35K
-   - Success Criteria: Tests still passing, coverage maintained
-   - **BLOCKING**: Cannot proceed if tests fail or coverage drops
-
-### Review & Verify (Phases 6-7)
-**Duration**: 1-2 hours | Tokens: ~55K
-
-6. **Phase 6: Review** (Code Quality Check)
-   - Purpose: Comprehensive code review and quality checks
-   - Duration: 45-90 min | Tokens: ~30K
-   - Deliverables: Code review checklist, quality metrics
-   - Agent: `code-reviewer` or secondary dev agent
-
-7. **Phase 7: Verify** (QA Validation)
-   - Purpose: Validate all acceptance criteria and edge cases
-   - Duration: 30-60 min | Tokens: ~25K
-   - Deliverables: QA report, acceptance validation
-   - Agent: `qa-automation`
-
-### Document & Share (Phases 8-9)
-**Duration**: 1-2 hours | Tokens: ~25K
-
-8. **Phase 8: Document** (Implementation Summary)
-   - Purpose: Create comprehensive documentation
-   - Duration: 45-90 min | Tokens: ~20K
-   - Deliverables: Docs, deployment guide, changelog
-   - Agent: Development agent
-
-9. **Phase 9: Share** (Notification & Archive)
-   - Purpose: Notify stakeholders, archive workflow
-   - Duration: 15-30 min | Tokens: ~5K
-   - Deliverables: JIRA updates, notifications, archive
-   - **AUTO-EXECUTES**: No approval required
-
-## Phase Groups (Mental Model)
-
-Think of the workflow as:
-
-1. **Planning** (1-4): Understand what and how to build
-2. **Building** (5): Test-driven implementation
-3. **Quality** (6-7): Review and validate
-4. **Shipping** (8-9): Document and notify
+---
 
 ## Approval Gates
 
-### When Required
-- After EVERY phase completion (except Phase 9)
-- Before code generation
-- Before file modifications
-- Before external system writes
-
-### Valid User Responses
+**Only 2 mandatory gates:** Phase 2 (Design) and Phase 5b (Implementation).
+All other phases auto-continue unless a blocker is hit.
 
 | Response | Action |
 |----------|--------|
-| `approve` / `yes` / `approved` | Proceed to next phase & AUTO-CONTINUE |
+| `approve` / `yes` | Proceed to next phase, AUTO-CONTINUE |
 | `reject: <reason>` | Restart phase with feedback |
-| `modify: <changes>` | Adjust deliverables without full restart |
-| `stop` / `cancel` | Cancel workflow immediately |
+| `modify: <changes>` | Adjust deliverables without restart |
+| `stop` / `cancel` | Cancel workflow |
 
-### Approval Gate Format
-
-```markdown
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🏗️ Phase [N]: [Name] - Approval Needed
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-## [Phase] Complete! ✨
-
-**What We Did:**
-[Summary of work]
-
-**Deliverables:**
-- ✅ [Deliverable 1]
-- ✅ [Deliverable 2]
-
-**Cross-Review:**
-- ✅ [Agent 1]: Approved
-- ✅ [Agent 2]: Approved
-
-**Token Usage:**
-- This phase: [X] tokens (~[Y]K)
-- Total used: [A] / 200,000 ([B]%)
-- Remaining: [C] tokens
-
-**Next Phase:** Phase [N+1]: [Name]
-[What happens next]
+After approval, IMMEDIATELY execute next phase (no waiting for next prompt).
 
 ---
 
-**Options:**
-- "approve" → Continue to Phase [N+1]
-- "reject: [reason]" → Revise with feedback
-- "modify: [changes]" → Adjust specific parts
+## Phase Deliverables
 
-⚡ After approval, I'll AUTO-CONTINUE to Phase [N+1]!
+| Phase | Key Document | Must Have |
+|-------|-------------|-----------|
+| 1 | REQUIREMENTS.md | User stories, acceptance criteria, scope |
+| 2 | TECH_SPEC.md + TECH_SPEC_CONFLUENCE.md | Architecture, files, APIs (AI reads TECH_SPEC.md) |
+| 3 | UI_BREAKDOWN.md | Components, props, accessibility |
+| 4 | TEST_PLAN.md | Test scenarios, coverage target (>=80%) |
+| 5a | Test files (src/**/__tests__/) | All tests FAIL |
+| 5b | Implementation code | All tests PASS, lint clean |
+| 5c | Refactored code | Tests still pass, coverage maintained |
+| 6 | CODE_REVIEW.md | Security, performance, best practices |
+| 7 | QA_REPORT.md | Test results, coverage, acceptance validation |
+| 8 | IMPLEMENTATION_SUMMARY.md | Changes, deployment guide, CHANGELOG update |
+| 9 | Workflow archive | JIRA/Slack updates, all docs archived |
 
-Your response:
-═══════════════════════════════════════════════════════════
+All deliverables saved to: `.cursor/logs/workflows/{workflow-id}/`
+
+---
+
+## Navigation & Progress
+
+After each phase, show:
+
+```
+WORKFLOW PROGRESS
+Progress: ████████░░░░░░░░ 50% (4/8 phases)
+[done] Phase 1-2  [current] Phase 3  [pending] Phase 4-9  [skip] Phase 3 (if no UI)
+Next: Phase N - Description
 ```
 
-## Auto-Continue Logic
-
-### After User Approves
-
-1. **IMMEDIATELY** execute next phase
-2. **NO** waiting for next user prompt
-3. **Continue** through phases until:
-   - Implementation complete (Phase 5c)
-   - User rejection
-   - Blocking error
-   - Token limit reached (150K+ warning)
-
-### Benefits
-- Faster workflow completion
-- Reduced back-and-forth
-- Maintains momentum
-- User retains control via approval gates
+---
 
 ## Blocking Conditions
 
-### Phase 5a (TDD RED)
-- ❌ ANY test passes (should all fail)
-- ❌ Failures are logic errors (not "not found")
-- ❌ Implementation code exists
-
-### Phase 5b (TDD GREEN)
-- ❌ ANY test fails
-- ❌ Coverage < 80% (or project goal)
-- ❌ Linter errors exist
-
-### Phase 5c (TDD REFACTOR)
-- ❌ ANY test fails
-- ❌ Coverage decreased
-- ❌ New linter errors
-
-### Phase 6 (Review)
-- ❌ Linter errors/warnings
-- ❌ Critical security issues
-- ❌ Cross-review not approved
-
-### Phase 7 (Verify)
-- ❌ Failing tests
-- ❌ Unvalidated acceptance criteria
-- ❌ Critical bugs found
-
-## Session Continuation & Handoff
-
-### When to Use Handoff
-
-**Token Thresholds:**
-- **150K (75%)**: Warning - plan handoff
-- **175K (87.5%)**: Critical - recommend handoff
-- **200K (100%)**: Hard limit - session ends
-
-**Handoff Command:**
-```bash
-workflow:handoff
-```
-
-**What Gets Saved:**
-- Complete workflow state
-- All deliverables
-- Current phase
-- Token usage
-- Git state (branch, commits, uncommitted files)
-- Test results
-- Handoff context document
-
-**Location:**
-```
-.cursor/logs/workflows/[workflow-id]/
-├── workflow-state.json
-├── deliverables/
-├── HANDOFF_CONTEXT.md
-└── backup/
-```
-
-### How to Resume
-
-**In New Session:**
-```bash
-workflow:resume [workflow-id]
-```
-
-**Resume Process:**
-1. Load workflow state from logs
-2. Verify git branch matches
-3. Check for file changes
-4. Restore context
-5. Continue from last phase
-
-### Recovery Options
-
-If resuming fails:
-- **Branch mismatch**: Checkout correct branch
-- **Files changed**: Show diff, offer restore
-- **Commits missing**: Restore from backup
-- **Complete loss**: Rebuild from deliverables
-
-## Phase Skipping Rules
-
-### When to Skip Phases
-
-**Phase 3 (UI Breakdown)** - Skip if:
-- No UI changes required
-- Backend-only changes
-- Data migration or refactoring
-- Bug fix with no visual impact
-
-**How to Skip:**
-- Workflow orchestrator auto-detects
-- Or user can request: "Skip UI phase"
-- Proceeds directly to Phase 4
-
-### Cannot Skip
-- Phase 1 (Understand) - Always required
-- Phase 2 (Design) - Always required
-- Phase 4 (Test Planning) - Always required
-- Phase 5 (TDD) - Always required
-- Phases 6-9 - Always required
-
-## Token Tracking
-
-### Display at Each Phase
-```
-**Token Usage:**
-- This phase: [X] tokens (~[Y]K)
-- Total used: [A] / 200,000 ([B]%)
-- Remaining: [C] tokens
-```
-
-### Warnings
-- **75% (150K)**: ⚠️ Consider handoff after current phase
-- **87.5% (175K)**: 🚨 CRITICAL - Run handoff NOW
-
-### Typical Token Budget
-- Phases 1-4 (Planning): ~135K
-- Phase 5 (Implementation): ~130K
-- Phases 6-7 (Quality): ~55K
-- Phases 8-9 (Shipping): ~25K
-- **Total**: ~345K (exceeds 200K!)
-
-**Strategy**: Use handoff between Phase 5b and 5c
-
-## Workflow State Management
-
-### State Location
-```
-.cursor/logs/workflows/[workflow-id]/workflow-state.json
-```
-
-### Active Workflow Pointer
-```
-.cursor/logs/active-workflow.txt
-```
-
-Contains current workflow ID.
-
-### Multiple Workflows
-- Each workflow has independent state
-- Switch between workflows: `workflow:switch [id]`
-- List all workflows: `workflow:list`
-
-## Quality Principles
-
-### KISS (Keep It Simple, Stupid)
-- Simple solutions over complex
-- Standard patterns over custom
-- Readable code over clever code
-- Solve today's problem, not tomorrow's
-
-### DRY (with Rule of Three)
-- 1st time: Write it
-- 2nd time: Duplicate (wince)
-- 3rd time: Refactor and abstract
-
-### TDD (Test-Driven Development)
-- RED: Write failing tests FIRST
-- GREEN: Write MINIMAL code to pass
-- REFACTOR: Improve while tests stay green
-
-### Cross-Review
-- Phase 1: PM → Dev + QA + UI review
-- Phase 2: Dev → Secondary Dev + QA review
-- Phase 4: QA → Dev review
-- Phase 6: Code reviewer → Multi-agent review
-
-## References
-
-### Phase Guides
-- `.cursor/workflows/phases/phase-1-understand.md`
-- `.cursor/workflows/phases/phase-2-design.md`
-- `.cursor/workflows/phases/phase-3-ui.md`
-- `.cursor/workflows/phases/phase-4-plan-tests.md`
-- `.cursor/workflows/phases/phase-5a-red.md`
-- `.cursor/workflows/phases/phase-5b-green.md`
-- `.cursor/workflows/phases/phase-5c-refactor.md`
-- `.cursor/workflows/phases/phase-6-review.md`
-- `.cursor/workflows/phases/phase-7-verify.md`
-- `.cursor/workflows/phases/phase-8-document.md`
-- `.cursor/workflows/phases/phase-9-share.md`
-
-### Related Documentation
-- `.cursor/workflows/STATE_MANAGEMENT.md` - State persistence
-- `.cursor/workflows/QUICK_REFERENCE.md` - Visual workflow guide
-- `~/.cursor/plugins/marketplaces/aurafrog/aura-frog/SESSION_CONTINUATION_GUIDE.md`
-
-### Skills
-- `workflow-orchestrator` - Main workflow skill
-- `phase-skipping` - Smart phase skip logic
-- `jira-integration` - JIRA ticket management
-- `figma-integration` - Design extraction
-
-### Core Rules
-- `.cursor/rules/core/deliverable-persistence.mdc` - **CRITICAL**: All deliverables MUST be saved to files
-- `.cursor/rules/core/kiss-principle.mdc`
-- `.cursor/rules/core/dry-with-caution.mdc`
-- `.cursor/rules/core/cross-review.mdc`
-- `.cursor/rules/skills/experts/testing-expert.mdc` - TDD workflow patterns
-
-## Usage Example
-
-```bash
-# Start new workflow
-workflow:start "Add user authentication"
-
-# System executes:
-# 1. Phase 1: Understand (with approval gate)
-# 2. User approves → AUTO-CONTINUE
-# 3. Phase 2: Design (with approval gate)
-# 4. User approves → AUTO-CONTINUE
-# ... continues through all 9 phases
-
-# If token limit approaching:
-workflow:handoff
-
-# In new session:
-workflow:resume add-user-authentication-20251124-120000
-
-# Continue seamlessly!
-```
-
-## Best Practices
-
-1. **Save deliverables to files** - NEVER just display in chat (see `deliverable-persistence.mdc`)
-2. **Load project context FIRST** - Before any phase
-3. **Show approval gates** - After every phase (except 9)
-4. **Track tokens** - Display at every approval gate
-5. **Auto-continue** - After approval, proceed immediately
-6. **Cross-review** - Multi-agent validation
-7. **TDD strictly** - RED → GREEN → REFACTOR
-8. **KISS always** - Simplest solution wins
-9. **Handoff proactively** - At 150K tokens, not 190K
-10. **Archive workflows** - For future reference
-11. **Celebrate completion** - Phase 9 is a win! 🎉
+- **5a RED**: Any test passes, or failures are logic errors (not "not found")
+- **5b GREEN**: Any test fails, coverage < 80%, linter errors
+- **5c REFACTOR**: Tests fail, coverage drops, new linter errors
+- **6 Review**: Linter errors, critical security issues
+- **7 Verify**: Failing tests, unvalidated acceptance criteria
 
 ---
 
-**Version:** 1.11.0
-**Last Updated:** 2026-02-13
+## Session Handoff
+
+| Threshold | Action |
+|-----------|--------|
+| 150K (75%) | Warning - plan handoff |
+| 175K (87.5%) | Critical - run `workflow:handoff` |
+| 200K (100%) | Hard limit |
+
+Resume: `workflow:resume [workflow-id]`
+
+---
+
+## Quality Principles
+
+- **KISS**: Simplest solution that works; solve today's problem
+- **DRY (Rule of Three)**: 1st: write it, 2nd: duplicate, 3rd: refactor
+- **TDD**: RED (fail) -> GREEN (pass) -> REFACTOR (clean)
+- **Cross-Review**: Multi-agent validation at phases 1, 2, 4, 6
+
+---
+
+## References
+
+- Phase guides: `.cursor/workflows/phases/phase-*.md`
+- State management: `.cursor/workflows/STATE_MANAGEMENT.md`
+- Quick reference: `.cursor/workflows/QUICK_REFERENCE.md`
+- Skills: `workflow-orchestrator`, `phase-skipping`, `jira-integration`, `figma-integration`
+- Related rules: `deliverable-persistence.mdc`, `kiss-principle.mdc`, `cross-review.mdc`
+
+---
+
+**Version:** 1.12.0
+**Last Updated:** 2026-02-14

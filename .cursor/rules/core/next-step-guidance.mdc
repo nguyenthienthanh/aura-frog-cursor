@@ -4,139 +4,37 @@ globs: []
 alwaysApply: true
 ---
 
-# Rule: Next Step Guidance
+# Next Step Guidance
 
-**Priority:** CRITICAL
-**Enforcement:** EVERY response must include next step guidance
-**Applies To:** All interactions, phases, and approval gates
+**Every response MUST end with a "What's Next" section.** User should never guess what to do.
 
----
+## Format
 
-## Core Rule
-
-**EVERY response MUST end with a "What's Next" section showing available actions and suggested commands.**
-
-The user should NEVER have to guess what they can do next.
-
----
-
-## Guidance Block Format
-
-### Standard Format (End of Every Response)
-
-```markdown
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 WHAT'S NEXT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-**Quick Actions:**
-- `approve` or `yes` - Continue to next phase
-- `reject: <reason>` - Redo with feedback
-- `skip` - Skip current phase (if allowed)
-
-**Available Commands:**
-- `workflow:status` - Show current progress
-- `workflow:skip phase-3` - Skip specific phase
-- `workflow:handoff` - Prepare session handoff
-
-**Suggestions:**
--> Type `approve` to continue to next phase
--> Or provide feedback to refine
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Quick Actions:
+- `approve` / `yes` - Continue
+- `reject: <reason>` - Redo
+Available Commands:
+- `workflow:status` - Progress
+- `workflow:handoff` - Save & handoff
+Suggestion: → Type `approve` to continue
 ```
 
----
+## Context-Aware Options
 
-## Context-Aware Guidance
+- **Planning (1-4):** approve, reject, skip phase-3 (backend-only)
+- **Implementation (5):** continue, tests:run, skip refactor
+- **Review (6-9):** approve, fix: issue, done
 
-Show relevant options based on current phase:
+## Minimal Format (mid-phase)
 
-### Planning Phases (1-4)
-- `approve` - Accept and continue
-- `reject: <feedback>` - Refine requirements
-- `skip phase-3` - Skip UI (backend-only)
-
-### Implementation Phase (5)
-- `continue` - Keep implementing
-- `tests:run` - Check test status
-- `skip refactor` - Skip Phase 5c
-
-### Review Phases (6-9)
-- `approve` - Accept deliverables
-- `fix: <issue>` - Address specific issue
-- `done` - Complete workflow
-
----
-
-## Universal Commands Reference
-
-### Workflow Control
-
-```toon
-workflow_control[6]{command,description}:
- approve/yes,Accept and continue
- reject: <reason>,Reject with feedback
- modify: <changes>,Adjust deliverables
- skip,Skip current phase
- done,Complete workflow
- pause,Save and pause
 ```
-
-### Phase Navigation
-
-```toon
-phase_navigation[4]{command,description}:
- workflow:status,Show progress
- workflow:skip <phase>,Skip specific phase
- workflow:force <phase>,Jump to phase
- workflow:handoff,Prepare session handoff
-```
-
-### Speed Commands
-
-```toon
-speed_commands[6]{command,description}:
- skip brainstorming,Skip requirement analysis
- skip ui,Skip Phase 3
- skip tests,Skip test writing
- skip docs,Skip Phase 8
- force implementation,Jump to coding
- force complete,End immediately
-```
-
----
-
-## When to Show Guidance
-
-### Show FULL guidance when:
-- First interaction of a phase
-- After rejection (show how to proceed)
-- Complex decision point
-- Multiple valid paths exist
-
-### Show MINIMAL guidance when:
-- Mid-phase work (just "continue" option)
-- Simple confirmation needed
-
-### Minimal Format:
-
-```markdown
----
 **Next:** `approve` to continue | `reject: <feedback>` to revise
 ```
 
 ---
 
-## Enforcement Checklist
-
-Every response should:
-
-- [ ] End with guidance block
-- [ ] Show 2-3 most relevant options
-- [ ] Include at least one quick command
-- [ ] Show a clear suggested action
-- [ ] Be context-aware for current phase
-
----
-
-**Version:** 1.11.0
-**Last Updated:** 2026-02-13
+**Version:** 1.12.0

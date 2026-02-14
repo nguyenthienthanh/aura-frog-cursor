@@ -1,7 +1,11 @@
 ---
 description: Performance optimization patterns for web and mobile applications
-globs: []
-alwaysApply: true
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.jsx"
+alwaysApply: false
 ---
 
 # Performance Rules

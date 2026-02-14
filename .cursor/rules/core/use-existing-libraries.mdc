@@ -1,7 +1,7 @@
 ---
 description: Use existing utility libraries (lodash, es-toolkit, date-fns) instead of creating custom functions
 globs: []
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Use Existing Libraries Rule

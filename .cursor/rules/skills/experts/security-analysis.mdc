@@ -28,7 +28,7 @@ This skill provides practical security implementation patterns. For comprehensiv
 - Framework-specific security
 
 **References:**
-- `sast-security.mdc` - OWASP Top 10, CWE patterns (alwaysApply: true)
+- `sast-security.mdc` - OWASP Top 10, CWE patterns (alwaysApply: false)
 - `api-design.mdc` - Secure API design
 
 ---
@@ -283,7 +283,7 @@ patterns[10]{vulnerability,fix}:
 
 ## Related Rules
 
-- `sast-security.mdc` - OWASP Top 10, CWE patterns, language-specific vulnerabilities (alwaysApply: true)
+- `sast-security.mdc` - OWASP Top 10, CWE patterns, language-specific vulnerabilities (alwaysApply: false)
 - `api-design.mdc` - Secure API design patterns
 
 ---

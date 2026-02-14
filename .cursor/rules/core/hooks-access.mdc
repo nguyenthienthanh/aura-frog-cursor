@@ -1,7 +1,7 @@
 ---
 description: Access values directly from hook objects, avoid intermediate destructuring
 globs: []
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Direct Hook Access - No Intermediate Destructuring

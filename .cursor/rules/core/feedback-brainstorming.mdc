@@ -1,7 +1,7 @@
 ---
 description: Brainstorm feedback before implementing - analyze suggestions and present options
 globs: []
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Rule: Feedback Brainstorming

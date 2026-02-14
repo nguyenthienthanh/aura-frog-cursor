@@ -1,7 +1,11 @@
 ---
 description: "SEO and AI Discovery quality standards - enforce best practices for search engine and AI visibility"
-globs: []
-alwaysApply: true
+globs:
+  - "**/*.tsx"
+  - "**/*.jsx"
+  - "**/*.html"
+  - "**/*.vue"
+alwaysApply: false
 ---
 
 # SEO & AI Discovery Standards

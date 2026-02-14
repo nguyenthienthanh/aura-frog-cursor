@@ -1,7 +1,7 @@
 ---
 description: "Manages workflow state across sessions with handoff and resume capabilities"
 globs: []
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Session Continuation Skill

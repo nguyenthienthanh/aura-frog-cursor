@@ -1,7 +1,10 @@
 ---
 description: WCAG accessibility standards for inclusive UI development
-globs: []
-alwaysApply: true
+globs:
+  - "**/*.tsx"
+  - "**/*.jsx"
+  - "**/*.vue"
+alwaysApply: false
 ---
 
 # Accessibility (a11y) Rules

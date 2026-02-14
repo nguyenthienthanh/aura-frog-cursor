@@ -1,7 +1,11 @@
 ---
 description: Structured logging with proper levels, sanitization, and request correlation
-globs: []
-alwaysApply: true
+globs:
+  - "**/*.ts"
+  - "**/*.tsx"
+  - "**/*.js"
+  - "**/*.py"
+alwaysApply: false
 ---
 
 # Logging Standards
